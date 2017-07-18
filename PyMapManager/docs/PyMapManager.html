@@ -1,0 +1,433 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>PyMapManager package &#8212; PyMapManager a0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     'a0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="pymapmanager-package">
+<h1>PyMapManager package<a class="headerlink" href="#pymapmanager-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="PyMapManager.interface.html">PyMapManager.interface package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="PyMapManager.interface.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="PyMapManager.interface.html#module-PyMapManager.interface.mmApp">PyMapManager.interface.mmApp module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="PyMapManager.interface.html#module-PyMapManager.interface.mmCanvas">PyMapManager.interface.mmCanvas module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="PyMapManager.interface.html#module-PyMapManager.interface.mmTable">PyMapManager.interface.mmTable module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="PyMapManager.interface.html#module-PyMapManager.interface.mmWindow">PyMapManager.interface.mmWindow module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="PyMapManager.interface.html#module-PyMapManager.interface">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-PyMapManager.main">
+<span id="pymapmanager-main-module"></span><h2>PyMapManager.main module<a class="headerlink" href="#module-PyMapManager.main" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-PyMapManager.mmMap">
+<span id="pymapmanager-mmmap-module"></span><h2>PyMapManager.mmMap module<a class="headerlink" href="#module-PyMapManager.mmMap" title="Permalink to this headline">¶</a></h2>
+<p>This is for mmMap module</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>Examples:</dt>
+<dd>xxx
+yyy</dd>
+</dl>
+</div></blockquote>
+<dl class="class">
+<dt id="PyMapManager.mmMap.mmMap">
+<em class="property">class </em><code class="descclassname">PyMapManager.mmMap.</code><code class="descname">mmMap</code><span class="sig-paren">(</span><em>filePath=''</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyMapManager/mmMap.html#mmMap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.mmMap.mmMap" title="Permalink to this definition">¶</a></dt>
+<dd><p>A map is a list of <a class="reference internal" href="#module-PyMapManager.mmStack" title="PyMapManager.mmStack"><code class="xref py py-class docutils literal"><span class="pre">PyMapManager.mmStack</span></code></a> and an object map that connects annotations (spines) sequentially from one stack to the next.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>filePath (str): Full file path to .txt file for the map. File is inside map folder, for map a5n it is /a5n/a5n.txt</dd>
+</dl>
+<p>Example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mmMap</span> <span class="k">import</span> <span class="n">mmMap</span>
+<span class="n">file</span> <span class="o">=</span> <span class="s1">&#39;/Users/cudmore/Desktop/data/rr30a/rr30a.txt&#39;</span>
+<span class="n">m</span> <span class="o">=</span> <span class="n">mmMap</span><span class="p">(</span><span class="n">filePath</span><span class="o">=</span><span class="n">path</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Once created and populated with stack, get the ith mmStack using:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">stack</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">stacks</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Use getMapValues2() to retrieve stack statistics (for the given segmentID) across the entire map:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pDist_values</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">getMapValues2</span><span class="p">(</span><span class="s1">&#39;pDist&#39;</span><span class="p">,</span> <span class="n">segmentID</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+</pre></div>
+</div>
+<dl class="attribute">
+<dt id="PyMapManager.mmMap.mmMap.filePath">
+<code class="descname">filePath</code><em class="property"> = None</em><a class="headerlink" href="#PyMapManager.mmMap.mmMap.filePath" title="Permalink to this definition">¶</a></dt>
+<dd><p>Path to file used to open map.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="PyMapManager.mmMap.mmMap.folder">
+<code class="descname">folder</code><em class="property"> = None</em><a class="headerlink" href="#PyMapManager.mmMap.mmMap.folder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Path to enclosing folder, ends in &#8216;/&#8217;.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="PyMapManager.mmMap.mmMap.getMapValues">
+<code class="descname">getMapValues</code><span class="sig-paren">(</span><em>d</em>, <em>flatten=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyMapManager/mmMap.html#mmMap.getMapValues"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.mmMap.mmMap.getMapValues" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get values of a stack statistic across all stacks in the map</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt>d (dict): Dictionary specifying parameters for the plot. See PyMApManager.PLOT_STRUCT</dt>
+<dd>flatten (boolean): On return flatten 2D into 1D</dd>
+</dl>
+</dd>
+<dt>Returns:</dt>
+<dd>(xPlot,yPlot, yIdx, ySess, yRunRow) which are all 2D numpy array</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="PyMapManager.mmMap.mmMap.getMapValues2">
+<code class="descname">getMapValues2</code><span class="sig-paren">(</span><em>stat</em>, <em>roiType='spineROI'</em>, <em>segmentID=[]</em>, <em>plotBad=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyMapManager/mmMap.html#mmMap.getMapValues2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.mmMap.mmMap.getMapValues2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get values of a stack statistic across all stacks in the map</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><dl class="first last docutils">
+<dt>stat (str): The stack statistic to get (corresponds to a column in mmStack.stackdb)</dt>
+<dd>roiType (str): xxx
+segmentID (list): xxx
+plotBad (boolean): xxx</dd>
+</dl>
+</dd>
+<dt>Returns:</dt>
+<dd>2D numpy array of stat values. Each row is a run of objects connected across sessions, columns are sessions, each [i][j] is a stat value</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="PyMapManager.mmMap.mmMap.getNumSegments">
+<code class="descname">getNumSegments</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyMapManager/mmMap.html#mmMap.getNumSegments"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.mmMap.mmMap.getNumSegments" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="PyMapManager.mmMap.mmMap.getStackName">
+<code class="descname">getStackName</code><span class="sig-paren">(</span><em>sess</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyMapManager/mmMap.html#mmMap.getStackName"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.mmMap.mmMap.getStackName" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Args:</dt>
+<dd>sess: Session number</dd>
+</dl>
+<p>Return: stack name as str</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="PyMapManager.mmMap.mmMap.getValue">
+<code class="descname">getValue</code><span class="sig-paren">(</span><em>name</em>, <em>sessionNumber</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyMapManager/mmMap.html#mmMap.getValue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.mmMap.mmMap.getValue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a value from the map (not from a stack!).</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>name: Name of map stat
+sessionNumber: Session number</dd>
+<dt>Returns:</dt>
+<dd>Str (this is a single value)</dd>
+</dl>
+<p>Examples:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">getValue</span><span class="p">(</span><span class="s1">&#39;voxelx&#39;</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span> <span class="c1"># get the x voxel size of stack 5 (in um/pixel)</span>
+<span class="n">m</span><span class="o">.</span><span class="n">getValue</span><span class="p">(</span><span class="s1">&#39;hsStack&#39;</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span> <span class="c1"># get the name of stack 3</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="PyMapManager.mmMap.mmMap.name">
+<code class="descname">name</code><em class="property"> = None</em><a class="headerlink" href="#PyMapManager.mmMap.mmMap.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>name of the map, for a map loaded with file a5n.txt, the name is a5b. Same as enclosing folder name.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="PyMapManager.mmMap.mmMap.numChannels">
+<code class="descname">numChannels</code><em class="property"> = None</em><a class="headerlink" href="#PyMapManager.mmMap.mmMap.numChannels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of image channels in each stack (must be the same for all stacks).</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="PyMapManager.mmMap.mmMap.numSessions">
+<code class="descname">numSessions</code><em class="property"> = None</em><a class="headerlink" href="#PyMapManager.mmMap.mmMap.numSessions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of sessions in the map.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="PyMapManager.mmMap.mmMap.stacks">
+<code class="descname">stacks</code><em class="property"> = None</em><a class="headerlink" href="#PyMapManager.mmMap.mmMap.stacks" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of mmStack</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="PyMapManager.mmMap.mmMap.table">
+<code class="descname">table</code><em class="property"> = None</em><a class="headerlink" href="#PyMapManager.mmMap.mmMap.table" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pandas df loaded from filePath. Get values using getValue(name,session)</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-PyMapManager.mmMapPool">
+<span id="pymapmanager-mmmappool-module"></span><h2>PyMapManager.mmMapPool module<a class="headerlink" href="#module-PyMapManager.mmMapPool" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="PyMapManager.mmMapPool.mmMapPool">
+<em class="property">class </em><code class="descclassname">PyMapManager.mmMapPool.</code><code class="descname">mmMapPool</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyMapManager/mmMapPool.html#mmMapPool"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.mmMapPool.mmMapPool" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-PyMapManager.mmStack">
+<span id="pymapmanager-mmstack-module"></span><h2>PyMapManager.mmStack module<a class="headerlink" href="#module-PyMapManager.mmStack" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="PyMapManager.mmStack.mmStack">
+<em class="property">class </em><code class="descclassname">PyMapManager.mmStack.</code><code class="descname">mmStack</code><span class="sig-paren">(</span><em>name=None</em>, <em>numChannels=1</em>, <em>map=None</em>, <em>mapSession=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyMapManager/mmStack.html#mmStack"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.mmStack.mmStack" title="Permalink to this definition">¶</a></dt>
+<dd><p>A stack contains a 3D Tiff, a list of 3D annotations, and optionally a number of dendritic (segment) tracings.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>name (str): Name of the stack. Used to fetch .tif file
+numChannels (int): Number of channels.
+map (object): Runtime object of <a class="reference internal" href="#module-PyMapManager.mmMap" title="PyMapManager.mmMap"><code class="xref py py-class docutils literal"><span class="pre">PyMapManager.mmMap</span></code></a> that created the stack.
+mapSession (int): The map session number for the stack.</dd>
+</dl>
+<dl class="method">
+<dt id="PyMapManager.mmStack.mmStack.add_to_map">
+<code class="descname">add_to_map</code><span class="sig-paren">(</span><em>map</em>, <em>session</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyMapManager/mmStack.html#mmStack.add_to_map"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.mmStack.mmStack.add_to_map" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add the stack into a map at the given session index</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="PyMapManager.mmStack.mmStack.getStackValues">
+<code class="descname">getStackValues</code><span class="sig-paren">(</span><em>token</em>, <em>roiType='spineROI'</em>, <em>segmentID=[]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyMapManager/mmStack.html#mmStack.getStackValues"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.mmStack.mmStack.getStackValues" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the values for a given token. Valid tokens are columns of stackdb.
+Specify roiType to get values for a given type.
+Specify a list of segments with segmentID to get just those segments.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>token (str): Statistic name (Must be a column name in pandas dataframe stackdb)
+roiType (str): xxx
+segmentID (list): xxx</dd>
+<dt>Return:</dt>
+<dd>1D numpy array of &#8216;token&#8217; values matching criteria.
+This is NOT the same size as stackdb it only contains values of interest.
+Use reverseLookup to find index into theValues that corresponds to an actual stackdb index</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="PyMapManager.mmStack.mmStack.images">
+<code class="descname">images</code><em class="property"> = None</em><a class="headerlink" href="#PyMapManager.mmStack.mmStack.images" title="Permalink to this definition">¶</a></dt>
+<dd><p>3D numpy array of the stacks images, axis 0 is slices</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="PyMapManager.mmStack.mmStack.loadStack">
+<code class="descname">loadStack</code><span class="sig-paren">(</span><em>channel=2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyMapManager/mmStack.html#mmStack.loadStack"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.mmStack.mmStack.loadStack" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load the images for a stack. Sets &#8216;images&#8217; instance variable</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>channel (int): Specifies the channel number to load. MapManager uses single channel .tif files. Each channel has its own file: _ch1.tif, _ch2.tif, _ch3.tif.</dd>
+<dt>Return:</dt>
+<dd>3D numpy array of images.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="PyMapManager.mmStack.mmStack.numObj">
+<code class="descname">numObj</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyMapManager/mmStack.html#mmStack.numObj"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.mmStack.mmStack.numObj" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the number of objects (annotations) in the stack. This is the number of rows in stackdb</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-PyMapManager.mmStackLine">
+<span id="pymapmanager-mmstackline-module"></span><h2>PyMapManager.mmStackLine module<a class="headerlink" href="#module-PyMapManager.mmStackLine" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="PyMapManager.mmStackLine.mmStackLine">
+<em class="property">class </em><code class="descclassname">PyMapManager.mmStackLine.</code><code class="descname">mmStackLine</code><span class="sig-paren">(</span><em>stack</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyMapManager/mmStackLine.html#mmStackLine"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.mmStackLine.mmStackLine" title="Permalink to this definition">¶</a></dt>
+<dd><p>A stack line represents a 3D tracing of a number of dendritic segments. Get a particular segment with getLine(segmentID=[]). Each spineROI and axonROI annotation in a mmStack is associated with one segmentID.</p>
+<dl class="method">
+<dt id="PyMapManager.mmStackLine.mmStackLine.getLine">
+<code class="descname">getLine</code><span class="sig-paren">(</span><em>segmentID=[]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyMapManager/mmStackLine.html#mmStackLine.getLine"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.mmStackLine.mmStackLine.getLine" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the x/y/z values of a line tracing. Pass segmentID to get just one tracing. Note, x/y are in um, z is in slices!</p>
+<p>segmentID (list): List of int specifying which segmentID, pass [] to get all.</p>
+<p>Return: np array of (x,y,z)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="PyMapManager.mmStackLine.mmStackLine.getLineLength">
+<code class="descname">getLineLength</code><span class="sig-paren">(</span><em>segmentID=[]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyMapManager/mmStackLine.html#mmStackLine.getLineLength"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.mmStackLine.mmStackLine.getLineLength" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the 3D line segment length in um</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="PyMapManager.mmStackLine.mmStackLine.linedb">
+<code class="descname">linedb</code><em class="property"> = None</em><a class="headerlink" href="#PyMapManager.mmStackLine.mmStackLine.linedb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pandas dataframe with (x,y,z,segmentID) columns</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-PyMapManager.mmUtil">
+<span id="pymapmanager-mmutil-module"></span><h2>PyMapManager.mmUtil module<a class="headerlink" href="#module-PyMapManager.mmUtil" title="Permalink to this headline">¶</a></h2>
+<p>Utility functions and classes for map manager.</p>
+<p>Try and keep these out of __init__.py</p>
+<dl class="data">
+<dt id="PyMapManager.mmUtil.PLOT_STRUCT">
+<code class="descclassname">PyMapManager.mmUtil.</code><code class="descname">PLOT_STRUCT</code><em class="property"> = {'xstat': '', 'segmentID': [], 'ystat': '', 'plotBad': False, 'roiType': 'spineROI', 'plotIntBad': False}</em><a class="headerlink" href="#PyMapManager.mmUtil.PLOT_STRUCT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Used to read interface state in QT and used to reduce number of parameters passed to plot functions</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="PyMapManager.mmUtil.ROI_TYPES">
+<code class="descclassname">PyMapManager.mmUtil.</code><code class="descname">ROI_TYPES</code><em class="property"> = ['spineROI', 'otherROI']</em><a class="headerlink" href="#PyMapManager.mmUtil.ROI_TYPES" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allowed ROI types. Specifies valid &#8216;roiType&#8217;.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="PyMapManager.mmUtil.STACK_STATS">
+<code class="descclassname">PyMapManager.mmUtil.</code><code class="descname">STACK_STATS</code><em class="property"> = ['Idx', 'x', 'y', 'z', 'pDist']</em><a class="headerlink" href="#PyMapManager.mmUtil.STACK_STATS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allowed stack stats. Specifies valid &#8216;tokens&#8217; for mmStack.getValue().</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="PyMapManager.mmUtil.mmEvent">
+<em class="property">class </em><code class="descclassname">PyMapManager.mmUtil.</code><code class="descname">mmEvent</code><span class="sig-paren">(</span><em>map</em>, <em>sessIdx</em>, <em>stackdbIdx</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyMapManager/mmUtil.html#mmEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.mmUtil.mmEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class to broadcast events. Events can be user events like &#8216;spine selection&#8217; or program events like &#8216;map opened&#8217;</p>
+<dl class="method">
+<dt id="PyMapManager.mmUtil.mmEvent.getText">
+<code class="descname">getText</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyMapManager/mmUtil.html#mmEvent.getText"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.mmUtil.mmEvent.getText" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="PyMapManager.mmUtil.mmEvent.spineSelection">
+<code class="descname">spineSelection</code><span class="sig-paren">(</span><em>map</em>, <em>sessIdx</em>, <em>stackdbIdx</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyMapManager/mmUtil.html#mmEvent.spineSelection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.mmUtil.mmEvent.spineSelection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make a single spine selection event</p>
+<p>map: map object
+sessIdx: int
+stackdbIdx: int</p>
+<p>Todo: extend this to list of spines</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="PyMapManager.mmUtil.newplotstruct">
+<code class="descclassname">PyMapManager.mmUtil.</code><code class="descname">newplotstruct</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyMapManager/mmUtil.html#newplotstruct"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.mmUtil.newplotstruct" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-PyMapManager">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-PyMapManager" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">PyMapManager package</a><ul>
+<li><a class="reference internal" href="#subpackages">Subpackages</a></li>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-PyMapManager.main">PyMapManager.main module</a></li>
+<li><a class="reference internal" href="#module-PyMapManager.mmMap">PyMapManager.mmMap module</a></li>
+<li><a class="reference internal" href="#module-PyMapManager.mmMapPool">PyMapManager.mmMapPool module</a></li>
+<li><a class="reference internal" href="#module-PyMapManager.mmStack">PyMapManager.mmStack module</a></li>
+<li><a class="reference internal" href="#module-PyMapManager.mmStackLine">PyMapManager.mmStackLine module</a></li>
+<li><a class="reference internal" href="#module-PyMapManager.mmUtil">PyMapManager.mmUtil module</a></li>
+<li><a class="reference internal" href="#module-PyMapManager">Module contents</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/PyMapManager.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, RHC.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/PyMapManager.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

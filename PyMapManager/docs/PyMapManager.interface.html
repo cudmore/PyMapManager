@@ -1,0 +1,544 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>PyMapManager.interface package &#8212; PyMapManager a0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     'a0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="pymapmanager-interface-package">
+<h1>PyMapManager.interface package<a class="headerlink" href="#pymapmanager-interface-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-PyMapManager.interface.mmApp">
+<span id="pymapmanager-interface-mmapp-module"></span><h2>PyMapManager.interface.mmApp module<a class="headerlink" href="#module-PyMapManager.interface.mmApp" title="Permalink to this headline">¶</a></h2>
+<p>Main PyMapManager application interface using PyQt interface library.</p>
+<p>Instantiate mmApplicationWindow to open the main window</p>
+<p>Example:</p>
+<blockquote>
+<div><p>from PyQt4 import QtGui
+from PyMapManager.interface.mmApp import mmApplicationWindow</p>
+<p>qApp = QtGui.QApplication(sys.argv)
+aw = mmApplicationWindow()
+aw.show()
+sys.exit(qApp.exec_())</p>
+</div></blockquote>
+<dl class="class">
+<dt id="PyMapManager.interface.mmApp.mmApplicationWindow">
+<em class="property">class </em><code class="descclassname">PyMapManager.interface.mmApp.</code><code class="descname">mmApplicationWindow</code><a class="reference internal" href="_modules/PyMapManager/interface/mmApp.html#mmApplicationWindow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.interface.mmApp.mmApplicationWindow" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">PyQt4.QtGui.QMainWindow</span></code></p>
+<p>Main PyMapManager applicaiton window. This holds list widgets to display: maps, sessions, segments, and stats</p>
+<dl class="method">
+<dt id="PyMapManager.interface.mmApp.mmApplicationWindow.about">
+<code class="descname">about</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyMapManager/interface/mmApp.html#mmApplicationWindow.about"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.interface.mmApp.mmApplicationWindow.about" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="PyMapManager.interface.mmApp.mmApplicationWindow.broadcastevent">
+<code class="descname">broadcastevent</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyMapManager/interface/mmApp.html#mmApplicationWindow.broadcastevent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.interface.mmApp.mmApplicationWindow.broadcastevent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Broadcast an event to all open application windows (self._windows) and call receiveevent(event)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="PyMapManager.interface.mmApp.mmApplicationWindow.closeEvent">
+<code class="descname">closeEvent</code><span class="sig-paren">(</span><em>ce</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyMapManager/interface/mmApp.html#mmApplicationWindow.closeEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.interface.mmApp.mmApplicationWindow.closeEvent" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="PyMapManager.interface.mmApp.mmApplicationWindow.closechildwindow">
+<code class="descname">closechildwindow</code><span class="sig-paren">(</span><em>windowPtr</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyMapManager/interface/mmApp.html#mmApplicationWindow.closechildwindow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.interface.mmApp.mmApplicationWindow.closechildwindow" title="Permalink to this definition">¶</a></dt>
+<dd><p>called when we close a PlotWindow</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="PyMapManager.interface.mmApp.mmApplicationWindow.dragEnterEvent">
+<code class="descname">dragEnterEvent</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyMapManager/interface/mmApp.html#mmApplicationWindow.dragEnterEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.interface.mmApp.mmApplicationWindow.dragEnterEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Changes the look of the main window when a file/folder is dragged over the window.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="PyMapManager.interface.mmApp.mmApplicationWindow.dropEvent">
+<code class="descname">dropEvent</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyMapManager/interface/mmApp.html#mmApplicationWindow.dropEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.interface.mmApp.mmApplicationWindow.dropEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handles opening a map, stack, or folder of maps/stacks when they are dropped on the main window.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="PyMapManager.interface.mmApp.mmApplicationWindow.fileQuit">
+<code class="descname">fileQuit</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyMapManager/interface/mmApp.html#mmApplicationWindow.fileQuit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.interface.mmApp.mmApplicationWindow.fileQuit" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="PyMapManager.interface.mmApp.mmApplicationWindow.getState">
+<code class="descname">getState</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyMapManager/interface/mmApp.html#mmApplicationWindow.getState"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.interface.mmApp.mmApplicationWindow.getState" title="Permalink to this definition">¶</a></dt>
+<dd><p>Capture the full state of the interface including selected: map, session, segment, ystat, xstat.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="PyMapManager.interface.mmApp.mmApplicationWindow.loadMap">
+<code class="descname">loadMap</code><span class="sig-paren">(</span><em>path=''</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyMapManager/interface/mmApp.html#mmApplicationWindow.loadMap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.interface.mmApp.mmApplicationWindow.loadMap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load a mmMap into application. Application keeps &#8216;maps&#8217;, a list of maps.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="PyMapManager.interface.mmApp.mmApplicationWindow.map_list_changed">
+<code class="descname">map_list_changed</code><span class="sig-paren">(</span><em>curr</em>, <em>prev</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyMapManager/interface/mmApp.html#mmApplicationWindow.map_list_changed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.interface.mmApp.mmApplicationWindow.map_list_changed" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="PyMapManager.interface.mmApp.mmApplicationWindow.plotMapButton_callback">
+<code class="descname">plotMapButton_callback</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyMapManager/interface/mmApp.html#mmApplicationWindow.plotMapButton_callback"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.interface.mmApp.mmApplicationWindow.plotMapButton_callback" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="PyMapManager.interface.mmApp.mmApplicationWindow.plotStackButton_callback">
+<code class="descname">plotStackButton_callback</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyMapManager/interface/mmApp.html#mmApplicationWindow.plotStackButton_callback"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.interface.mmApp.mmApplicationWindow.plotStackButton_callback" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="PyMapManager.interface.mmApp.mmApplicationWindow.plotStackImageButton_callback">
+<code class="descname">plotStackImageButton_callback</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyMapManager/interface/mmApp.html#mmApplicationWindow.plotStackImageButton_callback"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.interface.mmApp.mmApplicationWindow.plotStackImageButton_callback" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="PyMapManager.interface.mmApp.mmApplicationWindow.plotmap0">
+<code class="descname">plotmap0</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyMapManager/interface/mmApp.html#mmApplicationWindow.plotmap0"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.interface.mmApp.mmApplicationWindow.plotmap0" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot a session versus pDist map. This responds to double-click of a map in the map list.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="PyMapManager.interface.mmApp.mmApplicationWindow.seg_list_changed">
+<code class="descname">seg_list_changed</code><span class="sig-paren">(</span><em>curr</em>, <em>prev</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyMapManager/interface/mmApp.html#mmApplicationWindow.seg_list_changed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.interface.mmApp.mmApplicationWindow.seg_list_changed" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="PyMapManager.interface.mmApp.mmApplicationWindow.selectMap">
+<code class="descname">selectMap</code><span class="sig-paren">(</span><em>idx</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyMapManager/interface/mmApp.html#mmApplicationWindow.selectMap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.interface.mmApp.mmApplicationWindow.selectMap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the interface when user selects a different map or a new map is loaded</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="PyMapManager.interface.mmApp.mmApplicationWindow.sess_list_changed">
+<code class="descname">sess_list_changed</code><span class="sig-paren">(</span><em>curr</em>, <em>prev</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyMapManager/interface/mmApp.html#mmApplicationWindow.sess_list_changed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.interface.mmApp.mmApplicationWindow.sess_list_changed" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="PyMapManager.interface.mmApp.mmApplicationWindow.setDefaultRoiType">
+<code class="descname">setDefaultRoiType</code><span class="sig-paren">(</span><em>text</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyMapManager/interface/mmApp.html#mmApplicationWindow.setDefaultRoiType"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.interface.mmApp.mmApplicationWindow.setDefaultRoiType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Respond to roiType popup/QComboBox</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="PyMapManager.interface.mmApp.mmApplicationWindow.toolbarButton_callback">
+<code class="descname">toolbarButton_callback</code><span class="sig-paren">(</span><em>buttonID</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyMapManager/interface/mmApp.html#mmApplicationWindow.toolbarButton_callback"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.interface.mmApp.mmApplicationWindow.toolbarButton_callback" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-PyMapManager.interface.mmCanvas">
+<span id="pymapmanager-interface-mmcanvas-module"></span><h2>PyMapManager.interface.mmCanvas module<a class="headerlink" href="#module-PyMapManager.interface.mmCanvas" title="Permalink to this headline">¶</a></h2>
+<p>This module implements canvas classes to do the drawing inside PyMapManager windows</p>
+<blockquote>
+<div><p>StackImageCanvase: Canvas to display and interact with an 3D image volume (stack)</p>
+<p>mapplotcanvas:
+stackplotcanvas:
+segmentplotcanvas:</p>
+</div></blockquote>
+<dl class="class">
+<dt id="PyMapManager.interface.mmCanvas.mmCanvas">
+<em class="property">class </em><code class="descclassname">PyMapManager.interface.mmCanvas.</code><code class="descname">mmCanvas</code><span class="sig-paren">(</span><em>parent=None</em>, <em>width=5</em>, <em>height=4</em>, <em>dpi=100</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyMapManager/interface/mmCanvas.html#mmCanvas"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.interface.mmCanvas.mmCanvas" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">matplotlib.backends.backend_qt4agg.FigureCanvasQTAgg</span></code></p>
+<p>A figure canvas that holds a matplotlib figure. User actions are linked to this canvas with mpl_connect. This canvas must have Qt.ClickFocus to receive user events.</p>
+<dl class="method">
+<dt id="PyMapManager.interface.mmCanvas.mmCanvas.onclick">
+<code class="descname">onclick</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyMapManager/interface/mmCanvas.html#mmCanvas.onclick"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.interface.mmCanvas.mmCanvas.onclick" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="PyMapManager.interface.mmCanvas.mmCanvas.onkey">
+<code class="descname">onkey</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyMapManager/interface/mmCanvas.html#mmCanvas.onkey"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.interface.mmCanvas.mmCanvas.onkey" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="PyMapManager.interface.mmCanvas.mmCanvas.onpick">
+<code class="descname">onpick</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyMapManager/interface/mmCanvas.html#mmCanvas.onpick"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.interface.mmCanvas.mmCanvas.onpick" title="Permalink to this definition">¶</a></dt>
+<dd><p>Respond to clicks in a map, stack, and image plot.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="PyMapManager.interface.mmCanvas.mmCanvas.onscroll">
+<code class="descname">onscroll</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyMapManager/interface/mmCanvas.html#mmCanvas.onscroll"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.interface.mmCanvas.mmCanvas.onscroll" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="PyMapManager.interface.mmCanvas.mmCanvas.plot">
+<code class="descname">plot</code><span class="sig-paren">(</span><em>stateDict</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyMapManager/interface/mmCanvas.html#mmCanvas.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.interface.mmCanvas.mmCanvas.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>All derived classes should over-ride this and have code to plot.</p>
+<p>stateDict: Dictionary describing what to plot. See mmApplication.getState()</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="PyMapManager.interface.mmCanvas.mmCanvas.receiveevent">
+<code class="descname">receiveevent</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyMapManager/interface/mmCanvas.html#mmCanvas.receiveevent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.interface.mmCanvas.mmCanvas.receiveevent" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="PyMapManager.interface.mmCanvas.mmCanvas.toggledynamics">
+<code class="descname">toggledynamics</code><span class="sig-paren">(</span><em>onoff=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyMapManager/interface/mmCanvas.html#mmCanvas.toggledynamics"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.interface.mmCanvas.mmCanvas.toggledynamics" title="Permalink to this definition">¶</a></dt>
+<dd><p>Turn dynamics marker color on and off</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="PyMapManager.interface.mmCanvas.mmCanvas.togglelines">
+<code class="descname">togglelines</code><span class="sig-paren">(</span><em>onoff=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyMapManager/interface/mmCanvas.html#mmCanvas.togglelines"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.interface.mmCanvas.mmCanvas.togglelines" title="Permalink to this definition">¶</a></dt>
+<dd><p>Toggle lines connecting annotations between timepoint. Be carefull here on repeatedly plot these lines</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="PyMapManager.interface.mmCanvas.mmMapPlotCanvas">
+<em class="property">class </em><code class="descclassname">PyMapManager.interface.mmCanvas.</code><code class="descname">mmMapPlotCanvas</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyMapManager/interface/mmCanvas.html#mmMapPlotCanvas"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.interface.mmCanvas.mmMapPlotCanvas" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#PyMapManager.interface.mmCanvas.mmCanvas" title="PyMapManager.interface.mmCanvas.mmCanvas"><code class="xref py py-class docutils literal"><span class="pre">PyMapManager.interface.mmCanvas.mmCanvas</span></code></a></p>
+<p>Plot and interact with a plot of stack values across a map</p>
+<dl class="method">
+<dt id="PyMapManager.interface.mmCanvas.mmMapPlotCanvas.onkey">
+<code class="descname">onkey</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyMapManager/interface/mmCanvas.html#mmMapPlotCanvas.onkey"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.interface.mmCanvas.mmMapPlotCanvas.onkey" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="PyMapManager.interface.mmCanvas.mmMapPlotCanvas.onpick">
+<code class="descname">onpick</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyMapManager/interface/mmCanvas.html#mmMapPlotCanvas.onpick"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.interface.mmCanvas.mmMapPlotCanvas.onpick" title="Permalink to this definition">¶</a></dt>
+<dd><p>Respond to clicks in a map.</p>
+<p>event.ind: A list of hit points, just use the first.
+We are normally plotting self.runMap (a 2D nparray) with NaN.
+event.ind is index into this array AFTER nan has been stripped.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="PyMapManager.interface.mmCanvas.mmMapPlotCanvas.plot">
+<code class="descname">plot</code><span class="sig-paren">(</span><em>stateDict</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyMapManager/interface/mmCanvas.html#mmMapPlotCanvas.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.interface.mmCanvas.mmMapPlotCanvas.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot mmStack values for all mmStack(s) in the map.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="PyMapManager.interface.mmCanvas.mmMapPlotCanvas.plotMap0">
+<code class="descname">plotMap0</code><span class="sig-paren">(</span><em>stateDict</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyMapManager/interface/mmCanvas.html#mmMapPlotCanvas.plotMap0"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.interface.mmCanvas.mmMapPlotCanvas.plotMap0" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot a canonical map of pDist versus session.</p>
+<p>stateDict: Tells us map to plot</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="PyMapManager.interface.mmCanvas.mmMapPlotCanvas.receiveevent">
+<code class="descname">receiveevent</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyMapManager/interface/mmCanvas.html#mmMapPlotCanvas.receiveevent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.interface.mmCanvas.mmMapPlotCanvas.receiveevent" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="PyMapManager.interface.mmCanvas.mmMapPlotCanvas.toggledynamics">
+<code class="descname">toggledynamics</code><span class="sig-paren">(</span><em>onoff=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyMapManager/interface/mmCanvas.html#mmMapPlotCanvas.toggledynamics"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.interface.mmCanvas.mmMapPlotCanvas.toggledynamics" title="Permalink to this definition">¶</a></dt>
+<dd><p>Turn dynamics marker color on and off</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="PyMapManager.interface.mmCanvas.mmMapPlotCanvas.togglelines">
+<code class="descname">togglelines</code><span class="sig-paren">(</span><em>onoff=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyMapManager/interface/mmCanvas.html#mmMapPlotCanvas.togglelines"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.interface.mmCanvas.mmMapPlotCanvas.togglelines" title="Permalink to this definition">¶</a></dt>
+<dd><p>Toggle lines connecting annotations between timepoint. Be carefull here on repeatedly plot these lines</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="PyMapManager.interface.mmCanvas.mmStackCanvas">
+<em class="property">class </em><code class="descclassname">PyMapManager.interface.mmCanvas.</code><code class="descname">mmStackCanvas</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyMapManager/interface/mmCanvas.html#mmStackCanvas"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.interface.mmCanvas.mmStackCanvas" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#PyMapManager.interface.mmCanvas.mmCanvas" title="PyMapManager.interface.mmCanvas.mmCanvas"><code class="xref py py-class docutils literal"><span class="pre">PyMapManager.interface.mmCanvas.mmCanvas</span></code></a></p>
+<p>Plot and interact with a 3D images stack</p>
+<dl class="method">
+<dt id="PyMapManager.interface.mmCanvas.mmStackCanvas.onpick">
+<code class="descname">onpick</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyMapManager/interface/mmCanvas.html#mmStackCanvas.onpick"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.interface.mmCanvas.mmStackCanvas.onpick" title="Permalink to this definition">¶</a></dt>
+<dd><p>Respond to clicks in a map, stack, and image plot.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="PyMapManager.interface.mmCanvas.mmStackCanvas.onscroll">
+<code class="descname">onscroll</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyMapManager/interface/mmCanvas.html#mmStackCanvas.onscroll"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.interface.mmCanvas.mmStackCanvas.onscroll" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="PyMapManager.interface.mmCanvas.mmStackCanvas.plot">
+<code class="descname">plot</code><span class="sig-paren">(</span><em>stateDict</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyMapManager/interface/mmCanvas.html#mmStackCanvas.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.interface.mmCanvas.mmStackCanvas.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot a mmStack.images 3D image</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="PyMapManager.interface.mmCanvas.mmStackCanvas.receiveevent">
+<code class="descname">receiveevent</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyMapManager/interface/mmCanvas.html#mmStackCanvas.receiveevent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.interface.mmCanvas.mmStackCanvas.receiveevent" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="PyMapManager.interface.mmCanvas.mmStackCanvas.selectPoint">
+<code class="descname">selectPoint</code><span class="sig-paren">(</span><em>stackdbIdx</em>, <em>snap=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyMapManager/interface/mmCanvas.html#mmStackCanvas.selectPoint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.interface.mmCanvas.mmStackCanvas.selectPoint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Visually select a single point</p>
+<p>todo: extend this to take a list of points to select
+todo: this will select points that may be masked out (we use self.xPlot/self.yPlot but are plotting self.xMasked/self.yMasked</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="PyMapManager.interface.mmCanvas.mmStackCanvas.setSliceContrast">
+<code class="descname">setSliceContrast</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyMapManager/interface/mmCanvas.html#mmStackCanvas.setSliceContrast"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.interface.mmCanvas.mmStackCanvas.setSliceContrast" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="PyMapManager.interface.mmCanvas.mmStackCanvas.setSlice_">
+<code class="descname">setSlice_</code><span class="sig-paren">(</span><em>sliceNum</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyMapManager/interface/mmCanvas.html#mmStackCanvas.setSlice_"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.interface.mmCanvas.mmStackCanvas.setSlice_" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the slice when canvas is displaying a mmStack</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="PyMapManager.interface.mmCanvas.mmStackCanvas.toggledynamics">
+<code class="descname">toggledynamics</code><span class="sig-paren">(</span><em>onoff=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyMapManager/interface/mmCanvas.html#mmStackCanvas.toggledynamics"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.interface.mmCanvas.mmStackCanvas.toggledynamics" title="Permalink to this definition">¶</a></dt>
+<dd><p>Need to write this for stack, see parent function</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="PyMapManager.interface.mmCanvas.mmStackPlotCanvas">
+<em class="property">class </em><code class="descclassname">PyMapManager.interface.mmCanvas.</code><code class="descname">mmStackPlotCanvas</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyMapManager/interface/mmCanvas.html#mmStackPlotCanvas"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.interface.mmCanvas.mmStackPlotCanvas" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#PyMapManager.interface.mmCanvas.mmCanvas" title="PyMapManager.interface.mmCanvas.mmCanvas"><code class="xref py py-class docutils literal"><span class="pre">PyMapManager.interface.mmCanvas.mmCanvas</span></code></a></p>
+<p>Plot and interact with a plot of stack values across a map</p>
+<dl class="method">
+<dt id="PyMapManager.interface.mmCanvas.mmStackPlotCanvas.onkey">
+<code class="descname">onkey</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyMapManager/interface/mmCanvas.html#mmStackPlotCanvas.onkey"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.interface.mmCanvas.mmStackPlotCanvas.onkey" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="PyMapManager.interface.mmCanvas.mmStackPlotCanvas.onpick">
+<code class="descname">onpick</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyMapManager/interface/mmCanvas.html#mmStackPlotCanvas.onpick"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.interface.mmCanvas.mmStackPlotCanvas.onpick" title="Permalink to this definition">¶</a></dt>
+<dd><p>Respond to clicks in a stack plot.</p>
+<p>event.ind: A list of hit points, just use the first.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="PyMapManager.interface.mmCanvas.mmStackPlotCanvas.plot">
+<code class="descname">plot</code><span class="sig-paren">(</span><em>stateDict</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyMapManager/interface/mmCanvas.html#mmStackPlotCanvas.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.interface.mmCanvas.mmStackPlotCanvas.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot mmStack values</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="PyMapManager.interface.mmCanvas.mmStackPlotCanvas.receiveevent">
+<code class="descname">receiveevent</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyMapManager/interface/mmCanvas.html#mmStackPlotCanvas.receiveevent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.interface.mmCanvas.mmStackPlotCanvas.receiveevent" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="PyMapManager.interface.mmCanvas.mmStackPlotCanvas.selectPoint">
+<code class="descname">selectPoint</code><span class="sig-paren">(</span><em>stackdbIdx</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyMapManager/interface/mmCanvas.html#mmStackPlotCanvas.selectPoint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.interface.mmCanvas.mmStackPlotCanvas.selectPoint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Visually select a single point</p>
+<p>todo: extend this to take a list of points to select</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="PyMapManager.interface.mmCanvas.mmStackPlotCanvas.toggledynamics">
+<code class="descname">toggledynamics</code><span class="sig-paren">(</span><em>onoff=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyMapManager/interface/mmCanvas.html#mmStackPlotCanvas.toggledynamics"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.interface.mmCanvas.mmStackPlotCanvas.toggledynamics" title="Permalink to this definition">¶</a></dt>
+<dd><p>Turn dynamics marker color on and off</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-PyMapManager.interface.mmTable">
+<span id="pymapmanager-interface-mmtable-module"></span><h2>PyMapManager.interface.mmTable module<a class="headerlink" href="#module-PyMapManager.interface.mmTable" title="Permalink to this headline">¶</a></h2>
+<p>Tables to display stackdb pandas data frame</p>
+<dl class="class">
+<dt id="PyMapManager.interface.mmTable.MyPandasModel">
+<em class="property">class </em><code class="descclassname">PyMapManager.interface.mmTable.</code><code class="descname">MyPandasModel</code><span class="sig-paren">(</span><em>data</em>, <em>roiType='spineROI'</em>, <em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyMapManager/interface/mmTable.html#MyPandasModel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.interface.mmTable.MyPandasModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">PyQt4.QtCore.QAbstractTableModel</span></code></p>
+<p>Class to populate a table view with a pandas dataframe</p>
+<dl class="method">
+<dt id="PyMapManager.interface.mmTable.MyPandasModel.columnCount">
+<code class="descname">columnCount</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyMapManager/interface/mmTable.html#MyPandasModel.columnCount"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.interface.mmTable.MyPandasModel.columnCount" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="PyMapManager.interface.mmTable.MyPandasModel.data">
+<code class="descname">data</code><span class="sig-paren">(</span><em>index</em>, <em>role=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyMapManager/interface/mmTable.html#MyPandasModel.data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.interface.mmTable.MyPandasModel.data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="PyMapManager.interface.mmTable.MyPandasModel.headerData">
+<code class="descname">headerData</code><span class="sig-paren">(</span><em>col</em>, <em>orientation</em>, <em>role</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyMapManager/interface/mmTable.html#MyPandasModel.headerData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.interface.mmTable.MyPandasModel.headerData" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="PyMapManager.interface.mmTable.MyPandasModel.rowCount">
+<code class="descname">rowCount</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyMapManager/interface/mmTable.html#MyPandasModel.rowCount"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.interface.mmTable.MyPandasModel.rowCount" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-PyMapManager.interface.mmWindow">
+<span id="pymapmanager-interface-mmwindow-module"></span><h2>PyMapManager.interface.mmWindow module<a class="headerlink" href="#module-PyMapManager.interface.mmWindow" title="Permalink to this headline">¶</a></h2>
+<p>This module defines MapManager window classes.</p>
+<p>mmWindow: Base class for others to inherit from
+StackImageWindow: A window to display and interact with a stack</p>
+<p>stackplot:
+mapplot:
+segmentplot:</p>
+<dl class="class">
+<dt id="PyMapManager.interface.mmWindow.mmMapPlotWindow">
+<em class="property">class </em><code class="descclassname">PyMapManager.interface.mmWindow.</code><code class="descname">mmMapPlotWindow</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyMapManager/interface/mmWindow.html#mmMapPlotWindow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.interface.mmWindow.mmMapPlotWindow" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#PyMapManager.interface.mmWindow.mmWindow" title="PyMapManager.interface.mmWindow.mmWindow"><code class="xref py py-class docutils literal"><span class="pre">PyMapManager.interface.mmWindow.mmWindow</span></code></a></p>
+<p>Display a map plot of points.</p>
+<p>Todo: instantiate this with a stateStruct so we can figure out number of session for session spinner interface</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="PyMapManager.interface.mmWindow.mmStackPlotWindow">
+<em class="property">class </em><code class="descclassname">PyMapManager.interface.mmWindow.</code><code class="descname">mmStackPlotWindow</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyMapManager/interface/mmWindow.html#mmStackPlotWindow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.interface.mmWindow.mmStackPlotWindow" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#PyMapManager.interface.mmWindow.mmWindow" title="PyMapManager.interface.mmWindow.mmWindow"><code class="xref py py-class docutils literal"><span class="pre">PyMapManager.interface.mmWindow.mmWindow</span></code></a></p>
+<p>Display a stack plot of points.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="PyMapManager.interface.mmWindow.mmStackWindow">
+<em class="property">class </em><code class="descclassname">PyMapManager.interface.mmWindow.</code><code class="descname">mmStackWindow</code><span class="sig-paren">(</span><em>stateDict=None</em>, <em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyMapManager/interface/mmWindow.html#mmStackWindow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.interface.mmWindow.mmStackWindow" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#PyMapManager.interface.mmWindow.mmWindow" title="PyMapManager.interface.mmWindow.mmWindow"><code class="xref py py-class docutils literal"><span class="pre">PyMapManager.interface.mmWindow.mmWindow</span></code></a></p>
+<p>Hold a stack image plot.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="PyMapManager.interface.mmWindow.mmWindow">
+<em class="property">class </em><code class="descclassname">PyMapManager.interface.mmWindow.</code><code class="descname">mmWindow</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyMapManager/interface/mmWindow.html#mmWindow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.interface.mmWindow.mmWindow" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">PyQt4.QtGui.QMainWindow</span></code></p>
+<p>A second QMainWindow to hold a plot. Possible plots are: stack image, stack, and map. StackImageWindow derives from this to plot a stack image.</p>
+<dl class="method">
+<dt id="PyMapManager.interface.mmWindow.mmWindow.broadcastevent">
+<code class="descname">broadcastevent</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyMapManager/interface/mmWindow.html#mmWindow.broadcastevent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.interface.mmWindow.mmWindow.broadcastevent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Broadcast an event to all open application windows (self._windows) and call receiveevent(event).
+The main application is the only one who can broadcast.</p>
+<p>event : A mmEvent object with params to describe the event</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="PyMapManager.interface.mmWindow.mmWindow.closeEvent">
+<code class="descname">closeEvent</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyMapManager/interface/mmWindow.html#mmWindow.closeEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.interface.mmWindow.mmWindow.closeEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>On close, remove self from xxx list</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="PyMapManager.interface.mmWindow.mmWindow.receiveevent">
+<code class="descname">receiveevent</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyMapManager/interface/mmWindow.html#mmWindow.receiveevent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.interface.mmWindow.mmWindow.receiveevent" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="PyMapManager.interface.mmWindow.mmWindow.setStatus">
+<code class="descname">setStatus</code><span class="sig-paren">(</span><em>str</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/PyMapManager/interface/mmWindow.html#mmWindow.setStatus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PyMapManager.interface.mmWindow.mmWindow.setStatus" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-PyMapManager.interface">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-PyMapManager.interface" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">PyMapManager.interface package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-PyMapManager.interface.mmApp">PyMapManager.interface.mmApp module</a></li>
+<li><a class="reference internal" href="#module-PyMapManager.interface.mmCanvas">PyMapManager.interface.mmCanvas module</a></li>
+<li><a class="reference internal" href="#module-PyMapManager.interface.mmTable">PyMapManager.interface.mmTable module</a></li>
+<li><a class="reference internal" href="#module-PyMapManager.interface.mmWindow">PyMapManager.interface.mmWindow module</a></li>
+<li><a class="reference internal" href="#module-PyMapManager.interface">Module contents</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/PyMapManager.interface.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, RHC.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/PyMapManager.interface.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,158 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>PyMapManager.mmUtil &#8212; PyMapManager a0 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     'a0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for PyMapManager.mmUtil</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Utility functions and classes for map manager.</span>
+
+<span class="sd">Try and keep these out of __init__.py</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="n">ROI_TYPES</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;spineROI&#39;</span><span class="p">,</span> <span class="s1">&#39;otherROI&#39;</span><span class="p">]</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Allowed ROI types. Specifies valid &#39;roiType&#39;.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="n">STACK_STATS</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Idx&#39;</span><span class="p">,</span>
+               <span class="s1">&#39;x&#39;</span><span class="p">,</span>
+               <span class="s1">&#39;y&#39;</span><span class="p">,</span>
+               <span class="s1">&#39;z&#39;</span><span class="p">,</span>
+               <span class="s1">&#39;pDist&#39;</span><span class="p">]</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Allowed stack stats. Specifies valid &#39;tokens&#39; for mmStack.getValue().</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="n">PLOT_STRUCT</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Used to read interface state in QT and used to reduce number of parameters passed to plot functions</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="n">PLOT_STRUCT</span><span class="p">[</span><span class="s1">&#39;xstat&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+<span class="n">PLOT_STRUCT</span><span class="p">[</span><span class="s1">&#39;ystat&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+<span class="n">PLOT_STRUCT</span><span class="p">[</span><span class="s1">&#39;roiType&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;spineROI&#39;</span>
+<span class="n">PLOT_STRUCT</span><span class="p">[</span><span class="s1">&#39;segmentID&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1"># all segment</span>
+<span class="n">PLOT_STRUCT</span><span class="p">[</span><span class="s1">&#39;plotBad&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="n">PLOT_STRUCT</span><span class="p">[</span><span class="s1">&#39;plotIntBad&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+
+<div class="viewcode-block" id="newplotstruct"><a class="viewcode-back" href="../../PyMapManager.html#PyMapManager.mmUtil.newplotstruct">[docs]</a><span class="k">def</span> <span class="nf">newplotstruct</span><span class="p">():</span> <span class="k">return</span> <span class="n">PLOT_STRUCT</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="mmEvent"><a class="viewcode-back" href="../../PyMapManager.html#PyMapManager.mmUtil.mmEvent">[docs]</a><span class="k">class</span> <span class="nc">mmEvent</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Class to broadcast events. Events can be user events like &#39;spine selection&#39; or program events like &#39;map opened&#39;&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">map</span><span class="p">,</span> <span class="n">sessIdx</span><span class="p">,</span> <span class="n">stackdbIdx</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>  <span class="c1"># unique string identifying the event</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">map</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># object</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mapSession</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># index into mmMap.stacks</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stack</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># object</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stackdbIdx</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># stack centric index into stack.stackdb</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">runMapRow</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="nb">map</span> <span class="ow">and</span> <span class="n">sessIdx</span><span class="o">&gt;=</span><span class="mi">0</span> <span class="ow">and</span> <span class="n">stackdbIdx</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">spineSelection</span><span class="p">(</span><span class="nb">map</span><span class="p">,</span> <span class="n">sessIdx</span><span class="p">,</span> <span class="n">stackdbIdx</span><span class="p">)</span>
+
+<div class="viewcode-block" id="mmEvent.spineSelection"><a class="viewcode-back" href="../../PyMapManager.html#PyMapManager.mmUtil.mmEvent.spineSelection">[docs]</a>    <span class="k">def</span> <span class="nf">spineSelection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">map</span><span class="p">,</span> <span class="n">sessIdx</span><span class="p">,</span> <span class="n">stackdbIdx</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Make a single spine selection event</span>
+
+<span class="sd">        map: map object</span>
+<span class="sd">        sessIdx: int</span>
+<span class="sd">        stackdbIdx: int</span>
+
+<span class="sd">        Todo: extend this to list of spines</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="s1">&#39;spine selection&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">map</span> <span class="o">=</span> <span class="nb">map</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mapSession</span> <span class="o">=</span> <span class="n">sessIdx</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stack</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">map</span><span class="o">.</span><span class="n">stacks</span><span class="p">[</span><span class="n">sessIdx</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stackdbIdx</span> <span class="o">=</span> <span class="n">stackdbIdx</span>
+        <span class="n">runMapRowIdx</span> <span class="o">=</span> <span class="mi">6</span> <span class="c1">#xxx</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">runMapRow</span> <span class="o">=</span> <span class="nb">map</span><span class="o">.</span><span class="n">objMap</span><span class="p">[</span><span class="n">runMapRowIdx</span><span class="p">,</span><span class="n">stackdbIdx</span><span class="p">,</span><span class="n">sessIdx</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">runMapRow</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">runMapRow</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="mmEvent.getText"><a class="viewcode-back" href="../../PyMapManager.html#PyMapManager.mmUtil.mmEvent.getText">[docs]</a>    <span class="k">def</span> <span class="nf">getText</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get a</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="s1">&#39;User Select: sess:&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mapSession</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; stackdbIdx:&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stackdbIdx</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; runRow:&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">runMapRow</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">ret</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, RHC.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>
