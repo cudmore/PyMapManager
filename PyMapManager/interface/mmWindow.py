@@ -1,11 +1,13 @@
 """This module defines MapManager window classes.
 
-    mmWindow: Base class for others to inherit from
-    StackImageWindow: A window to display and interact with a stack
+    :class:`PyMapManager.interface.mmWindow` Base class for other windows to inherit from
 
-    stackplot:
-    mapplot:
-    segmentplot:
+    :class:`PyMapManager.interface.mmStackWindow`: Display and interact with the 3D image and annotations from a :class:`PyMapManager.mmStack`.
+
+    :class:`PyMapManager.interface.mmStackPlotWindow`: Display and interact with a plot of a annotations from a:class:`PyMapManager.mmStack`.
+
+    :class:`PyMapManager.interface.mmMapPlotWindow`: Display and interact with a plot of :class:`PyMapManager.mmStack` annotations accross a :class:`PyMapManager.mmMap`.
+
 """
 
 import sys, math

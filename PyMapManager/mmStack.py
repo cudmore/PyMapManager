@@ -12,12 +12,17 @@ class mmStack():
     """
     A stack contains a 3D Tiff, a list of 3D annotations, and optionally a number of dendritic (segment) tracings.
 
-    Args:
+    A stack can either be a single time-point or be embeded into a session of a :class:`PyMapManager.mmMap`.
+
+    Attributes:
         name (str): Name of the stack. Used to fetch .tif file
         numChannels (int): Number of channels.
         map (object): Runtime object of :class:`PyMapManager.mmMap` that created the stack.
         mapSession (int): The map session number for the stack.
 
+        stackdb (pandas dataframe): Pandas dataframe of annotations, one per row. Columns are statistic names.
+            See `PyMapManager.mmUtil STACK_STATS` for valid statistic names
+        images (numpy ndarray): 3D matrix of image pixels.
     """
 
     def __init__(self, name=None, numChannels=1, map=None, mapSession=None):
@@ -38,8 +43,7 @@ class mmStack():
         self.numSlices = 0 # assigned in loadStack()
         self.numSegments = 0
 
-        self.images = None
-        """3D numpy array of the stacks images, axis 0 is slices"""
+        self.images = None #  3D numpy array of the stacks images, axis 0 is slices"""
 
         #stackdb
         self.stackdb = None

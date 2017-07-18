@@ -1,23 +1,8 @@
 PyMapManager package
 ====================
 
-Subpackages
------------
-
-.. toctree::
-
-    PyMapManager.interface
-
 Submodules
 ----------
-
-PyMapManager\.main module
--------------------------
-
-.. automodule:: PyMapManager.main
-    :members:
-    :undoc-members:
-    :show-inheritance:
 
 PyMapManager\.mmMap module
 --------------------------

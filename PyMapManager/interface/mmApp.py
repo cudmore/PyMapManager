@@ -3,7 +3,7 @@ Main PyMapManager application interface using PyQt interface library.
 
 Instantiate mmApplicationWindow to open the main window
 
-Example:
+Example::
 
     from PyQt4 import QtGui
     from PyMapManager.interface.mmApp import mmApplicationWindow

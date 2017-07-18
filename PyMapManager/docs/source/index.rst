@@ -3,7 +3,7 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to PyMapManager's documentation!
+PyMapManager API documentation
 ========================================
 
 .. toctree::
@@ -11,10 +11,28 @@ Welcome to PyMapManager's documentation!
    :caption: Contents:
 
 
+Packages
+==================
+
+* :doc:`PyMapManager <PyMapManager>` is the main package with :py:class:`mmMap <PyMapManager.mmMap>` and :py:class:`mmStack <PyMapManager.mmStack>`
+* :doc:`PyMapManager.interface <PyMapManager.interface>` is a PyQt GUI interface package.
+
+
+
+Examples
+==================
+See the `/examples <https://github.com/cudmore/PyMapManager/tree/master/PyMapManager/examples>`_ folder in our GitHub repository.
+
+Links
+==================
+* PyMapManager `GitHub repository <https://github.com/cudmore/PyMapManager>`_
+* Documentation for the `Igor Pro Version of MapManager <http://blog.cudmore.io/mapmanager/>`_
+* Robert Cudmore's `homepage <http://robertcudmore.org>`_
 
 Indices and tables
 ==================
 
-* :ref:`genindex`
 * :ref:`modindex`
+* :ref:`genindex`
 * :ref:`search`
+

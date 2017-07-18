@@ -1,9 +1,5 @@
 """
-This is for mmMap module
-
-	Examples:
-		xxx
-		yyy
+A map is a list of :class:`PyMapManager.mmStack` and an object map that connects 3D annotations between stacks.
 """
 
 import os, time
@@ -17,10 +13,14 @@ from PyMapManager.mmStack import mmStack
 #import logging
 #logging.basicConfig(filename='example.log',level=logging.DEBUG)
 
+'''3D numpy array, rows are stack centric indices, columns are sessions, 3rd dimension is:
+    [0] idx, [1] next, [2] nextTP, [3] prev, [4] prevTP
+    [5] blank, [6] runIdx, [7] dynType, [8] forced
+    [9] nodeType, [10] segmentID, [11] splitIdx
+'''
+
 class mmMap():
 	"""
-	A map is a list of :class:`PyMapManager.mmStack` and an object map that connects annotations (spines) sequentially from one stack to the next.
-
 	Args:
 		filePath (str): Full file path to .txt file for the map. File is inside map folder, for map a5n it is /a5n/a5n.txt
 
@@ -34,7 +34,7 @@ class mmMap():
 
 		stack = m.stacks[i]
 
-	Use getMapValues2() to retrieve stack statistics (for the given segmentID) across the entire map::
+	Use getMapValues2() to retrieve stack annotations (for the given segmentID) across the entire map::
 
 		pDist_values = m.getMapValues2('pDist', segmentID=[3])
 
@@ -54,24 +54,12 @@ class mmMap():
 			print 'mmMap() error, file not found:', filePath
 			return
 
-		self.filePath = filePath
-		"""Path to file used to open map."""
-		self.folder = os.path.dirname(filePath) + '/'
-		"""Path to enclosing folder, ends in '/'."""
-		self.name = os.path.basename(filePath).strip('.txt')  # map name
-		"""name of the map, for a map loaded with file a5n.txt, the name is a5b. Same as enclosing folder name."""
-		self.table = pd.read_table(filePath, index_col=0)
-		"""Pandas df loaded from filePath. Get values using getValue(name,session)"""
-		self.numChannels = self.getValue('numChannels', 0)
-		"""Number of image channels in each stack (must be the same for all stacks)."""
-		self.numSessions = self.table.loc['hsStack'].count()
-		"""Number of sessions in the map."""
-
-		"""3D numpy array, rows are stack centric indices, columns are sessions, 3rd dimension is:
-		    [0] idx, [1] next, [2] nextTP, [3] prev, [4] prevTP
-		    [5] blank, [6] runIdx, [7] dynType, [8] forced
-		    [9] nodeType, [10] segmentID, [11] splitIdx
-		"""
+		self.filePath = filePath #  Path to file used to open map."""
+		self.folder = os.path.dirname(filePath) + '/' #  Path to enclosing folder, ends in '/'.
+		self.name = os.path.basename(filePath).strip('.txt')  #  Name of the map, for a map loaded with file a5n.txt, the name is a5b. Same as enclosing folder name.
+		self.table = pd.read_table(filePath, index_col=0) #  Pandas df loaded from filePath. Get values using getValue(name,session)
+		self.numChannels = self.getValue('numChannels', 0) #  Number of image channels in each stack (must be the same for all stacks).
+		self.numSessions = self.table.loc['hsStack'].count() #  Number of sessions in the map.
 
 		# objMap (3d)
 		objMapFile = self.folder + self.name + '_objMap.txt'
@@ -106,8 +94,7 @@ class mmMap():
 		self.segRunMap = self._buildRunMap(self.segMap)
 
 		#load each stack db
-		self.stacks = []
-		"""A list of mmStack"""
+		self.stacks = [] #  A list of mmStack
 		for i in range(0, self.numSessions):
 			stack = mmStack(name=self.getStackName(i), numChannels=self.numChannels, map=self, mapSession=i)
 
@@ -187,7 +174,7 @@ class mmMap():
 		Get values of a stack statistic across all stacks in the map
 
 		Args:
-		    d (dict): Dictionary specifying parameters for the plot. See PyMApManager.PLOT_STRUCT
+		    d (dict): Dictionary specifying parameters for the plot. See PyMapManager.mmUtil PLOT_STRUCT.
 			flatten (boolean): On return flatten 2D into 1D
 
 		Returns:

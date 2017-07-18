@@ -5,3 +5,4 @@ PyMapManager
    :maxdepth: 4
 
    PyMapManager
+   setup

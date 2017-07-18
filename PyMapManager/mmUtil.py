@@ -1,26 +1,19 @@
-"""Utility functions and classes for map manager.
-
-Try and keep these out of __init__.py
+"""
+Utility functions and classes for PyMapManager.
 """
 
+#: Allowed ROI types. Specifies valid 'roiType'.
 ROI_TYPES = ['spineROI', 'otherROI']
-"""
-Allowed ROI types. Specifies valid 'roiType'.
-"""
 
+#: Allowed stack stats. Specifies valid 'tokens' for mmStack.getValue().
 STACK_STATS = ['Idx',
                'x',
                'y',
                'z',
                'pDist']
-"""
-Allowed stack stats. Specifies valid 'tokens' for mmStack.getValue().
-"""
 
+#: Used to read interface state in QT and used to reduce number of parameters passed to plot functions
 PLOT_STRUCT = dict()
-"""
-Used to read interface state in QT and used to reduce number of parameters passed to plot functions
-"""
 PLOT_STRUCT['xstat'] = ''
 PLOT_STRUCT['ystat'] = ''
 PLOT_STRUCT['roiType'] = 'spineROI'
@@ -47,11 +40,10 @@ class mmEvent:
     def spineSelection(self, map, sessIdx, stackdbIdx):
         """Make a single spine selection event
 
-        map: map object
-        sessIdx: int
-        stackdbIdx: int
-
-        Todo: extend this to list of spines
+        Args:
+            map (object): :class:`PyMapManager.mmMap`
+            sessIdx (int): :class:`PyMapManager.mmMap` session number
+            stackdbIdx (int): Annotation number in a :class:`PyMapManager.mmStack`
         """
 
         self.type = 'spine selection'
@@ -64,7 +56,10 @@ class mmEvent:
         self.runMapRow = int(self.runMapRow)
 
     def getText(self):
-        """Get a
+        """
+        Returns a human readable string describing the event.
+
+        For example: 'Users Select sess:3 stackdbIdx:2, runRow:58'
         """
         ret = 'User Select: sess:' + str(self.mapSession) + ' stackdbIdx:' + str(self.stackdbIdx) + ' runRow:' + str(
             self.runMapRow)
