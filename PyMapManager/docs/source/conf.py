@@ -26,7 +26,7 @@ class Mock(MagicMock):
     def __getattr__(cls, name):
         return MagicMock()
 
-MOCK_MODULES = ['pygtk', 'gtk', 'gobject', 'argparse', 'numpy', 'pandas','sip', 'PyQt4', 'PyQt4.QtGui']
+MOCK_MODULES = ['pygtk', 'gtk', 'gobject', 'argparse', 'numpy', 'pandas','sip', 'PyQt4', 'PyQt4.QtGui', 'tifffile']
 sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
 
 """

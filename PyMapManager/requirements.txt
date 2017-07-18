@@ -1,2 +1,0 @@
-pyqt4
-tifffile
