@@ -7,11 +7,11 @@ This project will be merged with <A HREF="https://github.com/cmicek1/TiffViewer"
 
 Please see the <A HREF="http://pymapmanager.readthedocs.io/en/latest/">API Documentation</A>.
 
-See the `examples/` directory for ipython notebooks with code examples.
+See the <A HREF="https://github.com/cudmore/PyMapManager/tree/master/PyMapManager/examples">PyMapManager/examples/</A> folder for ipython notebooks with code examples.
 
 ## PyQt interface
 
-    python main.py
+    A PyQt GUI interface is in <A HREF="https://github.com/cudmore/PyMapManager/tree/master/PyMapManager/interface">/PyMapManager/interface</A>
 
 ## PyQt interface examples
 
@@ -26,6 +26,11 @@ This screen shot shows the main interface window (left), a map plot (top center)
  
      conda install -c conda-forge tifffile=0.12.1
 
+ - Downgrade anaconda from PyQt5 to PyQt4
+ 
+     conda uninstall pyqt
+     conda install pyqt=4
+     
 ## To do
 
  1. Generate API documentation from doc strings
