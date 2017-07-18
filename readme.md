@@ -11,7 +11,7 @@ See the <A HREF="https://github.com/cudmore/PyMapManager/tree/master/PyMapManage
 
 ## PyQt interface
 
-    A PyQt GUI interface is in <A HREF="https://github.com/cudmore/PyMapManager/tree/master/PyMapManager/interface">/PyMapManager/interface</A>
+A PyQt GUI interface is in <A HREF="https://github.com/cudmore/PyMapManager/tree/master/PyMapManager/interface">/PyMapManager/interface</A>
 
 ## PyQt interface examples
 
