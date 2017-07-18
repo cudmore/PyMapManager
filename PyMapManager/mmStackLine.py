@@ -45,7 +45,7 @@ class mmStackLine():
         Return:
             numpy ndarray of (x,y,z)
         """
-        if not self.linedb:
+        if self.linedb is None:
             return
 
         df = self.linedb
