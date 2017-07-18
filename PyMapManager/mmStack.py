@@ -116,11 +116,25 @@ class mmStack():
     def add_to_map(self, map, session):
         """Add the stack into a map at the given session index"""
 
+    def getStackValues2(self, token, roiType='spineROI', segmentID=[]):
+        """
+
+        Args:
+            token: stack statistic
+            roiType: yyy
+            segmentID: zzz
+
+        Returns: 1D numpy ndarray of values
+
+        """
+        ret, idx, reverse = self.getStackValues(token, roiType=roiType, segmentID=segmentID)
+        return ret
+
     def getStackValues(self, token, roiType='spineROI', segmentID=[]):
         """
-        Get the values for a given token. Valid tokens are columns of stackdb.
-        Specify roiType to get values for a given type.
-        Specify a list of segments with segmentID to get just those segments.
+        Get the (values, stack index, and reverse lookup) for a given token.
+
+        Valid tokens are columns of stackdb. Specify roiType to get values for a given type. Specify a list of segments with segmentID to get just those segments.
 
         Args:
             token (str): Statistic name (Must be a column name in pandas dataframe stackdb)
@@ -128,7 +142,7 @@ class mmStack():
             segmentID (list): xxx
 
         Return:
-            1D numpy array of 'token' values matching criteria.
+            Three 1D numpy array of 'token' values matching criteria.
             This is NOT the same size as stackdb it only contains values of interest.
             Use reverseLookup to find index into theValues that corresponds to an actual stackdb index
         """
