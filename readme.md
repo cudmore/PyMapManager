@@ -24,12 +24,12 @@ This screen shot shows the main interface window (left), a map plot (top center)
  - Install anaconda: https://www.continuum.io/downloads
  - Install tifffile: http://www.lfd.uci.edu/~gohlke/
  
-     conda install -c conda-forge tifffile=0.12.1
+    conda install -c conda-forge tifffile=0.12.1
 
  - Downgrade anaconda from PyQt5 to PyQt4
  
-     conda uninstall pyqt
-     conda install pyqt=4
+    conda uninstall pyqt
+    conda install pyqt=4
      
 ## To do
 
