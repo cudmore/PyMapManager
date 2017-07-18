@@ -43,7 +43,7 @@ class mmStackLine():
             segmentID (list): List of int specifying which segmentID, pass [] to get all.
 
         Return:
-            np array of (x,y,z)
+            numpy ndarray of (x,y,z)
         """
         if not self.linedb:
             return
@@ -59,5 +59,8 @@ class mmStackLine():
 
         Args:
             segmentID (list): List of segment ID
+
+        Returns:
+            3D length (float) of all segments in segmentID
         """
         pass

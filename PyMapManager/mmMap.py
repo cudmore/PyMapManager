@@ -26,7 +26,7 @@ class mmMap():
 
 	Example::
 
-		from mmMap import mmMap
+		from PyMapManager.mmMap import mmMap
 		file = '/Users/cudmore/Desktop/data/rr30a/rr30a.txt'
 		m = mmMap(filePath=path)
 
@@ -38,6 +38,8 @@ class mmMap():
 
 		pDist_values = m.getMapValues2('pDist', segmentID=[3])
 
+	Attributes:
+		stacks (list): List of :class:`PyMapManager.mmStack`
 	"""
 
 	def __init__(self, filePath=''):
@@ -134,7 +136,8 @@ class mmMap():
 		Args:
 			sess: Session number
 
-		Return: stack name as str
+		Returns:
+		    Stack name as str
 		"""
 		ret = self.getValue('hsStack', sess)
 		if ret.endswith('_ch1'):

@@ -4,11 +4,14 @@ from glob import glob
 from mmMap import mmMap
 
 class mmMapPool():
-    def __init__(self, path):
-        """
+    """
+    Load all maps in a folder.
 
-        :param path:
-        """
+    Args:
+        path (str): Full path to a folder.
+    """
+
+    def __init__(self, path):
         self.maps = []
 
         if os.path.isdir(path):

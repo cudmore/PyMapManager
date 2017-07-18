@@ -14,15 +14,17 @@ class mmStack():
 
     A stack can either be a single time-point or be embeded into a session of a :class:`PyMapManager.mmMap`.
 
-    Attributes:
+    Args:
         name (str): Name of the stack. Used to fetch .tif file
         numChannels (int): Number of channels.
         map (object): Runtime object of :class:`PyMapManager.mmMap` that created the stack.
         mapSession (int): The map session number for the stack.
 
+    Attributes:
         stackdb (pandas dataframe): Pandas dataframe of annotations, one per row. Columns are statistic names.
             See `PyMapManager.mmUtil STACK_STATS` for valid statistic names
         images (numpy ndarray): 3D matrix of image pixels.
+        line (:class:`PyMapManager.mmStackLine`): A 3D tracing of segments.
     """
 
     def __init__(self, name=None, numChannels=1, map=None, mapSession=None):
@@ -154,7 +156,8 @@ class mmStack():
         """
         Load a line (mmStackLine) associated with the stack. Sets 'line' instance variable.
 
-        Return: None.
+        Returns:
+            None.
         """
         self.line = mmStackLine(self)
 
