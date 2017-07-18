@@ -33,6 +33,16 @@ sphinx readthedocs theme
 
 Make sure config.py has
     
+    from mock import MagicMock
+    
+    class Mock(MagicMock):
+        @classmethod
+        def __getattr__(cls, name):
+            return MagicMock()
+    
+    MOCK_MODULES = ['pygtk', 'gtk', 'gobject', 'argparse', 'numpy', 'pandas','sip', 'PyQt4', 'PyQt4.QtGui', 'tifffile']
+    sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
+    
     import os
     import sys
     sys.path.insert(0, os.path.abspath('../..'))
