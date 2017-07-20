@@ -33,9 +33,9 @@ class mmCanvas(FigureCanvas):
         self.lines_on = False
 
         self.figure = Figure(figsize=(width, height), dpi=dpi)
-        self.axes = self.figure.add_subplot(111)
-        # self.axes = fig.add_axes([0, 0, 1, 1]) #remove white border
-        # self.axes.axis('off') #turn off axis labels
+        #self.axes = self.figure.add_subplot(111)
+        self.axes = self.figure.add_axes([0, 0, 1, 1]) #remove white border
+        self.axes.axis('off') #turn off axis labels
 
         FigureCanvas.__init__(self, self.figure)
         self.setParent(parent)
@@ -316,7 +316,7 @@ class mmMapPlotCanvas(mmCanvas):
         backgroundColor = (grayLevel, grayLevel, grayLevel)
         rect = self.figure.patch
         rect.set_facecolor(backgroundColor)  # figure background color
-        # self.axes.set_facecolor(backgroundColor) #axes background color
+        self.axes.set_facecolor(backgroundColor) #axes background color
 
         # remove frame
         self.axes.spines['top'].set_visible(False)
@@ -584,7 +584,7 @@ class mmStackCanvas(mmCanvas):
         self.stack = stateDict['stack']
         self.sliceNumber = 0
 
-        self.stack.loadStack(2)
+        self.stack.loadStackImages(2)
 
         roiType = stateDict['roiType']
         segmentID = stateDict['segmentID']
@@ -608,7 +608,7 @@ class mmStackCanvas(mmCanvas):
         #  line
         self.line_xyz = self.stack.line.getLine(segmentID)
 
-        if self.line_xyz:
+        if self.line_xyz is not None:
             markersize = 2
             self.myLinePlot = self.axes.scatter(self.line_xyz[:, 0], self.line_xyz[:, 1], marker='.',
                                           s=markersize)  # , picker=True)
@@ -690,7 +690,7 @@ class mmStackCanvas(mmCanvas):
 
             #
             # line
-            if self.line_xyz:
+            if self.line_xyz is not None:
                 zMask = np.ma.masked_outside(self.line_xyz[:, 2], upperz, lowerz)
                 xMasked = self.line_xyz[~zMask.mask, 0]
                 yMasked = self.line_xyz[~zMask.mask, 1]
