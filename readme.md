@@ -5,7 +5,7 @@ This project will be merged with <A HREF="https://github.com/cmicek1/TiffViewer"
 
 ## API interface
 
-Please see the <A HREF="http://pymapmanager.readthedocs.io/en/latest/">API Documentation</A>. We have a second copy <A HRE="http://robertcudmore.org/mapmanager/PyMapManager/docs/">here</A>.
+Please see the <A HREF="http://pymapmanager.readthedocs.io/en/latest/">API Documentation</A>. We have a second copy <A HREF="http://robertcudmore.org/mapmanager/PyMapManager/docs/">here</A>.
 
 See the <A HREF="https://github.com/cudmore/PyMapManager/tree/master/PyMapManager/examples">PyMapManager/examples/</A> folder for ipython notebooks with code examples.
 
