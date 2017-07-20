@@ -4,6 +4,14 @@ PyMapManager\.interface package
 Submodules
 ----------
 
+PyMapManager\.interface\.main module
+------------------------------------
+
+.. automodule:: PyMapManager.interface.main
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 PyMapManager\.interface\.mmApp module
 -------------------------------------
 

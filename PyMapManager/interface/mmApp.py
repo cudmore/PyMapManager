@@ -202,7 +202,7 @@ class mmApplicationWindow(QtGui.QMainWindow):
         # load a mm map
         if 1:
             defaultMap = '/Users/cudmore/Desktop/data/rr30a/rr30a.txt'
-            defaultMap = '/Volumes/fourt/MapManager_Data/stroke1/stroke1.txt'
+            #defaultMap = '/Volumes/fourt/MapManager_Data/stroke1/stroke1.txt'
             if os.path.isfile(defaultMap):
                 print 'loading default map:', defaultMap
                 self.loadMap(defaultMap)

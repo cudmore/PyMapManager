@@ -31,11 +31,29 @@ from mmMapPool import mmMapPool
 from PyMapManager.interface.mmApp import mmApplicationWindow
 
 if __name__ == '__main__':
-    qApp = QtGui.QApplication(sys.argv)
 
-    aw = mmApplicationWindow()
-    #aw.setWindowTitle("%s" % progname)
-    aw.setWindowTitle('PyQtMapManager')
-    aw.show()
-    sys.exit(qApp.exec_())
-    # qApp.exec_()
+    if 1:
+        qApp = QtGui.QApplication(sys.argv)
+
+        aw = mmApplicationWindow()
+        #aw.setWindowTitle("%s" % progname)
+        aw.setWindowTitle('PyQtMapManager')
+        aw.show()
+        sys.exit(qApp.exec_())
+        # qApp.exec_()
+
+    if 0:
+        from PyMapManager.mmStack import mmStack
+        stack = mmStack(filePath='/Users/cudmore/Desktop/data/julia/01_HC_ch1.tif')
+        stack.loadStackImages(channel=1)
+
+    if 0:
+        defaultMap = '/Users/cudmore/Desktop/data/rr30a/rr30a.txt'
+        print 'loading map:', defaultMap
+        m = mmMap(filePath=defaultMap)
+
+        import PyMapManager
+        pd = PyMapManager.mmUtil.newplotdict()
+
+        ma = PyMapManager.mmMapAnalysis.mmMapAnalysis(m)
+        ma.getDynamics(pd)

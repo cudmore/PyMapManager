@@ -22,6 +22,34 @@ PLOT_STRUCT['plotBad'] = False
 PLOT_STRUCT['plotIntBad'] = False
 
 def newplotstruct(): return PLOT_STRUCT.copy()
+""" Used by Qt interface"""
+
+PLOT_DICT = {
+    'map' : None, #: map (object) mmMap
+    'sessidx' : None, #: sessIdx (int): map session
+    'stack' : None, #: stack (object) use for single timepoint analysis
+
+    'xstat' : None, #: xstat (str): Name of statistic to retreive, corresponds to column in stack.stackdb
+    'ystat' : None,
+    'zstat' : None,
+    'roitype' : ['spineROI'], #: roiType
+    'segmentid' : [],
+    'plotbad' : False,
+    'plotintbad' : False,
+
+    #  Filled in by get functions
+    'x' : None,
+    'y' : None,
+    'z' : None,
+    'stackidx' : None,
+    'reverse' : None,
+
+    'runrow': None,
+    'mapsess': None,
+}
+
+def newplotdict(): return PLOT_DICT.copy()
+""" Get a default plot struct"""
 
 class mmEvent:
     """Class to broadcast events. Events can be user events like 'spine selection' or program events like 'map opened'"""

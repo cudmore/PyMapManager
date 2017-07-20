@@ -177,7 +177,7 @@ class MyFirstGUI:
 
         sess = self.sessList.curselection()[0]
 
-        self.m[mapIdx].stacks[sess].loadStack(theChannel)
+        self.m[mapIdx].stacks[sess].loadStackImages(theChannel)
 
         segmentID = self.getUserSelection('segmentID')
 
