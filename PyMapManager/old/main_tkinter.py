@@ -1,8 +1,9 @@
 import os
-from Tkinter import *
 import tkFileDialog
+from Tkinter import *
 
 import matplotlib as mpl
+
 mpl.use('TkAgg')
 
 import matplotlib.pyplot as plt

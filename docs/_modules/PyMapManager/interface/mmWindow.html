@@ -1,0 +1,562 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>PyMapManager.interface.mmWindow &mdash; PyMapManager a1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../../genindex.html"/>
+        <link rel="search" title="Search" href="../../../search.html"/>
+    <link rel="top" title="PyMapManager a1 documentation" href="../../../index.html"/>
+        <link rel="up" title="Module code" href="../../index.html"/> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> PyMapManager
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                Version 0a1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">PyMapManager</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>PyMapManager.interface.mmWindow</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for PyMapManager.interface.mmWindow</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;This module defines MapManager window classes.</span>
+
+<span class="sd">    :class:`PyMapManager.interface.mmWindow` Base class for other windows to inherit from</span>
+
+<span class="sd">    :class:`PyMapManager.interface.mmStackWindow`: Display and interact with the 3D image and annotations from a :class:`PyMapManager.mmStack`.</span>
+
+<span class="sd">    :class:`PyMapManager.interface.mmStackPlotWindow`: Display and interact with a plot of a annotations from a:class:`PyMapManager.mmStack`.</span>
+
+<span class="sd">    :class:`PyMapManager.interface.mmMapPlotWindow`: Display and interact with a plot of :class:`PyMapManager.mmStack` annotations accross a :class:`PyMapManager.mmMap`.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">math</span>
+
+<span class="kn">from</span> <span class="nn">PyQt4</span> <span class="k">import</span> <span class="n">QtGui</span><span class="p">,</span> <span class="n">QtCore</span>
+
+<span class="c1">#from matplotlib.backends.backend_qt4agg import NavigationToolbar2QT as NavigationToolbar</span>
+
+<span class="kn">from</span> <span class="nn">PyMapManager.interface.mmCanvas</span> <span class="k">import</span> <span class="n">mmStackCanvas</span><span class="p">,</span> <span class="n">mmMapPlotCanvas</span><span class="p">,</span> <span class="n">mmStackPlotCanvas</span>
+<span class="kn">from</span> <span class="nn">PyMapManager.interface.mmTable</span> <span class="k">import</span> <span class="n">MyPandasModel</span>
+
+<div class="viewcode-block" id="mmWindow"><a class="viewcode-back" href="../../../PyMapManager.interface.html#PyMapManager.interface.mmWindow.mmWindow">[docs]</a><span class="k">class</span> <span class="nc">mmWindow</span><span class="p">(</span><span class="n">QtGui</span><span class="o">.</span><span class="n">QMainWindow</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A second QMainWindow to hold a plot. Possible plots are: stack image, stack, and map. StackImageWindow derives from this to plot a stack image.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">mmWindow</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">parent</span> <span class="o">=</span> <span class="n">parent</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">setAttribute</span><span class="p">(</span><span class="n">QtCore</span><span class="o">.</span><span class="n">Qt</span><span class="o">.</span><span class="n">WA_DeleteOnClose</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s2">&quot;mm plot window&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">window_menu</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QMenu</span><span class="p">(</span><span class="s1">&#39;&amp;Window&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">window_menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="s1">&#39;&amp;Close&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">close</span><span class="p">,</span>
+                                 <span class="n">QtCore</span><span class="o">.</span><span class="n">Qt</span><span class="o">.</span><span class="n">CTRL</span> <span class="o">+</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">Qt</span><span class="o">.</span><span class="n">Key_W</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">menuBar</span><span class="p">()</span><span class="o">.</span><span class="n">addMenu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">window_menu</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">statusBar</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QStatusBar</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setStatusBar</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">statusBar</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">statusBar</span><span class="o">.</span><span class="n">showMessage</span><span class="p">(</span><span class="s1">&#39;...&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="mi">500</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">main_widget</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="c1">#toolbar</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">toolbar</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">addToolBar</span><span class="p">(</span><span class="s1">&#39;myToolbar&#39;</span><span class="p">)</span>
+
+        <span class="c1">#graphs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mainLayout</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QVBoxLayout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">main_widget</span><span class="p">)</span>
+
+        <span class="c1"># make sure these are done in derived classes</span>
+        <span class="c1">#self.myCanvas = MyMplCanvas(parent=self, width=400, height=300, dpi=100)</span>
+        <span class="c1">#self.navBar = NavigationToolbar(self.myCanvas, self)</span>
+
+        <span class="c1">#self.mainLayout.addWidget(self.myCanvas)</span>
+        <span class="c1">#self.mainLayout.addWidget(self.navBar)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">setFocusPolicy</span><span class="p">(</span><span class="n">QtCore</span><span class="o">.</span><span class="n">Qt</span><span class="o">.</span><span class="n">ClickFocus</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">main_widget</span><span class="o">.</span><span class="n">setFocus</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setCentralWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">main_widget</span><span class="p">)</span>
+
+        <span class="c1">#self.statusBar().showMessage(&quot;This is main MapManager plot window&quot;, 2000)</span>
+
+<div class="viewcode-block" id="mmWindow.closeEvent"><a class="viewcode-back" href="../../../PyMapManager.interface.html#PyMapManager.interface.mmWindow.mmWindow.closeEvent">[docs]</a>    <span class="k">def</span> <span class="nf">closeEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;On close, remove self from xxx list&quot;&quot;&quot;</span>
+        <span class="nb">print</span> <span class="s1">&#39;PlotWindow.closeEvent()&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">closechildwindow</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="mmWindow.setStatus"><a class="viewcode-back" href="../../../PyMapManager.interface.html#PyMapManager.interface.mmWindow.mmWindow.setStatus">[docs]</a>    <span class="k">def</span> <span class="nf">setStatus</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">statusBar</span><span class="o">.</span><span class="n">showMessage</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="mmWindow.broadcastevent"><a class="viewcode-back" href="../../../PyMapManager.interface.html#PyMapManager.interface.mmWindow.mmWindow.broadcastevent">[docs]</a>    <span class="k">def</span> <span class="nf">broadcastevent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Broadcast an event to all open application windows (self._windows) and call receiveevent(event).</span>
+<span class="sd">        The main application is the only one who can broadcast.</span>
+
+<span class="sd">        event : A mmEvent object with params to describe the event</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">broadcastevent</span><span class="p">(</span><span class="n">event</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="mmWindow.receiveevent"><a class="viewcode-back" href="../../../PyMapManager.interface.html#PyMapManager.interface.mmWindow.mmWindow.receiveevent">[docs]</a>    <span class="k">def</span> <span class="nf">receiveevent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="nb">print</span> <span class="s1">&#39;PlotWindow.receiveevent()&#39;</span><span class="p">,</span> <span class="n">event</span><span class="o">.</span><span class="n">type</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">myCanvas</span><span class="o">.</span><span class="n">receiveevent</span><span class="p">(</span><span class="n">event</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="mmStackWindow"><a class="viewcode-back" href="../../../PyMapManager.interface.html#PyMapManager.interface.mmWindow.mmStackWindow">[docs]</a><span class="k">class</span> <span class="nc">mmStackWindow</span><span class="p">(</span><span class="n">mmWindow</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Hold a stack image plot.&quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stateDict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">mmWindow</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">stateDict</span> <span class="o">=</span> <span class="n">stateDict</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">myCanvas</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="n">sliderMax</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">16</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lowContrast</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">highContrast</span> <span class="o">=</span> <span class="n">sliderMax</span>
+
+        <span class="c1"># min contrast</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lowContrastLayout</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QHBoxLayout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">main_widget</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">lowContrastLabel</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Low&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">lowContrastSpinner</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QSpinBox</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lowContrastSpinner</span><span class="o">.</span><span class="n">valueChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_valuechange_spinner</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lowContrastSpinner</span><span class="o">.</span><span class="n">setMinimum</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lowContrastSpinner</span><span class="o">.</span><span class="n">setMaximum</span><span class="p">(</span><span class="n">sliderMax</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lowContrastSpinner</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">lowContrastSlider</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QSlider</span><span class="p">(</span><span class="n">QtCore</span><span class="o">.</span><span class="n">Qt</span><span class="o">.</span><span class="n">Horizontal</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lowContrastSlider</span><span class="o">.</span><span class="n">valueChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_valuechange_slider</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lowContrastSlider</span><span class="o">.</span><span class="n">setMinimum</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lowContrastSlider</span><span class="o">.</span><span class="n">setMaximum</span><span class="p">(</span><span class="n">sliderMax</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lowContrastSlider</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="c1">#self.sl.setTickPosition(QSlider.TicksBelow)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">lowContrastLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lowContrastLabel</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lowContrastLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lowContrastSpinner</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lowContrastLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lowContrastSlider</span><span class="p">)</span>
+
+        <span class="c1"># max contrast</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">highContrastLayout</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QHBoxLayout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">main_widget</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">highContrastLabel</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QLabel</span><span class="p">(</span><span class="s2">&quot;High&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">highContrastSpinner</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QSpinBox</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">highContrastSpinner</span><span class="o">.</span><span class="n">valueChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_valuechange_spinner</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">highContrastSpinner</span><span class="o">.</span><span class="n">setMinimum</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">highContrastSpinner</span><span class="o">.</span><span class="n">setMaximum</span><span class="p">(</span><span class="n">sliderMax</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">highContrastSpinner</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">sliderMax</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">highContrastSlider</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QSlider</span><span class="p">(</span><span class="n">QtCore</span><span class="o">.</span><span class="n">Qt</span><span class="o">.</span><span class="n">Horizontal</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">highContrastSlider</span><span class="o">.</span><span class="n">valueChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_valuechange_slider</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">highContrastSlider</span><span class="o">.</span><span class="n">setMinimum</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">highContrastSlider</span><span class="o">.</span><span class="n">setMaximum</span><span class="p">(</span><span class="n">sliderMax</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">highContrastSlider</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">sliderMax</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">highContrastLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">highContrastLabel</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">highContrastLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">highContrastSpinner</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">highContrastLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">highContrastSlider</span><span class="p">)</span>
+
+        <span class="c1">##############################################################################</span>
+        <span class="c1"># docable widget to show stackdb as a table</span>
+        <span class="c1">##############################################################################</span>
+
+        <span class="c1"># see here for excellent code on switching this from widget to view to use DOM</span>
+        <span class="c1"># https://stackoverflow.com/questions/7782015/how-can-i-select-by-rows-instead-of-individual-cells-in-qtableview-in-pyqt</span>
+
+        <span class="c1">#</span>
+        <span class="c1"># segment list</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mySegmentDoc</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QDockWidget</span><span class="p">(</span><span class="s2">&quot;Segments&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+
+        <span class="n">numCol</span> <span class="o">=</span> <span class="mi">2</span>
+        <span class="n">numRow</span> <span class="o">=</span> <span class="mi">5</span>
+        <span class="n">colLabels</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Segment&#39;</span><span class="p">,</span> <span class="s1">&#39;um&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">segmentTable</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QTableWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">segmentTable</span><span class="o">.</span><span class="n">setRowCount</span><span class="p">(</span><span class="n">numRow</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">segmentTable</span><span class="o">.</span><span class="n">setColumnCount</span><span class="p">(</span><span class="n">numCol</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">segmentTable</span><span class="o">.</span><span class="n">setHorizontalHeaderLabels</span><span class="p">(</span><span class="n">colLabels</span><span class="p">)</span>
+        <span class="c1">#self.tableWidget.setFixedWidth(100)</span>
+        <span class="c1">#self.segmentTable.horizontalHeader().setStretchLastSection(True)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">numRow</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">numCol</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">segmentTable</span><span class="o">.</span><span class="n">setItem</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QTableWidgetItem</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="o">*</span><span class="n">j</span> <span class="o">+</span> <span class="n">j</span><span class="p">)))</span>
+                <span class="c1">#pass</span>
+                <span class="c1">#used to work</span>
+                <span class="c1">#self.tableWidget.setItem(i, j, QtGui.QTableWidgetItem(str(tmp_df.iget_value(i, j))))</span>
+                <span class="c1"># slow?</span>
+                <span class="c1"># self.tableWidget.setItem(i, j, QtGui.QTableWidgetItem(str(tmp_df.iloc[i, j])))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">segmentTable</span><span class="o">.</span><span class="n">setSelectionBehavior</span><span class="p">(</span><span class="n">QtGui</span><span class="o">.</span><span class="n">QTableWidget</span><span class="o">.</span><span class="n">SelectRows</span><span class="p">)</span>
+        <span class="c1">#self.segmentTable.resizeColumnsToContents()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">mySegmentDoc</span><span class="o">.</span><span class="n">setWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">segmentTable</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mySegmentDoc</span><span class="o">.</span><span class="n">setFloating</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="c1">#self.mySegmentDoc.resize(self.segmentTable.size())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">addDockWidget</span><span class="p">(</span><span class="n">QtCore</span><span class="o">.</span><span class="n">Qt</span><span class="o">.</span><span class="n">LeftDockWidgetArea</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mySegmentDoc</span><span class="p">)</span>
+
+        <span class="c1">#  not sure how to do this, i want the doc to size to the size of the enclosed widget?</span>
+
+
+        <span class="c1">#</span>
+        <span class="c1"># stack db dock</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">myStackdbDoc</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QDockWidget</span><span class="p">(</span><span class="s2">&quot;Annotations&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+
+        <span class="n">numCol</span> <span class="o">=</span> <span class="mi">4</span>
+        <span class="n">numRow</span> <span class="o">=</span> <span class="mi">100</span>
+        <span class="n">colLabels</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;roiType&#39;</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;z&#39;</span><span class="p">]</span>
+
+        <span class="n">roiType</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stateDict</span><span class="p">[</span><span class="s1">&#39;roiType&#39;</span><span class="p">]</span>
+
+        <span class="n">stackdb_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stateDict</span><span class="p">[</span><span class="s1">&#39;map&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">stacks</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">stackdb</span>
+        <span class="n">stackdb_df</span><span class="p">[</span><span class="s1">&#39;Idx&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">stackdb_df</span><span class="o">.</span><span class="n">index</span> <span class="c1"># Idx gets eaten when used as index, add a new column named &#39;Idx&#39;</span>
+        <span class="n">stackdb_df</span> <span class="o">=</span> <span class="n">stackdb_df</span><span class="p">[</span><span class="n">stackdb_df</span><span class="p">[</span><span class="s1">&#39;roiType&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">([</span><span class="n">roiType</span><span class="p">])]</span>
+        <span class="n">stackdb_df</span> <span class="o">=</span> <span class="n">stackdb_df</span><span class="p">[[</span><span class="s1">&#39;Idx&#39;</span><span class="p">,</span> <span class="s1">&#39;parentID&#39;</span><span class="p">,</span> <span class="s1">&#39;z&#39;</span><span class="p">]]</span>
+        <span class="n">myModel</span> <span class="o">=</span> <span class="n">MyPandasModel</span><span class="p">(</span><span class="n">stackdb_df</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">stackdbTable</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QTableView</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">stackdbTable</span><span class="o">.</span><span class="n">setModel</span><span class="p">(</span><span class="n">myModel</span><span class="p">)</span>
+
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        self.stackdbTable.setRowCount(numRow)</span>
+<span class="sd">        self.stackdbTable.setColumnCount(numCol)</span>
+<span class="sd">        self.stackdbTable.setHorizontalHeaderLabels(colLabels)</span>
+<span class="sd">        </span>
+<span class="sd">        #self.stackdbTable.setStyleSheet(&quot;gridline-color: rgb(191, 0, 0)&quot;) # sets the grid</span>
+<span class="sd">        #self.tableWidget.setFixedWidth(100)</span>
+<span class="sd">        #self.stackdbTable.horizontalHeader().setStretchLastSection(True)</span>
+<span class="sd">        evenRow = True</span>
+<span class="sd">        for i in range(numRow):</span>
+<span class="sd">            for j in range(numCol):</span>
+<span class="sd">                tableItem = QtGui.QTableWidgetItem(str(i*j + j))</span>
+<span class="sd">                if evenRow:</span>
+<span class="sd">                    tableItem.setBackground(QtGui.QColor(200,200,200))</span>
+<span class="sd">                else:</span>
+<span class="sd">                    tableItem.setBackground(QtGui.QColor(&#39;White&#39;))</span>
+<span class="sd">                self.stackdbTable.setItem(i, j, tableItem)</span>
+<span class="sd">                #pass</span>
+<span class="sd">                #used to work</span>
+<span class="sd">                #self.tableWidget.setItem(i, j, QtGui.QTableWidgetItem(str(tmp_df.iget_value(i, j))))</span>
+<span class="sd">                # slow?</span>
+<span class="sd">                # self.tableWidget.setItem(i, j, QtGui.QTableWidgetItem(str(tmp_df.iloc[i, j])))</span>
+<span class="sd">            evenRow = not evenRow</span>
+<span class="sd">        self.stackdbTable.resizeColumnsToContents()</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stackdbTable</span><span class="o">.</span><span class="n">setSelectionBehavior</span><span class="p">(</span><span class="n">QtGui</span><span class="o">.</span><span class="n">QTableWidget</span><span class="o">.</span><span class="n">SelectRows</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stackdbTable</span><span class="o">.</span><span class="n">setAlternatingRowColors</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">myStackdbDoc</span><span class="o">.</span><span class="n">setWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stackdbTable</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">myStackdbDoc</span><span class="o">.</span><span class="n">setFloating</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">addDockWidget</span><span class="p">(</span><span class="n">QtCore</span><span class="o">.</span><span class="n">Qt</span><span class="o">.</span><span class="n">LeftDockWidgetArea</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">myStackdbDoc</span><span class="p">)</span>
+
+        <span class="c1">##############################################################################</span>
+        <span class="c1"># menus</span>
+        <span class="c1">##############################################################################</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        if sys.platform.startswith(&#39;darwin&#39;) :</span>
+<span class="sd">            self.myMenuBar = QtGui.QMenuBar()</span>
+<span class="sd">        else:</span>
+<span class="sd">            self.myMenuBar = self.menuBar() # refer to the default one</span>
+<span class="sd">        #self.myMenuBar.setNativeMenuBar(True)</span>
+<span class="sd">        self.file_menu = QtGui.QMenu(&#39;&amp;File&#39;, self)</span>
+<span class="sd">        self.file_menu.addAction(&#39;&amp;Load Map&#39;, self.about)</span>
+<span class="sd">        self.file_menu.addSeparator()</span>
+<span class="sd">        self.file_menu.addAction(&#39;&amp;Close Map&#39;, self.about)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">view_menu</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QMenu</span><span class="p">(</span><span class="s1">&#39;&amp;View&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">view_menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mySegmentDoc</span><span class="o">.</span><span class="n">toggleViewAction</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">view_menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">myStackdbDoc</span><span class="o">.</span><span class="n">toggleViewAction</span><span class="p">())</span>
+
+        <span class="c1">#self.myMenuBar.addMenu(self.file_menu)</span>
+        <span class="c1">#self.myMenuBar.addMenu(self.view_menu)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">menuBar</span><span class="p">()</span><span class="o">.</span><span class="n">addMenu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">view_menu</span><span class="p">)</span>
+
+        <span class="c1">##############################################################################</span>
+        <span class="c1">#  IMPORTANT</span>
+        <span class="c1">#  main canvas to draw images and overlay points</span>
+        <span class="c1">##############################################################################</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">myCanvas</span> <span class="o">=</span> <span class="n">mmStackCanvas</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span> <span class="c1"># main widget, IMPORTANT</span>
+        <span class="c1">#self.navBar = NavigationToolbar(self.myCanvas, self)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">mainLayout</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lowContrastLayout</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mainLayout</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">highContrastLayout</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mainLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">myCanvas</span><span class="p">)</span>
+        <span class="c1">#self.mainLayout.addWidget(self.navBar)</span>
+
+    <span class="k">def</span> <span class="nf">_valuechange_slider</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lowContrast</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lowContrastSlider</span><span class="o">.</span><span class="n">value</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">highContrast</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">highContrastSlider</span><span class="o">.</span><span class="n">value</span><span class="p">()</span>
+        <span class="c1"># update spinner</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lowContrastSpinner</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lowContrast</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">highContrastSpinner</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">highContrast</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">myCanvas</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">myCanvas</span><span class="o">.</span><span class="n">setSliceContrast</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">myCanvas</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_valuechange_spinner</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lowContrast</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lowContrastSpinner</span><span class="o">.</span><span class="n">value</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">highContrast</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">highContrastSpinner</span><span class="o">.</span><span class="n">value</span><span class="p">()</span>
+        <span class="c1"># update slider</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lowContrastSlider</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lowContrast</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">highContrastSlider</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">highContrast</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">myCanvas</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">myCanvas</span><span class="o">.</span><span class="n">setSliceContrast</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">myCanvas</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="mmMapPlotWindow"><a class="viewcode-back" href="../../../PyMapManager.interface.html#PyMapManager.interface.mmWindow.mmMapPlotWindow">[docs]</a><span class="k">class</span> <span class="nc">mmMapPlotWindow</span><span class="p">(</span><span class="n">mmWindow</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Display a map plot of points.</span>
+
+<span class="sd">    Todo: instantiate this with a stateStruct so we can figure out number of session for session spinner interface</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">mmWindow</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">)</span>
+
+        <span class="n">tmpMaxSession</span> <span class="o">=</span> <span class="mi">20</span>
+
+        <span class="c1"># spinner to select session</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sessionLayout</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QHBoxLayout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">main_widget</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">sessionSpinnerLabel</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QLabel</span><span class="p">(</span><span class="s2">&quot;Session&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">sessionSpinner</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QSpinBox</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sessionSpinner</span><span class="o">.</span><span class="n">valueChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_valuechange_spinner</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sessionSpinner</span><span class="o">.</span><span class="n">setMinimum</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sessionSpinner</span><span class="o">.</span><span class="n">setMaximum</span><span class="p">(</span><span class="n">tmpMaxSession</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sessionSpinner</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">sessionLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sessionSpinnerLabel</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sessionLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sessionSpinner</span><span class="p">)</span>
+
+        <span class="c1"># the canvas that holds plot, does all drawing and responds to user (IMPORTANT)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">myCanvas</span> <span class="o">=</span> <span class="n">mmMapPlotCanvas</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span> <span class="c1"># main canvas to display and interact with plot (IMPORTANT)</span>
+
+        <span class="c1"># matplotlib toolbar</span>
+        <span class="c1">#self.navBar = NavigationToolbar(self.myCanvas, self)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">mainLayout</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sessionLayout</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mainLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">myCanvas</span><span class="p">)</span>
+        <span class="c1">#self.mainLayout.addWidget(self.navBar)</span>
+
+    <span class="k">def</span> <span class="nf">_valuechange_spinner</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sessionSpinner</span><span class="o">.</span><span class="n">value</span><span class="p">()</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">myCanvas</span><span class="o">.</span><span class="n">myPlotDict</span>
+        <span class="n">d</span><span class="p">[</span><span class="s1">&#39;segmentID&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">val</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">myCanvas</span><span class="o">.</span><span class="n">plotMap0</span><span class="p">(</span><span class="n">d</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="mmStackPlotWindow"><a class="viewcode-back" href="../../../PyMapManager.interface.html#PyMapManager.interface.mmWindow.mmStackPlotWindow">[docs]</a><span class="k">class</span> <span class="nc">mmStackPlotWindow</span><span class="p">(</span><span class="n">mmWindow</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Display a stack plot of points.&quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">mmWindow</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">myCanvas</span> <span class="o">=</span> <span class="n">mmStackPlotCanvas</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+        <span class="c1">#self.navBar = NavigationToolbar(self.myCanvas, self)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">mainLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">myCanvas</span><span class="p">)</span></div>
+        <span class="c1">#self.mainLayout.addWidget(self.navBar)</span>
+
+
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Robert H Cudmore.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'a1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
