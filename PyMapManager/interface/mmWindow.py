@@ -187,11 +187,11 @@ class mmStackWindow(mmWindow):
         numRow = 100
         colLabels = ['roiType', 'x', 'y', 'z']
 
-        roiType = self.stateDict['roiType']
+        roiType = self.stateDict['roitype']
 
         stackdb_df = self.stateDict['map'].stacks[0].stackdb
         stackdb_df['Idx'] = stackdb_df.index # Idx gets eaten when used as index, add a new column named 'Idx'
-        stackdb_df = stackdb_df[stackdb_df['roiType'].isin([roiType])]
+        stackdb_df = stackdb_df[stackdb_df['roiType'].isin(roiType)]
         stackdb_df = stackdb_df[['Idx', 'parentID', 'z']]
         myModel = MyPandasModel(stackdb_df)
 

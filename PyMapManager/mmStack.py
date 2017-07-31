@@ -1,16 +1,15 @@
 import os, time
+from glob import glob # for mmStackPool
 import pandas as pd
 import numpy as np
 import uuid # to generate a unique id for each spine
 import tifffile
 
-#import logging
-
 from mmStackLine import mmStackLine
 
 class mmStack():
     """
-    A stack contains a 3D Tiff, a list of 3D annotations, and optionally a number of dendritic (segment) tracings.
+    A stack contains a 3D Tiff, a list of 3D annotations, and optionally a number of segment tracings.
 
     A stack can either be a single time-point or be embeded into a session of a :class:`PyMapManager.mmMap`.
 
@@ -26,25 +25,15 @@ class mmStack():
         xxx
         yyy
         zzz
-
-    Attributes:
-        stackdb (pandas dataframe): Pandas dataframe of annotations, one per row. Columns are statistic names.
-            See `PyMapManager.mmUtil STACK_STATS` for valid statistic names.
-
-        images (numpy ndarray): 3D numpy ndarray of image data. This is not valid until :func:`loadStackImages` is called. Slices are in the 1st dimension, use images[0,:,:] to get the first image.
-        line (:class:`PyMapManager.mmStackLine`): A 3D tracing of segments.
     """
 
     def __init__(self, filePath=None, name=None, numChannels=1, map=None, mapSession=None):
-
-        #logging.debug('mmStack.__init__() map:' + map.name + ' stack:' + name)
-
         self.fileName = filePath
         self.folder = '' #map.folder #re-route this to load a single time-point stack from its .tif !!!
         self.name = name #re-route this for single channel stack
         self.numChannels = numChannels #get this from stackdb???
 
-        self.map = map
+        self.map_ = map
         self.mapSession = mapSession
 
         if filePath: # single time-point stack
@@ -67,13 +56,11 @@ class mmStack():
         self.voxelx = 1.0 #float(map.getValue('dx', mapSession))
         self.voxely = 1.0 #float(map.getValue('dy', mapSession))
         self.voxelz = 1.0 #int(map.getValue('dz', mapSession)) #we use z as index into numpy array, can't be int !!!
-        self.numSlices = None #: Number of image slices in the stack, e.g. images.shape[0]
-        self.numSegments = 0 #: Number of segments in the stack
 
-        self.images = None #  3D numpy array of the stacks images, axis 0 is slices"""
+        self._images = None #  3D numpy array of the stacks images, axis 0 is slices"""
 
         #stackdb
-        self.stackdb = None
+        self._stackdb = None
         stackdbFile = self.folder + 'stackdb' + '/' + self.name + '_db2.txt'
         if os.path.isfile(stackdbFile):
             #read first line header and get stack dimension
@@ -94,14 +81,14 @@ class mmStack():
                 #self.numSlices = int(d['pixelz'])
 
             #self.stackdb = pd.read_csv(stackdbFile, header=1, index_col=0)
-            self.stackdb = pd.read_csv(stackdbFile, header=1, index_col=False)
+            self._stackdb = pd.read_csv(stackdbFile, header=1, index_col=False)
 
             # CRITICAL: Idx in stackdb is corrupt (it is not used in Igor MapManager)
             #self.stackdb.reset_index(drop=True, inplace=True)
 
-            self.stackdb['Idx'] = self.stackdb.index
+            self._stackdb['Idx'] = self.stackdb.index
 
-            #not currently using, goo didea for EVERY spine to have unique ID?
+            #not currently using, good idea for EVERY spine to have unique ID?
             # hashID = [uuid.uuid4().hex for i in range(self.stackdb.shape[0])]
             # self.stackdb['hashID'] = hashID #32 character hexadecimal string
 
@@ -113,11 +100,11 @@ class mmStack():
                 self.stackdb['mapSession'] = mapSession
                 mapCond = map.getValue('mapCond', 0)  # one map condition, in column zero
                 #should have numObj()-1 here ???
-                self.stackdb['next'] = map.objMap[1,0:self.numObj(),mapSession].tolist() # 1: next
-                self.stackdb['nexttp'] = map.objMap[2,0:self.numObj(),mapSession].tolist() # 2: nextTP
-                self.stackdb['prev'] = map.objMap[3,0:self.numObj(),mapSession].tolist() # 3: prev
-                self.stackdb['prevtp'] = map.objMap[4,0:self.numObj(),mapSession].tolist() # 4: prevTP
-                self.stackdb['runIdx'] = map.objMap[6,0:self.numObj(),mapSession].tolist() # 4: runIdx
+                self.stackdb['next'] = map.objMap[1,0:self.numObj,mapSession].tolist() # 1: next
+                self.stackdb['nexttp'] = map.objMap[2,0:self.numObj,mapSession].tolist() # 2: nextTP
+                self.stackdb['prev'] = map.objMap[3,0:self.numObj,mapSession].tolist() # 3: prev
+                self.stackdb['prevtp'] = map.objMap[4,0:self.numObj,mapSession].tolist() # 4: prevTP
+                self.stackdb['runIdx'] = map.objMap[6,0:self.numObj,mapSession].tolist() # 4: runIdx
                 self.stackdb['days'] = map.getValue('days', mapSession)
                 self.stackdb['sessCond'] = map.getValue('condStr', mapSession)
                 self.stackdb['mapCond'] = mapCond
@@ -130,13 +117,8 @@ class mmStack():
                     self.stackdb['isSub'] = [np.nan if a >= 0 else 1 for a in map.objMap[1,0:m,mapSession]] # 1 is next
                 self.stackdb['isTransient'] = self.stackdb['isAdd'].isin([1]) & self.stackdb['isSub'].isin([1])
 
-                # lifetime
-
-            unique = self.stackdb['parentID'].unique()
-            self.numSegments = np.count_nonzero(~np.isnan(unique))
-
         else:
-            print 'mmStack() error, did not find file:', filePath
+            print 'mmStack() error, did not find stackdb file:', filePath
 
         # int1 and in2 will have some column names in common with stackdb
         #assuming we want values from stackdb, just drop them
@@ -146,34 +128,86 @@ class mmStack():
         int1File = self.folder + 'stackdb' + '/' + self.name + '_Int1.txt'
         if os.path.isfile(int1File):
             int1 = pd.read_csv(int1File, header=1, index_col=False)
-            #int1 = int1.drop(droplist, axis=1)
-            #print name, 'int1:', int1.columns.values.tolist()
             int1 = int1.add_suffix('_int1')
-            self.stackdb = self.stackdb.join(int1)
+            self._stackdb = self.stackdb.join(int1)
         else:
-            print 'mmStack error, did not find file', int1File
+            print 'mmStack error, did not find int1 file', int1File
 
         # int2
         if self.numChannels==2:
             int2File = self.folder + 'stackdb' + '/' + self.name + '_Int2.txt'
             if os.path.isfile(int2File):
                 int2 = pd.read_csv(int2File, header=1, index_col=False)
-                #int2 = int2.drop(droplist, axis=1)
-                #print int2.columns.values.tolist()
                 int2 = int2.add_suffix('_int2')
-                self.stackdb = self.stackdb.join(int2)
+                self._stackdb = self.stackdb.join(int2)
             else:
-                print 'mmStack error, did not find file', int2File
+                print 'mmStack error, did not find int2 file', int2File
 
         # line
-        self.line = None
+        self._line = None
         self._loadLine()
 
-    def add_to_map(self, map, session):
-        """Add the stack into a map at the given session index
-
-        NOT IMPLEMENTED
+    @property
+    def stackdb(self):
         """
+        stackdb (pandas dataframe): Pandas dataframe of annotations, one per row. Columns are statistic names.
+            See `PyMapManager.mmUtil STACK_STATS` for valid statistic names.
+        """
+        return self._stackdb
+
+    @property
+    def numObj(self):
+        """The number of objects (annotations) in the stack. This is the number of rows in stackdb"""
+        if self.stackdb is not None:
+            return self.stackdb.shape[0]
+        else:
+            return 0
+
+    @property
+    def images(self):
+        """
+        images (numpy ndarray): 3D numpy ndarray of image data.
+            This is not valid until :func:`loadStackImages` is called.
+            Slices are in the 1st dimension, use images[0,:,:] to get the first image.
+        """
+        return self._images
+
+    @property
+    def numSlices(self):
+        """
+        Number of image slices in the stack.
+        """
+        if self.images is not None:
+            return self.images.shape[0]
+        else:
+            return None
+
+    @property
+    def line(self):
+        """
+        line (:class:`PyMapManager.mmStackLine`): A 3D tracing of segments.
+        """
+        return self._line
+
+    @property
+    def numSegments(self):
+        """
+        Number of line segments in the stack.
+        """
+        if self.stackdb is not None:
+            unique = self.stackdb['parentID'].unique()
+            return np.count_nonzero(~np.isnan(unique))
+        else:
+            return None
+
+    def __str__(self):
+        mapname = self.map_.name if self.map_ else 'None'
+        return ('stack:' + self.name
+                + ' map:' + mapname
+                + ' session:' + str(self.mapSession)
+                + ' objects:' + str(self.numObj)
+                + ' segments:' + str(self.numSegments)
+                + ' channels:' + str(self.numChannels))
 
     def getStatNames(self):
         """Get column names from stack. These are valid values for plot functions."""
@@ -214,7 +248,7 @@ class mmStack():
 
         pd['stackidx'] = ret.index.values
 
-        reverse = np.zeros(self.numObj())
+        reverse = np.zeros(self.numObj)
         reverse[:] = np.NaN
         for i, val in enumerate(pd['stackidx']):
             if val >= 0:
@@ -223,7 +257,7 @@ class mmStack():
 
         return pd
 
-    def getStackValues2(self, token, roiType='spineROI', segmentID=[]):
+    def getStackValues2(self, stat, roiType=['spineROI'], segmentID=[], plotBad=False, plotIntBad=False):
         """
 
         Args:
@@ -234,44 +268,15 @@ class mmStack():
         Returns: 1D numpy ndarray of values
 
         """
-        ret, idx, reverse = self.getStackValues(token, roiType=roiType, segmentID=segmentID)
-        return ret
+        plotDict = newplotdict()
+        plotDict['roitype'] = roiType
+        plotDict['xstat'] = stat
+        plotDict['segmentid'] = segmentID
+        plotDict['plotbad'] = plotBad
+        plotDict['plotIntBad'] = plotIntBad
 
-    def getStackValues(self, token, roiType='spineROI', segmentID=[]):
-        """
-        Get the (values, stack index, and reverse lookup) for a given token.
-
-        Valid tokens are columns of stackdb. Specify roiType to get values for a given type. Specify a list of segments with segmentID to get just those segments.
-
-        Args:
-            token (str): Statistic name (Must be a column name in pandas dataframe stackdb)
-            roiType (str): xxx
-            segmentID (list): xxx
-
-        Return:
-            Three 1D numpy array of 'token' values matching criteria.
-            This is NOT the same size as stackdb it only contains values of interest.
-            Use reverseLookup to find index into theValues that corresponds to an actual stackdb index
-        """
-        ret = self.stackdb
-        if segmentID:
-            ret = ret[ret['parentID'].isin(segmentID)]
-        #ret = ret[ret['roiType'].isin([roiType])][token].values
-        ret = ret[ret['roiType'].isin([roiType])]
-        theValues = ret[token].values
-        theStackdbIdx = ret.index.values # values makes a ndarray
-
-        reverseLookup = np.zeros(self.numObj())
-        reverseLookup[:] = np.NaN
-        for i, val in enumerate(theStackdbIdx):
-            if val >= 0:
-                reverseLookup[val] = i
-
-        return theValues, theStackdbIdx, reverseLookup
-
-    def numObj(self):
-        """Get the number of objects (annotations) in the stack. This is the number of rows in stackdb"""
-        return self.stackdb.shape[0]
+        plotDict = self.getStackValues3(plotDict)
+        return plotDict['x']
 
     def _loadLine(self):
         """
@@ -280,7 +285,7 @@ class mmStack():
         Returns:
             None.
         """
-        self.line = mmStackLine(self)
+        self._line = mmStackLine(self)
 
     def loadStackImages(self, channel=2):
         """
@@ -299,7 +304,7 @@ class mmStack():
         else:
             chStr = '_ch2'
 
-        if self.map:
+        if self.map_:
             tiffFileName = self.folder + 'raw' + '/' + self.name + chStr + '.tif'
         else:
             tiffFileName = self.folder + self.name + chStr + '.tif'
@@ -351,3 +356,60 @@ class mmStack():
         #self.imgplot = plt.imshow(self.images[0,:,:])
 
         return self.images
+
+
+##############################################################################
+class mmStackPool():
+    """
+    Load all stacks in a folder.
+
+    Args:
+        path (str): Full path to a folder. This folder should contain .tif files.
+
+    Example::
+
+        path = '/Users/cudmore/MapManagerData/richard/Nancy/'
+        stacks = mmStackPool(path)
+        for stack in stacks:
+            print stack
+    """
+
+    def __init__(self, path):
+        self._stacks = []
+
+        startTime = time.time()
+
+        if os.path.isdir(path):
+            files = glob(path+'/*')
+            for file in files:
+                isTiff = file.endswith('.tif')
+                if (isTiff):
+                    print '=== mmStackPool() loading stack:', file
+                    stack = mmStack(filePath=file)
+                    self.stacks.append(stack)
+        else:
+            print 'error: mmMapPool() did not find path:', path
+
+        stopTime = time.time()
+        print 'mmStackPool() loaded', len(self.stacks), 'stacks in', stopTime-startTime, 'seconds.'
+
+    @property
+    def stacks(self):
+        """
+        List of :class:`PyMapManager.mmStack` in the mmStackPool.
+        """
+        return self._stacks
+
+    def __iter__(self):
+        i = 0
+        while i < len(self.stacks):
+            yield self.stacks[i]
+            i+=1
+
+    def __str__(self):
+        count = 0
+        for stack in self:
+            count += stack.numObj
+        return ('pool:'
+                + ' num stacks:' + str(len(self.stacks))
+                + ' num obj:' + str(count))

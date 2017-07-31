@@ -171,7 +171,7 @@
 <span class="n">PLOT_STRUCT</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
 <span class="n">PLOT_STRUCT</span><span class="p">[</span><span class="s1">&#39;xstat&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
 <span class="n">PLOT_STRUCT</span><span class="p">[</span><span class="s1">&#39;ystat&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
-<span class="n">PLOT_STRUCT</span><span class="p">[</span><span class="s1">&#39;roiType&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;spineROI&#39;</span>
+<span class="n">PLOT_STRUCT</span><span class="p">[</span><span class="s1">&#39;roiType&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;spineROI&#39;</span><span class="p">]</span>
 <span class="n">PLOT_STRUCT</span><span class="p">[</span><span class="s1">&#39;segmentID&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1"># all segment</span>
 <span class="n">PLOT_STRUCT</span><span class="p">[</span><span class="s1">&#39;plotBad&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
 <span class="n">PLOT_STRUCT</span><span class="p">[</span><span class="s1">&#39;plotIntBad&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
@@ -181,6 +181,7 @@
 
 <span class="n">PLOT_DICT</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s1">&#39;map&#39;</span> <span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="c1">#: map (object) mmMap</span>
+    <span class="s1">&#39;mapname&#39;</span> <span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
     <span class="s1">&#39;sessidx&#39;</span> <span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="c1">#: sessIdx (int): map session</span>
     <span class="s1">&#39;stack&#39;</span> <span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="c1">#: stack (object) use for single timepoint analysis</span>
 
@@ -189,8 +190,13 @@
     <span class="s1">&#39;zstat&#39;</span> <span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
     <span class="s1">&#39;roitype&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="s1">&#39;spineROI&#39;</span><span class="p">],</span> <span class="c1">#: roiType</span>
     <span class="s1">&#39;segmentid&#39;</span> <span class="p">:</span> <span class="p">[],</span>
+
+    <span class="s1">&#39;stacklist&#39;</span> <span class="p">:</span> <span class="p">[],</span>   <span class="c1"># list of int to specify sessions/stacks to plot, [] will plot all</span>
+
     <span class="s1">&#39;plotbad&#39;</span> <span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
     <span class="s1">&#39;plotintbad&#39;</span> <span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="s1">&#39;showlines&#39;</span> <span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="s1">&#39;showdynamics&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
 
     <span class="c1">#  Filled in by get functions</span>
     <span class="s1">&#39;x&#39;</span> <span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
@@ -198,7 +204,6 @@
     <span class="s1">&#39;z&#39;</span> <span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
     <span class="s1">&#39;stackidx&#39;</span> <span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
     <span class="s1">&#39;reverse&#39;</span> <span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-
     <span class="s1">&#39;runrow&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
     <span class="s1">&#39;mapsess&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">}</span>

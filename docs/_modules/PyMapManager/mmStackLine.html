@@ -176,7 +176,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">stack</span> <span class="o">=</span> <span class="n">stack</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">linedb</span> <span class="o">=</span> <span class="kc">None</span>
 
-        <span class="k">if</span> <span class="n">stack</span><span class="o">.</span><span class="n">map</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">stack</span><span class="o">.</span><span class="n">map_</span><span class="p">:</span>
             <span class="n">lineFile</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="n">folder</span> <span class="o">+</span> <span class="s1">&#39;line&#39;</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="n">stack</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;_l.txt&#39;</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">lineFile</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="n">folder</span> <span class="o">+</span> <span class="s1">&#39;stackdb&#39;</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="n">stack</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;_l.txt&#39;</span>
@@ -202,7 +202,7 @@
 <span class="sd">        Returns: pd with [&#39;x&#39;], [&#39;y&#39;], and [&#39;z&#39;] values filled in as numpy ndarray</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">linedb</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">return</span>
+            <span class="k">return</span> <span class="kc">None</span>
 
         <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">linedb</span>
         <span class="k">if</span> <span class="n">pd</span><span class="p">[</span><span class="s1">&#39;segmentid&#39;</span><span class="p">]:</span>
@@ -224,7 +224,7 @@
 <span class="sd">            numpy ndarray of (x,y,z)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">linedb</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">return</span>
+            <span class="k">return</span> <span class="kc">None</span>
 
         <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">linedb</span>
         <span class="k">if</span> <span class="n">segmentID</span><span class="p">:</span>

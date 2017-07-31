@@ -171,7 +171,8 @@
 <span class="kn">from</span> <span class="nn">matplotlib.backends.backend_qt4agg</span> <span class="k">import</span> <span class="n">FigureCanvasQTAgg</span> <span class="k">as</span> <span class="n">FigureCanvas</span>
 <span class="kn">from</span> <span class="nn">matplotlib.figure</span> <span class="k">import</span> <span class="n">Figure</span>
 
-<span class="kn">from</span> <span class="nn">PyMapManager.mmUtil</span> <span class="k">import</span> <span class="n">mmEvent</span>
+<span class="kn">from</span> <span class="nn">PyMapManager.mmUtil</span> <span class="k">import</span> <span class="n">mmEvent</span><span class="p">,</span> <span class="n">newplotdict</span>
+<span class="kn">from</span> <span class="nn">PyMapManager.mmMapPlot2</span> <span class="k">import</span> <span class="n">mmMapPlot2</span>
 
 <div class="viewcode-block" id="mmCanvas"><a class="viewcode-back" href="../../../PyMapManager.interface.html#PyMapManager.interface.mmCanvas.mmCanvas">[docs]</a><span class="k">class</span> <span class="nc">mmCanvas</span><span class="p">(</span><span class="n">FigureCanvas</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;A figure canvas that holds a matplotlib figure. User actions are linked to this canvas with mpl_connect. This canvas must have Qt.ClickFocus to receive user events.&quot;&quot;&quot;</span>
@@ -360,8 +361,10 @@
         <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;spine selection&#39;</span><span class="p">:</span>
             <span class="c1"># for a map, we should select a run</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">myWinType</span> <span class="o">==</span> <span class="s1">&#39;map_plot&#39;</span><span class="p">:</span>
-                <span class="n">xRun</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">xPlot</span><span class="p">[</span><span class="n">event</span><span class="o">.</span><span class="n">runMapRow</span><span class="p">,</span> <span class="p">:]</span>
-                <span class="n">yRun</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">yPlot</span><span class="p">[</span><span class="n">event</span><span class="o">.</span><span class="n">runMapRow</span><span class="p">,</span> <span class="p">:]</span>
+                <span class="c1">#xRun = self.xPlot[event.runMapRow, :]</span>
+                <span class="c1">#yRun = self.yPlot[event.runMapRow, :]</span>
+                <span class="n">xRun</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">myMapPlot</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="n">event</span><span class="o">.</span><span class="n">runMapRow</span><span class="p">,</span> <span class="p">:]</span>
+                <span class="n">yRun</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">myMapPlot</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">event</span><span class="o">.</span><span class="n">runMapRow</span><span class="p">,</span> <span class="p">:]</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">plotRunObj</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">plotRunObj</span><span class="o">.</span><span class="n">set_xdata</span><span class="p">(</span><span class="n">xRun</span><span class="p">)</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">plotRunObj</span><span class="o">.</span><span class="n">set_ydata</span><span class="p">(</span><span class="n">yRun</span><span class="p">)</span>
@@ -376,7 +379,7 @@
 
 <div class="viewcode-block" id="mmMapPlotCanvas.onpick"><a class="viewcode-back" href="../../../PyMapManager.interface.html#PyMapManager.interface.mmCanvas.mmMapPlotCanvas.onpick">[docs]</a>    <span class="k">def</span> <span class="nf">onpick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Respond to clicks in a map.</span>
+<span class="sd">        Respond to clicks in a map plot.</span>
 
 <span class="sd">        event.ind: A list of hit points, just use the first.</span>
 <span class="sd">        We are normally plotting self.runMap (a 2D nparray) with NaN.</span>
@@ -392,37 +395,52 @@
         <span class="c1">#yRunRow_noNan = self.yRunRow[~np.isnan(self.yRunRow)]</span>
         <span class="c1">#runMapRow = int(yRunRow_noNan[ind[0]])</span>
 
-        <span class="n">sessIdx_noNan</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sessIdx</span><span class="p">[</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sessIdx</span><span class="p">)]</span>
-        <span class="n">sessIdx</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">sessIdx_noNan</span><span class="p">[</span><span class="n">ind</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
+        <span class="n">sessIdx</span><span class="p">,</span> <span class="n">stackdbIdx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">myMapPlot</span><span class="o">.</span><span class="n">getUserSelection</span><span class="p">(</span><span class="n">ind</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="nb">print</span> <span class="s1">&#39;sessIdx:&#39;</span><span class="p">,</span> <span class="n">sessIdx</span><span class="p">,</span> <span class="s1">&#39;stackdbIdx:&#39;</span><span class="p">,</span> <span class="n">stackdbIdx</span>
 
-        <span class="n">stackdbIdx_noNan</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stackdbIdx</span><span class="p">[</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stackdbIdx</span><span class="p">)]</span>
-        <span class="n">stackdbIdx</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">stackdbIdx_noNan</span><span class="p">[</span><span class="n">ind</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        sessIdx_noNan = self.sessIdx[~np.isnan(self.sessIdx)]</span>
+<span class="sd">        sessIdx = int(sessIdx_noNan[ind[0]])</span>
 
-        <span class="c1"># transmit selection event to all open windows</span>
+<span class="sd">        stackdbIdx_noNan = self.stackdbIdx[~np.isnan(self.stackdbIdx)]</span>
+<span class="sd">        stackdbIdx = int(stackdbIdx_noNan[ind[0]])</span>
+
+<span class="sd">        # transmit selection event to all open windows</span>
+<span class="sd">        newEvent = mmEvent(self.map, sessIdx, stackdbIdx)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">newEvent</span> <span class="o">=</span> <span class="n">mmEvent</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">map</span><span class="p">,</span> <span class="n">sessIdx</span><span class="p">,</span> <span class="n">stackdbIdx</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">broadcastevent</span><span class="p">(</span><span class="n">newEvent</span><span class="p">)</span>
 
         <span class="n">statusStr</span> <span class="o">=</span> <span class="n">newEvent</span><span class="o">.</span><span class="n">getText</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">setStatus</span><span class="p">(</span><span class="n">statusStr</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="mmMapPlotCanvas.plot"><a class="viewcode-back" href="../../../PyMapManager.interface.html#PyMapManager.interface.mmCanvas.mmMapPlotCanvas.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stateDict</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Plot mmStack values for all mmStack(s) in the map.&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="mmMapPlotCanvas.plot2"><a class="viewcode-back" href="../../../PyMapManager.interface.html#PyMapManager.interface.mmCanvas.mmMapPlotCanvas.plot2">[docs]</a>    <span class="k">def</span> <span class="nf">plot2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stateDict</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Trying to get mmMapPlot working</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">myPlotDict</span> <span class="o">=</span> <span class="n">stateDict</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">myWinType</span> <span class="o">=</span> <span class="s1">&#39;map_plot&#39;</span>
-
         <span class="bp">self</span><span class="o">.</span><span class="n">map</span> <span class="o">=</span> <span class="n">stateDict</span><span class="p">[</span><span class="s1">&#39;map&#39;</span><span class="p">]</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">xValues</span><span class="p">,</span> \
-        <span class="bp">self</span><span class="o">.</span><span class="n">yValues</span><span class="p">,</span> \
-        <span class="bp">self</span><span class="o">.</span><span class="n">stackdbIdx</span><span class="p">,</span> \
-        <span class="bp">self</span><span class="o">.</span><span class="n">sessIdx</span><span class="p">,</span> \
-        <span class="bp">self</span><span class="o">.</span><span class="n">yRunRow</span><span class="p">,</span> \
-            <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">map</span><span class="o">.</span><span class="n">getMapValues</span><span class="p">(</span><span class="n">stateDict</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">myMapPlot</span> <span class="o">=</span> <span class="n">mmMapPlot2</span><span class="p">(</span><span class="n">stateDict</span><span class="p">[</span><span class="s1">&#39;map&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">myMapPlot</span><span class="o">.</span><span class="n">plotMap</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="p">,</span> <span class="n">stateDict</span><span class="p">)</span></div>
 
-        <span class="c1"># the values we plot, keep self.xValues and self.yValues as immutable</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">xPlot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">xValues</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">yPlot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">yValues</span>
+<div class="viewcode-block" id="mmMapPlotCanvas.plot"><a class="viewcode-back" href="../../../PyMapManager.interface.html#PyMapManager.interface.mmCanvas.mmMapPlotCanvas.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stateDict</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Plot mmStack values for all mmStack(s) in the map.&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">myPlotDict</span> <span class="o">=</span> <span class="n">stateDict</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">myWinType</span> <span class="o">=</span> <span class="s1">&#39;map_plot&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">map</span> <span class="o">=</span> <span class="n">stateDict</span><span class="p">[</span><span class="s1">&#39;map&#39;</span><span class="p">]</span>
+
+        <span class="n">stateDict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">map</span><span class="o">.</span><span class="n">getMapValues3</span><span class="p">(</span><span class="n">stateDict</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">xPlot</span> <span class="o">=</span> <span class="n">stateDict</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">yPlot</span> <span class="o">=</span> <span class="n">stateDict</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stackdbIdx</span> <span class="o">=</span> <span class="n">stateDict</span><span class="p">[</span><span class="s1">&#39;stackidx&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sessIdx</span> <span class="o">=</span> <span class="n">stateDict</span><span class="p">[</span><span class="s1">&#39;mapsess&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">yRunRow</span> <span class="o">=</span> <span class="n">stateDict</span><span class="p">[</span><span class="s1">&#39;runrow&#39;</span><span class="p">]</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">myScatterPlot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">xPlot</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">yPlot</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">picker</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
@@ -444,41 +462,42 @@
         <span class="c1"># this is silly, we should be given a map on construction?</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">map</span> <span class="o">=</span> <span class="n">stateDict</span><span class="p">[</span><span class="s1">&#39;map&#39;</span><span class="p">]</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">xValues</span><span class="p">,</span> \
-        <span class="bp">self</span><span class="o">.</span><span class="n">yValues</span><span class="p">,</span> \
-        <span class="bp">self</span><span class="o">.</span><span class="n">stackdbIdx</span><span class="p">,</span> \
-        <span class="bp">self</span><span class="o">.</span><span class="n">sessIdx</span><span class="p">,</span> \
-        <span class="bp">self</span><span class="o">.</span><span class="n">yRunRow</span><span class="p">,</span> \
-            <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">map</span><span class="o">.</span><span class="n">getMapValues</span><span class="p">(</span><span class="n">stateDict</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">myMapPlot</span> <span class="o">=</span> <span class="n">mmMapPlot2</span><span class="p">(</span><span class="n">stateDict</span><span class="p">[</span><span class="s1">&#39;map&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">myMapPlot</span><span class="o">.</span><span class="n">plotMap</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="p">,</span> <span class="n">stateDict</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">xPlot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">xValues</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">yPlot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">yValues</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        stateDict = self.map.getMapValues3(stateDict)</span>
 
-        <span class="c1"># get spine angle and offset</span>
-        <span class="n">offset</span> <span class="o">=</span> <span class="mf">0.1</span>
-        <span class="n">cAngle</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">map</span><span class="o">.</span><span class="n">getMapValues2</span><span class="p">(</span><span class="s1">&#39;cAngle&#39;</span><span class="p">,</span> <span class="n">segmentID</span><span class="o">=</span><span class="n">stateDict</span><span class="p">[</span><span class="s1">&#39;segmentID&#39;</span><span class="p">])</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">xPlot</span><span class="p">[</span><span class="n">cAngle</span> <span class="o">&gt;</span> <span class="mi">180</span><span class="p">]</span> <span class="o">+=</span> <span class="n">offset</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">xPlot</span><span class="p">[</span><span class="n">cAngle</span> <span class="o">&lt;</span> <span class="mi">180</span><span class="p">]</span> <span class="o">-=</span> <span class="n">offset</span>
+<span class="sd">        self.xPlot = stateDict[&#39;x&#39;]</span>
+<span class="sd">        self.yPlot = stateDict[&#39;y&#39;]</span>
 
-        <span class="n">markersize</span> <span class="o">=</span> <span class="mi">10</span>  <span class="c1"># units here is area</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">myScatterPlot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">xPlot</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">yPlot</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="n">markersize</span><span class="p">,</span> <span class="n">picker</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="sd">        # get spine angle and offset</span>
+<span class="sd">        offset = 0.1</span>
+<span class="sd">        cAngle = self.map.getMapValues2(&#39;cAngle&#39;, segmentID=stateDict[&#39;segmentid&#39;])</span>
+<span class="sd">        self.xPlot[cAngle &gt; 180] += offset</span>
+<span class="sd">        self.xPlot[cAngle &lt; 180] -= offset</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">toggledynamics</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">togglelines</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+<span class="sd">        markersize = 10  # units here is area</span>
+<span class="sd">        self.myScatterPlot = self.axes.scatter(self.xPlot, self.yPlot, marker=&#39;o&#39;, s=markersize, picker=True)</span>
 
-        <span class="c1"># background colors</span>
-        <span class="n">grayLevel</span> <span class="o">=</span> <span class="mf">0.6</span>
-        <span class="n">backgroundColor</span> <span class="o">=</span> <span class="p">(</span><span class="n">grayLevel</span><span class="p">,</span> <span class="n">grayLevel</span><span class="p">,</span> <span class="n">grayLevel</span><span class="p">)</span>
-        <span class="n">rect</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">patch</span>
-        <span class="n">rect</span><span class="o">.</span><span class="n">set_facecolor</span><span class="p">(</span><span class="n">backgroundColor</span><span class="p">)</span>  <span class="c1"># figure background color</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">set_facecolor</span><span class="p">(</span><span class="n">backgroundColor</span><span class="p">)</span> <span class="c1">#axes background color</span>
+<span class="sd">        self.toggledynamics(True)</span>
+<span class="sd">        self.togglelines(True)</span>
 
-        <span class="c1"># remove frame</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="s1">&#39;top&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="s1">&#39;right&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+<span class="sd">        # background colors</span>
+<span class="sd">        grayLevel = 0.6</span>
+<span class="sd">        backgroundColor = (grayLevel, grayLevel, grayLevel)</span>
+<span class="sd">        rect = self.figure.patch</span>
+<span class="sd">        rect.set_facecolor(backgroundColor)  # figure background color</span>
+<span class="sd">        # this works for matplotlib 2.02 but not earlier as is on my laptop</span>
+<span class="sd">        # #self.axes.set_facecolor(backgroundColor) #axes background color</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">stateDict</span><span class="p">[</span><span class="s1">&#39;xstat&#39;</span><span class="p">])</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">stateDict</span><span class="p">[</span><span class="s1">&#39;ystat&#39;</span><span class="p">])</span></div></div>
+<span class="sd">        # remove frame</span>
+<span class="sd">        self.axes.spines[&#39;top&#39;].set_visible(False)</span>
+<span class="sd">        self.axes.spines[&#39;right&#39;].set_visible(False)</span>
+
+<span class="sd">        self.axes.set_xlabel(stateDict[&#39;xstat&#39;])</span>
+<span class="sd">        self.axes.set_ylabel(stateDict[&#39;ystat&#39;])</span>
+<span class="sd">        &quot;&quot;&quot;</span></div></div>
 
 <div class="viewcode-block" id="mmStackPlotCanvas"><a class="viewcode-back" href="../../../PyMapManager.interface.html#PyMapManager.interface.mmCanvas.mmStackPlotCanvas">[docs]</a><span class="k">class</span> <span class="nc">mmStackPlotCanvas</span><span class="p">(</span><span class="n">mmCanvas</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Plot and interact with a plot of stack values across a map&quot;&quot;&quot;</span>
@@ -558,7 +577,7 @@
         <span class="nb">print</span> <span class="s1">&#39;mmStackPlotCanvas.receiveevent()&#39;</span><span class="p">,</span> <span class="n">event</span><span class="o">.</span><span class="n">type</span>
         <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">map</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">map</span><span class="p">:</span>
             <span class="k">return</span>
-        <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">mapSession</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stateDict</span><span class="p">[</span><span class="s1">&#39;sessionIdx&#39;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">mapSession</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stateDict</span><span class="p">[</span><span class="s1">&#39;sessidx&#39;</span><span class="p">]:</span>
             <span class="k">return</span>
 
         <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;spine selection&#39;</span><span class="p">:</span>
@@ -583,12 +602,12 @@
         <span class="n">stackdbIdx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stackdbIdx_plot</span><span class="p">[</span><span class="n">ind</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
 
         <span class="c1"># transmit selection event to all open windows</span>
-        <span class="n">newEvent</span> <span class="o">=</span> <span class="n">mmEvent</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">map</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">stateDict</span><span class="p">[</span><span class="s1">&#39;sessionIdx&#39;</span><span class="p">],</span> <span class="n">stackdbIdx</span><span class="p">)</span>
+        <span class="n">newEvent</span> <span class="o">=</span> <span class="n">mmEvent</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">map</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">stateDict</span><span class="p">[</span><span class="s1">&#39;sessidx&#39;</span><span class="p">],</span> <span class="n">stackdbIdx</span><span class="p">)</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        newEvent = mmEvent()</span>
 <span class="sd">        newEvent.type = &#39;spine selection&#39;</span>
 <span class="sd">        newEvent.map = self.map</span>
-<span class="sd">        newEvent.mapSession = self.stateDict[&#39;sessionIdx&#39;]</span>
+<span class="sd">        newEvent.mapSession = self.stateDict[&#39;sessidx&#39;]</span>
 <span class="sd">        newEvent.stack = None</span>
 <span class="sd">        newEvent.stackdbIdx = stackdbIdx</span>
 <span class="sd">        newEvent.runMapRow = None # we should not have to fill this in here</span>
@@ -610,12 +629,19 @@
         <span class="n">stack</span> <span class="o">=</span> <span class="n">stateDict</span><span class="p">[</span><span class="s1">&#39;stack&#39;</span><span class="p">]</span>
         <span class="n">xStat</span> <span class="o">=</span> <span class="n">stateDict</span><span class="p">[</span><span class="s1">&#39;xstat&#39;</span><span class="p">]</span>
         <span class="n">yStat</span> <span class="o">=</span> <span class="n">stateDict</span><span class="p">[</span><span class="s1">&#39;ystat&#39;</span><span class="p">]</span>
-        <span class="n">roiType</span> <span class="o">=</span> <span class="n">stateDict</span><span class="p">[</span><span class="s1">&#39;roiType&#39;</span><span class="p">]</span>
-        <span class="n">segmentID</span> <span class="o">=</span> <span class="n">stateDict</span><span class="p">[</span><span class="s1">&#39;segmentID&#39;</span><span class="p">]</span>
+        <span class="n">roiType</span> <span class="o">=</span> <span class="n">stateDict</span><span class="p">[</span><span class="s1">&#39;roitype&#39;</span><span class="p">]</span>
+        <span class="n">segmentID</span> <span class="o">=</span> <span class="n">stateDict</span><span class="p">[</span><span class="s1">&#39;segmentid&#39;</span><span class="p">]</span>
+
+        <span class="n">stateDict</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="n">getStackValues3</span><span class="p">(</span><span class="n">stateDict</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">xPlot</span> <span class="o">=</span> <span class="n">stateDict</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">yPlot</span> <span class="o">=</span> <span class="n">stateDict</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stackdbIdx_plot</span> <span class="o">=</span> <span class="n">stateDict</span><span class="p">[</span><span class="s1">&#39;stackidx&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reverseLookup</span> <span class="o">=</span> <span class="n">stateDict</span><span class="p">[</span><span class="s1">&#39;reverse&#39;</span><span class="p">]</span>
 
         <span class="c1">#we only get the values we are plotting here</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">xPlot</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">stackdbIdx_plot</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">reverseLookup</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="n">getStackValues</span><span class="p">(</span><span class="n">xStat</span><span class="p">,</span> <span class="n">roiType</span><span class="o">=</span><span class="n">roiType</span><span class="p">,</span> <span class="n">segmentID</span><span class="o">=</span><span class="n">segmentID</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">yPlot</span><span class="p">,</span> <span class="n">tmp</span><span class="p">,</span> <span class="n">tmp</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="n">getStackValues</span><span class="p">(</span><span class="n">yStat</span><span class="p">,</span> <span class="n">roiType</span><span class="o">=</span><span class="n">roiType</span><span class="p">,</span> <span class="n">segmentID</span><span class="o">=</span><span class="n">segmentID</span><span class="p">)</span>
+        <span class="c1">#self.xPlot, self.stackdbIdx_plot, self.reverseLookup = stack.getStackValues(xStat, roiType=roiType, segmentID=segmentID)</span>
+        <span class="c1">#self.yPlot, tmp, tmp = stack.getStackValues(yStat, roiType=roiType, segmentID=segmentID)</span>
 
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        #reverseLookup is same size as stackdb, for object i it gives us index into xPlot and yPlot</span>
@@ -682,7 +708,7 @@
         <span class="c1">#self.selectPoint(stackdbIdx)</span>
 
         <span class="c1"># transmit selection event to all open windows</span>
-        <span class="n">newEvent</span> <span class="o">=</span> <span class="n">mmEvent</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">map</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">stateDict</span><span class="p">[</span><span class="s1">&#39;sessionIdx&#39;</span><span class="p">],</span> <span class="n">stackdbIdx</span><span class="p">)</span>
+        <span class="n">newEvent</span> <span class="o">=</span> <span class="n">mmEvent</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">map</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">stateDict</span><span class="p">[</span><span class="s1">&#39;sessidx&#39;</span><span class="p">],</span> <span class="n">stackdbIdx</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">broadcastevent</span><span class="p">(</span><span class="n">newEvent</span><span class="p">)</span>
 
         <span class="c1"># update status bar</span>
@@ -723,7 +749,7 @@
         <span class="nb">print</span> <span class="s1">&#39;mmStackPlotCanvas.receiveevent()&#39;</span><span class="p">,</span> <span class="n">event</span><span class="o">.</span><span class="n">type</span>
         <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">map</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">map</span><span class="p">:</span>
             <span class="k">return</span>
-        <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">mapSession</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stateDict</span><span class="p">[</span><span class="s1">&#39;sessionIdx&#39;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">mapSession</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stateDict</span><span class="p">[</span><span class="s1">&#39;sessidx&#39;</span><span class="p">]:</span>
             <span class="k">return</span>
 
         <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;spine selection&#39;</span><span class="p">:</span>
@@ -741,8 +767,8 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">stack</span><span class="o">.</span><span class="n">loadStackImages</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
 
-        <span class="n">roiType</span> <span class="o">=</span> <span class="n">stateDict</span><span class="p">[</span><span class="s1">&#39;roiType&#39;</span><span class="p">]</span>
-        <span class="n">segmentID</span> <span class="o">=</span> <span class="n">stateDict</span><span class="p">[</span><span class="s1">&#39;segmentID&#39;</span><span class="p">]</span>
+        <span class="n">roiType</span> <span class="o">=</span> <span class="n">stateDict</span><span class="p">[</span><span class="s1">&#39;roitype&#39;</span><span class="p">]</span>
+        <span class="n">segmentID</span> <span class="o">=</span> <span class="n">stateDict</span><span class="p">[</span><span class="s1">&#39;segmentid&#39;</span><span class="p">]</span>
 
         <span class="c1">#</span>
         <span class="c1">#  images</span>
@@ -772,11 +798,24 @@
         <span class="c1">#  spines</span>
         <span class="n">ystat</span> <span class="o">=</span> <span class="s1">&#39;y&#39;</span>
         <span class="n">xstat</span> <span class="o">=</span> <span class="s1">&#39;x&#39;</span>
-        <span class="n">roiType</span> <span class="o">=</span> <span class="n">stateDict</span><span class="p">[</span><span class="s1">&#39;roiType&#39;</span><span class="p">]</span>
+        <span class="n">roiType</span> <span class="o">=</span> <span class="n">stateDict</span><span class="p">[</span><span class="s1">&#39;roitype&#39;</span><span class="p">]</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">xPlot</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">stackdbIdx_plot</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">reverseLookup</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stack</span><span class="o">.</span><span class="n">getStackValues</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">roiType</span><span class="o">=</span><span class="n">roiType</span><span class="p">,</span> <span class="n">segmentID</span><span class="o">=</span><span class="n">segmentID</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">yPlot</span><span class="p">,</span> <span class="n">tmp</span><span class="p">,</span> <span class="n">tmp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stack</span><span class="o">.</span><span class="n">getStackValues</span><span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">roiType</span><span class="o">=</span><span class="n">roiType</span><span class="p">,</span> <span class="n">segmentID</span><span class="o">=</span><span class="n">segmentID</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">zPlot</span><span class="p">,</span> <span class="n">tmp</span><span class="p">,</span> <span class="n">tmp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stack</span><span class="o">.</span><span class="n">getStackValues</span><span class="p">(</span><span class="s1">&#39;z&#39;</span><span class="p">,</span> <span class="n">roiType</span><span class="o">=</span><span class="n">roiType</span><span class="p">,</span> <span class="n">segmentID</span><span class="o">=</span><span class="n">segmentID</span><span class="p">)</span>
+        <span class="n">plotDict</span> <span class="o">=</span> <span class="n">stateDict</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">plotDict</span><span class="p">[</span><span class="s1">&#39;xstat&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;x&#39;</span>
+        <span class="n">plotDict</span><span class="p">[</span><span class="s1">&#39;ystat&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;y&#39;</span>
+        <span class="n">plotDict</span><span class="p">[</span><span class="s1">&#39;zstat&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;z&#39;</span>
+
+        <span class="n">plotDict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stack</span><span class="o">.</span><span class="n">getStackValues3</span><span class="p">(</span><span class="n">plotDict</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">xPlot</span> <span class="o">=</span> <span class="n">plotDict</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">yPlot</span> <span class="o">=</span> <span class="n">plotDict</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">zPlot</span> <span class="o">=</span> <span class="n">plotDict</span><span class="p">[</span><span class="s1">&#39;z&#39;</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">stackdbIdx_plot</span> <span class="o">=</span> <span class="n">plotDict</span><span class="p">[</span><span class="s1">&#39;stackidx&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reverseLookup</span> <span class="o">=</span> <span class="n">plotDict</span><span class="p">[</span><span class="s1">&#39;reverse&#39;</span><span class="p">]</span>
+        <span class="c1">#self.xPlot, self.stackdbIdx_plot, self.reverseLookup = self.stack.getStackValues(&#39;x&#39;, roiType=roiType, segmentID=segmentID)</span>
+        <span class="c1">#self.yPlot, tmp, tmp = self.stack.getStackValues(&#39;y&#39;, roiType=roiType, segmentID=segmentID)</span>
+        <span class="c1">#self.zPlot, tmp, tmp = self.stack.getStackValues(&#39;z&#39;, roiType=roiType, segmentID=segmentID)</span>
 
         <span class="n">markersize</span> <span class="o">=</span> <span class="mi">10</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">myScatterPlot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">xPlot</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">yPlot</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="n">markersize</span><span class="p">,</span> <span class="n">picker</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>

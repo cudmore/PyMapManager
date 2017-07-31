@@ -178,6 +178,7 @@
 
 <span class="kn">from</span> <span class="nn">PyMapManager.mmMap</span> <span class="k">import</span> <span class="n">mmMap</span>
 <span class="kn">from</span> <span class="nn">PyMapManager.interface.mmWindow</span> <span class="k">import</span> <span class="n">mmStackWindow</span><span class="p">,</span> <span class="n">mmMapPlotWindow</span><span class="p">,</span> <span class="n">mmStackPlotWindow</span>
+<span class="kn">from</span> <span class="nn">PyMapManager.mmUtil</span> <span class="k">import</span> <span class="n">newplotdict</span>
 
 <div class="viewcode-block" id="mmApplicationWindow"><a class="viewcode-back" href="../../../PyMapManager.interface.html#PyMapManager.interface.mmApp.mmApplicationWindow">[docs]</a><span class="k">class</span> <span class="nc">mmApplicationWindow</span><span class="p">(</span><span class="n">QtGui</span><span class="o">.</span><span class="n">QMainWindow</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Main PyMapManager applicaiton window. This holds list widgets to display: maps, sessions, segments, and stats&quot;&quot;&quot;</span>
@@ -542,37 +543,35 @@
 
 <div class="viewcode-block" id="mmApplicationWindow.getState"><a class="viewcode-back" href="../../../PyMapManager.interface.html#PyMapManager.interface.mmApp.mmApplicationWindow.getState">[docs]</a>    <span class="k">def</span> <span class="nf">getState</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Capture the full state of the interface including selected: map, session, segment, ystat, xstat.&quot;&quot;&quot;</span>
-        <span class="n">d</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="n">plotDict</span> <span class="o">=</span> <span class="n">newplotdict</span><span class="p">()</span>
 
         <span class="c1"># map</span>
         <span class="n">mapIdx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mapListWidget</span><span class="o">.</span><span class="n">currentRow</span><span class="p">()</span>
-        <span class="n">d</span><span class="p">[</span><span class="s1">&#39;map&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">maps</span><span class="p">[</span><span class="n">mapIdx</span><span class="p">]</span>
-        <span class="n">d</span><span class="p">[</span><span class="s1">&#39;mapIdx&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapIdx</span>
-        <span class="n">d</span><span class="p">[</span><span class="s1">&#39;mapName&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mapListWidget</span><span class="o">.</span><span class="n">currentItem</span><span class="p">()</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>
+        <span class="n">plotDict</span><span class="p">[</span><span class="s1">&#39;map&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">maps</span><span class="p">[</span><span class="n">mapIdx</span><span class="p">]</span>
+        <span class="n">plotDict</span><span class="p">[</span><span class="s1">&#39;mapname&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mapListWidget</span><span class="o">.</span><span class="n">currentItem</span><span class="p">()</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>
+        <span class="n">plotDict</span><span class="p">[</span><span class="s1">&#39;mapidx&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapIdx</span> <span class="c1"># index into the list we are displaying</span>
 
         <span class="c1"># session</span>
         <span class="n">sessIdx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sessListWidget</span><span class="o">.</span><span class="n">currentRow</span><span class="p">()</span>
-        <span class="n">d</span><span class="p">[</span><span class="s1">&#39;sessionIdx&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sessIdx</span>
-        <span class="n">d</span><span class="p">[</span><span class="s1">&#39;stack&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">maps</span><span class="p">[</span><span class="n">mapIdx</span><span class="p">]</span><span class="o">.</span><span class="n">stacks</span><span class="p">[</span><span class="n">sessIdx</span><span class="p">]</span>
-        <span class="c1"># d[&#39;stackName&#39;] = &#39;&#39; # not used</span>
+        <span class="n">plotDict</span><span class="p">[</span><span class="s1">&#39;sessidx&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sessIdx</span>
+        <span class="n">plotDict</span><span class="p">[</span><span class="s1">&#39;stack&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">maps</span><span class="p">[</span><span class="n">mapIdx</span><span class="p">]</span><span class="o">.</span><span class="n">stacks</span><span class="p">[</span><span class="n">sessIdx</span><span class="p">]</span>
 
         <span class="c1"># segment</span>
         <span class="n">segStr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">segListWidget</span><span class="o">.</span><span class="n">currentItem</span><span class="p">()</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">segStr</span> <span class="o">==</span> <span class="s1">&#39;All&#39;</span><span class="p">:</span>
-            <span class="n">d</span><span class="p">[</span><span class="s1">&#39;segmentID&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">plotDict</span><span class="p">[</span><span class="s1">&#39;segmentid&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">d</span><span class="p">[</span><span class="s1">&#39;segmentID&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">segStr</span><span class="p">)]</span>
+            <span class="n">plotDict</span><span class="p">[</span><span class="s1">&#39;segmentid&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">segStr</span><span class="p">)]</span>
 
         <span class="c1"># stat</span>
-        <span class="n">d</span><span class="p">[</span><span class="s1">&#39;ystat&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">statList</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ystatListWidget</span><span class="o">.</span><span class="n">currentRow</span><span class="p">()]</span>
-        <span class="n">d</span><span class="p">[</span><span class="s1">&#39;xstat&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">statList</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">xstatListWidget</span><span class="o">.</span><span class="n">currentRow</span><span class="p">()]</span>
-        <span class="n">d</span><span class="p">[</span><span class="s1">&#39;plotBad&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">plotDict</span><span class="p">[</span><span class="s1">&#39;ystat&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">statList</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ystatListWidget</span><span class="o">.</span><span class="n">currentRow</span><span class="p">()]</span>
+        <span class="n">plotDict</span><span class="p">[</span><span class="s1">&#39;xstat&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">statList</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">xstatListWidget</span><span class="o">.</span><span class="n">currentRow</span><span class="p">()]</span>
 
-        <span class="n">d</span><span class="p">[</span><span class="s1">&#39;roiType&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;spineROI&#39;</span>
-        <span class="k">if</span> <span class="n">d</span><span class="p">[</span><span class="s1">&#39;map&#39;</span><span class="p">]:</span>
-            <span class="n">d</span><span class="p">[</span><span class="s1">&#39;roiType&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="s1">&#39;map&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">defaultRoiType</span>
+        <span class="n">plotDict</span><span class="p">[</span><span class="s1">&#39;roitype&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;spineROI&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">plotDict</span><span class="p">[</span><span class="s1">&#39;map&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">plotDict</span><span class="p">[</span><span class="s1">&#39;roitype&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">plotDict</span><span class="p">[</span><span class="s1">&#39;map&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">defaultRoiType</span><span class="p">]</span>
 
-        <span class="k">return</span> <span class="n">d</span></div>
+        <span class="k">return</span> <span class="n">plotDict</span></div>
 
 <div class="viewcode-block" id="mmApplicationWindow.closechildwindow"><a class="viewcode-back" href="../../../PyMapManager.interface.html#PyMapManager.interface.mmApp.mmApplicationWindow.closechildwindow">[docs]</a>    <span class="k">def</span> <span class="nf">closechildwindow</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">windowPtr</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;called when we close a PlotWindow&quot;&quot;&quot;</span>
@@ -606,7 +605,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_windows</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">plotwindow</span><span class="p">)</span>
 
         <span class="n">stateDict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getState</span><span class="p">()</span>
-        <span class="n">plotwindow</span><span class="o">.</span><span class="n">myCanvas</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">stateDict</span><span class="p">)</span>
+        <span class="c1">#plotwindow.myCanvas.plot(stateDict)</span>
+        <span class="n">plotwindow</span><span class="o">.</span><span class="n">myCanvas</span><span class="o">.</span><span class="n">plot2</span><span class="p">(</span><span class="n">stateDict</span><span class="p">)</span>
 
         <span class="n">plotwindow</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
 
@@ -619,11 +619,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_windows</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">plotwindow</span><span class="p">)</span>
 
         <span class="n">stateDict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getState</span><span class="p">()</span>
-        <span class="k">if</span> <span class="n">stateDict</span><span class="p">[</span><span class="s1">&#39;roiType&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;spineROI&#39;</span><span class="p">:</span>
-            <span class="n">stateDict</span><span class="p">[</span><span class="s1">&#39;segmentID&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">stateDict</span><span class="p">[</span><span class="s1">&#39;roitype&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;spineROI&#39;</span><span class="p">:</span>
+            <span class="n">stateDict</span><span class="p">[</span><span class="s1">&#39;segmentid&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>
             <span class="n">stateDict</span><span class="p">[</span><span class="s1">&#39;ystat&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;pDist&#39;</span>
-        <span class="k">elif</span> <span class="n">stateDict</span><span class="p">[</span><span class="s1">&#39;roiType&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;otherROI&#39;</span><span class="p">:</span>
-            <span class="n">stateDict</span><span class="p">[</span><span class="s1">&#39;segmentID&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">elif</span> <span class="n">stateDict</span><span class="p">[</span><span class="s1">&#39;roitype&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;otherROI&#39;</span><span class="p">:</span>
+            <span class="n">stateDict</span><span class="p">[</span><span class="s1">&#39;segmentid&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="n">stateDict</span><span class="p">[</span><span class="s1">&#39;ystat&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;runIdx&#39;</span>
 
         <span class="n">stateDict</span><span class="p">[</span><span class="s1">&#39;xstat&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;mapSession&#39;</span>

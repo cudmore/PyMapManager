@@ -21,7 +21,7 @@ from matplotlib.figure import Figure
 from PyQt4 import QtGui, QtCore
 
 from mmMap import mmMap
-from mmMapPool import mmMapPool
+#from mmMap import mmMapPool
 #from mmStackPlot import mmStackPlot
 #from mmMapPlot import mmMapPlot
 
@@ -32,7 +32,7 @@ from PyMapManager.interface.mmApp import mmApplicationWindow
 
 if __name__ == '__main__':
 
-    if 1:
+    if 0:
         qApp = QtGui.QApplication(sys.argv)
 
         aw = mmApplicationWindow()
@@ -57,3 +57,36 @@ if __name__ == '__main__':
 
         ma = PyMapManager.mmMapAnalysis.mmMapAnalysis(m)
         ma.getDynamics(pd)
+
+    if 0:
+        from PyMapManager.mmStack import mmStackPool
+        path = '/Users/cudmore/MapManagerData/richard/Nancy/rr30a/raw/'
+        # path = '/Volumes/fourt/MapManagerData/richard/Nancy/'
+
+        stacks = mmStackPool(path)
+        print stacks
+
+        for stack in stacks:
+            print stack
+
+        images = stacks.stacks[1].loadStackImages(channel=1)
+        print images.shape
+
+    if 1:
+        import matplotlib.pyplot as plt
+
+        from PyMapManager.mmMapPlot2 import mmMapPlot2
+        from PyMapManager.mmUtil import newplotdict
+
+        defaultMap = '/Users/cudmore/Desktop/data/rr30a/rr30a.txt'
+        print 'loading map:', defaultMap
+        m = mmMap(filePath=defaultMap)
+
+        print m.stacks[0].stackdb
+
+        plotDict = newplotdict()
+        plotDict['segmentid'] = [0]
+
+        mp = mmMapPlot2(m)
+        fig = plt.figure()
+        mp.plotMap0(fig, plotDict)

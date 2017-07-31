@@ -16,7 +16,7 @@ STACK_STATS = ['Idx',
 PLOT_STRUCT = dict()
 PLOT_STRUCT['xstat'] = ''
 PLOT_STRUCT['ystat'] = ''
-PLOT_STRUCT['roiType'] = 'spineROI'
+PLOT_STRUCT['roiType'] = ['spineROI']
 PLOT_STRUCT['segmentID'] = [] # all segment
 PLOT_STRUCT['plotBad'] = False
 PLOT_STRUCT['plotIntBad'] = False
@@ -26,6 +26,7 @@ def newplotstruct(): return PLOT_STRUCT.copy()
 
 PLOT_DICT = {
     'map' : None, #: map (object) mmMap
+    'mapname' : None,
     'sessidx' : None, #: sessIdx (int): map session
     'stack' : None, #: stack (object) use for single timepoint analysis
 
@@ -34,8 +35,13 @@ PLOT_DICT = {
     'zstat' : None,
     'roitype' : ['spineROI'], #: roiType
     'segmentid' : [],
+
+    'stacklist' : [],   # list of int to specify sessions/stacks to plot, [] will plot all
+
     'plotbad' : False,
     'plotintbad' : False,
+    'showlines' : True,
+    'showdynamics': True,
 
     #  Filled in by get functions
     'x' : None,
@@ -43,7 +49,6 @@ PLOT_DICT = {
     'z' : None,
     'stackidx' : None,
     'reverse' : None,
-
     'runrow': None,
     'mapsess': None,
 }

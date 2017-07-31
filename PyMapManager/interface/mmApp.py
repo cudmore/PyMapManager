@@ -23,6 +23,7 @@ from PyQt4 import QtGui, QtCore
 
 from PyMapManager.mmMap import mmMap
 from PyMapManager.interface.mmWindow import mmStackWindow, mmMapPlotWindow, mmStackPlotWindow
+from PyMapManager.mmUtil import newplotdict
 
 class mmApplicationWindow(QtGui.QMainWindow):
     """Main PyMapManager applicaiton window. This holds list widgets to display: maps, sessions, segments, and stats"""
@@ -387,37 +388,35 @@ class mmApplicationWindow(QtGui.QMainWindow):
 
     def getState(self):
         """Capture the full state of the interface including selected: map, session, segment, ystat, xstat."""
-        d = dict()
+        plotDict = newplotdict()
 
         # map
         mapIdx = self.mapListWidget.currentRow()
-        d['map'] = self.maps[mapIdx]
-        d['mapIdx'] = mapIdx
-        d['mapName'] = self.mapListWidget.currentItem().text()
+        plotDict['map'] = self.maps[mapIdx]
+        plotDict['mapname'] = self.mapListWidget.currentItem().text()
+        plotDict['mapidx'] = mapIdx # index into the list we are displaying
 
         # session
         sessIdx = self.sessListWidget.currentRow()
-        d['sessionIdx'] = sessIdx
-        d['stack'] = self.maps[mapIdx].stacks[sessIdx]
-        # d['stackName'] = '' # not used
+        plotDict['sessidx'] = sessIdx
+        plotDict['stack'] = self.maps[mapIdx].stacks[sessIdx]
 
         # segment
         segStr = self.segListWidget.currentItem().text()
         if segStr == 'All':
-            d['segmentID'] = []
+            plotDict['segmentid'] = []
         else:
-            d['segmentID'] = [int(segStr)]
+            plotDict['segmentid'] = [int(segStr)]
 
         # stat
-        d['ystat'] = self.statList[self.ystatListWidget.currentRow()]
-        d['xstat'] = self.statList[self.xstatListWidget.currentRow()]
-        d['plotBad'] = 0
+        plotDict['ystat'] = self.statList[self.ystatListWidget.currentRow()]
+        plotDict['xstat'] = self.statList[self.xstatListWidget.currentRow()]
 
-        d['roiType'] = 'spineROI'
-        if d['map']:
-            d['roiType'] = d['map'].defaultRoiType
+        plotDict['roitype'] = ['spineROI']
+        if plotDict['map'] is not None:
+            plotDict['roitype'] = [plotDict['map'].defaultRoiType]
 
-        return d
+        return plotDict
 
     def closechildwindow(self, windowPtr):
         """called when we close a PlotWindow"""
@@ -451,7 +450,8 @@ class mmApplicationWindow(QtGui.QMainWindow):
         self._windows.append(plotwindow)
 
         stateDict = self.getState()
-        plotwindow.myCanvas.plot(stateDict)
+        #plotwindow.myCanvas.plot(stateDict)
+        plotwindow.myCanvas.plot2(stateDict)
 
         plotwindow.show()
 
@@ -464,11 +464,11 @@ class mmApplicationWindow(QtGui.QMainWindow):
         self._windows.append(plotwindow)
 
         stateDict = self.getState()
-        if stateDict['roiType'] == 'spineROI':
-            stateDict['segmentID'] = [0]
+        if stateDict['roitype'] == 'spineROI':
+            stateDict['segmentid'] = [0]
             stateDict['ystat'] = 'pDist'
-        elif stateDict['roiType'] == 'otherROI':
-            stateDict['segmentID'] = []
+        elif stateDict['roitype'] == 'otherROI':
+            stateDict['segmentid'] = []
             stateDict['ystat'] = 'runIdx'
 
         stateDict['xstat'] = 'mapSession'

@@ -21,7 +21,7 @@ class mmStackLine():
         self.stack = stack
         self.linedb = None
 
-        if stack.map:
+        if stack.map_:
             lineFile = stack.folder + 'line' + '/' + stack.name + '_l.txt'
         else:
             lineFile = stack.folder + 'stackdb' + '/' + stack.name + '_l.txt'
@@ -47,7 +47,7 @@ class mmStackLine():
         Returns: pd with ['x'], ['y'], and ['z'] values filled in as numpy ndarray
         """
         if self.linedb is None:
-            return
+            return None
 
         df = self.linedb
         if pd['segmentid']:
@@ -69,7 +69,7 @@ class mmStackLine():
             numpy ndarray of (x,y,z)
         """
         if self.linedb is None:
-            return
+            return None
 
         df = self.linedb
         if segmentID:

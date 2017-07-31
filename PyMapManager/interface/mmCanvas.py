@@ -16,7 +16,8 @@ from PyQt4 import QtGui, QtCore
 from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 
-from PyMapManager.mmUtil import mmEvent
+from PyMapManager.mmUtil import mmEvent, newplotdict
+from PyMapManager.mmMapPlot2 import mmMapPlot2
 
 class mmCanvas(FigureCanvas):
     """A figure canvas that holds a matplotlib figure. User actions are linked to this canvas with mpl_connect. This canvas must have Qt.ClickFocus to receive user events."""
@@ -205,8 +206,10 @@ class mmMapPlotCanvas(mmCanvas):
         if event.type == 'spine selection':
             # for a map, we should select a run
             if self.myWinType == 'map_plot':
-                xRun = self.xPlot[event.runMapRow, :]
-                yRun = self.yPlot[event.runMapRow, :]
+                #xRun = self.xPlot[event.runMapRow, :]
+                #yRun = self.yPlot[event.runMapRow, :]
+                xRun = self.myMapPlot.x[event.runMapRow, :]
+                yRun = self.myMapPlot.y[event.runMapRow, :]
                 if self.plotRunObj:
                     self.plotRunObj.set_xdata(xRun)
                     self.plotRunObj.set_ydata(yRun)
@@ -221,7 +224,7 @@ class mmMapPlotCanvas(mmCanvas):
 
     def onpick(self, event):
         """
-        Respond to clicks in a map.
+        Respond to clicks in a map plot.
 
         event.ind: A list of hit points, just use the first.
         We are normally plotting self.runMap (a 2D nparray) with NaN.
@@ -237,6 +240,10 @@ class mmMapPlotCanvas(mmCanvas):
         #yRunRow_noNan = self.yRunRow[~np.isnan(self.yRunRow)]
         #runMapRow = int(yRunRow_noNan[ind[0]])
 
+        sessIdx, stackdbIdx = self.myMapPlot.getUserSelection(ind[0])
+        print 'sessIdx:', sessIdx, 'stackdbIdx:', stackdbIdx
+
+        """
         sessIdx_noNan = self.sessIdx[~np.isnan(self.sessIdx)]
         sessIdx = int(sessIdx_noNan[ind[0]])
 
@@ -245,29 +252,40 @@ class mmMapPlotCanvas(mmCanvas):
 
         # transmit selection event to all open windows
         newEvent = mmEvent(self.map, sessIdx, stackdbIdx)
+        """
+        newEvent = mmEvent(self.map, sessIdx, stackdbIdx)
         self.parent.broadcastevent(newEvent)
 
         statusStr = newEvent.getText()
         self.parent.setStatus(statusStr)
 
-    def plot(self, stateDict):
-        """Plot mmStack values for all mmStack(s) in the map."""
+    def plot2(self, stateDict):
+        """
+        Trying to get mmMapPlot working
+        """
         self.myPlotDict = stateDict
 
         self.myWinType = 'map_plot'
-
         self.map = stateDict['map']
 
-        self.xValues, \
-        self.yValues, \
-        self.stackdbIdx, \
-        self.sessIdx, \
-        self.yRunRow, \
-            = self.map.getMapValues(stateDict)
+        self.myMapPlot = mmMapPlot2(stateDict['map'])
+        self.myMapPlot.plotMap(self.figure, stateDict)
 
-        # the values we plot, keep self.xValues and self.yValues as immutable
-        self.xPlot = self.xValues
-        self.yPlot = self.yValues
+    def plot(self, stateDict):
+        """Plot mmStack values for all mmStack(s) in the map."""
+
+        self.myPlotDict = stateDict
+
+        self.myWinType = 'map_plot'
+        self.map = stateDict['map']
+
+        stateDict = self.map.getMapValues3(stateDict)
+
+        self.xPlot = stateDict['x']
+        self.yPlot = stateDict['y']
+        self.stackdbIdx = stateDict['stackidx']
+        self.sessIdx = stateDict['mapsess']
+        self.yRunRow = stateDict['runrow']
 
         self.myScatterPlot = self.axes.scatter(self.xPlot, self.yPlot, marker='o', picker=True)
 
@@ -289,19 +307,18 @@ class mmMapPlotCanvas(mmCanvas):
         # this is silly, we should be given a map on construction?
         self.map = stateDict['map']
 
-        self.xValues, \
-        self.yValues, \
-        self.stackdbIdx, \
-        self.sessIdx, \
-        self.yRunRow, \
-            = self.map.getMapValues(stateDict)
+        self.myMapPlot = mmMapPlot2(stateDict['map'])
+        self.myMapPlot.plotMap(self.figure, stateDict)
 
-        self.xPlot = self.xValues
-        self.yPlot = self.yValues
+        """
+        stateDict = self.map.getMapValues3(stateDict)
+
+        self.xPlot = stateDict['x']
+        self.yPlot = stateDict['y']
 
         # get spine angle and offset
         offset = 0.1
-        cAngle = self.map.getMapValues2('cAngle', segmentID=stateDict['segmentID'])
+        cAngle = self.map.getMapValues2('cAngle', segmentID=stateDict['segmentid'])
         self.xPlot[cAngle > 180] += offset
         self.xPlot[cAngle < 180] -= offset
 
@@ -316,7 +333,8 @@ class mmMapPlotCanvas(mmCanvas):
         backgroundColor = (grayLevel, grayLevel, grayLevel)
         rect = self.figure.patch
         rect.set_facecolor(backgroundColor)  # figure background color
-        self.axes.set_facecolor(backgroundColor) #axes background color
+        # this works for matplotlib 2.02 but not earlier as is on my laptop
+        # #self.axes.set_facecolor(backgroundColor) #axes background color
 
         # remove frame
         self.axes.spines['top'].set_visible(False)
@@ -324,6 +342,7 @@ class mmMapPlotCanvas(mmCanvas):
 
         self.axes.set_xlabel(stateDict['xstat'])
         self.axes.set_ylabel(stateDict['ystat'])
+        """
 
 class mmStackPlotCanvas(mmCanvas):
     """Plot and interact with a plot of stack values across a map"""
@@ -403,7 +422,7 @@ class mmStackPlotCanvas(mmCanvas):
         print 'mmStackPlotCanvas.receiveevent()', event.type
         if event.map != self.map:
             return
-        if event.mapSession != self.stateDict['sessionIdx']:
+        if event.mapSession != self.stateDict['sessidx']:
             return
 
         if event.type == 'spine selection':
@@ -428,12 +447,12 @@ class mmStackPlotCanvas(mmCanvas):
         stackdbIdx = self.stackdbIdx_plot[ind[0]]
 
         # transmit selection event to all open windows
-        newEvent = mmEvent(self.map, self.stateDict['sessionIdx'], stackdbIdx)
+        newEvent = mmEvent(self.map, self.stateDict['sessidx'], stackdbIdx)
         """
         newEvent = mmEvent()
         newEvent.type = 'spine selection'
         newEvent.map = self.map
-        newEvent.mapSession = self.stateDict['sessionIdx']
+        newEvent.mapSession = self.stateDict['sessidx']
         newEvent.stack = None
         newEvent.stackdbIdx = stackdbIdx
         newEvent.runMapRow = None # we should not have to fill this in here
@@ -455,12 +474,19 @@ class mmStackPlotCanvas(mmCanvas):
         stack = stateDict['stack']
         xStat = stateDict['xstat']
         yStat = stateDict['ystat']
-        roiType = stateDict['roiType']
-        segmentID = stateDict['segmentID']
+        roiType = stateDict['roitype']
+        segmentID = stateDict['segmentid']
+
+        stateDict = stack.getStackValues3(stateDict)
+
+        self.xPlot = stateDict['x']
+        self.yPlot = stateDict['y']
+        self.stackdbIdx_plot = stateDict['stackidx']
+        self.reverseLookup = stateDict['reverse']
 
         #we only get the values we are plotting here
-        self.xPlot, self.stackdbIdx_plot, self.reverseLookup = stack.getStackValues(xStat, roiType=roiType, segmentID=segmentID)
-        self.yPlot, tmp, tmp = stack.getStackValues(yStat, roiType=roiType, segmentID=segmentID)
+        #self.xPlot, self.stackdbIdx_plot, self.reverseLookup = stack.getStackValues(xStat, roiType=roiType, segmentID=segmentID)
+        #self.yPlot, tmp, tmp = stack.getStackValues(yStat, roiType=roiType, segmentID=segmentID)
 
         """
         #reverseLookup is same size as stackdb, for object i it gives us index into xPlot and yPlot
@@ -527,7 +553,7 @@ class mmStackCanvas(mmCanvas):
         #self.selectPoint(stackdbIdx)
 
         # transmit selection event to all open windows
-        newEvent = mmEvent(self.map, self.stateDict['sessionIdx'], stackdbIdx)
+        newEvent = mmEvent(self.map, self.stateDict['sessidx'], stackdbIdx)
         self.parent.broadcastevent(newEvent)
 
         # update status bar
@@ -568,7 +594,7 @@ class mmStackCanvas(mmCanvas):
         print 'mmStackPlotCanvas.receiveevent()', event.type
         if event.map != self.map:
             return
-        if event.mapSession != self.stateDict['sessionIdx']:
+        if event.mapSession != self.stateDict['sessidx']:
             return
 
         if event.type == 'spine selection':
@@ -586,8 +612,8 @@ class mmStackCanvas(mmCanvas):
 
         self.stack.loadStackImages(2)
 
-        roiType = stateDict['roiType']
-        segmentID = stateDict['segmentID']
+        roiType = stateDict['roitype']
+        segmentID = stateDict['segmentid']
 
         #
         #  images
@@ -617,11 +643,24 @@ class mmStackCanvas(mmCanvas):
         #  spines
         ystat = 'y'
         xstat = 'x'
-        roiType = stateDict['roiType']
+        roiType = stateDict['roitype']
 
-        self.xPlot, self.stackdbIdx_plot, self.reverseLookup = self.stack.getStackValues('x', roiType=roiType, segmentID=segmentID)
-        self.yPlot, tmp, tmp = self.stack.getStackValues('y', roiType=roiType, segmentID=segmentID)
-        self.zPlot, tmp, tmp = self.stack.getStackValues('z', roiType=roiType, segmentID=segmentID)
+        plotDict = stateDict.copy()
+        plotDict['xstat'] = 'x'
+        plotDict['ystat'] = 'y'
+        plotDict['zstat'] = 'z'
+
+        plotDict = self.stack.getStackValues3(plotDict)
+
+        self.xPlot = plotDict['x']
+        self.yPlot = plotDict['y']
+        self.zPlot = plotDict['z']
+
+        self.stackdbIdx_plot = plotDict['stackidx']
+        self.reverseLookup = plotDict['reverse']
+        #self.xPlot, self.stackdbIdx_plot, self.reverseLookup = self.stack.getStackValues('x', roiType=roiType, segmentID=segmentID)
+        #self.yPlot, tmp, tmp = self.stack.getStackValues('y', roiType=roiType, segmentID=segmentID)
+        #self.zPlot, tmp, tmp = self.stack.getStackValues('z', roiType=roiType, segmentID=segmentID)
 
         markersize = 10
         self.myScatterPlot = self.axes.scatter(self.xPlot, self.yPlot, marker='o', s=markersize, picker=True)

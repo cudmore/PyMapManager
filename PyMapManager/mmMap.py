@@ -1,13 +1,19 @@
 """
-A map is a list of :class:`PyMapManager.mmStack` and an object map that connects 3D annotations between stacks.
+A mmMap is a time-series of :class:`PyMapManager.mmStack` plus some book-keeping to link corresponding annotations
+between stacks and to link corresponding line segments between stacks.
+
+Details::
+
+	stacks: list of :class:`PyMapManager.mmStack`
 """
 
 import os, time, copy
+from glob import glob # for pool
 import pandas as pd
 import numpy as np
 
-import PyMapManager
-from PyMapManager.mmUtil import ROI_TYPES, STACK_STATS, newplotstruct
+#import PyMapManager
+from PyMapManager.mmUtil import ROI_TYPES, newplotdict
 from PyMapManager.mmStack import mmStack
 
 #import logging
@@ -37,9 +43,6 @@ class mmMap():
 	Use getMapValues2() to retrieve stack annotations (for the given segmentID) across the entire map::
 
 		pDist_values = m.getMapValues2('pDist', segmentID=[3])
-
-	Attributes:
-		stacks (list): List of :class:`PyMapManager.mmStack`
 	"""
 
 	def __init__(self, filePath=''):
@@ -96,9 +99,9 @@ class mmMap():
 		self.segRunMap = self._buildRunMap(self.segMap)
 
 		#load each stack db
-		self.stacks = [] #  A list of mmStack
+		self._stacks = [] #  A list of mmStack
 		for i in range(0, self.numSessions):
-			stack = mmStack(name=self.getStackName(i), numChannels=self.numChannels, map=self, mapSession=i)
+			stack = mmStack(name=self._getStackName(i), numChannels=self.numChannels, map=self, mapSession=i)
 
 			#numObj = stack.numObj()
 
@@ -112,6 +115,28 @@ class mmMap():
 
 		stopTime = time.time()
 		print 'map', self.name, 'loaded in', round(stopTime-startTime,2), 'seconds.'
+
+	@property
+	def stacks(self):
+		"""
+		List of :class:`PyMapManager.mmStack` in the map.
+		"""
+		return self._stacks
+
+	def __str__(self):
+		objCount = 0
+		for stack in self.stacks:
+			objCount += stack.numObj
+		return ('map:' + self.name
+			+ ' segments:' + str(self.getNumSegments())
+			+ ' stacks:' + str(self.numSessions)
+			+ ' total object:' + str(objCount))
+
+	def __iter__(self):
+		i = 0
+		while i < len(self.stacks):
+			yield self.stacks[i]
+			i += 1
 
 	def getValue(self, name, sessionNumber):
 		"""
@@ -131,27 +156,9 @@ class mmMap():
 		"""
 		return self.table.loc[name].iloc[sessionNumber] # .loc specifies row, .iloc specifies a column
 
-	def getStack(self, sessIdx):
-		"""
-		Get a single stack at timepoint/session sessIdx
-
-		Args:
-		    sessIdx (int): Session/timepoint index of stack
-
-		Returns: :class:`PyMapManager.mmStack`
-
-		"""
-		return self.stacks[sessIdx]
-
-	def getStackName(self, sess):
-		"""
-		Args:
-			sess: Session number
-
-		Returns:
-		    Stack name as str
-		"""
-		ret = self.getValue('hsStack', sess)
+	def _getStackName(self, sessIdx):
+		# get the name of the stack at session sessIdx, this is contained in the map header
+		ret = self.getValue('hsStack', sessIdx)
 		if ret.endswith('_ch1'):
 			ret = ret[:-4]
 		return ret
@@ -197,7 +204,12 @@ class mmMap():
 
 		runIdxDim = 6
 
-		for j in range(n):
+		if pd['stacklist'] is not None and len(pd['stacklist'])>0:
+			myRange = pd['stacklist']
+		else:
+			myRange = range(n)
+
+		for j in myRange:
 			orig_df = self.stacks[j].stackdb
 
 			currSegmentID = []
@@ -235,12 +247,15 @@ class mmMap():
 			finalRows = finalRows.astype(int)
 
 			# convert to values at end
-			if pd['xstat']:
-				pd['x'][finalRows, j] = final_df[pd['xstat']].values
-			if pd['ystat']:
-				pd['y'][finalRows, j] = final_df[pd['ystat']].values
-			if pd['zstat']:
-				pd['z'][finalRows, j] = final_df[pd['zstat']].values
+			try:
+				if pd['xstat']:
+					pd['x'][finalRows, j] = final_df[pd['xstat']].values
+				if pd['ystat']:
+					pd['y'][finalRows, j] = final_df[pd['ystat']].values
+				if pd['zstat']:
+					pd['z'][finalRows, j] = final_df[pd['zstat']].values
+			except KeyError, e:
+				print 'getMapValues3() KeyError - reason "%s"' % str(e)
 
 			# keep track of stack centric spine idx
 			yIdx[finalRows, j] = final_df.index.values
@@ -255,7 +270,7 @@ class mmMap():
 		pd['runrow'] = yRunRow
 		return pd
 
-	def getMapValues2(self, stat, roiType='spineROI', segmentID=[], plotBad=False):
+	def getMapValues2(self, stat, roiType=['spineROI'], segmentID=[], plotBad=False, plotIntBad=False):
 		"""
 		Get values of a stack statistic across all stacks in the map
 
@@ -266,139 +281,38 @@ class mmMap():
 			plotBad (boolean): xxx
 
 		Returns:
-		    2D numpy array of stat values. Each row is a run of objects connected across sessions, columns are sessions, each [i][j] is a stat value
+		    2D numpy array of stat values. Each row is a run of objects connected across sessions,
+		    columns are sessions, each [i][j] is a stat value
 		"""
 
 		if roiType not in ROI_TYPES:
-			print 'error: mmMap.getMapValues2() stat', stat, 'is not in', ROI_TYPES
-			return
+			errStr = 'error: mmMap.getMapValues2() stat "' + stat + '" is not in ' + ROI_TYPES
+			raise ValueError(errStr)
 
-		d = newplotstruct()
-		d['xstat'] = stat
-		d['ystat'] = ''
-		d['roiType'] = roiType
-		d['segmentID'] = segmentID
-		d['plotBad'] = plotBad
+		plotDict = newplotdict()
+		plotDict['roitype'] = roiType
+		plotDict['xstat'] = stat
+		plotDict['segmentid'] = segmentID
+		plotDict['plotbad'] = plotBad
+		plotDict['plotIntBad'] = plotIntBad
 
-		xPlot, yPlot, yIdx, ySess, yRunRow = self.getMapValues(d)
-		return xPlot
+		plotDict = self.getMapValues3(plotDict)
 
-	def getMapValues(self, d, flatten=False):
-		"""
-		Get values of a stack statistic across all stacks in the map
-
-		Args:
-		    d (dict): Dictionary specifying parameters for the plot. See PyMapManager.mmUtil PLOT_STRUCT.
-			flatten (boolean): On return flatten 2D into 1D
-
-		Returns:
-		    (xPlot,yPlot, yIdx, ySess, yRunRow) which are all 2D numpy array
-		"""
-		startTime = time.time()
-
-		roiType = d['roiType']
-		if type(roiType) != 'list':
-			roiType = [roiType]
-		segmentID = d['segmentID']
-		plotBad = d['plotBad']
-		ystat = d['ystat']
-		xstat = d['xstat']
-
-		m = self.runMap.shape[0]
-		n = self.runMap.shape[1]
-
-		yPlot = np.empty([m, n])
-		xPlot = np.empty([m, n])
-		yPlot[:] = np.NAN
-		xPlot[:] = np.NAN
-
-		# keep track of stack centric index we are plotting
-		yIdx = np.empty([m, n])
-		yIdx[:] = np.NAN
-
-		# keep track of session index
-		ySess = np.empty([m, n])
-		ySess[:] = np.NAN
-
-		# keep track of run map rows (we already know the session/column)
-		yRunRow = np.empty([m,n])
-		yRunRow[:] = np.NAN
-
-		runIdxDim = 6
-
-		for j in range(n):
-			orig_df = self.stacks[j].stackdb
-
-			currSegmentID = []
-			if segmentID:
-				currSegmentID = self.segRunMap[segmentID,j] #this only works for one segment -- NOT A LIST
-				currSegmentID = currSegmentID.tolist()
-			if segmentID and not currSegmentID:
-				#this session does not have segmentID that match
-				break
-
-			goodIdx = self.runMap[:, j] # valid indices from runMap
-
-			runMap_idx = orig_df.index.isin(goodIdx) # series of boolean (Seems to play nice with nparray)
-
-			if roiType is not None:
-				roiType_idx = orig_df['roiType'].isin(roiType)
-				runMap_idx = runMap_idx & roiType_idx
-			if currSegmentID:
-				segmentID_idx = orig_df['parentID'].isin(currSegmentID)
-				runMap_idx = runMap_idx & segmentID_idx
-			if not plotBad:
-				notBad_idx = ~orig_df['isBad'].isin([1])
-				runMap_idx = runMap_idx & notBad_idx
-
-			#final_df = orig_df.loc[runMap_idx]
-			final_df = orig_df.ix[runMap_idx]
-
-			### final_df.index is giving repeats -->> causing finalRows to be missing 44 and has 45 repeated 4 times
-			finalIndexList = final_df.index.tolist()
-
-			# #we have a list of valid stack centric index in runMap_idx
-			# reverse this back into run centric to set rows in runMap (xPlot, yPlot)
-			#finalRows = self.objMap[runIdxDim,final_df.index,j]
-			finalRows = self.objMap[runIdxDim,finalIndexList,j]
-			finalRows = finalRows.astype(int)
-
-			# convert to values at end
-			xPlot[finalRows, j] = final_df[xstat].values
-			if ystat:
-				yPlot[finalRows, j] = final_df[ystat].values
-
-			# keep track of stack centric spine idx
-			yIdx[finalRows, j] = final_df.index.values
-			ySess[finalRows, j] = j
-			yRunRow[finalRows, j] = finalRows #final_df.index
-
-			if j==0:
-				tmp_m = len(finalRows)
-				for tmp_i in range(tmp_m):
-					#print tmp_i, finalRows[tmp_i]
-					pass
-
-		stopTime = time.time()
-		print 'mmMap.getMapValues() took', round(stopTime - startTime, 2), 'seconds'
-
-		if flatten:
-			xPlot = xPlot.flatten()
-			yPlot = yPlot.flatten()
-			yIdx = yIdx.flatten()
-			ySess = ySess.flatten()
-			yRunRow = yRunRow.flatten()
-
-		return xPlot,yPlot, yIdx, ySess, yRunRow
+		return plotDict['x']
 
 	def getNumSegments(self):
+		"""Get the number of map line segments."""
 		numSegments = self.segRunMap.shape[0]
 		return numSegments
 
 	def _buildRunMap(self, theMap):
 		"""Internal function. Converts 3D objMap into a 2D run map. A run map must be float as it uses np.NaN
 
-		theMap: Either self.objMap or self.segMap
+		Args:
+		    theMap: Either self.objMap or self.segMap
+
+		Returns:
+			A numpy ndarray run map
 		"""
 
 		idx = 0
@@ -447,7 +361,7 @@ class mmMap():
 
 	def _getSegmentID(self, segmentNumber, sessIdx):
 		"""
-		Given a map centric segment index (row in segRunMap), tell us the stack sentric segmentID for session sessIdx
+		Given a map centric segment index (row in segRunMap), tell us the stack centric segmentID for session sessIdx
 
 		Args:
 		    segmentNumber (int): Map centric segment index, row in segRunMap
@@ -457,3 +371,61 @@ class mmMap():
 		"""
 		return self.segRunMap[segmentNumber][sessIdx] # can be nan
 
+
+######################################################################
+class mmMapPool():
+    """
+    Load all maps in a folder.
+
+    Args:
+        path (str): Full path to a folder. This folder should contain folders of maps.
+
+    Example::
+
+        path = '/Users/cudmore/MapManagerData/richard/Nancy/'
+        maps = mmMapPool(path)
+        for map in maps:
+            print map
+    """
+
+    def __init__(self, path):
+        self._maps = []
+
+        startTime = time.time()
+
+        if os.path.isdir(path):
+            folders = glob(path+'/*/')
+            for folder in folders:
+                mapName = os.path.basename(folder[:-1])
+                mapFile = folder + mapName + '.txt'
+                if os.path.isfile(mapFile):
+                    print 'mmMapPool() loading map:', mapName
+                    map = mmMap(mapFile)
+                    self.maps.append(map)
+        else:
+            print 'error: mmMapPool() did not find path:', path
+
+        stopTime = time.time()
+        print 'mmMapPool() loaded', len(self.maps), 'maps in', stopTime-startTime, 'seconds.'
+
+    @property
+    def maps(self):
+        """
+        List of :class:`PyMapManager.mmMap` in the mmMapPool.
+        """
+        return self._maps
+
+    def __iter__(self):
+        i = 0
+        while i < len(self.maps):
+            yield self.maps[i]
+            i+=1
+
+    def __str__(self):
+        count = 0
+        for map in self:
+            for stack in map:
+                count += stack.numObj
+        return ('pool:'
+                + ' num maps:' + str(len(self.maps))
+                + ' num obj:' + str(count))
