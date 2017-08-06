@@ -1,0 +1,1 @@
+This folder has Python code to run a Flask server to serve Map Manager files.

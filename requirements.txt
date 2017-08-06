@@ -1,0 +1,6 @@
+requests
+glob
+pandas
+numpy
+matplotlib
+tifffile

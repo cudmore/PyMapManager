@@ -162,17 +162,15 @@
 <span class="sd">	stacks: list of :class:`PyMapManager.mmStack`</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">time</span><span class="o">,</span> <span class="nn">copy</span>
+<span class="kn">import</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">io</span><span class="o">,</span> <span class="nn">time</span><span class="o">,</span> <span class="nn">copy</span>
+<span class="kn">from</span> <span class="nn">errno</span> <span class="k">import</span> <span class="n">ENOENT</span>
 <span class="kn">from</span> <span class="nn">glob</span> <span class="k">import</span> <span class="n">glob</span> <span class="c1"># for pool</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="c1">#import PyMapManager</span>
 <span class="kn">from</span> <span class="nn">PyMapManager.mmUtil</span> <span class="k">import</span> <span class="n">ROI_TYPES</span><span class="p">,</span> <span class="n">newplotdict</span>
 <span class="kn">from</span> <span class="nn">PyMapManager.mmStack</span> <span class="k">import</span> <span class="n">mmStack</span>
-
-<span class="c1">#import logging</span>
-<span class="c1">#logging.basicConfig(filename=&#39;example.log&#39;,level=logging.DEBUG)</span>
+<span class="kn">from</span> <span class="nn">PyMapManager.mmio</span> <span class="k">import</span> <span class="n">mmio</span>
 
 <span class="sd">&#39;&#39;&#39;3D numpy array, rows are stack centric indices, columns are sessions, 3rd dimension is:</span>
 <span class="sd">    [0] idx, [1] next, [2] nextTP, [3] prev, [4] prevTP</span>
@@ -200,76 +198,128 @@
 <span class="sd">		pDist_values = m.getMapValues2(&#39;pDist&#39;, segmentID=[3])</span>
 <span class="sd">	&quot;&quot;&quot;</span>
 
-	<span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filePath</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
-
-		<span class="c1">#logging.debug(&#39;mmMap.__init__() filePath:&#39; + filePath)</span>
-		<span class="c1">#self.log = logging.getLogger(self.__class__.__name__)</span>
-		<span class="c1">#self.log.info(&quot;constructor&quot;)</span>
-
-		<span class="bp">self</span><span class="o">.</span><span class="n">defaultRoiType</span> <span class="o">=</span> <span class="s1">&#39;spineROI&#39;</span>
-
+	<span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filePath</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">urlmap</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 		<span class="n">startTime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
 
-		<span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">filePath</span><span class="p">):</span>
-			<span class="nb">print</span> <span class="s1">&#39;mmMap() error, file not found:&#39;</span><span class="p">,</span> <span class="n">filePath</span>
-			<span class="k">return</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">filePath</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Full file path to map file</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">folder</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Path to enclosing folder, ends in &#39;/&#39;.</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Name of the map. For a map loaded with file a5n.txt, name is a5b. Same as enclosing folder name.</span>
+<span class="sd">		If urlmap then this is the name of the map to fetch from the mmio server.</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">table</span> <span class="o">=</span> <span class="kc">None</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Pandas df loaded from file filePath or header if using url. Get values using getValue(name,session)</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">defaultRoiType</span> <span class="o">=</span> <span class="s1">&#39;spineROI&#39;</span>
 
-		<span class="bp">self</span><span class="o">.</span><span class="n">filePath</span> <span class="o">=</span> <span class="n">filePath</span> <span class="c1">#  Path to file used to open map.&quot;&quot;&quot;</span>
-		<span class="bp">self</span><span class="o">.</span><span class="n">folder</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">filePath</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="c1">#  Path to enclosing folder, ends in &#39;/&#39;.</span>
-		<span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">filePath</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39;.txt&#39;</span><span class="p">)</span>  <span class="c1">#  Name of the map, for a map loaded with file a5n.txt, the name is a5b. Same as enclosing folder name.</span>
-		<span class="bp">self</span><span class="o">.</span><span class="n">table</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_table</span><span class="p">(</span><span class="n">filePath</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="c1">#  Pandas df loaded from filePath. Get values using getValue(name,session)</span>
-		<span class="bp">self</span><span class="o">.</span><span class="n">numChannels</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">getValue</span><span class="p">(</span><span class="s1">&#39;numChannels&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span> <span class="c1">#:  Number of image channels in each stack (must be the same for all stacks).</span>
-		<span class="bp">self</span><span class="o">.</span><span class="n">numSessions</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s1">&#39;hsStack&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">count</span><span class="p">())</span> <span class="c1">#:  Number of sessions in the map.</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">server</span> <span class="o">=</span> <span class="kc">None</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Pointer to :class:`PyMapManager.mmio` server connection.</span>
+<span class="sd">		Only used to load from urlmap.</span>
+<span class="sd">		&quot;&quot;&quot;</span>
 
+		<span class="n">doFile</span> <span class="o">=</span> <span class="kc">True</span>
+		<span class="k">if</span> <span class="n">filePath</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+			<span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">filePath</span><span class="p">):</span>
+				<span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="n">ENOENT</span><span class="p">,</span> <span class="s1">&#39;mmMap did not find filePath:&#39;</span><span class="p">,</span> <span class="n">filePath</span><span class="p">)</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">filePath</span> <span class="o">=</span> <span class="n">filePath</span> <span class="c1">#  Path to file used to open map.&quot;&quot;&quot;</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">folder</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">filePath</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">filePath</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39;.txt&#39;</span><span class="p">)</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">table</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_table</span><span class="p">(</span><span class="n">filePath</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+		<span class="k">elif</span> <span class="n">urlmap</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+			<span class="n">doFile</span> <span class="o">=</span> <span class="kc">False</span>
+			<span class="c1"># try loading from url</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">urlmap</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">server</span> <span class="o">=</span> <span class="n">mmio</span><span class="o">.</span><span class="n">mmio</span><span class="p">()</span>
+			<span class="n">tmp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">getfile</span><span class="p">(</span><span class="s1">&#39;header&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">table</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_table</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">StringIO</span><span class="p">(</span><span class="n">tmp</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)),</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+		<span class="c1">###############################################################################</span>
 		<span class="c1"># objMap (3d)</span>
-		<span class="n">objMapFile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">folder</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;_objMap.txt&#39;</span>
-		<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">objMapFile</span><span class="p">,</span> <span class="s1">&#39;rU&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-			<span class="n">header</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span>
-			<span class="k">if</span> <span class="n">header</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;;&#39;</span><span class="p">):</span>
-				<span class="n">header</span> <span class="o">=</span> <span class="n">header</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-			<span class="n">header</span> <span class="o">=</span> <span class="n">header</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;;&#39;</span><span class="p">)</span>
-			<span class="n">d</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;=&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">header</span><span class="p">)</span>
-			<span class="n">numRow</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;rows&#39;</span><span class="p">])</span>
-			<span class="n">numCol</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;cols&#39;</span><span class="p">])</span>
-			<span class="n">numBlock</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;blocks&#39;</span><span class="p">])</span>
-		<span class="bp">self</span><span class="o">.</span><span class="n">objMap</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="n">objMapFile</span><span class="p">,</span> <span class="n">skiprows</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-		<span class="bp">self</span><span class="o">.</span><span class="n">objMap</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">numBlock</span><span class="p">,</span><span class="n">numRow</span><span class="p">,</span><span class="n">numCol</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">doFile</span><span class="p">:</span>
+			<span class="n">objMapFile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">folder</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;_objMap.txt&#39;</span>
+			<span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">objMapFile</span><span class="p">):</span>
+				<span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="n">ENOENT</span><span class="p">,</span> <span class="s1">&#39;mmMap did not find objMapFile:&#39;</span><span class="p">,</span> <span class="n">objMapFile</span><span class="p">)</span>
+			<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">objMapFile</span><span class="p">,</span> <span class="s1">&#39;rU&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+				<span class="n">header</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">objMap</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="n">objMapFile</span><span class="p">,</span> <span class="n">skiprows</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="n">tmp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">getfile</span><span class="p">(</span><span class="s1">&#39;objmap&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+			<span class="n">header</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">objMap</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="n">tmp</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">),</span> <span class="n">skiprows</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
+		<span class="k">if</span> <span class="n">header</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;;&#39;</span><span class="p">):</span>
+			<span class="n">header</span> <span class="o">=</span> <span class="n">header</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+		<span class="n">header</span> <span class="o">=</span> <span class="n">header</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;;&#39;</span><span class="p">)</span>
+		<span class="n">d</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;=&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">header</span><span class="p">)</span>
+		<span class="n">numRow</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;rows&#39;</span><span class="p">])</span>
+		<span class="n">numCol</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;cols&#39;</span><span class="p">])</span>
+		<span class="n">numBlock</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;blocks&#39;</span><span class="p">])</span>
+
+		<span class="bp">self</span><span class="o">.</span><span class="n">objMap</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">numBlock</span><span class="p">,</span><span class="n">numRow</span><span class="p">,</span><span class="n">numCol</span><span class="p">)</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">runMap</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_buildRunMap</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">objMap</span><span class="p">)</span>
 
+		<span class="c1">###############################################################################</span>
 		<span class="c1"># segMap (3d)</span>
-		<span class="n">segMapFile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">folder</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;_segMap.txt&#39;</span>
-		<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">segMapFile</span><span class="p">,</span> <span class="s1">&#39;rU&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-			<span class="n">header</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span>
-			<span class="k">if</span> <span class="n">header</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;;&#39;</span><span class="p">):</span>
-				<span class="n">header</span> <span class="o">=</span> <span class="n">header</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-			<span class="n">header</span> <span class="o">=</span> <span class="n">header</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;;&#39;</span><span class="p">)</span>
-			<span class="n">d</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;=&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">header</span><span class="p">)</span>
-			<span class="n">numRow</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;rows&#39;</span><span class="p">])</span>
-			<span class="n">numCol</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;cols&#39;</span><span class="p">])</span>
-			<span class="n">numBlock</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;blocks&#39;</span><span class="p">])</span>
-		<span class="bp">self</span><span class="o">.</span><span class="n">segMap</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="n">segMapFile</span><span class="p">,</span> <span class="n">skiprows</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-		<span class="bp">self</span><span class="o">.</span><span class="n">segMap</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">numBlock</span><span class="p">,</span><span class="n">numRow</span><span class="p">,</span><span class="n">numCol</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">doFile</span><span class="p">:</span>
+			<span class="n">segMapFile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">folder</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;_segMap.txt&#39;</span>
+			<span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">segMapFile</span><span class="p">):</span>
+				<span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="n">ENOENT</span><span class="p">,</span> <span class="s1">&#39;mmMap did not find segMapFile:&#39;</span><span class="p">,</span> <span class="n">segMapFile</span><span class="p">)</span>
+			<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">segMapFile</span><span class="p">,</span> <span class="s1">&#39;rU&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+				<span class="n">header</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">segMap</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="n">segMapFile</span><span class="p">,</span> <span class="n">skiprows</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="n">tmp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">getfile</span><span class="p">(</span><span class="s1">&#39;segmap&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+			<span class="n">header</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\r</span><span class="s1">&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">segMap</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="n">tmp</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\r</span><span class="s1">&#39;</span><span class="p">),</span> <span class="n">skiprows</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
+		<span class="k">if</span> <span class="n">header</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;;&#39;</span><span class="p">):</span>
+			<span class="n">header</span> <span class="o">=</span> <span class="n">header</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+		<span class="n">header</span> <span class="o">=</span> <span class="n">header</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;;&#39;</span><span class="p">)</span>
+		<span class="n">d</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;=&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">header</span><span class="p">)</span>
+		<span class="n">numRow</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;rows&#39;</span><span class="p">])</span>
+		<span class="n">numCol</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;cols&#39;</span><span class="p">])</span>
+		<span class="n">numBlock</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;blocks&#39;</span><span class="p">])</span>
+
+		<span class="bp">self</span><span class="o">.</span><span class="n">segMap</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">numBlock</span><span class="p">,</span><span class="n">numRow</span><span class="p">,</span><span class="n">numCol</span><span class="p">)</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">segRunMap</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_buildRunMap</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">segMap</span><span class="p">)</span>
 
+		<span class="c1">###############################################################################</span>
 		<span class="c1">#load each stack db</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">_stacks</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1">#  A list of mmStack</span>
 		<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">numSessions</span><span class="p">):</span>
-			<span class="n">stack</span> <span class="o">=</span> <span class="n">mmStack</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_getStackName</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">numChannels</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">numChannels</span><span class="p">,</span> <span class="nb">map</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">mapSession</span><span class="o">=</span><span class="n">i</span><span class="p">)</span>
-
-			<span class="c1">#numObj = stack.numObj()</span>
-
+			<span class="k">if</span> <span class="n">doFile</span><span class="p">:</span>
+				<span class="n">stack</span> <span class="o">=</span> <span class="n">mmStack</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_getStackName</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">numChannels</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">numChannels</span><span class="p">,</span> \
+								<span class="nb">map</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">mapSession</span><span class="o">=</span><span class="n">i</span><span class="p">)</span>
+			<span class="k">else</span><span class="p">:</span>
+				<span class="n">stack</span> <span class="o">=</span> <span class="n">mmStack</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_getStackName</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">numChannels</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">numChannels</span><span class="p">,</span> \
+								<span class="nb">map</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">mapSession</span><span class="o">=</span><span class="n">i</span><span class="p">,</span> <span class="n">urlmap</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
 			<span class="bp">self</span><span class="o">.</span><span class="n">stacks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span>
-
-			<span class="c1">#all stackdb into single pandas dataframe</span>
-			<span class="c1">#need to offset (next, prev)</span>
-
-			<span class="c1">#add nearest neighbor analysis?</span>
-
 
 		<span class="n">stopTime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
 		<span class="nb">print</span> <span class="s1">&#39;map&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s1">&#39;loaded in&#39;</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">stopTime</span><span class="o">-</span><span class="n">startTime</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span> <span class="s1">&#39;seconds.&#39;</span>
+
+	<span class="nd">@property</span>
+	<span class="k">def</span> <span class="nf">numChannels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Number of image channels in each stack (must be the same for all stacks).</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">getValue</span><span class="p">(</span><span class="s1">&#39;numChannels&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+
+	<span class="nd">@property</span>
+	<span class="k">def</span> <span class="nf">numSessions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">			Number of sessions (timepoints) in the map (time-series).</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s1">&#39;hsStack&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">count</span><span class="p">())</span>
 
 	<span class="nd">@property</span>
 	<span class="k">def</span> <span class="nf">stacks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -392,10 +442,9 @@
 			<span class="c1"># final_df = orig_df.loc[runMap_idx]</span>
 			<span class="n">final_df</span> <span class="o">=</span> <span class="n">orig_df</span><span class="o">.</span><span class="n">ix</span><span class="p">[</span><span class="n">runMap_idx</span><span class="p">]</span>
 
-			<span class="c1">### final_df.index is giving repeats --&gt;&gt; causing finalRows to be missing 44 and has 45 repeated 4 times</span>
 			<span class="n">finalIndexList</span> <span class="o">=</span> <span class="n">final_df</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
 
-			<span class="c1"># #we have a list of valid stack centric index in runMap_idx</span>
+			<span class="c1"># we have a list of valid stack centric index in runMap_idx</span>
 			<span class="c1"># reverse this back into run centric to set rows in runMap (xPlot, yPlot)</span>
 			<span class="c1"># finalRows = self.objMap[runIdxDim,final_df.index,j]</span>
 			<span class="n">finalRows</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">objMap</span><span class="p">[</span><span class="n">runIdxDim</span><span class="p">,</span> <span class="n">finalIndexList</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>
@@ -416,6 +465,18 @@
 			<span class="n">yIdx</span><span class="p">[</span><span class="n">finalRows</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">final_df</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">values</span>
 			<span class="n">ySess</span><span class="p">[</span><span class="n">finalRows</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">j</span>
 			<span class="n">yRunRow</span><span class="p">[</span><span class="n">finalRows</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">finalRows</span>  <span class="c1"># final_df.index</span>
+
+		<span class="c1"># strip out a nan rows, can&#39;t do this until we have gone through all sessions</span>
+		<span class="c1"># makes plotting way faster</span>
+		<span class="n">ySess</span> <span class="o">=</span> <span class="n">ySess</span><span class="p">[</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">yIdx</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)]</span>
+		<span class="n">yRunRow</span> <span class="o">=</span> <span class="n">yRunRow</span><span class="p">[</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">yIdx</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)]</span>
+		<span class="k">if</span> <span class="n">pd</span><span class="p">[</span><span class="s1">&#39;xstat&#39;</span><span class="p">]:</span>
+			<span class="n">pd</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">][</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">yIdx</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)]</span>
+		<span class="k">if</span> <span class="n">pd</span><span class="p">[</span><span class="s1">&#39;ystat&#39;</span><span class="p">]:</span>
+			<span class="n">pd</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">][</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">yIdx</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)]</span>
+		<span class="k">if</span> <span class="n">pd</span><span class="p">[</span><span class="s1">&#39;zstat&#39;</span><span class="p">]:</span>
+			<span class="n">pd</span><span class="p">[</span><span class="s1">&#39;z&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="p">[</span><span class="s1">&#39;z&#39;</span><span class="p">][</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">yIdx</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)]</span>
+		<span class="n">yIdx</span> <span class="o">=</span> <span class="n">yIdx</span><span class="p">[</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">yIdx</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)]</span> <span class="c1"># do this last</span>
 
 		<span class="n">stopTime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
 		<span class="nb">print</span> <span class="s1">&#39;mmMap.getMapValues3() took&#39;</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">stopTime</span> <span class="o">-</span> <span class="n">startTime</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="s1">&#39;seconds&#39;</span>
@@ -441,7 +502,7 @@
 <span class="sd">		&quot;&quot;&quot;</span>
 
 		<span class="k">if</span> <span class="n">roiType</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ROI_TYPES</span><span class="p">:</span>
-			<span class="n">errStr</span> <span class="o">=</span> <span class="s1">&#39;error: mmMap.getMapValues2() stat &quot;&#39;</span> <span class="o">+</span> <span class="n">stat</span> <span class="o">+</span> <span class="s1">&#39;&quot; is not in &#39;</span> <span class="o">+</span> <span class="n">ROI_TYPES</span>
+			<span class="n">errStr</span> <span class="o">=</span> <span class="s1">&#39;error: mmMap.getMapValues2() stat &quot;&#39;</span> <span class="o">+</span> <span class="n">stat</span> <span class="o">+</span> <span class="s1">&#39;&quot; is not in &#39;</span> <span class="o">+</span> <span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROI_TYPES</span><span class="p">)</span>
 			<span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">errStr</span><span class="p">)</span>
 
 		<span class="n">plotDict</span> <span class="o">=</span> <span class="n">newplotdict</span><span class="p">()</span>

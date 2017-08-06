@@ -32,7 +32,7 @@ from PyMapManager.interface.mmApp import mmApplicationWindow
 
 if __name__ == '__main__':
 
-    if 0:
+    if 1:
         qApp = QtGui.QApplication(sys.argv)
 
         aw = mmApplicationWindow()
@@ -72,7 +72,7 @@ if __name__ == '__main__':
         images = stacks.stacks[1].loadStackImages(channel=1)
         print images.shape
 
-    if 1:
+    if 0:
         import matplotlib.pyplot as plt
 
         from PyMapManager.mmMapPlot2 import mmMapPlot2

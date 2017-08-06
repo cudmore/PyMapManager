@@ -173,6 +173,7 @@
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">sys</span> <span class="c1"># to make menus on osx, sys.platform == &#39;darwin&#39;</span>
 <span class="kn">import</span> <span class="nn">functools</span>
+<span class="kn">from</span> <span class="nn">errno</span> <span class="k">import</span> <span class="n">ENOENT</span>
 
 <span class="kn">from</span> <span class="nn">PyQt4</span> <span class="k">import</span> <span class="n">QtGui</span><span class="p">,</span> <span class="n">QtCore</span>
 
@@ -356,13 +357,13 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">statusBar</span><span class="p">()</span><span class="o">.</span><span class="n">showMessage</span><span class="p">(</span><span class="s2">&quot;All hail matplotlib!&quot;</span><span class="p">,</span> <span class="mi">2000</span><span class="p">)</span>
 
         <span class="c1"># load a mm map</span>
-        <span class="k">if</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="n">defaultMap</span> <span class="o">=</span> <span class="s1">&#39;/Users/cudmore/Desktop/data/rr30a/rr30a.txt&#39;</span>
+        <span class="k">if</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">defaultMap</span> <span class="o">=</span> <span class="s1">&#39;/Users/cudmore/Desktop/data/cudmore/rr30a/rr30a.txt&#39;</span>
             <span class="c1">#defaultMap = &#39;/Volumes/fourt/MapManager_Data/stroke1/stroke1.txt&#39;</span>
-            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">defaultMap</span><span class="p">):</span>
-                <span class="nb">print</span> <span class="s1">&#39;loading default map:&#39;</span><span class="p">,</span> <span class="n">defaultMap</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">loadMap</span><span class="p">(</span><span class="n">defaultMap</span><span class="p">)</span>
-
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">defaultMap</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="n">ENOENT</span><span class="p">,</span> <span class="s1">&#39;mmApp did not find defaultMap:&#39;</span><span class="p">,</span> <span class="n">defaultMap</span><span class="p">)</span>
+            <span class="nb">print</span> <span class="s1">&#39;loading default map:&#39;</span><span class="p">,</span> <span class="n">defaultMap</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">loadMap</span><span class="p">(</span><span class="n">defaultMap</span><span class="p">)</span>
             <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            defaultMap = &#39;/Users/cudmore/Desktop/data/rr58c/rr58c.txt&#39;</span>
 <span class="sd">            if os.path.isfile(defaultMap):</span>
@@ -373,10 +374,9 @@
 <span class="sd">            &quot;&quot;&quot;</span>
 
         <span class="c1"># load from online repository</span>
-        <span class="k">if</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">defaultMap</span> <span class="o">=</span> <span class="s1">&#39;http://robertcudmore.org/mapmanager/data/rr30a/rr30a.txt&#39;</span>
-            <span class="nb">print</span> <span class="s1">&#39;loading map from online repo:&#39;</span><span class="p">,</span> <span class="n">defaultMap</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">loadMap</span><span class="p">(</span><span class="n">defaultMap</span><span class="p">)</span>
+        <span class="k">if</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">urlmap</span> <span class="o">=</span> <span class="s1">&#39;rr30a&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">loadMap</span><span class="p">(</span><span class="n">urlmap</span><span class="o">=</span><span class="n">urlmap</span><span class="p">)</span>
 
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        #show a table widget</span>
@@ -450,16 +450,20 @@
     <span class="c1"># def mainToolbar_callback(self, a):</span>
     <span class="c1">#    print &#39;mainToolbar_callback:&#39;, a</span>
 
-<div class="viewcode-block" id="mmApplicationWindow.loadMap"><a class="viewcode-back" href="../../../PyMapManager.interface.html#PyMapManager.interface.mmApp.mmApplicationWindow.loadMap">[docs]</a>    <span class="k">def</span> <span class="nf">loadMap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="mmApplicationWindow.loadMap"><a class="viewcode-back" href="../../../PyMapManager.interface.html#PyMapManager.interface.mmApp.mmApplicationWindow.loadMap">[docs]</a>    <span class="k">def</span> <span class="nf">loadMap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">urlmap</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Load a mmMap into application. Application keeps &#39;maps&#39;, a list of maps.&quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">urlmap</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">serverurl</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+            <span class="n">username</span> <span class="o">=</span> <span class="s1">&#39;cudmore&#39;</span>
+
+        <span class="k">elif</span> <span class="n">path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="c1"># ask user for file</span>
             <span class="n">path</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QFileDialog</span><span class="o">.</span><span class="n">getOpenFileName</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;Open File&#39;</span><span class="p">,</span> <span class="s1">&#39;/&#39;</span><span class="p">)</span>
             <span class="n">path</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span><span class="p">:</span>
-                    <span class="k">return</span>
+                <span class="k">return</span>
 
-        <span class="n">m</span> <span class="o">=</span> <span class="n">mmMap</span><span class="p">(</span><span class="n">filePath</span><span class="o">=</span><span class="n">path</span><span class="p">)</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">mmMap</span><span class="p">(</span><span class="n">filePath</span><span class="o">=</span><span class="n">path</span><span class="p">,</span> <span class="n">urlmap</span><span class="o">=</span><span class="n">urlmap</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">maps</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">mapListWidget</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>

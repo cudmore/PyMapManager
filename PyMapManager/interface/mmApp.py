@@ -18,6 +18,7 @@ Example::
 import os
 import sys # to make menus on osx, sys.platform == 'darwin'
 import functools
+from errno import ENOENT
 
 from PyQt4 import QtGui, QtCore
 
@@ -201,13 +202,13 @@ class mmApplicationWindow(QtGui.QMainWindow):
         self.statusBar().showMessage("All hail matplotlib!", 2000)
 
         # load a mm map
-        if 1:
-            defaultMap = '/Users/cudmore/Desktop/data/rr30a/rr30a.txt'
+        if 0:
+            defaultMap = '/Users/cudmore/Desktop/data/cudmore/rr30a/rr30a.txt'
             #defaultMap = '/Volumes/fourt/MapManager_Data/stroke1/stroke1.txt'
-            if os.path.isfile(defaultMap):
-                print 'loading default map:', defaultMap
-                self.loadMap(defaultMap)
-
+            if not os.path.isfile(defaultMap):
+                raise IOError(ENOENT, 'mmApp did not find defaultMap:', defaultMap)
+            print 'loading default map:', defaultMap
+            self.loadMap(defaultMap)
             """
             defaultMap = '/Users/cudmore/Desktop/data/rr58c/rr58c.txt'
             if os.path.isfile(defaultMap):
@@ -218,10 +219,9 @@ class mmApplicationWindow(QtGui.QMainWindow):
             """
 
         # load from online repository
-        if 0:
-            defaultMap = 'http://robertcudmore.org/mapmanager/data/rr30a/rr30a.txt'
-            print 'loading map from online repo:', defaultMap
-            self.loadMap(defaultMap)
+        if 1:
+            urlmap = 'rr30a'
+            self.loadMap(urlmap=urlmap)
 
         """
         #show a table widget
@@ -295,16 +295,20 @@ class mmApplicationWindow(QtGui.QMainWindow):
     # def mainToolbar_callback(self, a):
     #    print 'mainToolbar_callback:', a
 
-    def loadMap(self, path=''):
+    def loadMap(self, path=None, urlmap=None):
         """Load a mmMap into application. Application keeps 'maps', a list of maps."""
-        if not path:
+        if urlmap is not None:
+            serverurl = ''
+            username = 'cudmore'
+
+        elif path is None:
             # ask user for file
             path = QtGui.QFileDialog.getOpenFileName(self, 'Open File', '/')
             path = str(path)
             if not path:
-                    return
+                return
 
-        m = mmMap(filePath=path)
+        m = mmMap(filePath=path, urlmap=urlmap)
         self.maps.append(m)
 
         self.mapListWidget.clear()

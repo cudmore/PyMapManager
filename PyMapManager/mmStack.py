@@ -1,11 +1,13 @@
-import os, time
+import os, io, time
 from glob import glob # for mmStackPool
+from errno import ENOENT
 import pandas as pd
 import numpy as np
-import uuid # to generate a unique id for each spine
+#import uuid # to generate a unique id for each spine
 import tifffile
 
 from mmStackLine import mmStackLine
+from PyMapManager.mmio import mmio
 
 class mmStack():
     """
@@ -27,29 +29,40 @@ class mmStack():
         zzz
     """
 
-    def __init__(self, filePath=None, name=None, numChannels=1, map=None, mapSession=None):
+    def __init__(self, filePath=None, name=None, numChannels=1, map=None, mapSession=None, urlmap=None):
         self.fileName = filePath
         self.folder = '' #map.folder #re-route this to load a single time-point stack from its .tif !!!
         self.name = name #re-route this for single channel stack
         self.numChannels = numChannels #get this from stackdb???
 
+        self._stackdb = None
+
         self.map_ = map
         self.mapSession = mapSession
 
-        if filePath: # single time-point stack
+        self.doFile = True
+        self.server = None
+        self.urlmap = None
+
+        if urlmap is not None:
+            #from server
+            self.doFile = False
+            self.urlmap = urlmap
+            self.server = mmio.mmio()
+        elif map is not None:
+            # from mm map
+            self.folder = map.folder
+        elif filePath is not None:
+            # single timepoint
             self.folder = os.path.dirname(filePath) + '/' #  Path to enclosing folder, ends in '/'.
             self.name = os.path.basename(filePath).strip('.tiff')  #  Name of the stack
             if self.name.endswith('_ch1'): self.name = self.name[:-4]
             if self.name.endswith('_ch2'): self.name = self.name[:-4]
-
             # todo: we don't have numChannel in header, infer this from other _ch1.tif and _ch2.tif files in same directory
         else:
-            # todo: this is a big assumption about remaining parameters
-            if map:
-                self.folder = map.folder
-            else:
-                print 'ERROR: mmStack constructor needs either a fileNAme (for single time-point) or map and mapSession'
-                return
+            # undefined
+            print 'error: mmStack() constructor got bad parameters.'
+            return
 
         #todo: to open generic tif (no stackdb), we need to use tifffile load of first image, query tif header values (gonna be a pain)
         #f = tifffile.TiffFile('/Users/cudmore/Desktop/data/rr30a/raw/rr30a_s0_ch2.tif', pages=[0])
@@ -59,90 +72,102 @@ class mmStack():
 
         self._images = None #  3D numpy array of the stacks images, axis 0 is slices"""
 
+        ###############################################################################
         #stackdb
-        self._stackdb = None
-        stackdbFile = self.folder + 'stackdb' + '/' + self.name + '_db2.txt'
-        if os.path.isfile(stackdbFile):
-            #read first line header and get stack dimension
+        if self.doFile:
+            stackdbFile = self.folder + 'stackdb' + '/' + self.name + '_db2.txt'
+            if not os.path.isfile(stackdbFile):
+                raise IOError(ENOENT, 'mmStack did not find stackdbFile:', stackdbFile)
             with open(stackdbFile, 'rU') as f:
                 header = f.readline().rstrip()
-                if header.endswith(';'):
-                    header = header[:-1]
-                header = header.split(';')
-                d = dict(s.split('=') for s in header)
-                # stackdb file headers has (voxelx=0.12;voxely=0.12;voxelz=1;)
-                self.voxelx = float(d['voxelx']) # um
-                self.voxely = float(d['voxely'])
-                self.voxelz = float(d['voxelz'])
-
-                # julias single time-point stack have pixels=NaN ???
-                #self.pixelsx = int(d['pixelx']) # pixels
-                #self.pixelsy = int(d['pixely'])
-                #self.numSlices = int(d['pixelz'])
-
-            #self.stackdb = pd.read_csv(stackdbFile, header=1, index_col=0)
             self._stackdb = pd.read_csv(stackdbFile, header=1, index_col=False)
-
-            # CRITICAL: Idx in stackdb is corrupt (it is not used in Igor MapManager)
-            #self.stackdb.reset_index(drop=True, inplace=True)
-
+            self._stackdb['Idx'] = self.stackdb.index
+        else:
+            tmp = self.server.getfile('stackdb', self.urlmap, timepoint=self.mapSession)
+            header = tmp.split('\r')[0]
+            self._stackdb = pd.read_csv(io.StringIO(tmp.decode('utf-8')), header=1, index_col=False)
             self._stackdb['Idx'] = self.stackdb.index
 
-            #not currently using, good idea for EVERY spine to have unique ID?
-            # hashID = [uuid.uuid4().hex for i in range(self.stackdb.shape[0])]
-            # self.stackdb['hashID'] = hashID #32 character hexadecimal string
+        # stackdb file headers has (voxelx=0.12;voxely=0.12;voxelz=1;)
+        if header.endswith(';'):
+            header = header[:-1]
+        header = header.split(';')
+        d = dict(s.split('=') for s in header)
+        self.voxelx = float(d['voxelx']) # um
+        self.voxely = float(d['voxely'])
+        self.voxelz = float(d['voxelz'])
 
-            m = self.stackdb.shape[0]
+        # julias single time-point stack have pixels=NaN ???
+        #self.pixelsx = int(d['pixelx']) # pixels
+        #self.pixelsy = int(d['pixely'])
+        #self.numSlices = int(d['pixelz'])
 
-            # append columns (map, hashID, next, nexttp, prev, prevtp, runIdx)
-            if map and mapSession>=0:
-                self.stackdb['mapName'] = map.name
-                self.stackdb['mapSession'] = mapSession
-                mapCond = map.getValue('mapCond', 0)  # one map condition, in column zero
-                #should have numObj()-1 here ???
-                self.stackdb['next'] = map.objMap[1,0:self.numObj,mapSession].tolist() # 1: next
-                self.stackdb['nexttp'] = map.objMap[2,0:self.numObj,mapSession].tolist() # 2: nextTP
-                self.stackdb['prev'] = map.objMap[3,0:self.numObj,mapSession].tolist() # 3: prev
-                self.stackdb['prevtp'] = map.objMap[4,0:self.numObj,mapSession].tolist() # 4: prevTP
-                self.stackdb['runIdx'] = map.objMap[6,0:self.numObj,mapSession].tolist() # 4: runIdx
-                self.stackdb['days'] = map.getValue('days', mapSession)
-                self.stackdb['sessCond'] = map.getValue('condStr', mapSession)
-                self.stackdb['mapCond'] = mapCond
+        #not currently using, good idea for EVERY spine to have unique ID?
+        # hashID = [uuid.uuid4().hex for i in range(self.stackdb.shape[0])]
+        # self.stackdb['hashID'] = hashID #32 character hexadecimal string
 
-                self.stackdb['isAdd'] = np.nan
-                self.stackdb['isSub'] = np.nan
-                if mapSession > 0:
-                    self.stackdb['isAdd'] = [np.nan if a >= 0 else 1 for a in map.objMap[3,0:m,mapSession]] # 3 is prev
-                if mapSession < map.numSessions-1:
-                    self.stackdb['isSub'] = [np.nan if a >= 0 else 1 for a in map.objMap[1,0:m,mapSession]] # 1 is next
-                self.stackdb['isTransient'] = self.stackdb['isAdd'].isin([1]) & self.stackdb['isSub'].isin([1])
+        m = self.stackdb.shape[0]
 
-        else:
-            print 'mmStack() error, did not find stackdb file:', filePath
+        # append columns (map, hashID, next, nexttp, prev, prevtp, runIdx)
+        if map and mapSession>=0:
+            self.stackdb['mapName'] = map.name
+            self.stackdb['mapSession'] = mapSession
+            mapCond = map.getValue('mapCond', 0)  # one map condition, in column zero
+            #should have numObj()-1 here ???
+            self.stackdb['next'] = map.objMap[1,0:self.numObj,mapSession].tolist() # 1: next
+            self.stackdb['nexttp'] = map.objMap[2,0:self.numObj,mapSession].tolist() # 2: nextTP
+            self.stackdb['prev'] = map.objMap[3,0:self.numObj,mapSession].tolist() # 3: prev
+            self.stackdb['prevtp'] = map.objMap[4,0:self.numObj,mapSession].tolist() # 4: prevTP
+            self.stackdb['runIdx'] = map.objMap[6,0:self.numObj,mapSession].tolist() # 4: runIdx
+            self.stackdb['days'] = map.getValue('days', mapSession)
+            self.stackdb['sessCond'] = map.getValue('condStr', mapSession)
+            self.stackdb['mapCond'] = mapCond
+
+            self.stackdb['isAdd'] = np.nan
+            self.stackdb['isSub'] = np.nan
+            if mapSession > 0:
+                self.stackdb['isAdd'] = [np.nan if a >= 0 else 1 for a in map.objMap[3,0:m,mapSession]] # 3 is prev
+            if mapSession < map.numSessions-1:
+                self.stackdb['isSub'] = [np.nan if a >= 0 else 1 for a in map.objMap[1,0:m,mapSession]] # 1 is next
+            self.stackdb['isTransient'] = self.stackdb['isAdd'].isin([1]) & self.stackdb['isSub'].isin([1])
+
 
         # int1 and in2 will have some column names in common with stackdb
         #assuming we want values from stackdb, just drop them
         #droplist = ['x','y','z','isDirty','intBad']
 
+        ###############################################################################
         # int1
-        int1File = self.folder + 'stackdb' + '/' + self.name + '_Int1.txt'
-        if os.path.isfile(int1File):
+        if self.doFile:
+            int1File = self.folder + 'stackdb' + '/' + self.name + '_Int1.txt'
+            if not os.path.isfile(int1File):
+                raise IOError(ENOENT, 'mmStack did not find int1File:', int1File)
             int1 = pd.read_csv(int1File, header=1, index_col=False)
             int1 = int1.add_suffix('_int1')
             self._stackdb = self.stackdb.join(int1)
         else:
-            print 'mmStack error, did not find int1 file', int1File
+            tmp = self.server.getfile('int', self.urlmap, timepoint=self.mapSession, channel=1)
+            int1 = pd.read_csv(io.StringIO(tmp.decode('utf-8')), header=1, index_col=False)
+            int1 = int1.add_suffix('_int1')
+            self._stackdb = self.stackdb.join(int1)
 
+        ###############################################################################
         # int2
         if self.numChannels==2:
-            int2File = self.folder + 'stackdb' + '/' + self.name + '_Int2.txt'
-            if os.path.isfile(int2File):
+            if self.doFile:
+                int2File = self.folder + 'stackdb' + '/' + self.name + '_Int2.txt'
+                if not os.path.isfile(int2File):
+                    raise IOError(ENOENT, 'mmStack did not find int2File:', int2File)
                 int2 = pd.read_csv(int2File, header=1, index_col=False)
                 int2 = int2.add_suffix('_int2')
                 self._stackdb = self.stackdb.join(int2)
             else:
-                print 'mmStack error, did not find int2 file', int2File
+                tmp = self.server.getfile('int', self.urlmap, timepoint=self.mapSession, channel=2)
+                int2 = pd.read_csv(io.StringIO(tmp.decode('utf-8')), header=1, index_col=False)
+                int2 = int2.add_suffix('_int2')
+                self._stackdb = self.stackdb.join(int2)
 
+        ###############################################################################
         # line
         self._line = None
         self._loadLine()
@@ -299,40 +324,46 @@ class mmStack():
         """
         startTime = time.time()
 
-        if channel == 1 or channel is None:
-            chStr = '_ch1'
+        if self.urlmap is not None:
+            sliceNotUsed = 1
+            content = self.server.getimage(self.urlmap, self.mapSession, sliceNotUsed, channel=channel)
+            with tifffile.TiffFile(io.BytesIO(content)) as tif:
+                self._images = tif.asarray()
         else:
-            chStr = '_ch2'
+            if channel == 1 or channel is None:
+                chStr = '_ch1'
+            else:
+                chStr = '_ch2'
 
-        if self.map_:
-            tiffFileName = self.folder + 'raw' + '/' + self.name + chStr + '.tif'
-        else:
-            tiffFileName = self.folder + self.name + chStr + '.tif'
+            if self.map_:
+                tiffFileName = self.folder + 'raw' + '/' + self.name + chStr + '.tif'
+            else:
+                tiffFileName = self.folder + self.name + chStr + '.tif'
 
-        if not os.path.isfile(tiffFileName):
-            print 'ERROR: mmStack.loadStackImage() could not find file:', tiffFileName
-            return None
+            if not os.path.isfile(tiffFileName):
+                raise IOError(ENOENT, 'mmStack did not find tiffFileName:', tiffFileName)
 
-        try:
-            """
-            tmp = tifffile.TiffFile(tiffFileName)
-            print tmp.is_imagej
-            print tmp.pages #.imagej_tags()
-            """
+            try:
+                """
+                tmp = tifffile.TiffFile(tiffFileName)
+                print tmp.is_imagej
+                print tmp.pages #.imagej_tags()
+                """
 
-            with tifffile.TiffFile(tiffFileName) as tif:
-                    self.images = tif.asarray()
+                with tifffile.TiffFile(tiffFileName) as tif:
+                        self._images = tif.asarray()
 
-            if len(self.images.shape) > 3:
-                print 'WARNING: mmStack.loadStackImages() just loaded a stack with a bizarre shape:', self.images.shape
-                self.images = self.images[:,:,:,1]
+            except:
+                print 'ERROR: mmStack.loadStackImages() did not load tiff file:', tiffFileName
+                raise
 
-            # this is read from stackdb header
-            if self.numSlices is None:
-                self.numSlices = self.images.shape[0]
-        except:
-            print 'ERROR: mmStack.loadStackImages() did not load tiff file:', tiffFileName
-            raise
+        if len(self.images.shape) > 3:
+            print 'WARNING: mmStack.loadStackImages() just loaded a stack with a bizarre shape:', self.images.shape
+            self.images = self.images[:,:,:,1]
+
+        # this is read from stackdb header
+        #if self.numSlices is None:
+        #    self.numSlices = self.images.shape[0]
 
         '''
         # load both channels and make an rgb image

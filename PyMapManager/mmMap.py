@@ -7,17 +7,15 @@ Details::
 	stacks: list of :class:`PyMapManager.mmStack`
 """
 
-import os, time, copy
+import os, io, time, copy
+from errno import ENOENT
 from glob import glob # for pool
 import pandas as pd
 import numpy as np
 
-#import PyMapManager
 from PyMapManager.mmUtil import ROI_TYPES, newplotdict
 from PyMapManager.mmStack import mmStack
-
-#import logging
-#logging.basicConfig(filename='example.log',level=logging.DEBUG)
+from PyMapManager.mmio import mmio
 
 '''3D numpy array, rows are stack centric indices, columns are sessions, 3rd dimension is:
     [0] idx, [1] next, [2] nextTP, [3] prev, [4] prevTP
@@ -45,76 +43,128 @@ class mmMap():
 		pDist_values = m.getMapValues2('pDist', segmentID=[3])
 	"""
 
-	def __init__(self, filePath=''):
-
-		#logging.debug('mmMap.__init__() filePath:' + filePath)
-		#self.log = logging.getLogger(self.__class__.__name__)
-		#self.log.info("constructor")
-
-		self.defaultRoiType = 'spineROI'
-
+	def __init__(self, filePath=None, urlmap=None):
 		startTime = time.time()
 
-		if not os.path.isfile(filePath):
-			print 'mmMap() error, file not found:', filePath
-			return
+		self.filePath = ''
+		"""
+		Full file path to map file
+		"""
+		self.folder = ''
+		"""
+		Path to enclosing folder, ends in '/'.
+		"""
+		self.name = ''
+		"""
+		Name of the map. For a map loaded with file a5n.txt, name is a5b. Same as enclosing folder name.
+		If urlmap then this is the name of the map to fetch from the mmio server.
+		"""
+		self.table = None
+		"""
+		Pandas df loaded from file filePath or header if using url. Get values using getValue(name,session)
+		"""
+		self.defaultRoiType = 'spineROI'
 
-		self.filePath = filePath #  Path to file used to open map."""
-		self.folder = os.path.dirname(filePath) + '/' #  Path to enclosing folder, ends in '/'.
-		self.name = os.path.basename(filePath).strip('.txt')  #  Name of the map, for a map loaded with file a5n.txt, the name is a5b. Same as enclosing folder name.
-		self.table = pd.read_table(filePath, index_col=0) #  Pandas df loaded from filePath. Get values using getValue(name,session)
-		self.numChannels = int(self.getValue('numChannels', 0)) #:  Number of image channels in each stack (must be the same for all stacks).
-		self.numSessions = int(self.table.loc['hsStack'].count()) #:  Number of sessions in the map.
+		self.server = None
+		"""
+		Pointer to :class:`PyMapManager.mmio` server connection.
+		Only used to load from urlmap.
+		"""
 
+		doFile = True
+		if filePath is not None:
+			if not os.path.isfile(filePath):
+				raise IOError(ENOENT, 'mmMap did not find filePath:', filePath)
+			self.filePath = filePath #  Path to file used to open map."""
+			self.folder = os.path.dirname(filePath) + '/'
+			self.name = os.path.basename(filePath).strip('.txt')
+			self.table = pd.read_table(filePath, index_col=0)
+		elif urlmap is not None:
+			doFile = False
+			# try loading from url
+			self.name = urlmap
+			self.server = mmio.mmio()
+			tmp = self.server.getfile('header', self.name)
+			self.table = pd.read_table(io.StringIO(tmp.decode('utf-8')), index_col=0)
+
+		###############################################################################
 		# objMap (3d)
-		objMapFile = self.folder + self.name + '_objMap.txt'
-		with open(objMapFile, 'rU') as f:
-			header = f.readline().rstrip()
-			if header.endswith(';'):
-				header = header[:-1]
-			header = header.split(';')
-			d = dict(s.split('=') for s in header)
-			numRow = int(d['rows'])
-			numCol = int(d['cols'])
-			numBlock = int(d['blocks'])
-		self.objMap = np.loadtxt(objMapFile, skiprows=1)
-		self.objMap.resize(numBlock,numRow,numCol)
+		if doFile:
+			objMapFile = self.folder + self.name + '_objMap.txt'
+			if not os.path.isfile(objMapFile):
+				raise IOError(ENOENT, 'mmMap did not find objMapFile:', objMapFile)
+			with open(objMapFile, 'rU') as f:
+				header = f.readline().rstrip()
+			self.objMap = np.loadtxt(objMapFile, skiprows=1)
+		else:
+			tmp = self.server.getfile('objmap', self.name)
+			header = tmp.split('\n')[0]
+			self.objMap = np.loadtxt(tmp.split('\n'), skiprows=1)
 
+		if header.endswith(';'):
+			header = header[:-1]
+		header = header.split(';')
+		d = dict(s.split('=') for s in header)
+		numRow = int(d['rows'])
+		numCol = int(d['cols'])
+		numBlock = int(d['blocks'])
+
+		self.objMap.resize(numBlock,numRow,numCol)
 		self.runMap = self._buildRunMap(self.objMap)
 
+		###############################################################################
 		# segMap (3d)
-		segMapFile = self.folder + self.name + '_segMap.txt'
-		with open(segMapFile, 'rU') as f:
-			header = f.readline().rstrip()
-			if header.endswith(';'):
-				header = header[:-1]
-			header = header.split(';')
-			d = dict(s.split('=') for s in header)
-			numRow = int(d['rows'])
-			numCol = int(d['cols'])
-			numBlock = int(d['blocks'])
-		self.segMap = np.loadtxt(segMapFile, skiprows=1)
-		self.segMap.resize(numBlock,numRow,numCol)
+		if doFile:
+			segMapFile = self.folder + self.name + '_segMap.txt'
+			if not os.path.isfile(segMapFile):
+				raise IOError(ENOENT, 'mmMap did not find segMapFile:', segMapFile)
+			with open(segMapFile, 'rU') as f:
+				header = f.readline().rstrip()
+			self.segMap = np.loadtxt(segMapFile, skiprows=1)
+		else:
+			tmp = self.server.getfile('segmap', self.name)
+			header = tmp.split('\r')[0]
+			self.segMap = np.loadtxt(tmp.split('\r'), skiprows=1)
 
+		if header.endswith(';'):
+			header = header[:-1]
+		header = header.split(';')
+		d = dict(s.split('=') for s in header)
+		numRow = int(d['rows'])
+		numCol = int(d['cols'])
+		numBlock = int(d['blocks'])
+
+		self.segMap.resize(numBlock,numRow,numCol)
 		self.segRunMap = self._buildRunMap(self.segMap)
 
+		###############################################################################
 		#load each stack db
 		self._stacks = [] #  A list of mmStack
 		for i in range(0, self.numSessions):
-			stack = mmStack(name=self._getStackName(i), numChannels=self.numChannels, map=self, mapSession=i)
-
-			#numObj = stack.numObj()
-
+			if doFile:
+				stack = mmStack(name=self._getStackName(i), numChannels=self.numChannels, \
+								map=self, mapSession=i)
+			else:
+				stack = mmStack(name=self._getStackName(i), numChannels=self.numChannels, \
+								map=self, mapSession=i, urlmap=self.name)
 			self.stacks.append(stack)
-
-			#all stackdb into single pandas dataframe
-			#need to offset (next, prev)
-
-			#add nearest neighbor analysis?
-
 
 		stopTime = time.time()
 		print 'map', self.name, 'loaded in', round(stopTime-startTime,2), 'seconds.'
+
+	@property
+	def numChannels(self):
+		"""
+		Number of image channels in each stack (must be the same for all stacks).
+		"""
+		return int(self.getValue('numChannels', 0))
+
+	@property
+	def numSessions(self):
+		"""
+			Number of sessions (timepoints) in the map (time-series).
+		"""
+		return int(self.table.loc['hsStack'].count())
 
 	@property
 	def stacks(self):
@@ -237,10 +287,9 @@ class mmMap():
 			# final_df = orig_df.loc[runMap_idx]
 			final_df = orig_df.ix[runMap_idx]
 
-			### final_df.index is giving repeats -->> causing finalRows to be missing 44 and has 45 repeated 4 times
 			finalIndexList = final_df.index.tolist()
 
-			# #we have a list of valid stack centric index in runMap_idx
+			# we have a list of valid stack centric index in runMap_idx
 			# reverse this back into run centric to set rows in runMap (xPlot, yPlot)
 			# finalRows = self.objMap[runIdxDim,final_df.index,j]
 			finalRows = self.objMap[runIdxDim, finalIndexList, j]
@@ -261,6 +310,18 @@ class mmMap():
 			yIdx[finalRows, j] = final_df.index.values
 			ySess[finalRows, j] = j
 			yRunRow[finalRows, j] = finalRows  # final_df.index
+
+		# strip out a nan rows, can't do this until we have gone through all sessions
+		# makes plotting way faster
+		ySess = ySess[~np.isnan(yIdx).all(axis=1)]
+		yRunRow = yRunRow[~np.isnan(yIdx).all(axis=1)]
+		if pd['xstat']:
+			pd['x'] = pd['x'][~np.isnan(yIdx).all(axis=1)]
+		if pd['ystat']:
+			pd['y'] = pd['y'][~np.isnan(yIdx).all(axis=1)]
+		if pd['zstat']:
+			pd['z'] = pd['z'][~np.isnan(yIdx).all(axis=1)]
+		yIdx = yIdx[~np.isnan(yIdx).all(axis=1)] # do this last
 
 		stopTime = time.time()
 		print 'mmMap.getMapValues3() took', round(stopTime - startTime, 2), 'seconds'
@@ -286,7 +347,7 @@ class mmMap():
 		"""
 
 		if roiType not in ROI_TYPES:
-			errStr = 'error: mmMap.getMapValues2() stat "' + stat + '" is not in ' + ROI_TYPES
+			errStr = 'error: mmMap.getMapValues2() stat "' + stat + '" is not in ' + ','.join(ROI_TYPES)
 			raise ValueError(errStr)
 
 		plotDict = newplotdict()

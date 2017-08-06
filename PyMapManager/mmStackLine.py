@@ -1,4 +1,5 @@
-import os, math
+import os, io, math
+from errno import ENOENT
 import pandas as pd
 import numpy as np
 
@@ -19,25 +20,42 @@ class mmStackLine():
 
         """
         self.stack = stack
+        """
+        The parent stack
+        """
         self.linedb = None
+        """
+        Pandas dataframe of line with (x,y,z,ID) columns.
+        """
 
-        if stack.map_:
-            lineFile = stack.folder + 'line' + '/' + stack.name + '_l.txt'
+        if stack.urlmap is not None:
+            # careful, we use tmp later to load (we need to know # header rows)
+            tmp = self.stack.server.getfile('line', stack.urlmap, timepoint=stack.mapSession)
+            header = tmp.split('\r')[0]
         else:
-            lineFile = stack.folder + 'stackdb' + '/' + stack.name + '_l.txt'
-        if os.path.isfile(lineFile):
+            if stack.map_:
+                lineFile = stack.folder + 'line' + '/' + stack.name + '_l.txt'
+            else:
+                lineFile = stack.folder + 'stackdb' + '/' + stack.name + '_l.txt'
+            if not os.path.isfile(lineFile):
+                raise IOError(ENOENT, 'mmStackLine did not find lineFile:', lineFile)
             with open(lineFile, 'rU') as f:
                 header = f.readline().rstrip()
-            if header.endswith(';'):
-                header = header[:-1]
-            header = header.split(';')
-            d = dict(s.split('=') for s in header)
 
-            # line file has a header of segments
-            # 1 file header + 1 segment header + numHeaderRow
-            numHeaderRow = int(d['numHeaderRow'])
-            startReadingRow = 1 + 1 + numHeaderRow
-            self.linedb = pd.read_csv(lineFile, header=startReadingRow, index_col=0) #  Pandas dataframe with (x,y,z,segmentID) columns
+        if header.endswith(';'):
+            header = header[:-1]
+        header = header.split(';')
+        d = dict(s.split('=') for s in header)
+
+        # line file has a header of segments
+        # 1 file header + 1 segment header + numHeaderRow
+        numHeaderRow = int(d['numHeaderRow'])
+        startReadingRow = 1 + 1 + numHeaderRow
+
+        if stack.urlmap is not None:
+            self.linedb = pd.read_csv(io.StringIO(tmp.decode('utf-8')), header=startReadingRow, index_col=False)
+        else:
+            self.linedb = pd.read_csv(lineFile, header=startReadingRow, index_col=False)
 
     def getLineValues3(self,pd):
         """
