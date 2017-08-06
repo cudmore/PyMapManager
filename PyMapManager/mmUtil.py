@@ -12,18 +12,6 @@ STACK_STATS = ['Idx',
                'z',
                'pDist']
 
-#: Used to read interface state in QT and used to reduce number of parameters passed to plot functions
-PLOT_STRUCT = dict()
-PLOT_STRUCT['xstat'] = ''
-PLOT_STRUCT['ystat'] = ''
-PLOT_STRUCT['roiType'] = ['spineROI']
-PLOT_STRUCT['segmentID'] = [] # all segment
-PLOT_STRUCT['plotBad'] = False
-PLOT_STRUCT['plotIntBad'] = False
-
-def newplotstruct(): return PLOT_STRUCT.copy()
-""" Used by Qt interface"""
-
 PLOT_DICT = {
     'map' : None, #: map (object) mmMap
     'mapname' : None,
@@ -54,10 +42,18 @@ PLOT_DICT = {
 }
 
 def newplotdict(): return PLOT_DICT.copy()
-""" Get a default plot struct"""
+"""
+Get a new default plot dictionary.
+
+The plot dictionary is used to tell plot functions what to plot (e.g. ['xtat'] and ['ystat']). 
+All plot function return the same plot dictionary with keys filled in with values that were plotted 
+(e.g. ['x'] and ['y']).
+"""
 
 class mmEvent:
-    """Class to broadcast events. Events can be user events like 'spine selection' or program events like 'map opened'"""
+    """Class used by Qt to broadcast events.
+    Events can be user events like 'spine selection' or program events like 'map opened'
+    """
 
     def __init__(self, map, sessIdx, stackdbIdx):
         self.type = ''  # unique string identifying the event
@@ -71,7 +67,8 @@ class mmEvent:
             self.spineSelection(map, sessIdx, stackdbIdx)
 
     def spineSelection(self, map, sessIdx, stackdbIdx):
-        """Make a single spine selection event
+        """
+        Make a single spine selection event
 
         Args:
             map (object): :class:`pymapmanager.mmMap`

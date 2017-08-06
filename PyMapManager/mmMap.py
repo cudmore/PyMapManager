@@ -358,9 +358,9 @@ class mmMap():
 			columns are sessions, each [i][j] is a stat value
 		"""
 
-		if roiType not in ROI_TYPES:
-			errStr = 'error: mmMap.getMapValues2() stat "' + roiType + '" is not in ' + ','.join(ROI_TYPES)
-			raise ValueError(errStr)
+		#if roiType not in ROI_TYPES:
+		#	errStr = 'error: mmMap.getMapValues2() stat "' + roiType + '" is not in ' + ','.join(ROI_TYPES)
+		#	raise ValueError(errStr)
 
 		plotDict = newplotdict()
 		plotDict['roitype'] = roiType

@@ -19,7 +19,7 @@ def getMapDynamics(map, plotDict):
 
     Example::
 
-        import pandas as pandas
+        import pandas as pd
         from IPython.display import display # displays pretty table in ipython
 
         from pymapmanager.mmUtil import newplotdict
@@ -30,11 +30,11 @@ def getMapDynamics(map, plotDict):
         filePath = '/Users/cudmore/Desktop/data/rr30a/rr30a.txt'
         m = mmMap(filePath=filePath)
 
-        pd = newplotdict()
-        pd = getMapDynamics(m, pd)
+        plotDict = newplotdict()
+        plotDict = getMapDynamics(m, pd)
 
-        for segmentReport in pd:
-            display(pandas.DataFrame.from_dict(segmentReport, orient='index'))
+        for segmentReport in plotDict:
+            display(pd.DataFrame.from_dict(segmentReport, orient='index'))
 
     """
     startTime = time.time()
@@ -73,7 +73,7 @@ def getMapDynamics(map, plotDict):
     }
 
     retList = []
-    for i in range(map.getNumSegments()):
+    for i in range(map.numMapSegments):
 
         retList.append(copy.deepcopy(retStruct))
 

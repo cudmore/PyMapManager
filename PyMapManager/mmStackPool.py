@@ -1,6 +1,8 @@
 import os, time
 from glob import glob # for pool
 
+from pymapmanager.mmStack import mmStack
+
 class mmStackPool():
     """
     Load all stacks in a folder.

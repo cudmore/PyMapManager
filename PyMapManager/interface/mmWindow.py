@@ -1,12 +1,17 @@
 """This module defines MapManager window classes.
 
-    :class:`PyMapManager.interface.mmWindow` Base class for other windows to inherit from
+    :class:`pymapmanager.interface.mmWindow`:
+    Base class for other windows to inherit from
 
-    :class:`PyMapManager.interface.mmStackWindow`: Display and interact with the 3D image and annotations from a :class:`PyMapManager.mmStack`.
+    :class:`pymapmanager.interface.mmStackWindow`:
+    Display and interact with the 3D image and annotations from a :class:`pymapmanager.mmStack`.
 
-    :class:`PyMapManager.interface.mmStackPlotWindow`: Display and interact with a plot of a annotations from a:class:`PyMapManager.mmStack`.
+    :class:`pymapmanager.interface.mmStackPlotWindow`:
+    Display and interact with a plot of a annotations from a:class:`pymapmanager.mmStack`.
 
-    :class:`PyMapManager.interface.mmMapPlotWindow`: Display and interact with a plot of :class:`PyMapManager.mmStack` annotations accross a :class:`PyMapManager.mmMap`.
+    :class:`pymapmanager.interface.mmMapPlotWindow`:
+    Display and interact with a plot of :class:`pymapmanager.mmStack`
+    annotations accross a :class:`pymapmanager.mmMap`.
 
 """
 

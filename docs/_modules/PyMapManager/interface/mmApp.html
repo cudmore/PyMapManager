@@ -161,7 +161,7 @@
 <span class="sd">Example::</span>
 
 <span class="sd">    from PyQt4 import QtGui</span>
-<span class="sd">    from PyMapManager.interface.mmApp import mmApplicationWindow</span>
+<span class="sd">    from pymapmanager.interface.mmApp import mmApplicationWindow</span>
 
 <span class="sd">    qApp = QtGui.QApplication(sys.argv)</span>
 <span class="sd">    aw = mmApplicationWindow()</span>
@@ -182,12 +182,15 @@
 <span class="kn">from</span> <span class="nn">pymapmanager.mmUtil</span> <span class="k">import</span> <span class="n">newplotdict</span>
 
 <div class="viewcode-block" id="mmApplicationWindow"><a class="viewcode-back" href="../../../pymapmanager.interface.html#pymapmanager.interface.mmApp.mmApplicationWindow">[docs]</a><span class="k">class</span> <span class="nc">mmApplicationWindow</span><span class="p">(</span><span class="n">QtGui</span><span class="o">.</span><span class="n">QMainWindow</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Main PyMapManager applicaiton window. This holds list widgets to display: maps, sessions, segments, and stats&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Main PyMapManager applicaiton window.</span>
+<span class="sd">    This holds list widgets to display: maps, sessions, segments, and stats</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">QtGui</span><span class="o">.</span><span class="n">QMainWindow</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">maps</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># List of open PyMapManager.map</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">maps</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># List of open pymapmanager.map</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_windows</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># list of open windows (use this to propogate selections)</span>
 
         <span class="c1"># set location of the window</span>

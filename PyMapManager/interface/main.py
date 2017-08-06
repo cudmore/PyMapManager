@@ -36,7 +36,7 @@ if __name__ == '__main__':
         # qApp.exec_()
 
     if 0:
-        from PyMapManager.mmStack import mmStack
+        from pymapmanager.mmStack import mmStack
         stack = mmStack(filePath='/Users/cudmore/Desktop/data/julia/01_HC_ch1.tif')
         stack.loadStackImages(channel=1)
 
@@ -45,14 +45,14 @@ if __name__ == '__main__':
         print 'loading map:', defaultMap
         m = mmMap(filePath=defaultMap)
 
-        import PyMapManager
-        pd = PyMapManager.mmUtil.newplotdict()
+        import pymapmanager
+        pd = pymapmanager.mmUtil.newplotdict()
 
-        ma = PyMapManager.mmMapAnalysis.mmMapAnalysis(m)
+        ma = pymapmanager.mmMapAnalysis.mmMapAnalysis(m)
         ma.getDynamics(pd)
 
     if 0:
-        from PyMapManager.mmStack import mmStackPool
+        from pymapmanager.mmStack import mmStackPool
         path = '/Users/cudmore/MapManagerData/richard/Nancy/rr30a/raw/'
         # path = '/Volumes/fourt/MapManagerData/richard/Nancy/'
 
@@ -68,8 +68,8 @@ if __name__ == '__main__':
     if 0:
         import matplotlib.pyplot as plt
 
-        from PyMapManager.mmMapPlot2 import mmMapPlot2
-        from PyMapManager.mmUtil import newplotdict
+        from pymapmanager.mmMapPlot2 import mmMapPlot2
+        from pymapmanager.mmUtil import newplotdict
 
         defaultMap = '/Users/cudmore/Desktop/data/rr30a/rr30a.txt'
         print 'loading map:', defaultMap

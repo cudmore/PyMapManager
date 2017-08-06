@@ -8,6 +8,7 @@ import tifffile
 
 from pymapmanager.mmStackLine import mmStackLine
 from pymapmanager.mmio import mmio
+from pymapmanager.mmUtil import newplotdict
 
 class mmStack():
     """

@@ -6,7 +6,7 @@ Instantiate mmApplicationWindow to open the main window
 Example::
 
     from PyQt4 import QtGui
-    from PyMapManager.interface.mmApp import mmApplicationWindow
+    from pymapmanager.interface.mmApp import mmApplicationWindow
 
     qApp = QtGui.QApplication(sys.argv)
     aw = mmApplicationWindow()
@@ -27,12 +27,15 @@ from pymapmanager.interface.mmWindow import mmStackWindow, mmMapPlotWindow, mmSt
 from pymapmanager.mmUtil import newplotdict
 
 class mmApplicationWindow(QtGui.QMainWindow):
-    """Main PyMapManager applicaiton window. This holds list widgets to display: maps, sessions, segments, and stats"""
+    """
+    Main PyMapManager applicaiton window.
+    This holds list widgets to display: maps, sessions, segments, and stats
+    """
 
     def __init__(self):
         QtGui.QMainWindow.__init__(self)
 
-        self.maps = []  # List of open PyMapManager.map
+        self.maps = []  # List of open pymapmanager.map
         self._windows = []  # list of open windows (use this to propogate selections)
 
         # set location of the window

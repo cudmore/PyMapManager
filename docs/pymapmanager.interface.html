@@ -177,7 +177,7 @@
 <p>Instantiate mmApplicationWindow to open the main window</p>
 <p>Example:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">PyQt4</span> <span class="k">import</span> <span class="n">QtGui</span>
-<span class="kn">from</span> <span class="nn">PyMapManager.interface.mmApp</span> <span class="k">import</span> <span class="n">mmApplicationWindow</span>
+<span class="kn">from</span> <span class="nn">pymapmanager.interface.mmApp</span> <span class="k">import</span> <span class="n">mmApplicationWindow</span>
 
 <span class="n">qApp</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QApplication</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span>
 <span class="n">aw</span> <span class="o">=</span> <span class="n">mmApplicationWindow</span><span class="p">()</span>
@@ -189,7 +189,8 @@
 <dt id="pymapmanager.interface.mmApp.mmApplicationWindow">
 <em class="property">class </em><code class="descclassname">pymapmanager.interface.mmApp.</code><code class="descname">mmApplicationWindow</code><a class="reference internal" href="_modules/pymapmanager/interface/mmApp.html#mmApplicationWindow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymapmanager.interface.mmApp.mmApplicationWindow" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">PyQt4.QtGui.QMainWindow</span></code></p>
-<p>Main PyMapManager applicaiton window. This holds list widgets to display: maps, sessions, segments, and stats</p>
+<p>Main PyMapManager applicaiton window.
+This holds list widgets to display: maps, sessions, segments, and stats</p>
 <dl class="method">
 <dt id="pymapmanager.interface.mmApp.mmApplicationWindow.about">
 <code class="descname">about</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymapmanager/interface/mmApp.html#mmApplicationWindow.about"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymapmanager.interface.mmApp.mmApplicationWindow.about" title="Permalink to this definition">¶</a></dt>
@@ -547,10 +548,15 @@ todo: this will select points that may be masked out (we use self.xPlot/self.yPl
 <div class="section" id="module-pymapmanager.interface.mmWindow">
 <span id="pymapmanager-interface-mmwindow-module"></span><h2>pymapmanager.interface.mmWindow module<a class="headerlink" href="#module-pymapmanager.interface.mmWindow" title="Permalink to this headline">¶</a></h2>
 <p>This module defines MapManager window classes.</p>
-<p><code class="xref py py-class docutils literal"><span class="pre">PyMapManager.interface.mmWindow</span></code> Base class for other windows to inherit from</p>
-<p><code class="xref py py-class docutils literal"><span class="pre">PyMapManager.interface.mmStackWindow</span></code>: Display and interact with the 3D image and annotations from a <code class="xref py py-class docutils literal"><span class="pre">PyMapManager.mmStack</span></code>.</p>
-<p><code class="xref py py-class docutils literal"><span class="pre">PyMapManager.interface.mmStackPlotWindow</span></code>: Display and interact with a plot of a annotations from a:class:<cite>PyMapManager.mmStack</cite>.</p>
-<p><code class="xref py py-class docutils literal"><span class="pre">PyMapManager.interface.mmMapPlotWindow</span></code>: Display and interact with a plot of <code class="xref py py-class docutils literal"><span class="pre">PyMapManager.mmStack</span></code> annotations accross a <code class="xref py py-class docutils literal"><span class="pre">PyMapManager.mmMap</span></code>.</p>
+<p><a class="reference internal" href="#module-pymapmanager.interface.mmWindow" title="pymapmanager.interface.mmWindow"><code class="xref py py-class docutils literal"><span class="pre">pymapmanager.interface.mmWindow</span></code></a>:
+Base class for other windows to inherit from</p>
+<p><code class="xref py py-class docutils literal"><span class="pre">pymapmanager.interface.mmStackWindow</span></code>:
+Display and interact with the 3D image and annotations from a <a class="reference internal" href="pymapmanager.html#module-pymapmanager.mmStack" title="pymapmanager.mmStack"><code class="xref py py-class docutils literal"><span class="pre">pymapmanager.mmStack</span></code></a>.</p>
+<p><code class="xref py py-class docutils literal"><span class="pre">pymapmanager.interface.mmStackPlotWindow</span></code>:
+Display and interact with a plot of a annotations from a:class:<cite>pymapmanager.mmStack</cite>.</p>
+<p><code class="xref py py-class docutils literal"><span class="pre">pymapmanager.interface.mmMapPlotWindow</span></code>:
+Display and interact with a plot of <a class="reference internal" href="pymapmanager.html#module-pymapmanager.mmStack" title="pymapmanager.mmStack"><code class="xref py py-class docutils literal"><span class="pre">pymapmanager.mmStack</span></code></a>
+annotations accross a <a class="reference internal" href="pymapmanager.html#module-pymapmanager.mmMap" title="pymapmanager.mmMap"><code class="xref py py-class docutils literal"><span class="pre">pymapmanager.mmMap</span></code></a>.</p>
 <dl class="class">
 <dt id="pymapmanager.interface.mmWindow.mmMapPlotWindow">
 <em class="property">class </em><code class="descclassname">pymapmanager.interface.mmWindow.</code><code class="descname">mmMapPlotWindow</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymapmanager/interface/mmWindow.html#mmMapPlotWindow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymapmanager.interface.mmWindow.mmMapPlotWindow" title="Permalink to this definition">¶</a></dt>

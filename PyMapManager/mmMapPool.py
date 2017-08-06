@@ -1,6 +1,8 @@
 import os, time
 from glob import glob # for pool
 
+from pymapmanager.mmMap import mmMap
+
 class mmMapPool():
 	"""
 	Load all maps in a folder.
