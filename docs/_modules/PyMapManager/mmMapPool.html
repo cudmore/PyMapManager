@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>PyMapManager.mmMapPool &mdash; PyMapManager a1 documentation</title>
+  <title>pymapmanager.mmMapPool &mdash; PyMapManager a1 documentation</title>
   
 
   
@@ -32,6 +32,9 @@
   
 
   
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
     <link rel="top" title="PyMapManager a1 documentation" href="../../index.html"/>
         <link rel="up" title="Module code" href="../index.html"/> 
 
@@ -132,7 +135,7 @@
         
           <li><a href="../index.html">Module code</a> &raquo;</li>
         
-      <li>PyMapManager.mmMapPool</li>
+      <li>pymapmanager.mmMapPool</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -149,68 +152,66 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <h1>Source code for PyMapManager.mmMapPool</h1><div class="highlight"><pre>
+  <h1>Source code for pymapmanager.mmMapPool</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">time</span>
-<span class="kn">from</span> <span class="nn">glob</span> <span class="k">import</span> <span class="n">glob</span>
+<span class="kn">from</span> <span class="nn">glob</span> <span class="k">import</span> <span class="n">glob</span> <span class="c1"># for pool</span>
 
-<span class="kn">from</span> <span class="nn">mmMap</span> <span class="k">import</span> <span class="n">mmMap</span>
+<div class="viewcode-block" id="mmMapPool"><a class="viewcode-back" href="../../pymapmanager.html#pymapmanager.mmMapPool.mmMapPool">[docs]</a><span class="k">class</span> <span class="nc">mmMapPool</span><span class="p">():</span>
+	<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">	Load all maps in a folder.</span>
 
-<div class="viewcode-block" id="mmMapPool"><a class="viewcode-back" href="../../PyMapManager.html#PyMapManager.mmMapPool.mmMapPool">[docs]</a><span class="k">class</span> <span class="nc">mmMapPool</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Load all maps in a folder.</span>
+<span class="sd">	Args:</span>
+<span class="sd">		path (str): Full path to a folder. This folder should contain folders of maps.</span>
 
-<span class="sd">    Args:</span>
-<span class="sd">        path (str): Full path to a folder. This folder should contain folders of maps.</span>
+<span class="sd">	Example::</span>
 
-<span class="sd">    Example::</span>
+<span class="sd">		path = &#39;/Users/cudmore/MapManagerData/richard/Nancy/&#39;</span>
+<span class="sd">		maps = mmMapPool(path)</span>
+<span class="sd">		for map in maps:</span>
+<span class="sd">			print map</span>
+<span class="sd">	&quot;&quot;&quot;</span>
 
-<span class="sd">        path = &#39;/Users/cudmore/MapManagerData/richard/Nancy/&#39;</span>
-<span class="sd">        maps = mmMapPool(path)</span>
-<span class="sd">        for map in maps:</span>
-<span class="sd">            print map</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+	<span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">_maps</span> <span class="o">=</span> <span class="p">[]</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_maps</span> <span class="o">=</span> <span class="p">[]</span>
+		<span class="n">startTime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
 
-        <span class="n">startTime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+		<span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+			<span class="n">folders</span> <span class="o">=</span> <span class="n">glob</span><span class="p">(</span><span class="n">path</span><span class="o">+</span><span class="s1">&#39;/*/&#39;</span><span class="p">)</span>
+			<span class="k">for</span> <span class="n">folder</span> <span class="ow">in</span> <span class="n">folders</span><span class="p">:</span>
+				<span class="n">mapName</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">folder</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+				<span class="n">mapFile</span> <span class="o">=</span> <span class="n">folder</span> <span class="o">+</span> <span class="n">mapName</span> <span class="o">+</span> <span class="s1">&#39;.txt&#39;</span>
+				<span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">mapFile</span><span class="p">):</span>
+					<span class="nb">print</span> <span class="s1">&#39;mmMapPool() loading map:&#39;</span><span class="p">,</span> <span class="n">mapName</span>
+					<span class="nb">map</span> <span class="o">=</span> <span class="n">mmMap</span><span class="p">(</span><span class="n">mapFile</span><span class="p">)</span>
+					<span class="bp">self</span><span class="o">.</span><span class="n">maps</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">map</span><span class="p">)</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="nb">print</span> <span class="s1">&#39;error: mmMapPool() did not find path:&#39;</span><span class="p">,</span> <span class="n">path</span>
 
-        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
-            <span class="n">folders</span> <span class="o">=</span> <span class="n">glob</span><span class="p">(</span><span class="n">path</span><span class="o">+</span><span class="s1">&#39;/*/&#39;</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">folder</span> <span class="ow">in</span> <span class="n">folders</span><span class="p">:</span>
-                <span class="n">mapName</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">folder</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
-                <span class="n">mapFile</span> <span class="o">=</span> <span class="n">folder</span> <span class="o">+</span> <span class="n">mapName</span> <span class="o">+</span> <span class="s1">&#39;.txt&#39;</span>
-                <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">mapFile</span><span class="p">):</span>
-                    <span class="nb">print</span> <span class="s1">&#39;mmMapPool() loading map:&#39;</span><span class="p">,</span> <span class="n">mapName</span>
-                    <span class="nb">map</span> <span class="o">=</span> <span class="n">mmMap</span><span class="p">(</span><span class="n">mapFile</span><span class="p">)</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">maps</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">map</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="nb">print</span> <span class="s1">&#39;error: mmMapPool() did not find path:&#39;</span><span class="p">,</span> <span class="n">path</span>
+		<span class="n">stopTime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+		<span class="nb">print</span> <span class="s1">&#39;mmMapPool() loaded&#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">maps</span><span class="p">),</span> <span class="s1">&#39;maps in&#39;</span><span class="p">,</span> <span class="n">stopTime</span><span class="o">-</span><span class="n">startTime</span><span class="p">,</span> <span class="s1">&#39;seconds.&#39;</span>
 
-        <span class="n">stopTime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-        <span class="nb">print</span> <span class="s1">&#39;mmMapPool() loaded&#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">maps</span><span class="p">),</span> <span class="s1">&#39;maps in&#39;</span><span class="p">,</span> <span class="n">stopTime</span><span class="o">-</span><span class="n">startTime</span><span class="p">,</span> <span class="s1">&#39;seconds.&#39;</span>
+	<span class="nd">@property</span>
+	<span class="k">def</span> <span class="nf">maps</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		List of :class:`pymapmanager.mmMap` in the mmMapPool.</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_maps</span>
 
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">maps</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        List of :class:`PyMapManager.mmMap` in the mmMapPool.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_maps</span>
+	<span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+		<span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">maps</span><span class="p">):</span>
+			<span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">maps</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+			<span class="n">i</span><span class="o">+=</span><span class="mi">1</span>
 
-    <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">maps</span><span class="p">):</span>
-            <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">maps</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-            <span class="n">i</span><span class="o">+=</span><span class="mi">1</span>
-
-    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="k">for</span> <span class="nb">map</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">stack</span> <span class="ow">in</span> <span class="nb">map</span><span class="p">:</span>
-                <span class="n">count</span> <span class="o">+=</span> <span class="n">stack</span><span class="o">.</span><span class="n">numObj</span>
-        <span class="k">return</span> <span class="p">(</span><span class="s1">&#39;pool:&#39;</span>
-                <span class="o">+</span> <span class="s1">&#39; num maps:&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">maps</span><span class="p">))</span>
-                <span class="o">+</span> <span class="s1">&#39; num obj:&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">count</span><span class="p">))</span></div>
+	<span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+		<span class="k">for</span> <span class="nb">map</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
+			<span class="k">for</span> <span class="n">stack</span> <span class="ow">in</span> <span class="nb">map</span><span class="p">:</span>
+				<span class="n">count</span> <span class="o">+=</span> <span class="n">stack</span><span class="o">.</span><span class="n">numObj</span>
+		<span class="k">return</span> <span class="p">(</span><span class="s1">&#39;pool:&#39;</span>
+				<span class="o">+</span> <span class="s1">&#39; num maps:&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">maps</span><span class="p">))</span>
+				<span class="o">+</span> <span class="s1">&#39; num obj:&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">count</span><span class="p">))</span></div>
 </pre></div>
 
            </div>
@@ -251,7 +252,7 @@
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: ''
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
       <script type="text/javascript" src="../../_static/jquery.js"></script>

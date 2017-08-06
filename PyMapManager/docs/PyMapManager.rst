@@ -7,6 +7,7 @@ Subpackages
 .. toctree::
 
     PyMapManager.interface
+    PyMapManager.mmio
 
 Submodules
 ----------
@@ -27,10 +28,10 @@ PyMapManager\.mmMapAnalysis module
     :undoc-members:
     :show-inheritance:
 
-PyMapManager\.mmMapPool module
-------------------------------
+PyMapManager\.mmMapPlot2 module
+-------------------------------
 
-.. automodule:: PyMapManager.mmMapPool
+.. automodule:: PyMapManager.mmMapPlot2
     :members:
     :undoc-members:
     :show-inheritance:

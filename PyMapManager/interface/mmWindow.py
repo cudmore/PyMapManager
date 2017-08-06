@@ -16,8 +16,8 @@ from PyQt4 import QtGui, QtCore
 
 #from matplotlib.backends.backend_qt4agg import NavigationToolbar2QT as NavigationToolbar
 
-from PyMapManager.interface.mmCanvas import mmStackCanvas, mmMapPlotCanvas, mmStackPlotCanvas
-from PyMapManager.interface.mmTable import MyPandasModel
+from pymapmanager.interface.mmCanvas import mmStackCanvas, mmMapPlotCanvas, mmStackPlotCanvas
+from pymapmanager.interface.mmTable import MyPandasModel
 
 class mmWindow(QtGui.QMainWindow):
     """

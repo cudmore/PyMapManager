@@ -1,0 +1,285 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pymapmanager.mmUtil module &mdash; PyMapManager a1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="PyMapManager a1 documentation" href="index.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> PyMapManager
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                Version 0a1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">pymapmanager.mmUtil module</a></li>
+</ul>
+</div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">PyMapManager</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>pymapmanager.mmUtil module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/pymapmanager.mmUtil.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-pymapmanager.mmUtil">
+<span id="pymapmanager-mmutil-module"></span><h1>pymapmanager.mmUtil module<a class="headerlink" href="#module-pymapmanager.mmUtil" title="Permalink to this headline">¶</a></h1>
+<p>Utility functions and classes for PyMapManager.</p>
+<dl class="data">
+<dt id="pymapmanager.mmUtil.PLOT_STRUCT">
+<code class="descclassname">pymapmanager.mmUtil.</code><code class="descname">PLOT_STRUCT</code><em class="property"> = {'xstat': '', 'segmentID': [], 'ystat': '', 'plotBad': False, 'roiType': ['spineROI'], 'plotIntBad': False}</em><a class="headerlink" href="#pymapmanager.mmUtil.PLOT_STRUCT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Used to read interface state in QT and used to reduce number of parameters passed to plot functions</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="pymapmanager.mmUtil.ROI_TYPES">
+<code class="descclassname">pymapmanager.mmUtil.</code><code class="descname">ROI_TYPES</code><em class="property"> = ['spineROI', 'otherROI']</em><a class="headerlink" href="#pymapmanager.mmUtil.ROI_TYPES" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allowed ROI types. Specifies valid &#8216;roiType&#8217;.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="pymapmanager.mmUtil.STACK_STATS">
+<code class="descclassname">pymapmanager.mmUtil.</code><code class="descname">STACK_STATS</code><em class="property"> = ['Idx', 'x', 'y', 'z', 'pDist']</em><a class="headerlink" href="#pymapmanager.mmUtil.STACK_STATS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allowed stack stats. Specifies valid &#8216;tokens&#8217; for mmStack.getValue().</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="pymapmanager.mmUtil.mmEvent">
+<em class="property">class </em><code class="descclassname">pymapmanager.mmUtil.</code><code class="descname">mmEvent</code><span class="sig-paren">(</span><em>map</em>, <em>sessIdx</em>, <em>stackdbIdx</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymapmanager/mmUtil.html#mmEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymapmanager.mmUtil.mmEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class to broadcast events. Events can be user events like &#8216;spine selection&#8217; or program events like &#8216;map opened&#8217;</p>
+<dl class="method">
+<dt id="pymapmanager.mmUtil.mmEvent.getText">
+<code class="descname">getText</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymapmanager/mmUtil.html#mmEvent.getText"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymapmanager.mmUtil.mmEvent.getText" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a human readable string describing the event.</p>
+<p>For example: &#8216;Users Select sess:3 stackdbIdx:2, runRow:58&#8217;</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymapmanager.mmUtil.mmEvent.spineSelection">
+<code class="descname">spineSelection</code><span class="sig-paren">(</span><em>map</em>, <em>sessIdx</em>, <em>stackdbIdx</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymapmanager/mmUtil.html#mmEvent.spineSelection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymapmanager.mmUtil.mmEvent.spineSelection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make a single spine selection event</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>map</strong> (<em>object</em>) &#8211; <a class="reference internal" href="pymapmanager.mmMap.html#module-pymapmanager.mmMap" title="pymapmanager.mmMap"><code class="xref py py-class docutils literal"><span class="pre">pymapmanager.mmMap</span></code></a></li>
+<li><strong>sessIdx</strong> (<em>int</em>) &#8211; <a class="reference internal" href="pymapmanager.mmMap.html#module-pymapmanager.mmMap" title="pymapmanager.mmMap"><code class="xref py py-class docutils literal"><span class="pre">pymapmanager.mmMap</span></code></a> session number</li>
+<li><strong>stackdbIdx</strong> (<em>int</em>) &#8211; Annotation number in a <a class="reference internal" href="pymapmanager.mmStack.html#module-pymapmanager.mmStack" title="pymapmanager.mmStack"><code class="xref py py-class docutils literal"><span class="pre">pymapmanager.mmStack</span></code></a></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="pymapmanager.mmUtil.newplotdict">
+<code class="descclassname">pymapmanager.mmUtil.</code><code class="descname">newplotdict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymapmanager/mmUtil.html#newplotdict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymapmanager.mmUtil.newplotdict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="pymapmanager.mmUtil.newplotstruct">
+<code class="descclassname">pymapmanager.mmUtil.</code><code class="descname">newplotstruct</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymapmanager/mmUtil.html#newplotstruct"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymapmanager.mmUtil.newplotstruct" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Robert H Cudmore.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'a1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

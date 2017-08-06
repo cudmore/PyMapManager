@@ -1,5 +1,7 @@
 """
-
+Use this to load (get) files from a mmserver.
+This is a temporary wrapper as mmserver is currently a Flask server (slow).
+Eventually transition this to use proper online repository like ndio.
 """
 
 import requests

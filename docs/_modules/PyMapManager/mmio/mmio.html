@@ -1,0 +1,338 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pymapmanager.mmio.mmio &mdash; PyMapManager a1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../../genindex.html"/>
+        <link rel="search" title="Search" href="../../../search.html"/>
+    <link rel="top" title="PyMapManager a1 documentation" href="../../../index.html"/>
+        <link rel="up" title="Module code" href="../../index.html"/> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> PyMapManager
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                Version 0a1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">PyMapManager</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>pymapmanager.mmio.mmio</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pymapmanager.mmio.mmio</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Use this to load (get) files from a mmserver.</span>
+<span class="sd">This is a temporary wrapper as mmserver is currently a Flask server (slow).</span>
+<span class="sd">Eventually transition this to use proper online repository like ndio.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">requests</span>
+
+<span class="n">default_server_url</span> <span class="o">=</span> <span class="s1">&#39;http://127.0.0.1:5000/&#39;</span>
+<span class="n">default_user</span> <span class="o">=</span> <span class="s1">&#39;cudmore&#39;</span>
+
+<div class="viewcode-block" id="mmio"><a class="viewcode-back" href="../../../pymapmanager.mmio.html#pymapmanager.mmio.mmio.mmio">[docs]</a><span class="k">class</span> <span class="nc">mmio</span><span class="p">():</span>
+
+	<span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">server_url</span><span class="o">=</span><span class="n">default_server_url</span><span class="p">,</span> <span class="n">username</span><span class="o">=</span><span class="n">default_user</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Establish connection to a mmserver.</span>
+<span class="sd">		</span>
+<span class="sd">		Args:</span>
+<span class="sd">			server_url (str): The full url to the mmServer</span>
+<span class="sd">				For example: http://127.0.0.1:5000/</span>
+<span class="sd">			username (str): A valid username.</span>
+<span class="sd">				For example: cudmore</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">server_url</span> <span class="o">=</span> <span class="n">server_url</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">username</span> <span class="o">=</span> <span class="n">username</span>
+		
+		<span class="c1"># check if url responded correctly</span>
+		<span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">server_url</span><span class="p">)</span>
+		<span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+
+<div class="viewcode-block" id="mmio.maplist"><a class="viewcode-back" href="../../../pymapmanager.mmio.html#pymapmanager.mmio.mmio.mmio.maplist">[docs]</a>	<span class="k">def</span> <span class="nf">maplist</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Return list of maps for user username</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">server_url</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">username</span> <span class="o">+</span> <span class="s1">&#39;/maps&#39;</span>
+		<span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span></div>
+		<span class="c1">#print response.content</span>
+
+<div class="viewcode-block" id="mmio.getfile"><a class="viewcode-back" href="../../../pymapmanager.mmio.html#pymapmanager.mmio.mmio.mmio.getfile">[docs]</a>	<span class="k">def</span> <span class="nf">getfile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="n">mapname</span><span class="p">,</span> <span class="n">timepoint</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">channel</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Get a file from a map.</span>
+<span class="sd">		</span>
+<span class="sd">		Args:</span>
+<span class="sd">			type (str): One of (header, objmap, segmap, stackdb, line, int)</span>
+<span class="sd">			mapname (str):</span>
+<span class="sd">			timepoint (int):</span>
+<span class="sd">			channel (int): Required for type=int</span>
+<span class="sd">			</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="n">baseurl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">server_url</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">username</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="n">mapname</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span>
+		<span class="k">if</span> <span class="nb">type</span> <span class="o">==</span> <span class="s1">&#39;header&#39;</span><span class="p">:</span>
+			<span class="n">url</span> <span class="o">=</span> <span class="n">baseurl</span> <span class="o">+</span> <span class="s1">&#39;header&#39;</span>
+		<span class="k">elif</span> <span class="nb">type</span> <span class="o">==</span> <span class="s1">&#39;objmap&#39;</span><span class="p">:</span>
+			<span class="n">url</span> <span class="o">=</span> <span class="n">baseurl</span> <span class="o">+</span> <span class="s1">&#39;objmap&#39;</span>
+		<span class="k">elif</span> <span class="nb">type</span> <span class="o">==</span> <span class="s1">&#39;segmap&#39;</span><span class="p">:</span>
+			<span class="n">url</span> <span class="o">=</span> <span class="n">baseurl</span> <span class="o">+</span> <span class="s1">&#39;segmap&#39;</span>		
+		<span class="k">elif</span> <span class="nb">type</span> <span class="o">==</span> <span class="s1">&#39;stackdb&#39;</span><span class="p">:</span>
+			<span class="n">url</span> <span class="o">=</span> <span class="n">baseurl</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">timepoint</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;/stackdb&#39;</span>
+		<span class="k">elif</span> <span class="nb">type</span> <span class="o">==</span> <span class="s1">&#39;line&#39;</span><span class="p">:</span>
+			<span class="n">url</span> <span class="o">=</span> <span class="n">baseurl</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">timepoint</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;/line&#39;</span>
+		<span class="k">elif</span> <span class="nb">type</span> <span class="o">==</span> <span class="s1">&#39;int&#39;</span><span class="p">:</span>
+			<span class="n">url</span> <span class="o">=</span> <span class="n">baseurl</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">timepoint</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;/int/&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">channel</span><span class="p">)</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="c1"># error</span>
+			<span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+		<span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">404</span><span class="p">:</span>
+			<span class="nb">print</span> <span class="s1">&#39;error: mmio.getfile() received a 404 for url:&#39;</span><span class="p">,</span> <span class="n">url</span>
+		<span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">content</span></div>
+			
+<div class="viewcode-block" id="mmio.getimage"><a class="viewcode-back" href="../../../pymapmanager.mmio.html#pymapmanager.mmio.mmio.mmio.getimage">[docs]</a>	<span class="k">def</span> <span class="nf">getimage</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mapname</span><span class="p">,</span> <span class="n">timepoint</span><span class="p">,</span> <span class="nb">slice</span><span class="p">,</span> <span class="n">channel</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Get an image from a map.</span>
+<span class="sd">		</span>
+<span class="sd">		Args:</span>
+<span class="sd">			mapname (str):</span>
+<span class="sd">			timepoint (int):</span>
+<span class="sd">			slice (int):</span>
+<span class="sd">			channel (int):</span>
+<span class="sd">			</span>
+<span class="sd">		Note::</span>
+<span class="sd">			For now this is the whole 3D stack, need to make it one slice.</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		
+		<span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">server_url</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">username</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="n">mapname</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">timepoint</span><span class="p">)</span> \
+			<span class="o">+</span> <span class="s1">&#39;/image/&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">slice</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">channel</span><span class="p">)</span>
+		<span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">404</span><span class="p">:</span>
+			<span class="nb">print</span> <span class="s1">&#39;error: mmio.getimage() received a 404 for url:&#39;</span><span class="p">,</span> <span class="n">url</span>
+		<span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">content</span></div></div>
+		
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+	<span class="k">if</span> <span class="mi">0</span><span class="p">:</span>
+		<span class="n">io</span> <span class="o">=</span> <span class="n">mmio</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="s1">&#39;cudmore&#39;</span><span class="p">)</span>
+		<span class="n">io</span><span class="o">.</span><span class="n">maplist</span><span class="p">()</span>
+
+		<span class="n">header</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">getfile</span><span class="p">(</span><span class="s1">&#39;header&#39;</span><span class="p">,</span> <span class="s1">&#39;rr30a&#39;</span><span class="p">)</span>
+		<span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">header</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\r</span><span class="s1">&#39;</span><span class="p">):</span>
+			<span class="nb">print</span> <span class="n">line</span>
+
+		<span class="n">objmap</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">getfile</span><span class="p">(</span><span class="s1">&#39;objmap&#39;</span><span class="p">,</span> <span class="s1">&#39;rr30a&#39;</span><span class="p">)</span>
+		<span class="nb">print</span> <span class="n">objmap</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\r</span><span class="s1">&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+		<span class="nb">print</span> <span class="n">objmap</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\r</span><span class="s1">&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+
+		<span class="n">stackdb</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">getfile</span><span class="p">(</span><span class="s1">&#39;stackdb&#39;</span><span class="p">,</span> <span class="s1">&#39;rr30a&#39;</span><span class="p">,</span> <span class="n">timepoint</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+		<span class="nb">print</span> <span class="s1">&#39;stackdb:&#39;</span><span class="p">,</span> <span class="n">stackdb</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\r</span><span class="s1">&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+		<span class="n">line</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">getfile</span><span class="p">(</span><span class="s1">&#39;line&#39;</span><span class="p">,</span> <span class="s1">&#39;rr30a&#39;</span><span class="p">,</span> <span class="n">timepoint</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+		<span class="nb">print</span> <span class="s1">&#39;line:&#39;</span><span class="p">,</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\r</span><span class="s1">&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+		<span class="n">int1</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">getfile</span><span class="p">(</span><span class="s1">&#39;int&#39;</span><span class="p">,</span> <span class="s1">&#39;rr30a&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">channel</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+		<span class="nb">print</span> <span class="s1">&#39;int1:&#39;</span><span class="p">,</span> <span class="n">int1</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\r</span><span class="s1">&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+		<span class="n">int2</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">getfile</span><span class="p">(</span><span class="s1">&#39;int&#39;</span><span class="p">,</span> <span class="s1">&#39;rr30a&#39;</span><span class="p">,</span> <span class="n">timepoint</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">channel</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+		<span class="nb">print</span> <span class="s1">&#39;int2:&#39;</span><span class="p">,</span> <span class="n">int2</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\r</span><span class="s1">&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+		<span class="n">image</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">getimage</span><span class="p">(</span><span class="s1">&#39;rr30a&#39;</span><span class="p">,</span> <span class="n">timepoint</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="nb">slice</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">channel</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+		<span class="c1">#print &#39;image:&#39;, image</span>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Robert H Cudmore.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'a1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

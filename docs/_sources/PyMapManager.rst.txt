@@ -1,4 +1,4 @@
-PyMapManager package
+pymapmanager package
 ====================
 
 Subpackages
@@ -6,55 +6,72 @@ Subpackages
 
 .. toctree::
 
-    PyMapManager.interface
+    pymapmanager.interface
+    pymapmanager.mmio
 
 Submodules
 ----------
 
-PyMapManager\.mmMap module
+pymapmanager\.mmMap module
 --------------------------
 
-.. automodule:: PyMapManager.mmMap
+.. automodule:: pymapmanager.mmMap
     :members:
     :undoc-members:
     :show-inheritance:
 
-PyMapManager\.mmMapAnalysis module
+pymapmanager\.mmMapAnalysis module
 ----------------------------------
 
-.. automodule:: PyMapManager.mmMapAnalysis
+.. automodule:: pymapmanager.mmMapAnalysis
     :members:
     :undoc-members:
     :show-inheritance:
 
-PyMapManager\.mmMapPool module
+pymapmanager\.mmMapPlot2 module
+-------------------------------
+
+.. automodule:: pymapmanager.mmMapPlot2
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+pymapmanager\.mmMapPool module
 ------------------------------
 
-.. automodule:: PyMapManager.mmMapPool
+.. automodule:: pymapmanager.mmMapPool
     :members:
     :undoc-members:
     :show-inheritance:
 
-PyMapManager\.mmStack module
+pymapmanager\.mmStack module
 ----------------------------
 
-.. automodule:: PyMapManager.mmStack
+.. automodule:: pymapmanager.mmStack
     :members:
     :undoc-members:
     :show-inheritance:
 
-PyMapManager\.mmStackLine module
+pymapmanager\.mmStackLine module
 --------------------------------
 
-.. automodule:: PyMapManager.mmStackLine
+.. automodule:: pymapmanager.mmStackLine
     :members:
     :undoc-members:
     :show-inheritance:
 
-PyMapManager\.mmUtil module
+pymapmanager\.mmStackPool module
+--------------------------------
+
+.. automodule:: pymapmanager.mmStackPool
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+pymapmanager\.mmUtil module
 ---------------------------
 
-.. automodule:: PyMapManager.mmUtil
+.. automodule:: pymapmanager.mmUtil
     :members:
     :undoc-members:
     :show-inheritance:
@@ -63,7 +80,7 @@ PyMapManager\.mmUtil module
 Module contents
 ---------------
 
-.. automodule:: PyMapManager
+.. automodule:: pymapmanager
     :members:
     :undoc-members:
     :show-inheritance:

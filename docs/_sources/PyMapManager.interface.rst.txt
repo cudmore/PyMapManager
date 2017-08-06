@@ -1,45 +1,45 @@
-PyMapManager\.interface package
+pymapmanager\.interface package
 ===============================
 
 Submodules
 ----------
 
-PyMapManager\.interface\.main module
+pymapmanager\.interface\.main module
 ------------------------------------
 
-.. automodule:: PyMapManager.interface.main
+.. automodule:: pymapmanager.interface.main
     :members:
     :undoc-members:
     :show-inheritance:
 
-PyMapManager\.interface\.mmApp module
+pymapmanager\.interface\.mmApp module
 -------------------------------------
 
-.. automodule:: PyMapManager.interface.mmApp
+.. automodule:: pymapmanager.interface.mmApp
     :members:
     :undoc-members:
     :show-inheritance:
 
-PyMapManager\.interface\.mmCanvas module
+pymapmanager\.interface\.mmCanvas module
 ----------------------------------------
 
-.. automodule:: PyMapManager.interface.mmCanvas
+.. automodule:: pymapmanager.interface.mmCanvas
     :members:
     :undoc-members:
     :show-inheritance:
 
-PyMapManager\.interface\.mmTable module
+pymapmanager\.interface\.mmTable module
 ---------------------------------------
 
-.. automodule:: PyMapManager.interface.mmTable
+.. automodule:: pymapmanager.interface.mmTable
     :members:
     :undoc-members:
     :show-inheritance:
 
-PyMapManager\.interface\.mmWindow module
+pymapmanager\.interface\.mmWindow module
 ----------------------------------------
 
-.. automodule:: PyMapManager.interface.mmWindow
+.. automodule:: pymapmanager.interface.mmWindow
     :members:
     :undoc-members:
     :show-inheritance:
@@ -48,7 +48,7 @@ PyMapManager\.interface\.mmWindow module
 Module contents
 ---------------
 
-.. automodule:: PyMapManager.interface
+.. automodule:: pymapmanager.interface
     :members:
     :undoc-members:
     :show-inheritance:

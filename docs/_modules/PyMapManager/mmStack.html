@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>PyMapManager.mmStack &mdash; PyMapManager a1 documentation</title>
+  <title>pymapmanager.mmStack &mdash; PyMapManager a1 documentation</title>
   
 
   
@@ -135,7 +135,7 @@
         
           <li><a href="../index.html">Module code</a> &raquo;</li>
         
-      <li>PyMapManager.mmStack</li>
+      <li>pymapmanager.mmStack</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -152,7 +152,7 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <h1>Source code for PyMapManager.mmStack</h1><div class="highlight"><pre>
+  <h1>Source code for pymapmanager.mmStack</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">io</span><span class="o">,</span> <span class="nn">time</span>
 <span class="kn">from</span> <span class="nn">glob</span> <span class="k">import</span> <span class="n">glob</span> <span class="c1"># for mmStackPool</span>
 <span class="kn">from</span> <span class="nn">errno</span> <span class="k">import</span> <span class="n">ENOENT</span>
@@ -161,20 +161,20 @@
 <span class="c1">#import uuid # to generate a unique id for each spine</span>
 <span class="kn">import</span> <span class="nn">tifffile</span>
 
-<span class="kn">from</span> <span class="nn">mmStackLine</span> <span class="k">import</span> <span class="n">mmStackLine</span>
-<span class="kn">from</span> <span class="nn">PyMapManager.mmio</span> <span class="k">import</span> <span class="n">mmio</span>
+<span class="kn">from</span> <span class="nn">pymapmanager.mmStackLine</span> <span class="k">import</span> <span class="n">mmStackLine</span>
+<span class="kn">from</span> <span class="nn">pymapmanager.mmio</span> <span class="k">import</span> <span class="n">mmio</span>
 
-<div class="viewcode-block" id="mmStack"><a class="viewcode-back" href="../../PyMapManager.html#PyMapManager.mmStack.mmStack">[docs]</a><span class="k">class</span> <span class="nc">mmStack</span><span class="p">():</span>
+<div class="viewcode-block" id="mmStack"><a class="viewcode-back" href="../../pymapmanager.html#pymapmanager.mmStack.mmStack">[docs]</a><span class="k">class</span> <span class="nc">mmStack</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A stack contains a 3D Tiff, a list of 3D annotations, and optionally a number of segment tracings.</span>
 
-<span class="sd">    A stack can either be a single time-point or be embeded into a session of a :class:`PyMapManager.mmMap`.</span>
+<span class="sd">    A stack can either be a single time-point or be embeded into a session of a :class:`pymapmanager.mmMap`.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        filePath (str): Full path to tiff file, this is used to open single timepoint stacks (not stacks in a map)</span>
 <span class="sd">        name (str): Name of the stack. Used to fetch .tif file</span>
 <span class="sd">        numChannels (int): Number of channels.</span>
-<span class="sd">        map (object): Runtime object of :class:`PyMapManager.mmMap` that created the stack.</span>
+<span class="sd">        map (object): Runtime object of :class:`pymapmanager.mmMap` that created the stack.</span>
 <span class="sd">        mapSession (int): The map session number for the stack.</span>
 
 <span class="sd">    Example::</span>
@@ -186,7 +186,7 @@
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filePath</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">numChannels</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="nb">map</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">mapSession</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">urlmap</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fileName</span> <span class="o">=</span> <span class="n">filePath</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">folder</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span> <span class="c1">#map.folder #re-route this to load a single time-point stack from its .tif !!!</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_folder</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span> <span class="c1">#map.folder #re-route this to load a single time-point stack from its .tif !!!</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span> <span class="c1">#re-route this for single channel stack</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">numChannels</span> <span class="o">=</span> <span class="n">numChannels</span> <span class="c1">#get this from stackdb???</span>
 
@@ -206,10 +206,10 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">server</span> <span class="o">=</span> <span class="n">mmio</span><span class="o">.</span><span class="n">mmio</span><span class="p">()</span>
         <span class="k">elif</span> <span class="nb">map</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="c1"># from mm map</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">folder</span> <span class="o">=</span> <span class="nb">map</span><span class="o">.</span><span class="n">folder</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_folder</span> <span class="o">=</span> <span class="nb">map</span><span class="o">.</span><span class="n">_folder</span>
         <span class="k">elif</span> <span class="n">filePath</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="c1"># single timepoint</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">folder</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">filePath</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="c1">#  Path to enclosing folder, ends in &#39;/&#39;.</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_folder</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">filePath</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="c1">#  Path to enclosing folder, ends in &#39;/&#39;.</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">filePath</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39;.tiff&#39;</span><span class="p">)</span>  <span class="c1">#  Name of the stack</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;_ch1&#39;</span><span class="p">):</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">[:</span><span class="o">-</span><span class="mi">4</span><span class="p">]</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;_ch2&#39;</span><span class="p">):</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">[:</span><span class="o">-</span><span class="mi">4</span><span class="p">]</span>
@@ -230,7 +230,7 @@
         <span class="c1">###############################################################################</span>
         <span class="c1">#stackdb</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">doFile</span><span class="p">:</span>
-            <span class="n">stackdbFile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">folder</span> <span class="o">+</span> <span class="s1">&#39;stackdb&#39;</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;_db2.txt&#39;</span>
+            <span class="n">stackdbFile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_folder</span> <span class="o">+</span> <span class="s1">&#39;stackdb&#39;</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;_db2.txt&#39;</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">stackdbFile</span><span class="p">):</span>
                 <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="n">ENOENT</span><span class="p">,</span> <span class="s1">&#39;mmStack did not find stackdbFile:&#39;</span><span class="p">,</span> <span class="n">stackdbFile</span><span class="p">)</span>
             <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">stackdbFile</span><span class="p">,</span> <span class="s1">&#39;rU&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
@@ -294,7 +294,7 @@
         <span class="c1">###############################################################################</span>
         <span class="c1"># int1</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">doFile</span><span class="p">:</span>
-            <span class="n">int1File</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">folder</span> <span class="o">+</span> <span class="s1">&#39;stackdb&#39;</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;_Int1.txt&#39;</span>
+            <span class="n">int1File</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_folder</span> <span class="o">+</span> <span class="s1">&#39;stackdb&#39;</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;_Int1.txt&#39;</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">int1File</span><span class="p">):</span>
                 <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="n">ENOENT</span><span class="p">,</span> <span class="s1">&#39;mmStack did not find int1File:&#39;</span><span class="p">,</span> <span class="n">int1File</span><span class="p">)</span>
             <span class="n">int1</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">int1File</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -310,7 +310,7 @@
         <span class="c1"># int2</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">numChannels</span><span class="o">==</span><span class="mi">2</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">doFile</span><span class="p">:</span>
-                <span class="n">int2File</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">folder</span> <span class="o">+</span> <span class="s1">&#39;stackdb&#39;</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;_Int2.txt&#39;</span>
+                <span class="n">int2File</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_folder</span> <span class="o">+</span> <span class="s1">&#39;stackdb&#39;</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;_Int2.txt&#39;</span>
                 <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">int2File</span><span class="p">):</span>
                     <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="n">ENOENT</span><span class="p">,</span> <span class="s1">&#39;mmStack did not find int2File:&#39;</span><span class="p">,</span> <span class="n">int2File</span><span class="p">)</span>
                 <span class="n">int2</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">int2File</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -331,7 +331,7 @@
     <span class="k">def</span> <span class="nf">stackdb</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        stackdb (pandas dataframe): Pandas dataframe of annotations, one per row. Columns are statistic names.</span>
-<span class="sd">            See `PyMapManager.mmUtil STACK_STATS` for valid statistic names.</span>
+<span class="sd">            See `pymapmanager.mmUtil STACK_STATS` for valid statistic names.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_stackdb</span>
 
@@ -365,7 +365,7 @@
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">line</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        line (:class:`PyMapManager.mmStackLine`): A 3D tracing of segments.</span>
+<span class="sd">        line (:class:`pymapmanager.mmStackLine`): A 3D tracing of segments.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_line</span>
 
@@ -389,11 +389,11 @@
                 <span class="o">+</span> <span class="s1">&#39; segments:&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">numSegments</span><span class="p">)</span>
                 <span class="o">+</span> <span class="s1">&#39; channels:&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">numChannels</span><span class="p">))</span>
 
-<div class="viewcode-block" id="mmStack.getStatNames"><a class="viewcode-back" href="../../PyMapManager.html#PyMapManager.mmStack.mmStack.getStatNames">[docs]</a>    <span class="k">def</span> <span class="nf">getStatNames</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="mmStack.getStatNames"><a class="viewcode-back" href="../../pymapmanager.html#pymapmanager.mmStack.mmStack.getStatNames">[docs]</a>    <span class="k">def</span> <span class="nf">getStatNames</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get column names from stack. These are valid values for plot functions.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stackdb</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">values</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="mmStack.getStackValues3"><a class="viewcode-back" href="../../PyMapManager.html#PyMapManager.mmStack.mmStack.getStackValues3">[docs]</a>    <span class="k">def</span> <span class="nf">getStackValues3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pd</span><span class="p">):</span>
+<div class="viewcode-block" id="mmStack.getStackValues3"><a class="viewcode-back" href="../../pymapmanager.html#pymapmanager.mmStack.mmStack.getStackValues3">[docs]</a>    <span class="k">def</span> <span class="nf">getStackValues3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pd</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get x/y/z stats using a plot dict pd</span>
 
 <span class="sd">        Args:</span>
@@ -437,7 +437,7 @@
 
         <span class="k">return</span> <span class="n">pd</span></div>
 
-<div class="viewcode-block" id="mmStack.getStackValues2"><a class="viewcode-back" href="../../PyMapManager.html#PyMapManager.mmStack.mmStack.getStackValues2">[docs]</a>    <span class="k">def</span> <span class="nf">getStackValues2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stat</span><span class="p">,</span> <span class="n">roiType</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;spineROI&#39;</span><span class="p">],</span> <span class="n">segmentID</span><span class="o">=</span><span class="p">[],</span> <span class="n">plotBad</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">plotIntBad</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="mmStack.getStackValues2"><a class="viewcode-back" href="../../pymapmanager.html#pymapmanager.mmStack.mmStack.getStackValues2">[docs]</a>    <span class="k">def</span> <span class="nf">getStackValues2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stat</span><span class="p">,</span> <span class="n">roiType</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;spineROI&#39;</span><span class="p">],</span> <span class="n">segmentID</span><span class="o">=</span><span class="p">[],</span> <span class="n">plotBad</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">plotIntBad</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">        Args:</span>
@@ -467,7 +467,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_line</span> <span class="o">=</span> <span class="n">mmStackLine</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
-<div class="viewcode-block" id="mmStack.loadStackImages"><a class="viewcode-back" href="../../PyMapManager.html#PyMapManager.mmStack.mmStack.loadStackImages">[docs]</a>    <span class="k">def</span> <span class="nf">loadStackImages</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">channel</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+<div class="viewcode-block" id="mmStack.loadStackImages"><a class="viewcode-back" href="../../pymapmanager.html#pymapmanager.mmStack.mmStack.loadStackImages">[docs]</a>    <span class="k">def</span> <span class="nf">loadStackImages</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">channel</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Load the images for a stack. Sets &#39;images&#39; instance variable</span>
 
@@ -491,9 +491,9 @@
                 <span class="n">chStr</span> <span class="o">=</span> <span class="s1">&#39;_ch2&#39;</span>
 
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">map_</span><span class="p">:</span>
-                <span class="n">tiffFileName</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">folder</span> <span class="o">+</span> <span class="s1">&#39;raw&#39;</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="n">chStr</span> <span class="o">+</span> <span class="s1">&#39;.tif&#39;</span>
+                <span class="n">tiffFileName</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_folder</span> <span class="o">+</span> <span class="s1">&#39;raw&#39;</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="n">chStr</span> <span class="o">+</span> <span class="s1">&#39;.tif&#39;</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">tiffFileName</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">folder</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="n">chStr</span> <span class="o">+</span> <span class="s1">&#39;.tif&#39;</span>
+                <span class="n">tiffFileName</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_folder</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="n">chStr</span> <span class="o">+</span> <span class="s1">&#39;.tif&#39;</span>
 
             <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">tiffFileName</span><span class="p">):</span>
                 <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="n">ENOENT</span><span class="p">,</span> <span class="s1">&#39;mmStack did not find tiffFileName:&#39;</span><span class="p">,</span> <span class="n">tiffFileName</span><span class="p">)</span>
@@ -523,10 +523,10 @@
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        # load both channels and make an rgb image</span>
 <span class="sd">        self.rgb = np.zeros(4)</span>
-<span class="sd">        tiffFileName = self.folder + &#39;raw&#39; + &#39;/&#39; + self.name + &#39;_ch1.tif&#39;</span>
+<span class="sd">        tiffFileName = self._folder + &#39;raw&#39; + &#39;/&#39; + self.name + &#39;_ch1.tif&#39;</span>
 <span class="sd">        with tifffile.TiffFile(tiffFileName) as tif:</span>
 <span class="sd">            self.rgb[...,1] = tif.asarray()</span>
-<span class="sd">        tiffFileName = self.folder + &#39;raw&#39; + &#39;/&#39; + self.name + &#39;_ch2.tif&#39;</span>
+<span class="sd">        tiffFileName = self._folder + &#39;raw&#39; + &#39;/&#39; + self.name + &#39;_ch2.tif&#39;</span>
 <span class="sd">        with tifffile.TiffFile(tiffFileName) as tif:</span>
 <span class="sd">            self.rgb[...,2] = tif.asarray()</span>
 <span class="sd">        imshow(self.rgb)</span>
@@ -544,61 +544,6 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">images</span></div></div>
 
 
-<span class="c1">##############################################################################</span>
-<div class="viewcode-block" id="mmStackPool"><a class="viewcode-back" href="../../PyMapManager.html#PyMapManager.mmStack.mmStackPool">[docs]</a><span class="k">class</span> <span class="nc">mmStackPool</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Load all stacks in a folder.</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        path (str): Full path to a folder. This folder should contain .tif files.</span>
-
-<span class="sd">    Example::</span>
-
-<span class="sd">        path = &#39;/Users/cudmore/MapManagerData/richard/Nancy/&#39;</span>
-<span class="sd">        stacks = mmStackPool(path)</span>
-<span class="sd">        for stack in stacks:</span>
-<span class="sd">            print stack</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_stacks</span> <span class="o">=</span> <span class="p">[]</span>
-
-        <span class="n">startTime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-
-        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
-            <span class="n">files</span> <span class="o">=</span> <span class="n">glob</span><span class="p">(</span><span class="n">path</span><span class="o">+</span><span class="s1">&#39;/*&#39;</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
-                <span class="n">isTiff</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.tif&#39;</span><span class="p">)</span>
-                <span class="k">if</span> <span class="p">(</span><span class="n">isTiff</span><span class="p">):</span>
-                    <span class="nb">print</span> <span class="s1">&#39;=== mmStackPool() loading stack:&#39;</span><span class="p">,</span> <span class="n">file</span>
-                    <span class="n">stack</span> <span class="o">=</span> <span class="n">mmStack</span><span class="p">(</span><span class="n">filePath</span><span class="o">=</span><span class="n">file</span><span class="p">)</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">stacks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="nb">print</span> <span class="s1">&#39;error: mmMapPool() did not find path:&#39;</span><span class="p">,</span> <span class="n">path</span>
-
-        <span class="n">stopTime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-        <span class="nb">print</span> <span class="s1">&#39;mmStackPool() loaded&#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stacks</span><span class="p">),</span> <span class="s1">&#39;stacks in&#39;</span><span class="p">,</span> <span class="n">stopTime</span><span class="o">-</span><span class="n">startTime</span><span class="p">,</span> <span class="s1">&#39;seconds.&#39;</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">stacks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        List of :class:`PyMapManager.mmStack` in the mmStackPool.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_stacks</span>
-
-    <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stacks</span><span class="p">):</span>
-            <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">stacks</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-            <span class="n">i</span><span class="o">+=</span><span class="mi">1</span>
-
-    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="k">for</span> <span class="n">stack</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
-            <span class="n">count</span> <span class="o">+=</span> <span class="n">stack</span><span class="o">.</span><span class="n">numObj</span>
-        <span class="k">return</span> <span class="p">(</span><span class="s1">&#39;pool:&#39;</span>
-                <span class="o">+</span> <span class="s1">&#39; num stacks:&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stacks</span><span class="p">))</span>
-                <span class="o">+</span> <span class="s1">&#39; num obj:&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">count</span><span class="p">))</span></div>
 </pre></div>
 
            </div>

@@ -6,20 +6,20 @@ import numpy as np
 #import uuid # to generate a unique id for each spine
 import tifffile
 
-from mmStackLine import mmStackLine
-from PyMapManager.mmio import mmio
+from pymapmanager.mmStackLine import mmStackLine
+from pymapmanager.mmio import mmio
 
 class mmStack():
     """
     A stack contains a 3D Tiff, a list of 3D annotations, and optionally a number of segment tracings.
 
-    A stack can either be a single time-point or be embeded into a session of a :class:`PyMapManager.mmMap`.
+    A stack can either be a single time-point or be embeded into a session of a :class:`pymapmanager.mmMap`.
 
     Args:
         filePath (str): Full path to tiff file, this is used to open single timepoint stacks (not stacks in a map)
         name (str): Name of the stack. Used to fetch .tif file
         numChannels (int): Number of channels.
-        map (object): Runtime object of :class:`PyMapManager.mmMap` that created the stack.
+        map (object): Runtime object of :class:`pymapmanager.mmMap` that created the stack.
         mapSession (int): The map session number for the stack.
 
     Example::
@@ -31,7 +31,7 @@ class mmStack():
 
     def __init__(self, filePath=None, name=None, numChannels=1, map=None, mapSession=None, urlmap=None):
         self.fileName = filePath
-        self.folder = '' #map.folder #re-route this to load a single time-point stack from its .tif !!!
+        self._folder = '' #map.folder #re-route this to load a single time-point stack from its .tif !!!
         self.name = name #re-route this for single channel stack
         self.numChannels = numChannels #get this from stackdb???
 
@@ -51,10 +51,10 @@ class mmStack():
             self.server = mmio.mmio()
         elif map is not None:
             # from mm map
-            self.folder = map.folder
+            self._folder = map._folder
         elif filePath is not None:
             # single timepoint
-            self.folder = os.path.dirname(filePath) + '/' #  Path to enclosing folder, ends in '/'.
+            self._folder = os.path.dirname(filePath) + '/' #  Path to enclosing folder, ends in '/'.
             self.name = os.path.basename(filePath).strip('.tiff')  #  Name of the stack
             if self.name.endswith('_ch1'): self.name = self.name[:-4]
             if self.name.endswith('_ch2'): self.name = self.name[:-4]
@@ -75,7 +75,7 @@ class mmStack():
         ###############################################################################
         #stackdb
         if self.doFile:
-            stackdbFile = self.folder + 'stackdb' + '/' + self.name + '_db2.txt'
+            stackdbFile = self._folder + 'stackdb' + '/' + self.name + '_db2.txt'
             if not os.path.isfile(stackdbFile):
                 raise IOError(ENOENT, 'mmStack did not find stackdbFile:', stackdbFile)
             with open(stackdbFile, 'rU') as f:
@@ -139,7 +139,7 @@ class mmStack():
         ###############################################################################
         # int1
         if self.doFile:
-            int1File = self.folder + 'stackdb' + '/' + self.name + '_Int1.txt'
+            int1File = self._folder + 'stackdb' + '/' + self.name + '_Int1.txt'
             if not os.path.isfile(int1File):
                 raise IOError(ENOENT, 'mmStack did not find int1File:', int1File)
             int1 = pd.read_csv(int1File, header=1, index_col=False)
@@ -155,7 +155,7 @@ class mmStack():
         # int2
         if self.numChannels==2:
             if self.doFile:
-                int2File = self.folder + 'stackdb' + '/' + self.name + '_Int2.txt'
+                int2File = self._folder + 'stackdb' + '/' + self.name + '_Int2.txt'
                 if not os.path.isfile(int2File):
                     raise IOError(ENOENT, 'mmStack did not find int2File:', int2File)
                 int2 = pd.read_csv(int2File, header=1, index_col=False)
@@ -176,7 +176,7 @@ class mmStack():
     def stackdb(self):
         """
         stackdb (pandas dataframe): Pandas dataframe of annotations, one per row. Columns are statistic names.
-            See `PyMapManager.mmUtil STACK_STATS` for valid statistic names.
+            See `pymapmanager.mmUtil STACK_STATS` for valid statistic names.
         """
         return self._stackdb
 
@@ -210,7 +210,7 @@ class mmStack():
     @property
     def line(self):
         """
-        line (:class:`PyMapManager.mmStackLine`): A 3D tracing of segments.
+        line (:class:`pymapmanager.mmStackLine`): A 3D tracing of segments.
         """
         return self._line
 
@@ -336,9 +336,9 @@ class mmStack():
                 chStr = '_ch2'
 
             if self.map_:
-                tiffFileName = self.folder + 'raw' + '/' + self.name + chStr + '.tif'
+                tiffFileName = self._folder + 'raw' + '/' + self.name + chStr + '.tif'
             else:
-                tiffFileName = self.folder + self.name + chStr + '.tif'
+                tiffFileName = self._folder + self.name + chStr + '.tif'
 
             if not os.path.isfile(tiffFileName):
                 raise IOError(ENOENT, 'mmStack did not find tiffFileName:', tiffFileName)
@@ -368,10 +368,10 @@ class mmStack():
         '''
         # load both channels and make an rgb image
         self.rgb = np.zeros(4)
-        tiffFileName = self.folder + 'raw' + '/' + self.name + '_ch1.tif'
+        tiffFileName = self._folder + 'raw' + '/' + self.name + '_ch1.tif'
         with tifffile.TiffFile(tiffFileName) as tif:
             self.rgb[...,1] = tif.asarray()
-        tiffFileName = self.folder + 'raw' + '/' + self.name + '_ch2.tif'
+        tiffFileName = self._folder + 'raw' + '/' + self.name + '_ch2.tif'
         with tifffile.TiffFile(tiffFileName) as tif:
             self.rgb[...,2] = tif.asarray()
         imshow(self.rgb)
@@ -389,58 +389,3 @@ class mmStack():
         return self.images
 
 
-##############################################################################
-class mmStackPool():
-    """
-    Load all stacks in a folder.
-
-    Args:
-        path (str): Full path to a folder. This folder should contain .tif files.
-
-    Example::
-
-        path = '/Users/cudmore/MapManagerData/richard/Nancy/'
-        stacks = mmStackPool(path)
-        for stack in stacks:
-            print stack
-    """
-
-    def __init__(self, path):
-        self._stacks = []
-
-        startTime = time.time()
-
-        if os.path.isdir(path):
-            files = glob(path+'/*')
-            for file in files:
-                isTiff = file.endswith('.tif')
-                if (isTiff):
-                    print '=== mmStackPool() loading stack:', file
-                    stack = mmStack(filePath=file)
-                    self.stacks.append(stack)
-        else:
-            print 'error: mmMapPool() did not find path:', path
-
-        stopTime = time.time()
-        print 'mmStackPool() loaded', len(self.stacks), 'stacks in', stopTime-startTime, 'seconds.'
-
-    @property
-    def stacks(self):
-        """
-        List of :class:`PyMapManager.mmStack` in the mmStackPool.
-        """
-        return self._stacks
-
-    def __iter__(self):
-        i = 0
-        while i < len(self.stacks):
-            yield self.stacks[i]
-            i+=1
-
-    def __str__(self):
-        count = 0
-        for stack in self:
-            count += stack.numObj
-        return ('pool:'
-                + ' num stacks:' + str(len(self.stacks))
-                + ' num obj:' + str(count))

@@ -16,7 +16,7 @@ class mmStackLine():
         Load a line tracing for a stack. In addition to (x,y,z), the line has 'parentID' to specify multiple dendritic tracings
 
         Args:
-            stack (:class:`PyMapManager.mmStack`): The stack that will own the line.
+            stack (:class:`pymapmanager.mmStack`): The stack that will own the line.
 
         """
         self.stack = stack
@@ -34,9 +34,9 @@ class mmStackLine():
             header = tmp.split('\r')[0]
         else:
             if stack.map_:
-                lineFile = stack.folder + 'line' + '/' + stack.name + '_l.txt'
+                lineFile = stack._folder + 'line' + '/' + stack.name + '_l.txt'
             else:
-                lineFile = stack.folder + 'stackdb' + '/' + stack.name + '_l.txt'
+                lineFile = stack._folder + 'stackdb' + '/' + stack.name + '_l.txt'
             if not os.path.isfile(lineFile):
                 raise IOError(ENOENT, 'mmStackLine did not find lineFile:', lineFile)
             with open(lineFile, 'rU') as f:

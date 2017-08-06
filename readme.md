@@ -1,5 +1,5 @@
 
-This is python code to load and visualize MapManager files. The workflow is to use <A HREF="http://blog.cudmore.io/mapmanager/">MapManager</A> to create maps and stacks. Then, use PyMapManager to easily perform additional analysis.
+This is python code to load and visualize MapManager files. The workflow is to use <A HREF="http://blog.cudmore.io/mapmanager/">MapManager</A> to create annotated maps and stacks. Then, use PyMapManager to easily perform additional analysis.
 
 This project will be merged with <A HREF="https://github.com/cmicek1/TiffViewer">PyQt TiffViewer</A> created by <A HREF="https://github.com/cmicek1">Chris Micek</A>.
 

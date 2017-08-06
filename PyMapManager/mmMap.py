@@ -1,45 +1,37 @@
-"""
-A mmMap is a time-series of :class:`PyMapManager.mmStack` plus some book-keeping to link corresponding annotations
-between stacks and to link corresponding line segments between stacks.
-
-Details::
-
-	stacks: list of :class:`PyMapManager.mmStack`
-"""
-
 import os, io, time, copy
 from errno import ENOENT
-from glob import glob # for pool
 import pandas as pd
 import numpy as np
 
-from PyMapManager.mmUtil import ROI_TYPES, newplotdict
-from PyMapManager.mmStack import mmStack
-from PyMapManager.mmio import mmio
+from pymapmanager.mmUtil import ROI_TYPES, newplotdict
+from pymapmanager.mmStack import mmStack
+from pymapmanager.mmio import mmio
 
 '''3D numpy array, rows are stack centric indices, columns are sessions, 3rd dimension is:
-    [0] idx, [1] next, [2] nextTP, [3] prev, [4] prevTP
-    [5] blank, [6] runIdx, [7] dynType, [8] forced
-    [9] nodeType, [10] segmentID, [11] splitIdx
+	[0] idx, [1] next, [2] nextTP, [3] prev, [4] prevTP
+	[5] blank, [6] runIdx, [7] dynType, [8] forced
+	[9] nodeType, [10] segmentID, [11] splitIdx
 '''
 
 class mmMap():
 	"""
+	A time-series of :class:`pymapmanager.mmStack` plus some book-keeping to link corresponding annotations
+	and segments between stacks.
+
 	Args:
 		filePath (str): Full file path to .txt file for the map. File is inside map folder, for map a5n it is /a5n/a5n.txt
+		urlmap (str): Name of the map to load from a :class:`pymapmanager.mmio` online repository.
 
 	Example::
 
-		from PyMapManager.mmMap import mmMap
+		from pymapmanager.mmMap import mmMap
 		file = '/Users/cudmore/Desktop/data/rr30a/rr30a.txt'
 		m = mmMap(filePath=path)
 
-	Once created and populated with stack, get the ith mmStack using::
-
+		# Get the ith mmStack using::
 		stack = m.stacks[i]
 
-	Use getMapValues2() to retrieve stack annotations (for the given segmentID) across the entire map::
-
+		# Use getMapValues2() to retrieve stack annotations (for the given segmentID) across the entire map::
 		pDist_values = m.getMapValues2('pDist', segmentID=[3])
 	"""
 
@@ -50,7 +42,7 @@ class mmMap():
 		"""
 		Full file path to map file
 		"""
-		self.folder = ''
+		self._folder = ''
 		"""
 		Path to enclosing folder, ends in '/'.
 		"""
@@ -67,8 +59,20 @@ class mmMap():
 
 		self.server = None
 		"""
-		Pointer to :class:`PyMapManager.mmio` server connection.
+		Pointer to :class:`pymapmanager.mmio` server connection.
 		Only used to load from urlmap.
+		"""
+
+		self.objMap = None
+		"""
+		2D array where each row is a run of annotations.
+		objMap[i][j] gives us a mmStack centric index into mmStack.stackdb.
+		"""
+
+		self.segMap = None
+		"""
+		2D array where each row is a run of segments.
+		segMap[i][j] gives us mmStack centric index into mmStack._line
 		"""
 
 		doFile = True
@@ -76,7 +80,7 @@ class mmMap():
 			if not os.path.isfile(filePath):
 				raise IOError(ENOENT, 'mmMap did not find filePath:', filePath)
 			self.filePath = filePath #  Path to file used to open map."""
-			self.folder = os.path.dirname(filePath) + '/'
+			self._folder = os.path.dirname(filePath) + '/'
 			self.name = os.path.basename(filePath).strip('.txt')
 			self.table = pd.read_table(filePath, index_col=0)
 		elif urlmap is not None:
@@ -90,7 +94,7 @@ class mmMap():
 		###############################################################################
 		# objMap (3d)
 		if doFile:
-			objMapFile = self.folder + self.name + '_objMap.txt'
+			objMapFile = self._folder + self.name + '_objMap.txt'
 			if not os.path.isfile(objMapFile):
 				raise IOError(ENOENT, 'mmMap did not find objMapFile:', objMapFile)
 			with open(objMapFile, 'rU') as f:
@@ -115,7 +119,7 @@ class mmMap():
 		###############################################################################
 		# segMap (3d)
 		if doFile:
-			segMapFile = self.folder + self.name + '_segMap.txt'
+			segMapFile = self._folder + self.name + '_segMap.txt'
 			if not os.path.isfile(segMapFile):
 				raise IOError(ENOENT, 'mmMap did not find segMapFile:', segMapFile)
 			with open(segMapFile, 'rU') as f:
@@ -169,16 +173,24 @@ class mmMap():
 	@property
 	def stacks(self):
 		"""
-		List of :class:`PyMapManager.mmStack` in the map.
+		List of :class:`pymapmanager.mmStack` in the map.
 		"""
 		return self._stacks
+
+	@property
+	def numMapSegments(self):
+		"""The number of line segments in the map.
+		Corresponding segments are connected together with the segMap.
+		"""
+		numSegments = self.segRunMap.shape[0]
+		return numSegments
 
 	def __str__(self):
 		objCount = 0
 		for stack in self.stacks:
 			objCount += stack.numObj
 		return ('map:' + self.name
-			+ ' segments:' + str(self.getNumSegments())
+			+ ' map segments:' + str(self.numMapSegments)
 			+ ' stacks:' + str(self.numSessions)
 			+ ' total object:' + str(objCount))
 
@@ -193,16 +205,16 @@ class mmMap():
 		Get a value from the map (not from a stack!).
 
 		Args:
-		    name: Name of map stat
-		    sessionNumber: Session number
+			name: Name of map stat
+			sessionNumber: Session number
 
 		Returns:
-		    Str (this is a single value)
+			Str (this is a single value)
 
 		Examples::
 
-		    m.getValue('voxelx', 5) # get the x voxel size of stack 5 (in um/pixel)
-		    m.getValue('hsStack',3) # get the name of stack 3
+			m.getValue('voxelx', 5) # get the x voxel size of stack 5 (in um/pixel)
+			m.getValue('hsStack',3) # get the name of stack 3
 		"""
 		return self.table.loc[name].iloc[sessionNumber] # .loc specifies row, .iloc specifies a column
 
@@ -217,7 +229,7 @@ class mmMap():
 		"""
 
 		Args:
-		    pd (dict): Fill in mmUtil.PLOT_DICT
+			pd (dict): Fill in mmUtil.PLOT_DICT
 
 		Returns pd with::
 
@@ -336,18 +348,18 @@ class mmMap():
 		Get values of a stack statistic across all stacks in the map
 
 		Args:
-		    stat (str): The stack statistic to get (corresponds to a column in mmStack.stackdb)
+			stat (str): The stack statistic to get (corresponds to a column in mmStack.stackdb)
 			roiType (str): xxx
 			segmentID (list): xxx
 			plotBad (boolean): xxx
 
 		Returns:
-		    2D numpy array of stat values. Each row is a run of objects connected across sessions,
-		    columns are sessions, each [i][j] is a stat value
+			2D numpy array of stat values. Each row is a run of objects connected across sessions,
+			columns are sessions, each [i][j] is a stat value
 		"""
 
 		if roiType not in ROI_TYPES:
-			errStr = 'error: mmMap.getMapValues2() stat "' + stat + '" is not in ' + ','.join(ROI_TYPES)
+			errStr = 'error: mmMap.getMapValues2() stat "' + roiType + '" is not in ' + ','.join(ROI_TYPES)
 			raise ValueError(errStr)
 
 		plotDict = newplotdict()
@@ -361,16 +373,11 @@ class mmMap():
 
 		return plotDict['x']
 
-	def getNumSegments(self):
-		"""Get the number of map line segments."""
-		numSegments = self.segRunMap.shape[0]
-		return numSegments
-
 	def _buildRunMap(self, theMap):
 		"""Internal function. Converts 3D objMap into a 2D run map. A run map must be float as it uses np.NaN
 
 		Args:
-		    theMap: Either self.objMap or self.segMap
+			theMap: Either self.objMap or self.segMap
 
 		Returns:
 			A numpy ndarray run map
@@ -425,68 +432,11 @@ class mmMap():
 		Given a map centric segment index (row in segRunMap), tell us the stack centric segmentID for session sessIdx
 
 		Args:
-		    segmentNumber (int): Map centric segment index, row in segRunMap
-		    sessIdx (int): Session number
+			segmentNumber (int): Map centric segment index, row in segRunMap
+			sessIdx (int): Session number
 
 		Returns: int: stack centric segmentID or nan if no corresponding segment in that session
 		"""
 		return self.segRunMap[segmentNumber][sessIdx] # can be nan
 
 
-######################################################################
-class mmMapPool():
-    """
-    Load all maps in a folder.
-
-    Args:
-        path (str): Full path to a folder. This folder should contain folders of maps.
-
-    Example::
-
-        path = '/Users/cudmore/MapManagerData/richard/Nancy/'
-        maps = mmMapPool(path)
-        for map in maps:
-            print map
-    """
-
-    def __init__(self, path):
-        self._maps = []
-
-        startTime = time.time()
-
-        if os.path.isdir(path):
-            folders = glob(path+'/*/')
-            for folder in folders:
-                mapName = os.path.basename(folder[:-1])
-                mapFile = folder + mapName + '.txt'
-                if os.path.isfile(mapFile):
-                    print 'mmMapPool() loading map:', mapName
-                    map = mmMap(mapFile)
-                    self.maps.append(map)
-        else:
-            print 'error: mmMapPool() did not find path:', path
-
-        stopTime = time.time()
-        print 'mmMapPool() loaded', len(self.maps), 'maps in', stopTime-startTime, 'seconds.'
-
-    @property
-    def maps(self):
-        """
-        List of :class:`PyMapManager.mmMap` in the mmMapPool.
-        """
-        return self._maps
-
-    def __iter__(self):
-        i = 0
-        while i < len(self.maps):
-            yield self.maps[i]
-            i+=1
-
-    def __str__(self):
-        count = 0
-        for map in self:
-            for stack in map:
-                count += stack.numObj
-        return ('pool:'
-                + ' num maps:' + str(len(self.maps))
-                + ' num obj:' + str(count))

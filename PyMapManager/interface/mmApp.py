@@ -22,9 +22,9 @@ from errno import ENOENT
 
 from PyQt4 import QtGui, QtCore
 
-from PyMapManager.mmMap import mmMap
-from PyMapManager.interface.mmWindow import mmStackWindow, mmMapPlotWindow, mmStackPlotWindow
-from PyMapManager.mmUtil import newplotdict
+from pymapmanager.mmMap import mmMap
+from pymapmanager.interface.mmWindow import mmStackWindow, mmMapPlotWindow, mmStackPlotWindow
+from pymapmanager.mmUtil import newplotdict
 
 class mmApplicationWindow(QtGui.QMainWindow):
     """Main PyMapManager applicaiton window. This holds list widgets to display: maps, sessions, segments, and stats"""
@@ -334,7 +334,7 @@ class mmApplicationWindow(QtGui.QMainWindow):
         self.segListWidget.clear()
         item = QtGui.QListWidgetItem('All')
         self.segListWidget.addItem(item)
-        for i in range(self.maps[idx].getNumSegments()):
+        for i in range(self.maps[idx].numMapSegments):
             item = QtGui.QListWidgetItem("%i" % i)
             self.segListWidget.addItem(item)
         self.segListWidget.setCurrentRow(0)

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>PyMapManager.mmMap &mdash; PyMapManager a1 documentation</title>
+  <title>pymapmanager.mmMap &mdash; PyMapManager a1 documentation</title>
   
 
   
@@ -135,7 +135,7 @@
         
           <li><a href="../index.html">Module code</a> &raquo;</li>
         
-      <li>PyMapManager.mmMap</li>
+      <li>pymapmanager.mmMap</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -152,49 +152,41 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <h1>Source code for PyMapManager.mmMap</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">A mmMap is a time-series of :class:`PyMapManager.mmStack` plus some book-keeping to link corresponding annotations</span>
-<span class="sd">between stacks and to link corresponding line segments between stacks.</span>
-
-<span class="sd">Details::</span>
-
-<span class="sd">	stacks: list of :class:`PyMapManager.mmStack`</span>
-<span class="sd">&quot;&quot;&quot;</span>
-
-<span class="kn">import</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">io</span><span class="o">,</span> <span class="nn">time</span><span class="o">,</span> <span class="nn">copy</span>
+  <h1>Source code for pymapmanager.mmMap</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">io</span><span class="o">,</span> <span class="nn">time</span><span class="o">,</span> <span class="nn">copy</span>
 <span class="kn">from</span> <span class="nn">errno</span> <span class="k">import</span> <span class="n">ENOENT</span>
-<span class="kn">from</span> <span class="nn">glob</span> <span class="k">import</span> <span class="n">glob</span> <span class="c1"># for pool</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">PyMapManager.mmUtil</span> <span class="k">import</span> <span class="n">ROI_TYPES</span><span class="p">,</span> <span class="n">newplotdict</span>
-<span class="kn">from</span> <span class="nn">PyMapManager.mmStack</span> <span class="k">import</span> <span class="n">mmStack</span>
-<span class="kn">from</span> <span class="nn">PyMapManager.mmio</span> <span class="k">import</span> <span class="n">mmio</span>
+<span class="kn">from</span> <span class="nn">pymapmanager.mmUtil</span> <span class="k">import</span> <span class="n">ROI_TYPES</span><span class="p">,</span> <span class="n">newplotdict</span>
+<span class="kn">from</span> <span class="nn">pymapmanager.mmStack</span> <span class="k">import</span> <span class="n">mmStack</span>
+<span class="kn">from</span> <span class="nn">pymapmanager.mmio</span> <span class="k">import</span> <span class="n">mmio</span>
 
 <span class="sd">&#39;&#39;&#39;3D numpy array, rows are stack centric indices, columns are sessions, 3rd dimension is:</span>
-<span class="sd">    [0] idx, [1] next, [2] nextTP, [3] prev, [4] prevTP</span>
-<span class="sd">    [5] blank, [6] runIdx, [7] dynType, [8] forced</span>
-<span class="sd">    [9] nodeType, [10] segmentID, [11] splitIdx</span>
+<span class="sd">	[0] idx, [1] next, [2] nextTP, [3] prev, [4] prevTP</span>
+<span class="sd">	[5] blank, [6] runIdx, [7] dynType, [8] forced</span>
+<span class="sd">	[9] nodeType, [10] segmentID, [11] splitIdx</span>
 <span class="sd">&#39;&#39;&#39;</span>
 
-<div class="viewcode-block" id="mmMap"><a class="viewcode-back" href="../../PyMapManager.html#PyMapManager.mmMap.mmMap">[docs]</a><span class="k">class</span> <span class="nc">mmMap</span><span class="p">():</span>
+<div class="viewcode-block" id="mmMap"><a class="viewcode-back" href="../../pymapmanager.html#pymapmanager.mmMap.mmMap">[docs]</a><span class="k">class</span> <span class="nc">mmMap</span><span class="p">():</span>
 	<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">	A time-series of :class:`pymapmanager.mmStack` plus some book-keeping to link corresponding annotations</span>
+<span class="sd">	and segments between stacks.</span>
+
 <span class="sd">	Args:</span>
 <span class="sd">		filePath (str): Full file path to .txt file for the map. File is inside map folder, for map a5n it is /a5n/a5n.txt</span>
+<span class="sd">		urlmap (str): Name of the map to load from a :class:`pymapmanager.mmio` online repository.</span>
 
 <span class="sd">	Example::</span>
 
-<span class="sd">		from PyMapManager.mmMap import mmMap</span>
+<span class="sd">		from pymapmanager.mmMap import mmMap</span>
 <span class="sd">		file = &#39;/Users/cudmore/Desktop/data/rr30a/rr30a.txt&#39;</span>
 <span class="sd">		m = mmMap(filePath=path)</span>
 
-<span class="sd">	Once created and populated with stack, get the ith mmStack using::</span>
-
+<span class="sd">		# Get the ith mmStack using::</span>
 <span class="sd">		stack = m.stacks[i]</span>
 
-<span class="sd">	Use getMapValues2() to retrieve stack annotations (for the given segmentID) across the entire map::</span>
-
+<span class="sd">		# Use getMapValues2() to retrieve stack annotations (for the given segmentID) across the entire map::</span>
 <span class="sd">		pDist_values = m.getMapValues2(&#39;pDist&#39;, segmentID=[3])</span>
 <span class="sd">	&quot;&quot;&quot;</span>
 
@@ -205,7 +197,7 @@
 		<span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Full file path to map file</span>
 <span class="sd">		&quot;&quot;&quot;</span>
-		<span class="bp">self</span><span class="o">.</span><span class="n">folder</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">_folder</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
 		<span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Path to enclosing folder, ends in &#39;/&#39;.</span>
 <span class="sd">		&quot;&quot;&quot;</span>
@@ -222,8 +214,20 @@
 
 		<span class="bp">self</span><span class="o">.</span><span class="n">server</span> <span class="o">=</span> <span class="kc">None</span>
 		<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">		Pointer to :class:`PyMapManager.mmio` server connection.</span>
+<span class="sd">		Pointer to :class:`pymapmanager.mmio` server connection.</span>
 <span class="sd">		Only used to load from urlmap.</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+
+		<span class="bp">self</span><span class="o">.</span><span class="n">objMap</span> <span class="o">=</span> <span class="kc">None</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		2D array where each row is a run of annotations.</span>
+<span class="sd">		objMap[i][j] gives us a mmStack centric index into mmStack.stackdb.</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+
+		<span class="bp">self</span><span class="o">.</span><span class="n">segMap</span> <span class="o">=</span> <span class="kc">None</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		2D array where each row is a run of segments.</span>
+<span class="sd">		segMap[i][j] gives us mmStack centric index into mmStack._line</span>
 <span class="sd">		&quot;&quot;&quot;</span>
 
 		<span class="n">doFile</span> <span class="o">=</span> <span class="kc">True</span>
@@ -231,7 +235,7 @@
 			<span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">filePath</span><span class="p">):</span>
 				<span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="n">ENOENT</span><span class="p">,</span> <span class="s1">&#39;mmMap did not find filePath:&#39;</span><span class="p">,</span> <span class="n">filePath</span><span class="p">)</span>
 			<span class="bp">self</span><span class="o">.</span><span class="n">filePath</span> <span class="o">=</span> <span class="n">filePath</span> <span class="c1">#  Path to file used to open map.&quot;&quot;&quot;</span>
-			<span class="bp">self</span><span class="o">.</span><span class="n">folder</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">filePath</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">_folder</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">filePath</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span>
 			<span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">filePath</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39;.txt&#39;</span><span class="p">)</span>
 			<span class="bp">self</span><span class="o">.</span><span class="n">table</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_table</span><span class="p">(</span><span class="n">filePath</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 		<span class="k">elif</span> <span class="n">urlmap</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -245,7 +249,7 @@
 		<span class="c1">###############################################################################</span>
 		<span class="c1"># objMap (3d)</span>
 		<span class="k">if</span> <span class="n">doFile</span><span class="p">:</span>
-			<span class="n">objMapFile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">folder</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;_objMap.txt&#39;</span>
+			<span class="n">objMapFile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_folder</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;_objMap.txt&#39;</span>
 			<span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">objMapFile</span><span class="p">):</span>
 				<span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="n">ENOENT</span><span class="p">,</span> <span class="s1">&#39;mmMap did not find objMapFile:&#39;</span><span class="p">,</span> <span class="n">objMapFile</span><span class="p">)</span>
 			<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">objMapFile</span><span class="p">,</span> <span class="s1">&#39;rU&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
@@ -270,7 +274,7 @@
 		<span class="c1">###############################################################################</span>
 		<span class="c1"># segMap (3d)</span>
 		<span class="k">if</span> <span class="n">doFile</span><span class="p">:</span>
-			<span class="n">segMapFile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">folder</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;_segMap.txt&#39;</span>
+			<span class="n">segMapFile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_folder</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;_segMap.txt&#39;</span>
 			<span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">segMapFile</span><span class="p">):</span>
 				<span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="n">ENOENT</span><span class="p">,</span> <span class="s1">&#39;mmMap did not find segMapFile:&#39;</span><span class="p">,</span> <span class="n">segMapFile</span><span class="p">)</span>
 			<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">segMapFile</span><span class="p">,</span> <span class="s1">&#39;rU&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
@@ -324,16 +328,24 @@
 	<span class="nd">@property</span>
 	<span class="k">def</span> <span class="nf">stacks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 		<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">		List of :class:`PyMapManager.mmStack` in the map.</span>
+<span class="sd">		List of :class:`pymapmanager.mmStack` in the map.</span>
 <span class="sd">		&quot;&quot;&quot;</span>
 		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_stacks</span>
+
+	<span class="nd">@property</span>
+	<span class="k">def</span> <span class="nf">numMapSegments</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;The number of line segments in the map.</span>
+<span class="sd">		Corresponding segments are connected together with the segMap.</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="n">numSegments</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">segRunMap</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+		<span class="k">return</span> <span class="n">numSegments</span>
 
 	<span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 		<span class="n">objCount</span> <span class="o">=</span> <span class="mi">0</span>
 		<span class="k">for</span> <span class="n">stack</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">stacks</span><span class="p">:</span>
 			<span class="n">objCount</span> <span class="o">+=</span> <span class="n">stack</span><span class="o">.</span><span class="n">numObj</span>
 		<span class="k">return</span> <span class="p">(</span><span class="s1">&#39;map:&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
-			<span class="o">+</span> <span class="s1">&#39; segments:&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">getNumSegments</span><span class="p">())</span>
+			<span class="o">+</span> <span class="s1">&#39; map segments:&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">numMapSegments</span><span class="p">)</span>
 			<span class="o">+</span> <span class="s1">&#39; stacks:&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">numSessions</span><span class="p">)</span>
 			<span class="o">+</span> <span class="s1">&#39; total object:&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">objCount</span><span class="p">))</span>
 
@@ -343,21 +355,21 @@
 			<span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">stacks</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
 			<span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
 
-<div class="viewcode-block" id="mmMap.getValue"><a class="viewcode-back" href="../../PyMapManager.html#PyMapManager.mmMap.mmMap.getValue">[docs]</a>	<span class="k">def</span> <span class="nf">getValue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">sessionNumber</span><span class="p">):</span>
+<div class="viewcode-block" id="mmMap.getValue"><a class="viewcode-back" href="../../pymapmanager.html#pymapmanager.mmMap.mmMap.getValue">[docs]</a>	<span class="k">def</span> <span class="nf">getValue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">sessionNumber</span><span class="p">):</span>
 		<span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Get a value from the map (not from a stack!).</span>
 
 <span class="sd">		Args:</span>
-<span class="sd">		    name: Name of map stat</span>
-<span class="sd">		    sessionNumber: Session number</span>
+<span class="sd">			name: Name of map stat</span>
+<span class="sd">			sessionNumber: Session number</span>
 
 <span class="sd">		Returns:</span>
-<span class="sd">		    Str (this is a single value)</span>
+<span class="sd">			Str (this is a single value)</span>
 
 <span class="sd">		Examples::</span>
 
-<span class="sd">		    m.getValue(&#39;voxelx&#39;, 5) # get the x voxel size of stack 5 (in um/pixel)</span>
-<span class="sd">		    m.getValue(&#39;hsStack&#39;,3) # get the name of stack 3</span>
+<span class="sd">			m.getValue(&#39;voxelx&#39;, 5) # get the x voxel size of stack 5 (in um/pixel)</span>
+<span class="sd">			m.getValue(&#39;hsStack&#39;,3) # get the name of stack 3</span>
 <span class="sd">		&quot;&quot;&quot;</span>
 		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">sessionNumber</span><span class="p">]</span> <span class="c1"># .loc specifies row, .iloc specifies a column</span></div>
 
@@ -368,11 +380,11 @@
 			<span class="n">ret</span> <span class="o">=</span> <span class="n">ret</span><span class="p">[:</span><span class="o">-</span><span class="mi">4</span><span class="p">]</span>
 		<span class="k">return</span> <span class="n">ret</span>
 
-<div class="viewcode-block" id="mmMap.getMapValues3"><a class="viewcode-back" href="../../PyMapManager.html#PyMapManager.mmMap.mmMap.getMapValues3">[docs]</a>	<span class="k">def</span> <span class="nf">getMapValues3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pd</span><span class="p">):</span>
+<div class="viewcode-block" id="mmMap.getMapValues3"><a class="viewcode-back" href="../../pymapmanager.html#pymapmanager.mmMap.mmMap.getMapValues3">[docs]</a>	<span class="k">def</span> <span class="nf">getMapValues3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pd</span><span class="p">):</span>
 		<span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">		Args:</span>
-<span class="sd">		    pd (dict): Fill in mmUtil.PLOT_DICT</span>
+<span class="sd">			pd (dict): Fill in mmUtil.PLOT_DICT</span>
 
 <span class="sd">		Returns pd with::</span>
 
@@ -486,23 +498,23 @@
 		<span class="n">pd</span><span class="p">[</span><span class="s1">&#39;runrow&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">yRunRow</span>
 		<span class="k">return</span> <span class="n">pd</span></div>
 
-<div class="viewcode-block" id="mmMap.getMapValues2"><a class="viewcode-back" href="../../PyMapManager.html#PyMapManager.mmMap.mmMap.getMapValues2">[docs]</a>	<span class="k">def</span> <span class="nf">getMapValues2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stat</span><span class="p">,</span> <span class="n">roiType</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;spineROI&#39;</span><span class="p">],</span> <span class="n">segmentID</span><span class="o">=</span><span class="p">[],</span> <span class="n">plotBad</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">plotIntBad</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="mmMap.getMapValues2"><a class="viewcode-back" href="../../pymapmanager.html#pymapmanager.mmMap.mmMap.getMapValues2">[docs]</a>	<span class="k">def</span> <span class="nf">getMapValues2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stat</span><span class="p">,</span> <span class="n">roiType</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;spineROI&#39;</span><span class="p">],</span> <span class="n">segmentID</span><span class="o">=</span><span class="p">[],</span> <span class="n">plotBad</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">plotIntBad</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 		<span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Get values of a stack statistic across all stacks in the map</span>
 
 <span class="sd">		Args:</span>
-<span class="sd">		    stat (str): The stack statistic to get (corresponds to a column in mmStack.stackdb)</span>
+<span class="sd">			stat (str): The stack statistic to get (corresponds to a column in mmStack.stackdb)</span>
 <span class="sd">			roiType (str): xxx</span>
 <span class="sd">			segmentID (list): xxx</span>
 <span class="sd">			plotBad (boolean): xxx</span>
 
 <span class="sd">		Returns:</span>
-<span class="sd">		    2D numpy array of stat values. Each row is a run of objects connected across sessions,</span>
-<span class="sd">		    columns are sessions, each [i][j] is a stat value</span>
+<span class="sd">			2D numpy array of stat values. Each row is a run of objects connected across sessions,</span>
+<span class="sd">			columns are sessions, each [i][j] is a stat value</span>
 <span class="sd">		&quot;&quot;&quot;</span>
 
 		<span class="k">if</span> <span class="n">roiType</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ROI_TYPES</span><span class="p">:</span>
-			<span class="n">errStr</span> <span class="o">=</span> <span class="s1">&#39;error: mmMap.getMapValues2() stat &quot;&#39;</span> <span class="o">+</span> <span class="n">stat</span> <span class="o">+</span> <span class="s1">&#39;&quot; is not in &#39;</span> <span class="o">+</span> <span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROI_TYPES</span><span class="p">)</span>
+			<span class="n">errStr</span> <span class="o">=</span> <span class="s1">&#39;error: mmMap.getMapValues2() stat &quot;&#39;</span> <span class="o">+</span> <span class="n">roiType</span> <span class="o">+</span> <span class="s1">&#39;&quot; is not in &#39;</span> <span class="o">+</span> <span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROI_TYPES</span><span class="p">)</span>
 			<span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">errStr</span><span class="p">)</span>
 
 		<span class="n">plotDict</span> <span class="o">=</span> <span class="n">newplotdict</span><span class="p">()</span>
@@ -516,16 +528,11 @@
 
 		<span class="k">return</span> <span class="n">plotDict</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="mmMap.getNumSegments"><a class="viewcode-back" href="../../PyMapManager.html#PyMapManager.mmMap.mmMap.getNumSegments">[docs]</a>	<span class="k">def</span> <span class="nf">getNumSegments</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;Get the number of map line segments.&quot;&quot;&quot;</span>
-		<span class="n">numSegments</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">segRunMap</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-		<span class="k">return</span> <span class="n">numSegments</span></div>
-
 	<span class="k">def</span> <span class="nf">_buildRunMap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">theMap</span><span class="p">):</span>
 		<span class="sd">&quot;&quot;&quot;Internal function. Converts 3D objMap into a 2D run map. A run map must be float as it uses np.NaN</span>
 
 <span class="sd">		Args:</span>
-<span class="sd">		    theMap: Either self.objMap or self.segMap</span>
+<span class="sd">			theMap: Either self.objMap or self.segMap</span>
 
 <span class="sd">		Returns:</span>
 <span class="sd">			A numpy ndarray run map</span>
@@ -580,71 +587,14 @@
 <span class="sd">		Given a map centric segment index (row in segRunMap), tell us the stack centric segmentID for session sessIdx</span>
 
 <span class="sd">		Args:</span>
-<span class="sd">		    segmentNumber (int): Map centric segment index, row in segRunMap</span>
-<span class="sd">		    sessIdx (int): Session number</span>
+<span class="sd">			segmentNumber (int): Map centric segment index, row in segRunMap</span>
+<span class="sd">			sessIdx (int): Session number</span>
 
 <span class="sd">		Returns: int: stack centric segmentID or nan if no corresponding segment in that session</span>
 <span class="sd">		&quot;&quot;&quot;</span>
 		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">segRunMap</span><span class="p">[</span><span class="n">segmentNumber</span><span class="p">][</span><span class="n">sessIdx</span><span class="p">]</span> <span class="c1"># can be nan</span></div>
 
 
-<span class="c1">######################################################################</span>
-<div class="viewcode-block" id="mmMapPool"><a class="viewcode-back" href="../../PyMapManager.html#PyMapManager.mmMap.mmMapPool">[docs]</a><span class="k">class</span> <span class="nc">mmMapPool</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Load all maps in a folder.</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        path (str): Full path to a folder. This folder should contain folders of maps.</span>
-
-<span class="sd">    Example::</span>
-
-<span class="sd">        path = &#39;/Users/cudmore/MapManagerData/richard/Nancy/&#39;</span>
-<span class="sd">        maps = mmMapPool(path)</span>
-<span class="sd">        for map in maps:</span>
-<span class="sd">            print map</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_maps</span> <span class="o">=</span> <span class="p">[]</span>
-
-        <span class="n">startTime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-
-        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
-            <span class="n">folders</span> <span class="o">=</span> <span class="n">glob</span><span class="p">(</span><span class="n">path</span><span class="o">+</span><span class="s1">&#39;/*/&#39;</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">folder</span> <span class="ow">in</span> <span class="n">folders</span><span class="p">:</span>
-                <span class="n">mapName</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">folder</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
-                <span class="n">mapFile</span> <span class="o">=</span> <span class="n">folder</span> <span class="o">+</span> <span class="n">mapName</span> <span class="o">+</span> <span class="s1">&#39;.txt&#39;</span>
-                <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">mapFile</span><span class="p">):</span>
-                    <span class="nb">print</span> <span class="s1">&#39;mmMapPool() loading map:&#39;</span><span class="p">,</span> <span class="n">mapName</span>
-                    <span class="nb">map</span> <span class="o">=</span> <span class="n">mmMap</span><span class="p">(</span><span class="n">mapFile</span><span class="p">)</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">maps</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">map</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="nb">print</span> <span class="s1">&#39;error: mmMapPool() did not find path:&#39;</span><span class="p">,</span> <span class="n">path</span>
-
-        <span class="n">stopTime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-        <span class="nb">print</span> <span class="s1">&#39;mmMapPool() loaded&#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">maps</span><span class="p">),</span> <span class="s1">&#39;maps in&#39;</span><span class="p">,</span> <span class="n">stopTime</span><span class="o">-</span><span class="n">startTime</span><span class="p">,</span> <span class="s1">&#39;seconds.&#39;</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">maps</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        List of :class:`PyMapManager.mmMap` in the mmMapPool.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_maps</span>
-
-    <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">maps</span><span class="p">):</span>
-            <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">maps</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-            <span class="n">i</span><span class="o">+=</span><span class="mi">1</span>
-
-    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="k">for</span> <span class="nb">map</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">stack</span> <span class="ow">in</span> <span class="nb">map</span><span class="p">:</span>
-                <span class="n">count</span> <span class="o">+=</span> <span class="n">stack</span><span class="o">.</span><span class="n">numObj</span>
-        <span class="k">return</span> <span class="p">(</span><span class="s1">&#39;pool:&#39;</span>
-                <span class="o">+</span> <span class="s1">&#39; num maps:&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">maps</span><span class="p">))</span>
-                <span class="o">+</span> <span class="s1">&#39; num obj:&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">count</span><span class="p">))</span></div>
 </pre></div>
 
            </div>

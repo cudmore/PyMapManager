@@ -20,15 +20,8 @@ from matplotlib.figure import Figure
 
 from PyQt4 import QtGui, QtCore
 
-from mmMap import mmMap
-#from mmMap import mmMapPool
-#from mmStackPlot import mmStackPlot
-#from mmMapPlot import mmMapPlot
-
-#progname = os.path.basename(sys.argv[0])
-#progversion = "0.1"
-
-from PyMapManager.interface.mmApp import mmApplicationWindow
+from pymapmanager.mmMap import mmMap
+from pymapmanager.interface.mmApp import mmApplicationWindow
 
 if __name__ == '__main__':
 

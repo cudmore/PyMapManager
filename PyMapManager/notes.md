@@ -85,6 +85,13 @@ To build the docs
 This should put output into root /docs/ folder (holding index.html) and github /docs/ option should work?
 
     cd ~/Dropbox/PyMapManager/PyMapManager/docs/ #this has source directory with .rst files
+    
+    # if i add a module i need to do this
+    sphinx-apidoc -f -o source ~/Dropbox/PyMapManager
+    # or
+    sphinx-apidoc -fe -o source ~/Dropbox/PyMapManager
+    
+    # generic rebuild (do this all the time)
     sphinx-build -b html source/ ../../docs
     
 ### Github

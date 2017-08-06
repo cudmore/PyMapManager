@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>PyMapManager.interface.mmApp &mdash; PyMapManager a1 documentation</title>
+  <title>pymapmanager.interface.mmApp &mdash; PyMapManager a1 documentation</title>
   
 
   
@@ -135,7 +135,7 @@
         
           <li><a href="../../index.html">Module code</a> &raquo;</li>
         
-      <li>PyMapManager.interface.mmApp</li>
+      <li>pymapmanager.interface.mmApp</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -152,7 +152,7 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <h1>Source code for PyMapManager.interface.mmApp</h1><div class="highlight"><pre>
+  <h1>Source code for pymapmanager.interface.mmApp</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Main PyMapManager application interface using PyQt interface library.</span>
 
@@ -177,11 +177,11 @@
 
 <span class="kn">from</span> <span class="nn">PyQt4</span> <span class="k">import</span> <span class="n">QtGui</span><span class="p">,</span> <span class="n">QtCore</span>
 
-<span class="kn">from</span> <span class="nn">PyMapManager.mmMap</span> <span class="k">import</span> <span class="n">mmMap</span>
-<span class="kn">from</span> <span class="nn">PyMapManager.interface.mmWindow</span> <span class="k">import</span> <span class="n">mmStackWindow</span><span class="p">,</span> <span class="n">mmMapPlotWindow</span><span class="p">,</span> <span class="n">mmStackPlotWindow</span>
-<span class="kn">from</span> <span class="nn">PyMapManager.mmUtil</span> <span class="k">import</span> <span class="n">newplotdict</span>
+<span class="kn">from</span> <span class="nn">pymapmanager.mmMap</span> <span class="k">import</span> <span class="n">mmMap</span>
+<span class="kn">from</span> <span class="nn">pymapmanager.interface.mmWindow</span> <span class="k">import</span> <span class="n">mmStackWindow</span><span class="p">,</span> <span class="n">mmMapPlotWindow</span><span class="p">,</span> <span class="n">mmStackPlotWindow</span>
+<span class="kn">from</span> <span class="nn">pymapmanager.mmUtil</span> <span class="k">import</span> <span class="n">newplotdict</span>
 
-<div class="viewcode-block" id="mmApplicationWindow"><a class="viewcode-back" href="../../../PyMapManager.interface.html#PyMapManager.interface.mmApp.mmApplicationWindow">[docs]</a><span class="k">class</span> <span class="nc">mmApplicationWindow</span><span class="p">(</span><span class="n">QtGui</span><span class="o">.</span><span class="n">QMainWindow</span><span class="p">):</span>
+<div class="viewcode-block" id="mmApplicationWindow"><a class="viewcode-back" href="../../../pymapmanager.interface.html#pymapmanager.interface.mmApp.mmApplicationWindow">[docs]</a><span class="k">class</span> <span class="nc">mmApplicationWindow</span><span class="p">(</span><span class="n">QtGui</span><span class="o">.</span><span class="n">QMainWindow</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Main PyMapManager applicaiton window. This holds list widgets to display: maps, sessions, segments, and stats&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -412,13 +412,13 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">setAcceptDrops</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
 
-<div class="viewcode-block" id="mmApplicationWindow.setDefaultRoiType"><a class="viewcode-back" href="../../../PyMapManager.interface.html#PyMapManager.interface.mmApp.mmApplicationWindow.setDefaultRoiType">[docs]</a>    <span class="k">def</span> <span class="nf">setDefaultRoiType</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+<div class="viewcode-block" id="mmApplicationWindow.setDefaultRoiType"><a class="viewcode-back" href="../../../pymapmanager.interface.html#pymapmanager.interface.mmApp.mmApplicationWindow.setDefaultRoiType">[docs]</a>    <span class="k">def</span> <span class="nf">setDefaultRoiType</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Respond to roiType popup/QComboBox&quot;&quot;&quot;</span>
         <span class="n">d</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getState</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">d</span><span class="p">[</span><span class="s1">&#39;map&#39;</span><span class="p">]:</span>
             <span class="n">d</span><span class="p">[</span><span class="s1">&#39;map&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">defaultRoiType</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">text</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="mmApplicationWindow.broadcastevent"><a class="viewcode-back" href="../../../PyMapManager.interface.html#PyMapManager.interface.mmApp.mmApplicationWindow.broadcastevent">[docs]</a>    <span class="k">def</span> <span class="nf">broadcastevent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+<div class="viewcode-block" id="mmApplicationWindow.broadcastevent"><a class="viewcode-back" href="../../../pymapmanager.interface.html#pymapmanager.interface.mmApp.mmApplicationWindow.broadcastevent">[docs]</a>    <span class="k">def</span> <span class="nf">broadcastevent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Broadcast an event to all open application windows (self._windows) and call receiveevent(event)&quot;&quot;&quot;</span>
 
         <span class="c1"># if we don;t get a runMapRow but have a spine selection from a map then fill it in</span>
@@ -432,14 +432,14 @@
         <span class="k">for</span> <span class="n">window</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_windows</span><span class="p">:</span>
             <span class="n">window</span><span class="o">.</span><span class="n">receiveevent</span><span class="p">(</span><span class="n">event</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="mmApplicationWindow.dragEnterEvent"><a class="viewcode-back" href="../../../PyMapManager.interface.html#PyMapManager.interface.mmApp.mmApplicationWindow.dragEnterEvent">[docs]</a>    <span class="k">def</span> <span class="nf">dragEnterEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+<div class="viewcode-block" id="mmApplicationWindow.dragEnterEvent"><a class="viewcode-back" href="../../../pymapmanager.interface.html#pymapmanager.interface.mmApp.mmApplicationWindow.dragEnterEvent">[docs]</a>    <span class="k">def</span> <span class="nf">dragEnterEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Changes the look of the main window when a file/folder is dragged over the window.&quot;&quot;&quot;</span>
         <span class="nb">print</span> <span class="n">event</span><span class="o">.</span><span class="n">mimeData</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">mimeData</span><span class="p">()</span><span class="o">.</span><span class="n">hasFormat</span><span class="p">(</span><span class="s2">&quot;text/uri-list&quot;</span><span class="p">):</span>
             <span class="n">event</span><span class="o">.</span><span class="n">acceptProposedAction</span><span class="p">()</span>
         <span class="n">event</span><span class="o">.</span><span class="n">acceptProposedAction</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="mmApplicationWindow.dropEvent"><a class="viewcode-back" href="../../../PyMapManager.interface.html#PyMapManager.interface.mmApp.mmApplicationWindow.dropEvent">[docs]</a>    <span class="k">def</span> <span class="nf">dropEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+<div class="viewcode-block" id="mmApplicationWindow.dropEvent"><a class="viewcode-back" href="../../../pymapmanager.interface.html#pymapmanager.interface.mmApp.mmApplicationWindow.dropEvent">[docs]</a>    <span class="k">def</span> <span class="nf">dropEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Handles opening a map, stack, or folder of maps/stacks when they are dropped on the main window.&quot;&quot;&quot;</span>
         <span class="n">urls</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">mimeData</span><span class="p">()</span><span class="o">.</span><span class="n">urls</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">urls</span><span class="p">:</span>
@@ -450,7 +450,7 @@
     <span class="c1"># def mainToolbar_callback(self, a):</span>
     <span class="c1">#    print &#39;mainToolbar_callback:&#39;, a</span>
 
-<div class="viewcode-block" id="mmApplicationWindow.loadMap"><a class="viewcode-back" href="../../../PyMapManager.interface.html#PyMapManager.interface.mmApp.mmApplicationWindow.loadMap">[docs]</a>    <span class="k">def</span> <span class="nf">loadMap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">urlmap</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="mmApplicationWindow.loadMap"><a class="viewcode-back" href="../../../pymapmanager.interface.html#pymapmanager.interface.mmApp.mmApplicationWindow.loadMap">[docs]</a>    <span class="k">def</span> <span class="nf">loadMap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">urlmap</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Load a mmMap into application. Application keeps &#39;maps&#39;, a list of maps.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">urlmap</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">serverurl</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
@@ -472,7 +472,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">mapListWidget</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">selectMap</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="mmApplicationWindow.selectMap"><a class="viewcode-back" href="../../../PyMapManager.interface.html#PyMapManager.interface.mmApp.mmApplicationWindow.selectMap">[docs]</a>    <span class="k">def</span> <span class="nf">selectMap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">):</span>
+<div class="viewcode-block" id="mmApplicationWindow.selectMap"><a class="viewcode-back" href="../../../pymapmanager.interface.html#pymapmanager.interface.mmApp.mmApplicationWindow.selectMap">[docs]</a>    <span class="k">def</span> <span class="nf">selectMap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Update the interface when user selects a different map or a new map is loaded&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">statList</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">maps</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">stacks</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">stackdb</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">values</span>
 
@@ -489,7 +489,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">segListWidget</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
         <span class="n">item</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QListWidgetItem</span><span class="p">(</span><span class="s1">&#39;All&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">segListWidget</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">maps</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">getNumSegments</span><span class="p">()):</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">maps</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">numMapSegments</span><span class="p">):</span>
             <span class="n">item</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QListWidgetItem</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%i</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">i</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">segListWidget</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">segListWidget</span><span class="o">.</span><span class="n">setCurrentRow</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
@@ -522,30 +522,30 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">ystatListWidget</span><span class="o">.</span><span class="n">setCurrentRow</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">xstatListWidget</span><span class="o">.</span><span class="n">setCurrentRow</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="mmApplicationWindow.toolbarButton_callback"><a class="viewcode-back" href="../../../PyMapManager.interface.html#PyMapManager.interface.mmApp.mmApplicationWindow.toolbarButton_callback">[docs]</a>    <span class="k">def</span> <span class="nf">toolbarButton_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">buttonID</span><span class="p">):</span>
+<div class="viewcode-block" id="mmApplicationWindow.toolbarButton_callback"><a class="viewcode-back" href="../../../pymapmanager.interface.html#pymapmanager.interface.mmApp.mmApplicationWindow.toolbarButton_callback">[docs]</a>    <span class="k">def</span> <span class="nf">toolbarButton_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">buttonID</span><span class="p">):</span>
         <span class="nb">print</span> <span class="s1">&#39;toolbarButton_callback:&#39;</span><span class="p">,</span> <span class="n">buttonID</span>
         <span class="k">if</span> <span class="n">buttonID</span> <span class="o">==</span> <span class="s1">&#39;loadMapButton&#39;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">loadMap</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="mmApplicationWindow.map_list_changed"><a class="viewcode-back" href="../../../PyMapManager.interface.html#PyMapManager.interface.mmApp.mmApplicationWindow.map_list_changed">[docs]</a>    <span class="k">def</span> <span class="nf">map_list_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">curr</span><span class="p">,</span> <span class="n">prev</span><span class="p">):</span>
+<div class="viewcode-block" id="mmApplicationWindow.map_list_changed"><a class="viewcode-back" href="../../../pymapmanager.interface.html#pymapmanager.interface.mmApp.mmApplicationWindow.map_list_changed">[docs]</a>    <span class="k">def</span> <span class="nf">map_list_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">curr</span><span class="p">,</span> <span class="n">prev</span><span class="p">):</span>
         <span class="c1"># (curr,prev) are QListWidgetItem</span>
         <span class="nb">print</span> <span class="s1">&#39;ApplicationWindow.map_list_changed&#39;</span><span class="p">,</span> <span class="n">curr</span>
         <span class="nb">print</span> <span class="s1">&#39;   currentRow:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mapListWidget</span><span class="o">.</span><span class="n">currentRow</span><span class="p">()</span>
         <span class="nb">print</span> <span class="s1">&#39;   &#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mapListWidget</span><span class="o">.</span><span class="n">currentItem</span><span class="p">()</span><span class="o">.</span><span class="n">text</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="mmApplicationWindow.sess_list_changed"><a class="viewcode-back" href="../../../PyMapManager.interface.html#PyMapManager.interface.mmApp.mmApplicationWindow.sess_list_changed">[docs]</a>    <span class="k">def</span> <span class="nf">sess_list_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">curr</span><span class="p">,</span> <span class="n">prev</span><span class="p">):</span>
+<div class="viewcode-block" id="mmApplicationWindow.sess_list_changed"><a class="viewcode-back" href="../../../pymapmanager.interface.html#pymapmanager.interface.mmApp.mmApplicationWindow.sess_list_changed">[docs]</a>    <span class="k">def</span> <span class="nf">sess_list_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">curr</span><span class="p">,</span> <span class="n">prev</span><span class="p">):</span>
         <span class="c1"># (curr,prev) are QListWidgetItem</span>
         <span class="nb">print</span> <span class="s1">&#39;ApplicationWindow.sess_list_changed&#39;</span><span class="p">,</span> <span class="n">curr</span>
         <span class="nb">print</span> <span class="s1">&#39;   currentRow:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sessListWidget</span><span class="o">.</span><span class="n">currentRow</span><span class="p">()</span>
         <span class="nb">print</span> <span class="s1">&#39;   &#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sessListWidget</span><span class="o">.</span><span class="n">currentItem</span><span class="p">()</span><span class="o">.</span><span class="n">text</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="mmApplicationWindow.seg_list_changed"><a class="viewcode-back" href="../../../PyMapManager.interface.html#PyMapManager.interface.mmApp.mmApplicationWindow.seg_list_changed">[docs]</a>    <span class="k">def</span> <span class="nf">seg_list_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">curr</span><span class="p">,</span> <span class="n">prev</span><span class="p">):</span>
+<div class="viewcode-block" id="mmApplicationWindow.seg_list_changed"><a class="viewcode-back" href="../../../pymapmanager.interface.html#pymapmanager.interface.mmApp.mmApplicationWindow.seg_list_changed">[docs]</a>    <span class="k">def</span> <span class="nf">seg_list_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">curr</span><span class="p">,</span> <span class="n">prev</span><span class="p">):</span>
         <span class="c1"># (curr,prev) are QListWidgetItem</span>
         <span class="nb">print</span> <span class="s1">&#39;ApplicationWindow.seg_list_changed&#39;</span><span class="p">,</span> <span class="n">curr</span>
         <span class="nb">print</span> <span class="s1">&#39;   currentRow:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">segListWidget</span><span class="o">.</span><span class="n">currentRow</span><span class="p">()</span>
         <span class="nb">print</span> <span class="s1">&#39;   &#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">segListWidget</span><span class="o">.</span><span class="n">currentItem</span><span class="p">()</span><span class="o">.</span><span class="n">text</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="mmApplicationWindow.getState"><a class="viewcode-back" href="../../../PyMapManager.interface.html#PyMapManager.interface.mmApp.mmApplicationWindow.getState">[docs]</a>    <span class="k">def</span> <span class="nf">getState</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="mmApplicationWindow.getState"><a class="viewcode-back" href="../../../pymapmanager.interface.html#pymapmanager.interface.mmApp.mmApplicationWindow.getState">[docs]</a>    <span class="k">def</span> <span class="nf">getState</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Capture the full state of the interface including selected: map, session, segment, ystat, xstat.&quot;&quot;&quot;</span>
         <span class="n">plotDict</span> <span class="o">=</span> <span class="n">newplotdict</span><span class="p">()</span>
 
@@ -577,7 +577,7 @@
 
         <span class="k">return</span> <span class="n">plotDict</span></div>
 
-<div class="viewcode-block" id="mmApplicationWindow.closechildwindow"><a class="viewcode-back" href="../../../PyMapManager.interface.html#PyMapManager.interface.mmApp.mmApplicationWindow.closechildwindow">[docs]</a>    <span class="k">def</span> <span class="nf">closechildwindow</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">windowPtr</span><span class="p">):</span>
+<div class="viewcode-block" id="mmApplicationWindow.closechildwindow"><a class="viewcode-back" href="../../../pymapmanager.interface.html#pymapmanager.interface.mmApp.mmApplicationWindow.closechildwindow">[docs]</a>    <span class="k">def</span> <span class="nf">closechildwindow</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">windowPtr</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;called when we close a PlotWindow&quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_windows</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">windowPtr</span><span class="p">)</span>
@@ -587,7 +587,7 @@
 <span class="sd">                self._windows.remove(windowPtr)</span>
 <span class="sd">        &quot;&quot;&quot;</span></div>
 
-<div class="viewcode-block" id="mmApplicationWindow.plotStackButton_callback"><a class="viewcode-back" href="../../../PyMapManager.interface.html#PyMapManager.interface.mmApp.mmApplicationWindow.plotStackButton_callback">[docs]</a>    <span class="k">def</span> <span class="nf">plotStackButton_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="mmApplicationWindow.plotStackButton_callback"><a class="viewcode-back" href="../../../pymapmanager.interface.html#pymapmanager.interface.mmApp.mmApplicationWindow.plotStackButton_callback">[docs]</a>    <span class="k">def</span> <span class="nf">plotStackButton_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">print</span> <span class="s1">&#39;ApplicationWindow.plotStackButton_callback()&#39;</span>
 
         <span class="c1"># todo: add to list of open windows self._windows</span>
@@ -600,7 +600,7 @@
 
         <span class="n">plotwindow</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="mmApplicationWindow.plotMapButton_callback"><a class="viewcode-back" href="../../../PyMapManager.interface.html#PyMapManager.interface.mmApp.mmApplicationWindow.plotMapButton_callback">[docs]</a>    <span class="k">def</span> <span class="nf">plotMapButton_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="mmApplicationWindow.plotMapButton_callback"><a class="viewcode-back" href="../../../pymapmanager.interface.html#pymapmanager.interface.mmApp.mmApplicationWindow.plotMapButton_callback">[docs]</a>    <span class="k">def</span> <span class="nf">plotMapButton_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">print</span> <span class="s1">&#39;ApplicationWindow.plotMapButton_callback()&#39;</span>
 
         <span class="c1"># todo: add to list of open windows self._windows</span>
@@ -614,7 +614,7 @@
 
         <span class="n">plotwindow</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="mmApplicationWindow.plotmap0"><a class="viewcode-back" href="../../../PyMapManager.interface.html#PyMapManager.interface.mmApp.mmApplicationWindow.plotmap0">[docs]</a>    <span class="k">def</span> <span class="nf">plotmap0</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="mmApplicationWindow.plotmap0"><a class="viewcode-back" href="../../../pymapmanager.interface.html#pymapmanager.interface.mmApp.mmApplicationWindow.plotmap0">[docs]</a>    <span class="k">def</span> <span class="nf">plotmap0</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Plot a session versus pDist map. This responds to double-click of a map in the map list.&quot;&quot;&quot;</span>
 
         <span class="c1"># todo: add to list of open windows self._windows</span>
@@ -636,7 +636,7 @@
 
         <span class="n">plotwindow</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="mmApplicationWindow.plotStackImageButton_callback"><a class="viewcode-back" href="../../../PyMapManager.interface.html#PyMapManager.interface.mmApp.mmApplicationWindow.plotStackImageButton_callback">[docs]</a>    <span class="k">def</span> <span class="nf">plotStackImageButton_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="mmApplicationWindow.plotStackImageButton_callback"><a class="viewcode-back" href="../../../pymapmanager.interface.html#pymapmanager.interface.mmApp.mmApplicationWindow.plotStackImageButton_callback">[docs]</a>    <span class="k">def</span> <span class="nf">plotStackImageButton_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">print</span> <span class="s1">&#39;ApplicationWindow.plotStackImageButton_callback()&#39;</span>
 
         <span class="c1"># todo: add to list of open windows self._windows</span>
@@ -651,13 +651,13 @@
 
         <span class="n">plotwindow</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="mmApplicationWindow.fileQuit"><a class="viewcode-back" href="../../../PyMapManager.interface.html#PyMapManager.interface.mmApp.mmApplicationWindow.fileQuit">[docs]</a>    <span class="k">def</span> <span class="nf">fileQuit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="mmApplicationWindow.fileQuit"><a class="viewcode-back" href="../../../pymapmanager.interface.html#pymapmanager.interface.mmApp.mmApplicationWindow.fileQuit">[docs]</a>    <span class="k">def</span> <span class="nf">fileQuit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="mmApplicationWindow.closeEvent"><a class="viewcode-back" href="../../../PyMapManager.interface.html#PyMapManager.interface.mmApp.mmApplicationWindow.closeEvent">[docs]</a>    <span class="k">def</span> <span class="nf">closeEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ce</span><span class="p">):</span>
+<div class="viewcode-block" id="mmApplicationWindow.closeEvent"><a class="viewcode-back" href="../../../pymapmanager.interface.html#pymapmanager.interface.mmApp.mmApplicationWindow.closeEvent">[docs]</a>    <span class="k">def</span> <span class="nf">closeEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ce</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fileQuit</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="mmApplicationWindow.about"><a class="viewcode-back" href="../../../PyMapManager.interface.html#PyMapManager.interface.mmApp.mmApplicationWindow.about">[docs]</a>    <span class="k">def</span> <span class="nf">about</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="mmApplicationWindow.about"><a class="viewcode-back" href="../../../pymapmanager.interface.html#pymapmanager.interface.mmApp.mmApplicationWindow.about">[docs]</a>    <span class="k">def</span> <span class="nf">about</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">QtGui</span><span class="o">.</span><span class="n">QMessageBox</span><span class="o">.</span><span class="n">about</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;About&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;&quot;Made by Robert H Cudmore.&quot;&quot;&quot;</span><span class="p">)</span></div></div>
 </pre></div>
 

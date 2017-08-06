@@ -4,7 +4,7 @@ either mapPlot0 or mapPlot.
 
 This class will then give you x/y that are plotted, tell you what a user clicked on and append selections.
 
-Examples:
+Example::
 
     %matplotlib notebook
 

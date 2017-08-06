@@ -1,13 +1,13 @@
 from setuptools import setup, find_packages
 
-setup(name='PyMapManager',
+setup(name='pymapmanager',
       version='0.1',
       description='Python library to load and analyze MapManager files',
       url='http://github.com/cudmore/PyMapManager',
       author='Robert H Cudmore',
       author_email='robert.cudmore@gmail.com',
       license='MIT',
-      packages=['PyMapManager'],
+      packages=['pymapmanager'],
       zip_safe=False)
 
 #  This one work, it excludes interface

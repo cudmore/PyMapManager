@@ -22,9 +22,9 @@ def getMapDynamics(map, plotDict):
         import pandas as pandas
         from IPython.display import display # displays pretty table in ipython
 
-        from PyMapManager.mmUtil import newplotdict
-        from PyMapManager.mmMap import mmMap
-        from PyMapManager.mmMapAnalysis import getMapDynamics
+        from pymapmanager.mmUtil import newplotdict
+        from pymapmanager.mmMap import mmMap
+        from pymapmanager.mmMapAnalysis import getMapDynamics
 
         # load a map
         filePath = '/Users/cudmore/Desktop/data/rr30a/rr30a.txt'

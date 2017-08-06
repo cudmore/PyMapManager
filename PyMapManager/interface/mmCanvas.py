@@ -16,8 +16,8 @@ from PyQt4 import QtGui, QtCore
 from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 
-from PyMapManager.mmUtil import mmEvent, newplotdict
-from PyMapManager.mmMapPlot2 import mmMapPlot2
+from pymapmanager.mmUtil import mmEvent, newplotdict
+from pymapmanager.mmMapPlot2 import mmMapPlot2
 
 class mmCanvas(FigureCanvas):
     """A figure canvas that holds a matplotlib figure. User actions are linked to this canvas with mpl_connect. This canvas must have Qt.ClickFocus to receive user events."""

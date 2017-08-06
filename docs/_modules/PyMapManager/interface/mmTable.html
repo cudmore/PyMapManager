@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>PyMapManager.interface.mmTable &mdash; PyMapManager a1 documentation</title>
+  <title>pymapmanager.interface.mmTable &mdash; PyMapManager a1 documentation</title>
   
 
   
@@ -135,7 +135,7 @@
         
           <li><a href="../../index.html">Module code</a> &raquo;</li>
         
-      <li>PyMapManager.interface.mmTable</li>
+      <li>pymapmanager.interface.mmTable</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -152,14 +152,14 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <h1>Source code for PyMapManager.interface.mmTable</h1><div class="highlight"><pre>
+  <h1>Source code for pymapmanager.interface.mmTable</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Tables to display stackdb pandas data frame</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">from</span> <span class="nn">PyQt4</span> <span class="k">import</span> <span class="n">QtGui</span><span class="p">,</span> <span class="n">QtCore</span>
 
-<div class="viewcode-block" id="MyPandasModel"><a class="viewcode-back" href="../../../PyMapManager.interface.html#PyMapManager.interface.mmTable.MyPandasModel">[docs]</a><span class="k">class</span> <span class="nc">MyPandasModel</span><span class="p">(</span><span class="n">QtCore</span><span class="o">.</span><span class="n">QAbstractTableModel</span><span class="p">):</span>
+<div class="viewcode-block" id="MyPandasModel"><a class="viewcode-back" href="../../../pymapmanager.interface.html#pymapmanager.interface.mmTable.MyPandasModel">[docs]</a><span class="k">class</span> <span class="nc">MyPandasModel</span><span class="p">(</span><span class="n">QtCore</span><span class="o">.</span><span class="n">QAbstractTableModel</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Class to populate a table view with a pandas dataframe</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -169,21 +169,21 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_roiType</span> <span class="o">=</span> <span class="p">[</span><span class="n">roiType</span><span class="p">]</span>
 
-<div class="viewcode-block" id="MyPandasModel.rowCount"><a class="viewcode-back" href="../../../PyMapManager.interface.html#PyMapManager.interface.mmTable.MyPandasModel.rowCount">[docs]</a>    <span class="k">def</span> <span class="nf">rowCount</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="MyPandasModel.rowCount"><a class="viewcode-back" href="../../../pymapmanager.interface.html#pymapmanager.interface.mmTable.MyPandasModel.rowCount">[docs]</a>    <span class="k">def</span> <span class="nf">rowCount</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="c1">#m = len(self._data[&#39;roiType&#39;].isin(self._roiType).values)</span>
         <span class="c1">#return m</span>
         <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">values</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="MyPandasModel.columnCount"><a class="viewcode-back" href="../../../PyMapManager.interface.html#PyMapManager.interface.mmTable.MyPandasModel.columnCount">[docs]</a>    <span class="k">def</span> <span class="nf">columnCount</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="MyPandasModel.columnCount"><a class="viewcode-back" href="../../../pymapmanager.interface.html#pymapmanager.interface.mmTable.MyPandasModel.columnCount">[docs]</a>    <span class="k">def</span> <span class="nf">columnCount</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">size</span></div>
 
-<div class="viewcode-block" id="MyPandasModel.data"><a class="viewcode-back" href="../../../PyMapManager.interface.html#PyMapManager.interface.mmTable.MyPandasModel.data">[docs]</a>    <span class="k">def</span> <span class="nf">data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">role</span><span class="o">=</span><span class="n">QtCore</span><span class="o">.</span><span class="n">Qt</span><span class="o">.</span><span class="n">DisplayRole</span><span class="p">):</span>
+<div class="viewcode-block" id="MyPandasModel.data"><a class="viewcode-back" href="../../../pymapmanager.interface.html#pymapmanager.interface.mmTable.MyPandasModel.data">[docs]</a>    <span class="k">def</span> <span class="nf">data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">role</span><span class="o">=</span><span class="n">QtCore</span><span class="o">.</span><span class="n">Qt</span><span class="o">.</span><span class="n">DisplayRole</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">index</span><span class="o">.</span><span class="n">isValid</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">role</span> <span class="o">==</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">Qt</span><span class="o">.</span><span class="n">DisplayRole</span><span class="p">:</span>
                 <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">index</span><span class="o">.</span><span class="n">row</span><span class="p">()][</span><span class="n">index</span><span class="o">.</span><span class="n">column</span><span class="p">()])</span>
         <span class="k">return</span> <span class="kc">None</span></div>
 
-<div class="viewcode-block" id="MyPandasModel.headerData"><a class="viewcode-back" href="../../../PyMapManager.interface.html#PyMapManager.interface.mmTable.MyPandasModel.headerData">[docs]</a>    <span class="k">def</span> <span class="nf">headerData</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="n">orientation</span><span class="p">,</span> <span class="n">role</span><span class="p">):</span>
+<div class="viewcode-block" id="MyPandasModel.headerData"><a class="viewcode-back" href="../../../pymapmanager.interface.html#pymapmanager.interface.mmTable.MyPandasModel.headerData">[docs]</a>    <span class="k">def</span> <span class="nf">headerData</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="n">orientation</span><span class="p">,</span> <span class="n">role</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">orientation</span> <span class="o">==</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">Qt</span><span class="o">.</span><span class="n">Horizontal</span> <span class="ow">and</span> <span class="n">role</span> <span class="o">==</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">Qt</span><span class="o">.</span><span class="n">DisplayRole</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="n">col</span><span class="p">]</span>
         <span class="k">return</span> <span class="kc">None</span></div></div>

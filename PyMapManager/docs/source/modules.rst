@@ -4,5 +4,5 @@ PyMapManager
 .. toctree::
    :maxdepth: 4
 
-   PyMapManager
+   pymapmanager
    setup

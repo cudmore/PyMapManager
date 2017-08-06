@@ -74,9 +74,9 @@ class mmEvent:
         """Make a single spine selection event
 
         Args:
-            map (object): :class:`PyMapManager.mmMap`
-            sessIdx (int): :class:`PyMapManager.mmMap` session number
-            stackdbIdx (int): Annotation number in a :class:`PyMapManager.mmStack`
+            map (object): :class:`pymapmanager.mmMap`
+            sessIdx (int): :class:`pymapmanager.mmMap` session number
+            stackdbIdx (int): Annotation number in a :class:`pymapmanager.mmStack`
         """
 
         self.type = 'spine selection'
