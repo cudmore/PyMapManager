@@ -174,7 +174,7 @@
 
 <span class="sd">    Example::</span>
 
-<span class="sd">        import pandas as pandas</span>
+<span class="sd">        import pandas as pd</span>
 <span class="sd">        from IPython.display import display # displays pretty table in ipython</span>
 
 <span class="sd">        from pymapmanager.mmUtil import newplotdict</span>
@@ -185,11 +185,11 @@
 <span class="sd">        filePath = &#39;/Users/cudmore/Desktop/data/rr30a/rr30a.txt&#39;</span>
 <span class="sd">        m = mmMap(filePath=filePath)</span>
 
-<span class="sd">        pd = newplotdict()</span>
-<span class="sd">        pd = getMapDynamics(m, pd)</span>
+<span class="sd">        plotDict = newplotdict()</span>
+<span class="sd">        plotDict = getMapDynamics(m, pd)</span>
 
-<span class="sd">        for segmentReport in pd:</span>
-<span class="sd">            display(pandas.DataFrame.from_dict(segmentReport, orient=&#39;index&#39;))</span>
+<span class="sd">        for segmentReport in plotDict:</span>
+<span class="sd">            display(pd.DataFrame.from_dict(segmentReport, orient=&#39;index&#39;))</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">startTime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
@@ -228,7 +228,7 @@
     <span class="p">}</span>
 
     <span class="n">retList</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">map</span><span class="o">.</span><span class="n">getNumSegments</span><span class="p">()):</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">map</span><span class="o">.</span><span class="n">numMapSegments</span><span class="p">):</span>
 
         <span class="n">retList</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">retStruct</span><span class="p">))</span>
 

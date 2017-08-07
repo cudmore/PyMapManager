@@ -263,16 +263,20 @@ columns are sessions, each [i][j] is a stat value</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pd</strong> (<em>dict</em>) &#8211; Fill in mmUtil.PLOT_DICT</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pd</strong> (<em>dict</em>) &#8211; A plot dictionary describing what to plot. Get default from mmUtil.newplotdict().</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><div class="line-block">
+<div class="line">pd[&#8216;x&#8217;], 2D ndarray of xstat values, rows are runs, cols are sessions, nan is where there is no stackdb annotation</div>
+<div class="line">pd[&#8216;y&#8217;], same</div>
+<div class="line">pd[&#8216;z&#8217;], same</div>
+<div class="line">pd[&#8216;stackidx&#8217;], Each [i]j[] gives the stack centric index of annotation value at [i][j].</div>
+<div class="line">pd[&#8216;mapsess&#8217;], Each [i][j] gives the map session of value at annotation [i][j].</div>
+<div class="line">pd[&#8216;runrow&#8217;],</div>
+</div>
+</td>
 </tr>
 </tbody>
 </table>
-<p>Returns pd with:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pd</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]:</span> <span class="mi">2</span><span class="n">D</span> <span class="n">ndarray</span> <span class="n">of</span> <span class="n">xstat</span> <span class="n">values</span><span class="p">,</span> <span class="n">rows</span> <span class="n">are</span> <span class="n">runs</span><span class="p">,</span> <span class="n">cols</span> <span class="n">are</span> <span class="n">sessions</span><span class="p">,</span> <span class="n">nan</span> <span class="ow">is</span> <span class="n">where</span> <span class="n">there</span> <span class="ow">is</span> <span class="n">no</span> <span class="n">stackdb</span> <span class="n">annotation</span>
-<span class="n">pd</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]:</span> <span class="n">same</span>
-<span class="n">pd</span><span class="p">[</span><span class="s1">&#39;z&#39;</span><span class="p">]:</span> <span class="n">same</span>
-</pre></div>
-</div>
 </dd></dl>
 
 <dl class="method">
@@ -305,7 +309,7 @@ columns are sessions, each [i][j] is a stat value</p>
 <dt id="pymapmanager.mmMap.mmMap.name">
 <code class="descname">name</code><em class="property"> = None</em><a class="headerlink" href="#pymapmanager.mmMap.mmMap.name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Name of the map. For a map loaded with file a5n.txt, name is a5b. Same as enclosing folder name.
-If urlmap then this is the name of the map to fetch from the mmio server.</p>
+If urlmap then this is the name of the map to fetch from a <a class="reference internal" href="pymapmanager.mmio.html#module-pymapmanager.mmio" title="pymapmanager.mmio"><code class="xref py py-class docutils literal"><span class="pre">pymapmanager.mmio</span></code></a> server.</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -388,7 +392,7 @@ sessions in a the map</p>
 </tbody>
 </table>
 <p>Example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pandas</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">from</span> <span class="nn">IPython.display</span> <span class="k">import</span> <span class="n">display</span> <span class="c1"># displays pretty table in ipython</span>
 
 <span class="kn">from</span> <span class="nn">pymapmanager.mmUtil</span> <span class="k">import</span> <span class="n">newplotdict</span>
@@ -399,11 +403,11 @@ sessions in a the map</p>
 <span class="n">filePath</span> <span class="o">=</span> <span class="s1">&#39;/Users/cudmore/Desktop/data/rr30a/rr30a.txt&#39;</span>
 <span class="n">m</span> <span class="o">=</span> <span class="n">mmMap</span><span class="p">(</span><span class="n">filePath</span><span class="o">=</span><span class="n">filePath</span><span class="p">)</span>
 
-<span class="n">pd</span> <span class="o">=</span> <span class="n">newplotdict</span><span class="p">()</span>
-<span class="n">pd</span> <span class="o">=</span> <span class="n">getMapDynamics</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">pd</span><span class="p">)</span>
+<span class="n">plotDict</span> <span class="o">=</span> <span class="n">newplotdict</span><span class="p">()</span>
+<span class="n">plotDict</span> <span class="o">=</span> <span class="n">getMapDynamics</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">pd</span><span class="p">)</span>
 
-<span class="k">for</span> <span class="n">segmentReport</span> <span class="ow">in</span> <span class="n">pd</span><span class="p">:</span>
-    <span class="n">display</span><span class="p">(</span><span class="n">pandas</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">segmentReport</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s1">&#39;index&#39;</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">segmentReport</span> <span class="ow">in</span> <span class="n">plotDict</span><span class="p">:</span>
+    <span class="n">display</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">segmentReport</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s1">&#39;index&#39;</span><span class="p">))</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -548,8 +552,8 @@ plt.figure() if using command line or IPython/Jupyter.</li>
 <dl class="class">
 <dt id="pymapmanager.mmStack.mmStack">
 <em class="property">class </em><code class="descclassname">pymapmanager.mmStack.</code><code class="descname">mmStack</code><span class="sig-paren">(</span><em>filePath=None</em>, <em>name=None</em>, <em>numChannels=1</em>, <em>map=None</em>, <em>mapSession=None</em>, <em>urlmap=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymapmanager/mmStack.html#mmStack"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymapmanager.mmStack.mmStack" title="Permalink to this definition">¶</a></dt>
-<dd><p>A stack contains a 3D Tiff, a list of 3D annotations, and optionally a number of segment tracings.</p>
-<p>A stack can either be a single time-point or be embeded into a session of a <a class="reference internal" href="#module-pymapmanager.mmMap" title="pymapmanager.mmMap"><code class="xref py py-class docutils literal"><span class="pre">pymapmanager.mmMap</span></code></a>.</p>
+<dd><p>A stack contains a 3D Tiff, a list of 3D annotations, and optionally a number of segment tracings.
+A stack can either be a single time-point or be embeded into a session of a <a class="reference internal" href="#module-pymapmanager.mmMap" title="pymapmanager.mmMap"><code class="xref py py-class docutils literal"><span class="pre">pymapmanager.mmMap</span></code></a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -574,46 +578,51 @@ plt.figure() if using command line or IPython/Jupyter.</li>
 <dl class="method">
 <dt id="pymapmanager.mmStack.mmStack.getStackValues2">
 <code class="descname">getStackValues2</code><span class="sig-paren">(</span><em>stat, roiType=['spineROI'], segmentID=[], plotBad=False, plotIntBad=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymapmanager/mmStack.html#mmStack.getStackValues2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymapmanager.mmStack.mmStack.getStackValues2" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
+<dd><p>Get all values for a stack annotation.</p>
+<table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>token</strong> &#8211; stack statistic</li>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>stat</strong> (<em>str</em>) &#8211; Name of a stack annotation.</li>
 <li><strong>roiType</strong> &#8211; yyy</li>
 <li><strong>segmentID</strong> &#8211; zzz</li>
 </ul>
 </td>
 </tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">1D numpy ndarray of values</p>
+</td>
+</tr>
 </tbody>
 </table>
-<p>Returns: 1D numpy ndarray of values</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pymapmanager.mmStack.mmStack.getStackValues3">
 <code class="descname">getStackValues3</code><span class="sig-paren">(</span><em>pd</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymapmanager/mmStack.html#mmStack.getStackValues3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymapmanager.mmStack.mmStack.getStackValues3" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get x/y/z stats using a plot dict pd</p>
+<dd><p>Get values of three annotations using a plot dictionary pd.
+Get a default plot dictionary from mmUtil.newplotdict().
+This is useful for getting annotation values for plotting.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pd</strong> (<em>dict</em>) &#8211; A <code class="xref py py-const docutils literal"><span class="pre">mmUtil.PLOT_DICT</span></code></td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pd</strong> (<em>dict</em>) &#8211; A plot dictionary telling us what to plot. Fill in x/y/z with stat names.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">pd with pd[&#8216;x&#8217;], pd[&#8216;y&#8217;] and pd[&#8216;z&#8217;] filled in with values</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><div class="line-block">
+<div class="line">pd[&#8216;x&#8217;], x stat values if pd[&#8216;xstat&#8217;], length is number of annotations matching criteria in original pd argument</div>
+<div class="line">pd[&#8216;y&#8217;], y stat values if pd[&#8216;ystat&#8217;]</div>
+<div class="line">pd[&#8216;z&#8217;], z stat values if pd[&#8216;zstat&#8217;]</div>
+<div class="line">pd[&#8216;stackidx&#8217;], stack index of returned values</div>
+<div class="line">pd[&#8216;reverse&#8217;], same length as stackdb.numObj,</div>
+<div class="line-block">
+<div class="line">reverse[i]&gt;=0 gives index into pd[&#8216;x&#8217;] for annotation i, reverse[i]==&#8217;nan&#8217; means annotation i was not included</div>
+</div>
+</div>
+</td>
 </tr>
 </tbody>
 </table>
-<p>Note:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Returns</span> <span class="n">pd</span> <span class="n">filled</span> <span class="ow">in</span> <span class="k">as</span> <span class="n">follows</span><span class="p">:</span>
-<span class="n">pd</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]:</span> <span class="n">x</span> <span class="n">stat</span> <span class="n">values</span> <span class="k">if</span> <span class="n">pd</span><span class="p">[</span><span class="s1">&#39;xstat&#39;</span><span class="p">],</span> <span class="n">length</span> <span class="ow">is</span> <span class="n">number</span> <span class="n">of</span> <span class="n">annotations</span> <span class="n">matching</span> <span class="n">criteria</span> <span class="ow">in</span> <span class="n">original</span> <span class="n">pd</span> <span class="n">argument</span>
-<span class="n">pd</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]:</span> <span class="n">y</span> <span class="n">stat</span> <span class="n">values</span> <span class="k">if</span> <span class="n">pd</span><span class="p">[</span><span class="s1">&#39;ystat&#39;</span><span class="p">]</span>
-<span class="n">pd</span><span class="p">[</span><span class="s1">&#39;z&#39;</span><span class="p">]:</span> <span class="n">z</span> <span class="n">stat</span> <span class="n">values</span> <span class="k">if</span> <span class="n">pd</span><span class="p">[</span><span class="s1">&#39;zstat&#39;</span><span class="p">]</span>
-<span class="n">pd</span><span class="p">[</span><span class="s1">&#39;stackidx&#39;</span><span class="p">]:</span> <span class="n">stack</span> <span class="n">index</span> <span class="n">of</span> <span class="n">returned</span> <span class="n">values</span>
-<span class="n">pd</span><span class="p">[</span><span class="s1">&#39;reverse&#39;</span><span class="p">]:</span> <span class="n">same</span> <span class="n">length</span> <span class="k">as</span> <span class="n">stackdb</span><span class="o">.</span><span class="n">numObj</span><span class="p">,</span>
-    <span class="n">reverse</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">&gt;=</span><span class="mi">0</span> <span class="n">gives</span> <span class="n">index</span> <span class="n">into</span> <span class="n">pd</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">annotation</span> <span class="n">i</span><span class="p">,</span> <span class="n">reverse</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;nan&#39;</span> <span class="n">means</span> <span class="n">annotation</span> <span class="n">i</span> <span class="n">was</span> <span class="ow">not</span> <span class="n">included</span>
-</pre></div>
-</div>
 </dd></dl>
 
 <dl class="method">
@@ -790,12 +799,6 @@ See <cite>pymapmanager.mmUtil STACK_STATS</cite> for valid statistic names.</p>
 <span id="pymapmanager-mmutil-module"></span><h2>pymapmanager.mmUtil module<a class="headerlink" href="#module-pymapmanager.mmUtil" title="Permalink to this headline">¶</a></h2>
 <p>Utility functions and classes for PyMapManager.</p>
 <dl class="data">
-<dt id="pymapmanager.mmUtil.PLOT_STRUCT">
-<code class="descclassname">pymapmanager.mmUtil.</code><code class="descname">PLOT_STRUCT</code><em class="property"> = {'xstat': '', 'segmentID': [], 'ystat': '', 'plotBad': False, 'roiType': ['spineROI'], 'plotIntBad': False}</em><a class="headerlink" href="#pymapmanager.mmUtil.PLOT_STRUCT" title="Permalink to this definition">¶</a></dt>
-<dd><p>Used to read interface state in QT and used to reduce number of parameters passed to plot functions</p>
-</dd></dl>
-
-<dl class="data">
 <dt id="pymapmanager.mmUtil.ROI_TYPES">
 <code class="descclassname">pymapmanager.mmUtil.</code><code class="descname">ROI_TYPES</code><em class="property"> = ['spineROI', 'otherROI']</em><a class="headerlink" href="#pymapmanager.mmUtil.ROI_TYPES" title="Permalink to this definition">¶</a></dt>
 <dd><p>Allowed ROI types. Specifies valid &#8216;roiType&#8217;.</p>
@@ -810,7 +813,8 @@ See <cite>pymapmanager.mmUtil STACK_STATS</cite> for valid statistic names.</p>
 <dl class="class">
 <dt id="pymapmanager.mmUtil.mmEvent">
 <em class="property">class </em><code class="descclassname">pymapmanager.mmUtil.</code><code class="descname">mmEvent</code><span class="sig-paren">(</span><em>map</em>, <em>sessIdx</em>, <em>stackdbIdx</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymapmanager/mmUtil.html#mmEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymapmanager.mmUtil.mmEvent" title="Permalink to this definition">¶</a></dt>
-<dd><p>Class to broadcast events. Events can be user events like &#8216;spine selection&#8217; or program events like &#8216;map opened&#8217;</p>
+<dd><p>Class used by Qt to broadcast events.
+Events can be user events like &#8216;spine selection&#8217; or program events like &#8216;map opened&#8217;</p>
 <dl class="method">
 <dt id="pymapmanager.mmUtil.mmEvent.getText">
 <code class="descname">getText</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymapmanager/mmUtil.html#mmEvent.getText"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymapmanager.mmUtil.mmEvent.getText" title="Permalink to this definition">¶</a></dt>
@@ -842,12 +846,11 @@ See <cite>pymapmanager.mmUtil STACK_STATS</cite> for valid statistic names.</p>
 <dl class="function">
 <dt id="pymapmanager.mmUtil.newplotdict">
 <code class="descclassname">pymapmanager.mmUtil.</code><code class="descname">newplotdict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymapmanager/mmUtil.html#newplotdict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymapmanager.mmUtil.newplotdict" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="pymapmanager.mmUtil.newplotstruct">
-<code class="descclassname">pymapmanager.mmUtil.</code><code class="descname">newplotstruct</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymapmanager/mmUtil.html#newplotstruct"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymapmanager.mmUtil.newplotstruct" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Get a new default plot dictionary.</p>
+<p>The plot dictionary is used to tell plot functions what to plot (e.g. [&#8216;xtat&#8217;] and [&#8216;ystat&#8217;]).
+All plot function return the same plot dictionary with keys filled in with values that were plotted
+(e.g. [&#8216;x&#8217;] and [&#8216;y&#8217;]).</p>
+</dd></dl>
 
 </div>
 <div class="section" id="module-pymapmanager">

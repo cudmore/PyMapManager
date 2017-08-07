@@ -49,7 +49,7 @@ class mmMap():
 		self.name = ''
 		"""
 		Name of the map. For a map loaded with file a5n.txt, name is a5b. Same as enclosing folder name.
-		If urlmap then this is the name of the map to fetch from the mmio server.
+		If urlmap then this is the name of the map to fetch from a :class:`pymapmanager.mmio` server.
 		"""
 		self.table = None
 		"""
@@ -229,13 +229,17 @@ class mmMap():
 		"""
 
 		Args:
-			pd (dict): Fill in mmUtil.PLOT_DICT
+			pd (dict): A plot dictionary describing what to plot. Get default from mmUtil.newplotdict().
 
-		Returns pd with::
+		Returns:
 
-			pd['x']: 2D ndarray of xstat values, rows are runs, cols are sessions, nan is where there is no stackdb annotation
-			pd['y']: same
-			pd['z']: same
+			| pd['x'], 2D ndarray of xstat values, rows are runs, cols are sessions, nan is where there is no stackdb annotation
+			| pd['y'], same
+			| pd['z'], same
+			| pd['stackidx'], Each [i]j[] gives the stack centric index of annotation value at [i][j].
+			| pd['mapsess'], Each [i][j] gives the map session of value at annotation [i][j].
+			| pd['runrow'],
+
 		"""
 		startTime = time.time()
 

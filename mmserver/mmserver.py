@@ -1,6 +1,7 @@
 """
-A RESTful API implemented with Flask to get files and images from a mmMap.
-
+A http server to serve mmMap files and images.
+Server is run using Flask.
+Implements a RESTful API.
 """
 
 import os

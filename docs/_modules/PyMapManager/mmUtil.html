@@ -167,18 +167,6 @@
                <span class="s1">&#39;z&#39;</span><span class="p">,</span>
                <span class="s1">&#39;pDist&#39;</span><span class="p">]</span>
 
-<span class="c1">#: Used to read interface state in QT and used to reduce number of parameters passed to plot functions</span>
-<span class="n">PLOT_STRUCT</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-<span class="n">PLOT_STRUCT</span><span class="p">[</span><span class="s1">&#39;xstat&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
-<span class="n">PLOT_STRUCT</span><span class="p">[</span><span class="s1">&#39;ystat&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
-<span class="n">PLOT_STRUCT</span><span class="p">[</span><span class="s1">&#39;roiType&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;spineROI&#39;</span><span class="p">]</span>
-<span class="n">PLOT_STRUCT</span><span class="p">[</span><span class="s1">&#39;segmentID&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1"># all segment</span>
-<span class="n">PLOT_STRUCT</span><span class="p">[</span><span class="s1">&#39;plotBad&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
-<span class="n">PLOT_STRUCT</span><span class="p">[</span><span class="s1">&#39;plotIntBad&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
-
-<div class="viewcode-block" id="newplotstruct"><a class="viewcode-back" href="../../pymapmanager.html#pymapmanager.mmUtil.newplotstruct">[docs]</a><span class="k">def</span> <span class="nf">newplotstruct</span><span class="p">():</span> <span class="k">return</span> <span class="n">PLOT_STRUCT</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span></div>
-<span class="sd">&quot;&quot;&quot; Used by Qt interface&quot;&quot;&quot;</span>
-
 <span class="n">PLOT_DICT</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s1">&#39;map&#39;</span> <span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="c1">#: map (object) mmMap</span>
     <span class="s1">&#39;mapname&#39;</span> <span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
@@ -208,11 +196,20 @@
     <span class="s1">&#39;mapsess&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">}</span>
 
-<div class="viewcode-block" id="newplotdict"><a class="viewcode-back" href="../../pymapmanager.html#pymapmanager.mmUtil.newplotdict">[docs]</a><span class="k">def</span> <span class="nf">newplotdict</span><span class="p">():</span> <span class="k">return</span> <span class="n">PLOT_DICT</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span></div>
-<span class="sd">&quot;&quot;&quot; Get a default plot struct&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="newplotdict"><a class="viewcode-back" href="../../pymapmanager.html#pymapmanager.mmUtil.newplotdict">[docs]</a><span class="k">def</span> <span class="nf">newplotdict</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get a new default plot dictionary.</span>
+
+<span class="sd">    The plot dictionary is used to tell plot functions what to plot (e.g. [&#39;xtat&#39;] and [&#39;ystat&#39;]).</span>
+<span class="sd">    All plot function return the same plot dictionary with keys filled in with values that were plotted</span>
+<span class="sd">    (e.g. [&#39;x&#39;] and [&#39;y&#39;]).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">PLOT_DICT</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="mmEvent"><a class="viewcode-back" href="../../pymapmanager.html#pymapmanager.mmUtil.mmEvent">[docs]</a><span class="k">class</span> <span class="nc">mmEvent</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Class to broadcast events. Events can be user events like &#39;spine selection&#39; or program events like &#39;map opened&#39;&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Class used by Qt to broadcast events.</span>
+<span class="sd">    Events can be user events like &#39;spine selection&#39; or program events like &#39;map opened&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">map</span><span class="p">,</span> <span class="n">sessIdx</span><span class="p">,</span> <span class="n">stackdbIdx</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>  <span class="c1"># unique string identifying the event</span>
@@ -226,7 +223,8 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">spineSelection</span><span class="p">(</span><span class="nb">map</span><span class="p">,</span> <span class="n">sessIdx</span><span class="p">,</span> <span class="n">stackdbIdx</span><span class="p">)</span>
 
 <div class="viewcode-block" id="mmEvent.spineSelection"><a class="viewcode-back" href="../../pymapmanager.html#pymapmanager.mmUtil.mmEvent.spineSelection">[docs]</a>    <span class="k">def</span> <span class="nf">spineSelection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">map</span><span class="p">,</span> <span class="n">sessIdx</span><span class="p">,</span> <span class="n">stackdbIdx</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Make a single spine selection event</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Make a single spine selection event</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            map (object): :class:`pymapmanager.mmMap`</span>

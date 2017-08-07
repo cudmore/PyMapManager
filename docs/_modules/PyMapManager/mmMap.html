@@ -204,7 +204,7 @@
 		<span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
 		<span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Name of the map. For a map loaded with file a5n.txt, name is a5b. Same as enclosing folder name.</span>
-<span class="sd">		If urlmap then this is the name of the map to fetch from the mmio server.</span>
+<span class="sd">		If urlmap then this is the name of the map to fetch from a :class:`pymapmanager.mmio` server.</span>
 <span class="sd">		&quot;&quot;&quot;</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">table</span> <span class="o">=</span> <span class="kc">None</span>
 		<span class="sd">&quot;&quot;&quot;</span>
@@ -384,13 +384,17 @@
 		<span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">		Args:</span>
-<span class="sd">			pd (dict): Fill in mmUtil.PLOT_DICT</span>
+<span class="sd">			pd (dict): A plot dictionary describing what to plot. Get default from mmUtil.newplotdict().</span>
 
-<span class="sd">		Returns pd with::</span>
+<span class="sd">		Returns:</span>
 
-<span class="sd">			pd[&#39;x&#39;]: 2D ndarray of xstat values, rows are runs, cols are sessions, nan is where there is no stackdb annotation</span>
-<span class="sd">			pd[&#39;y&#39;]: same</span>
-<span class="sd">			pd[&#39;z&#39;]: same</span>
+<span class="sd">			| pd[&#39;x&#39;], 2D ndarray of xstat values, rows are runs, cols are sessions, nan is where there is no stackdb annotation</span>
+<span class="sd">			| pd[&#39;y&#39;], same</span>
+<span class="sd">			| pd[&#39;z&#39;], same</span>
+<span class="sd">			| pd[&#39;stackidx&#39;], Each [i]j[] gives the stack centric index of annotation value at [i][j].</span>
+<span class="sd">			| pd[&#39;mapsess&#39;], Each [i][j] gives the map session of value at annotation [i][j].</span>
+<span class="sd">			| pd[&#39;runrow&#39;], </span>
+
 <span class="sd">		&quot;&quot;&quot;</span>
 		<span class="n">startTime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
 
@@ -513,9 +517,9 @@
 <span class="sd">			columns are sessions, each [i][j] is a stat value</span>
 <span class="sd">		&quot;&quot;&quot;</span>
 
-		<span class="k">if</span> <span class="n">roiType</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ROI_TYPES</span><span class="p">:</span>
-			<span class="n">errStr</span> <span class="o">=</span> <span class="s1">&#39;error: mmMap.getMapValues2() stat &quot;&#39;</span> <span class="o">+</span> <span class="n">roiType</span> <span class="o">+</span> <span class="s1">&#39;&quot; is not in &#39;</span> <span class="o">+</span> <span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROI_TYPES</span><span class="p">)</span>
-			<span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">errStr</span><span class="p">)</span>
+		<span class="c1">#if roiType not in ROI_TYPES:</span>
+		<span class="c1">#	errStr = &#39;error: mmMap.getMapValues2() stat &quot;&#39; + roiType + &#39;&quot; is not in &#39; + &#39;,&#39;.join(ROI_TYPES)</span>
+		<span class="c1">#	raise ValueError(errStr)</span>
 
 		<span class="n">plotDict</span> <span class="o">=</span> <span class="n">newplotdict</span><span class="p">()</span>
 		<span class="n">plotDict</span><span class="p">[</span><span class="s1">&#39;roitype&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">roiType</span>

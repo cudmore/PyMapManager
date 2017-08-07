@@ -41,14 +41,15 @@ PLOT_DICT = {
     'mapsess': None,
 }
 
-def newplotdict(): return PLOT_DICT.copy()
-"""
-Get a new default plot dictionary.
+def newplotdict():
+    """
+    Get a new default plot dictionary.
 
-The plot dictionary is used to tell plot functions what to plot (e.g. ['xtat'] and ['ystat']). 
-All plot function return the same plot dictionary with keys filled in with values that were plotted 
-(e.g. ['x'] and ['y']).
-"""
+    The plot dictionary is used to tell plot functions what to plot (e.g. ['xtat'] and ['ystat']).
+    All plot function return the same plot dictionary with keys filled in with values that were plotted
+    (e.g. ['x'] and ['y']).
+    """
+    return PLOT_DICT.copy()
 
 class mmEvent:
     """Class used by Qt to broadcast events.

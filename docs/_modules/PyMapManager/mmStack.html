@@ -163,11 +163,11 @@
 
 <span class="kn">from</span> <span class="nn">pymapmanager.mmStackLine</span> <span class="k">import</span> <span class="n">mmStackLine</span>
 <span class="kn">from</span> <span class="nn">pymapmanager.mmio</span> <span class="k">import</span> <span class="n">mmio</span>
+<span class="kn">from</span> <span class="nn">pymapmanager.mmUtil</span> <span class="k">import</span> <span class="n">newplotdict</span>
 
 <div class="viewcode-block" id="mmStack"><a class="viewcode-back" href="../../pymapmanager.html#pymapmanager.mmStack.mmStack">[docs]</a><span class="k">class</span> <span class="nc">mmStack</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A stack contains a 3D Tiff, a list of 3D annotations, and optionally a number of segment tracings.</span>
-
 <span class="sd">    A stack can either be a single time-point or be embeded into a session of a :class:`pymapmanager.mmMap`.</span>
 
 <span class="sd">    Args:</span>
@@ -393,24 +393,46 @@
         <span class="sd">&quot;&quot;&quot;Get column names from stack. These are valid values for plot functions.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stackdb</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">values</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="mmStack.getStackValues3"><a class="viewcode-back" href="../../pymapmanager.html#pymapmanager.mmStack.mmStack.getStackValues3">[docs]</a>    <span class="k">def</span> <span class="nf">getStackValues3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pd</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Get x/y/z stats using a plot dict pd</span>
+<div class="viewcode-block" id="mmStack.getStackValues2"><a class="viewcode-back" href="../../pymapmanager.html#pymapmanager.mmStack.mmStack.getStackValues2">[docs]</a>    <span class="k">def</span> <span class="nf">getStackValues2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stat</span><span class="p">,</span> <span class="n">roiType</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;spineROI&#39;</span><span class="p">],</span> <span class="n">segmentID</span><span class="o">=</span><span class="p">[],</span> <span class="n">plotBad</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">plotIntBad</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get all values for a stack annotation.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            pd (dict): A :py:const:`mmUtil.PLOT_DICT`</span>
+<span class="sd">            stat (str): Name of a stack annotation.</span>
+<span class="sd">            roiType: yyy</span>
+<span class="sd">            segmentID: zzz</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            pd with pd[&#39;x&#39;], pd[&#39;y&#39;] and pd[&#39;z&#39;] filled in with values</span>
+<span class="sd">            1D numpy ndarray of values</span>
 
-<span class="sd">        Note::</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">plotDict</span> <span class="o">=</span> <span class="n">newplotdict</span><span class="p">()</span>
+        <span class="n">plotDict</span><span class="p">[</span><span class="s1">&#39;roitype&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">roiType</span>
+        <span class="n">plotDict</span><span class="p">[</span><span class="s1">&#39;xstat&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">stat</span>
+        <span class="n">plotDict</span><span class="p">[</span><span class="s1">&#39;segmentid&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">segmentID</span>
+        <span class="n">plotDict</span><span class="p">[</span><span class="s1">&#39;plotbad&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">plotBad</span>
+        <span class="n">plotDict</span><span class="p">[</span><span class="s1">&#39;plotIntBad&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">plotIntBad</span>
 
-<span class="sd">            Returns pd filled in as follows:</span>
-<span class="sd">            pd[&#39;x&#39;]: x stat values if pd[&#39;xstat&#39;], length is number of annotations matching criteria in original pd argument</span>
-<span class="sd">            pd[&#39;y&#39;]: y stat values if pd[&#39;ystat&#39;]</span>
-<span class="sd">            pd[&#39;z&#39;]: z stat values if pd[&#39;zstat&#39;]</span>
-<span class="sd">            pd[&#39;stackidx&#39;]: stack index of returned values</span>
-<span class="sd">            pd[&#39;reverse&#39;]: same length as stackdb.numObj,</span>
-<span class="sd">                reverse[i]&gt;=0 gives index into pd[&#39;x&#39;] for annotation i, reverse[i]==&#39;nan&#39; means annotation i was not included</span>
+        <span class="n">plotDict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getStackValues3</span><span class="p">(</span><span class="n">plotDict</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">plotDict</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="mmStack.getStackValues3"><a class="viewcode-back" href="../../pymapmanager.html#pymapmanager.mmStack.mmStack.getStackValues3">[docs]</a>    <span class="k">def</span> <span class="nf">getStackValues3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pd</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get values of three annotations using a plot dictionary pd.</span>
+<span class="sd">        Get a default plot dictionary from mmUtil.newplotdict().</span>
+<span class="sd">        This is useful for getting annotation values for plotting.</span>
+
+<span class="sd">        Args:</span>
+
+<span class="sd">            pd (dict): A plot dictionary telling us what to plot. Fill in x/y/z with stat names.</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">            | pd[&#39;x&#39;], x stat values if pd[&#39;xstat&#39;], length is number of annotations matching criteria in original pd argument</span>
+<span class="sd">            | pd[&#39;y&#39;], y stat values if pd[&#39;ystat&#39;]</span>
+<span class="sd">            | pd[&#39;z&#39;], z stat values if pd[&#39;zstat&#39;]</span>
+<span class="sd">            | pd[&#39;stackidx&#39;], stack index of returned values</span>
+<span class="sd">            | pd[&#39;reverse&#39;], same length as stackdb.numObj,</span>
+<span class="sd">            |     reverse[i]&gt;=0 gives index into pd[&#39;x&#39;] for annotation i, reverse[i]==&#39;nan&#39; means annotation i was not included</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">ret</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stackdb</span>
@@ -436,27 +458,6 @@
         <span class="n">pd</span><span class="p">[</span><span class="s1">&#39;reverse&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">reverse</span>
 
         <span class="k">return</span> <span class="n">pd</span></div>
-
-<div class="viewcode-block" id="mmStack.getStackValues2"><a class="viewcode-back" href="../../pymapmanager.html#pymapmanager.mmStack.mmStack.getStackValues2">[docs]</a>    <span class="k">def</span> <span class="nf">getStackValues2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stat</span><span class="p">,</span> <span class="n">roiType</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;spineROI&#39;</span><span class="p">],</span> <span class="n">segmentID</span><span class="o">=</span><span class="p">[],</span> <span class="n">plotBad</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">plotIntBad</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            token: stack statistic</span>
-<span class="sd">            roiType: yyy</span>
-<span class="sd">            segmentID: zzz</span>
-
-<span class="sd">        Returns: 1D numpy ndarray of values</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">plotDict</span> <span class="o">=</span> <span class="n">newplotdict</span><span class="p">()</span>
-        <span class="n">plotDict</span><span class="p">[</span><span class="s1">&#39;roitype&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">roiType</span>
-        <span class="n">plotDict</span><span class="p">[</span><span class="s1">&#39;xstat&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">stat</span>
-        <span class="n">plotDict</span><span class="p">[</span><span class="s1">&#39;segmentid&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">segmentID</span>
-        <span class="n">plotDict</span><span class="p">[</span><span class="s1">&#39;plotbad&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">plotBad</span>
-        <span class="n">plotDict</span><span class="p">[</span><span class="s1">&#39;plotIntBad&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">plotIntBad</span>
-
-        <span class="n">plotDict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getStackValues3</span><span class="p">(</span><span class="n">plotDict</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">plotDict</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span></div>
 
     <span class="k">def</span> <span class="nf">_loadLine</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>

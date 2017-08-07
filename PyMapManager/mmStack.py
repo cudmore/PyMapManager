@@ -13,7 +13,6 @@ from pymapmanager.mmUtil import newplotdict
 class mmStack():
     """
     A stack contains a 3D Tiff, a list of 3D annotations, and optionally a number of segment tracings.
-
     A stack can either be a single time-point or be embeded into a session of a :class:`pymapmanager.mmMap`.
 
     Args:
@@ -239,24 +238,46 @@ class mmStack():
         """Get column names from stack. These are valid values for plot functions."""
         return list(self.stackdb.columns.values)
 
-    def getStackValues3(self, pd):
-        """Get x/y/z stats using a plot dict pd
+    def getStackValues2(self, stat, roiType=['spineROI'], segmentID=[], plotBad=False, plotIntBad=False):
+        """
+        Get all values for a stack annotation.
 
         Args:
-            pd (dict): A :py:const:`mmUtil.PLOT_DICT`
+            stat (str): Name of a stack annotation.
+            roiType: yyy
+            segmentID: zzz
 
         Returns:
-            pd with pd['x'], pd['y'] and pd['z'] filled in with values
+            1D numpy ndarray of values
 
-        Note::
+        """
+        plotDict = newplotdict()
+        plotDict['roitype'] = roiType
+        plotDict['xstat'] = stat
+        plotDict['segmentid'] = segmentID
+        plotDict['plotbad'] = plotBad
+        plotDict['plotIntBad'] = plotIntBad
 
-            Returns pd filled in as follows:
-            pd['x']: x stat values if pd['xstat'], length is number of annotations matching criteria in original pd argument
-            pd['y']: y stat values if pd['ystat']
-            pd['z']: z stat values if pd['zstat']
-            pd['stackidx']: stack index of returned values
-            pd['reverse']: same length as stackdb.numObj,
-                reverse[i]>=0 gives index into pd['x'] for annotation i, reverse[i]=='nan' means annotation i was not included
+        plotDict = self.getStackValues3(plotDict)
+        return plotDict['x']
+
+    def getStackValues3(self, pd):
+        """Get values of three annotations using a plot dictionary pd.
+        Get a default plot dictionary from mmUtil.newplotdict().
+        This is useful for getting annotation values for plotting.
+
+        Args:
+
+            pd (dict): A plot dictionary telling us what to plot. Fill in x/y/z with stat names.
+
+        Returns:
+
+            | pd['x'], x stat values if pd['xstat'], length is number of annotations matching criteria in original pd argument
+            | pd['y'], y stat values if pd['ystat']
+            | pd['z'], z stat values if pd['zstat']
+            | pd['stackidx'], stack index of returned values
+            | pd['reverse'], same length as stackdb.numObj,
+            |     reverse[i]>=0 gives index into pd['x'] for annotation i, reverse[i]=='nan' means annotation i was not included
         """
 
         ret = self.stackdb
@@ -282,27 +303,6 @@ class mmStack():
         pd['reverse'] = reverse
 
         return pd
-
-    def getStackValues2(self, stat, roiType=['spineROI'], segmentID=[], plotBad=False, plotIntBad=False):
-        """
-
-        Args:
-            token: stack statistic
-            roiType: yyy
-            segmentID: zzz
-
-        Returns: 1D numpy ndarray of values
-
-        """
-        plotDict = newplotdict()
-        plotDict['roitype'] = roiType
-        plotDict['xstat'] = stat
-        plotDict['segmentid'] = segmentID
-        plotDict['plotbad'] = plotBad
-        plotDict['plotIntBad'] = plotIntBad
-
-        plotDict = self.getStackValues3(plotDict)
-        return plotDict['x']
 
     def _loadLine(self):
         """
