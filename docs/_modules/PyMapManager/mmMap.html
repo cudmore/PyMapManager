@@ -168,7 +168,7 @@
 <span class="sd">	[9] nodeType, [10] segmentID, [11] splitIdx</span>
 <span class="sd">&#39;&#39;&#39;</span>
 
-<div class="viewcode-block" id="mmMap"><a class="viewcode-back" href="../../pymapmanager.html#pymapmanager.mmMap.mmMap">[docs]</a><span class="k">class</span> <span class="nc">mmMap</span><span class="p">():</span>
+<div class="viewcode-block" id="mmMap"><a class="viewcode-back" href="../../pymapmanager.mmMap.html#pymapmanager.mmMap.mmMap">[docs]</a><span class="k">class</span> <span class="nc">mmMap</span><span class="p">():</span>
 	<span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">	A time-series of :class:`pymapmanager.mmStack` plus some book-keeping to link corresponding annotations</span>
 <span class="sd">	and segments between stacks.</span>
@@ -180,13 +180,13 @@
 <span class="sd">	Example::</span>
 
 <span class="sd">		from pymapmanager.mmMap import mmMap</span>
-<span class="sd">		file = &#39;/Users/cudmore/Desktop/data/rr30a/rr30a.txt&#39;</span>
+<span class="sd">		file = &#39;/Users/cudmore/Desktop/data/cudmore/rr30a/rr30a.txt&#39;</span>
 <span class="sd">		m = mmMap(filePath=path)</span>
 
-<span class="sd">		# Get the ith mmStack using::</span>
-<span class="sd">		stack = m.stacks[i]</span>
+<span class="sd">		# Get the 3rd mmStack using</span>
+<span class="sd">		stack = m.stacks[3]</span>
 
-<span class="sd">		# Use getMapValues2() to retrieve stack annotations (for the given segmentID) across the entire map::</span>
+<span class="sd">		# Use getMapValues2() to retrieve stack annotations (for the given segmentID) across the entire map</span>
 <span class="sd">		pDist_values = m.getMapValues2(&#39;pDist&#39;, segmentID=[3])</span>
 <span class="sd">	&quot;&quot;&quot;</span>
 
@@ -194,41 +194,32 @@
 		<span class="n">startTime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
 
 		<span class="bp">self</span><span class="o">.</span><span class="n">filePath</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
-		<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">		Full file path to map file</span>
-<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="c1"># Full file path to .txt file for the map.</span>
+
 		<span class="bp">self</span><span class="o">.</span><span class="n">_folder</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
-		<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">		Path to enclosing folder, ends in &#39;/&#39;.</span>
-<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="c1"># Path to enclosing folder, ends in &#39;/&#39;.</span>
+
 		<span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
-		<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">		Name of the map. For a map loaded with file a5n.txt, name is a5b. Same as enclosing folder name.</span>
-<span class="sd">		If urlmap then this is the name of the map to fetch from a :class:`pymapmanager.mmio` server.</span>
-<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="c1"># Name of the map. For a map loaded with file a5n.txt, name is a5b. Same as enclosing folder name.</span>
+		<span class="c1"># If urlmap then this is the name of the map to fetch from a :class:`pymapmanager.mmio` server.</span>
+
 		<span class="bp">self</span><span class="o">.</span><span class="n">table</span> <span class="o">=</span> <span class="kc">None</span>
-		<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">		Pandas df loaded from file filePath or header if using url. Get values using getValue(name,session)</span>
-<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="c1"># Pandas dataframe loaded from .txt file filePath or &#39;header&#39; if using :class:`pymapmanager.mmio`.</span>
+		<span class="c1"># Get values from this dataframe using getValue(name,sessionNumber)</span>
+
 		<span class="bp">self</span><span class="o">.</span><span class="n">defaultRoiType</span> <span class="o">=</span> <span class="s1">&#39;spineROI&#39;</span>
 
 		<span class="bp">self</span><span class="o">.</span><span class="n">server</span> <span class="o">=</span> <span class="kc">None</span>
-		<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">		Pointer to :class:`pymapmanager.mmio` server connection.</span>
-<span class="sd">		Only used to load from urlmap.</span>
-<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="c1"># Pointer to :class:`pymapmanager.mmio` server connection.</span>
+		<span class="c1"># Only used to load from urlmap.</span>
 
 		<span class="bp">self</span><span class="o">.</span><span class="n">objMap</span> <span class="o">=</span> <span class="kc">None</span>
-		<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">		2D array where each row is a run of annotations.</span>
-<span class="sd">		objMap[i][j] gives us a mmStack centric index into mmStack.stackdb.</span>
-<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="c1"># 2D array where each row is a run of annotations.</span>
+		<span class="c1"># objMap[i][j] gives us a mmStack centric index into mmStack.stackdb.</span>
 
 		<span class="bp">self</span><span class="o">.</span><span class="n">segMap</span> <span class="o">=</span> <span class="kc">None</span>
-		<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">		2D array where each row is a run of segments.</span>
-<span class="sd">		segMap[i][j] gives us mmStack centric index into mmStack._line</span>
-<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="c1"># 2D array where each row is a run of segments.</span>
+		<span class="c1"># segMap[i][j] gives us mmStack centric index into mmStack._line</span>
 
 		<span class="n">doFile</span> <span class="o">=</span> <span class="kc">True</span>
 		<span class="k">if</span> <span class="n">filePath</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -355,21 +346,22 @@
 			<span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">stacks</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
 			<span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
 
-<div class="viewcode-block" id="mmMap.getValue"><a class="viewcode-back" href="../../pymapmanager.html#pymapmanager.mmMap.mmMap.getValue">[docs]</a>	<span class="k">def</span> <span class="nf">getValue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">sessionNumber</span><span class="p">):</span>
+<div class="viewcode-block" id="mmMap.getValue"><a class="viewcode-back" href="../../pymapmanager.mmMap.html#pymapmanager.mmMap.mmMap.getValue">[docs]</a>	<span class="k">def</span> <span class="nf">getValue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">sessionNumber</span><span class="p">):</span>
 		<span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Get a value from the map (not from a stack!).</span>
 
 <span class="sd">		Args:</span>
-<span class="sd">			name: Name of map stat</span>
-<span class="sd">			sessionNumber: Session number</span>
+<span class="sd">			name: Name of map value</span>
+<span class="sd">			sessionNumber: Session number of the stack</span>
 
 <span class="sd">		Returns:</span>
 <span class="sd">			Str (this is a single value)</span>
 
 <span class="sd">		Examples::</span>
 
-<span class="sd">			m.getValue(&#39;voxelx&#39;, 5) # get the x voxel size of stack 5 (in um/pixel)</span>
-<span class="sd">			m.getValue(&#39;hsStack&#39;,3) # get the name of stack 3</span>
+<span class="sd">			m.getValue(&#39;pixelsz&#39;, 2) # get the number of z-slices (pixels) of stack 2.</span>
+<span class="sd">			m.getValue(&#39;voxelx&#39;, 5) # get the x voxel size of stack 5 (in um/pixel).</span>
+<span class="sd">			m.getValue(&#39;hsStack&#39;,3) # get the name of stack 3.</span>
 <span class="sd">		&quot;&quot;&quot;</span>
 		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">sessionNumber</span><span class="p">]</span> <span class="c1"># .loc specifies row, .iloc specifies a column</span></div>
 
@@ -380,8 +372,9 @@
 			<span class="n">ret</span> <span class="o">=</span> <span class="n">ret</span><span class="p">[:</span><span class="o">-</span><span class="mi">4</span><span class="p">]</span>
 		<span class="k">return</span> <span class="n">ret</span>
 
-<div class="viewcode-block" id="mmMap.getMapValues3"><a class="viewcode-back" href="../../pymapmanager.html#pymapmanager.mmMap.mmMap.getMapValues3">[docs]</a>	<span class="k">def</span> <span class="nf">getMapValues3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pd</span><span class="p">):</span>
+<div class="viewcode-block" id="mmMap.getMapValues3"><a class="viewcode-back" href="../../pymapmanager.mmMap.html#pymapmanager.mmMap.mmMap.getMapValues3">[docs]</a>	<span class="k">def</span> <span class="nf">getMapValues3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pd</span><span class="p">):</span>
 		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Get values of a stack annotation across all stacks in the map.</span>
 
 <span class="sd">		Args:</span>
 <span class="sd">			pd (dict): A plot dictionary describing what to plot. Get default from mmUtil.newplotdict().</span>
@@ -393,7 +386,7 @@
 <span class="sd">			| pd[&#39;z&#39;], same</span>
 <span class="sd">			| pd[&#39;stackidx&#39;], Each [i]j[] gives the stack centric index of annotation value at [i][j].</span>
 <span class="sd">			| pd[&#39;mapsess&#39;], Each [i][j] gives the map session of value at annotation [i][j].</span>
-<span class="sd">			| pd[&#39;runrow&#39;], </span>
+<span class="sd">			| pd[&#39;runrow&#39;],</span>
 
 <span class="sd">		&quot;&quot;&quot;</span>
 		<span class="n">startTime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
@@ -502,12 +495,12 @@
 		<span class="n">pd</span><span class="p">[</span><span class="s1">&#39;runrow&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">yRunRow</span>
 		<span class="k">return</span> <span class="n">pd</span></div>
 
-<div class="viewcode-block" id="mmMap.getMapValues2"><a class="viewcode-back" href="../../pymapmanager.html#pymapmanager.mmMap.mmMap.getMapValues2">[docs]</a>	<span class="k">def</span> <span class="nf">getMapValues2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stat</span><span class="p">,</span> <span class="n">roiType</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;spineROI&#39;</span><span class="p">],</span> <span class="n">segmentID</span><span class="o">=</span><span class="p">[],</span> <span class="n">plotBad</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">plotIntBad</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="mmMap.getMapValues2"><a class="viewcode-back" href="../../pymapmanager.mmMap.html#pymapmanager.mmMap.mmMap.getMapValues2">[docs]</a>	<span class="k">def</span> <span class="nf">getMapValues2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stat</span><span class="p">,</span> <span class="n">roiType</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;spineROI&#39;</span><span class="p">],</span> <span class="n">segmentID</span><span class="o">=</span><span class="p">[],</span> <span class="n">plotBad</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">plotIntBad</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 		<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">		Get values of a stack statistic across all stacks in the map</span>
+<span class="sd">		Get values of a stack annotation across all stacks in the map.</span>
 
 <span class="sd">		Args:</span>
-<span class="sd">			stat (str): The stack statistic to get (corresponds to a column in mmStack.stackdb)</span>
+<span class="sd">			stat (str): The stack annotation to get (corresponds to a column in mmStack.stackdb)</span>
 <span class="sd">			roiType (str): xxx</span>
 <span class="sd">			segmentID (list): xxx</span>
 <span class="sd">			plotBad (boolean): xxx</span>
@@ -599,6 +592,12 @@
 		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">segRunMap</span><span class="p">[</span><span class="n">segmentNumber</span><span class="p">][</span><span class="n">sessIdx</span><span class="p">]</span> <span class="c1"># can be nan</span></div>
 
 
+<div class="viewcode-block" id="testmmMap"><a class="viewcode-back" href="../../pymapmanager.mmMap.html#pymapmanager.mmMap.testmmMap">[docs]</a><span class="k">class</span> <span class="nc">testmmMap</span><span class="p">():</span>
+	<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">	docstring for testmmMap</span>
+<span class="sd">	&quot;&quot;&quot;</span>
+	<span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="k">pass</span></div>
 </pre></div>
 
            </div>

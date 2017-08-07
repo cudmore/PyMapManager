@@ -196,7 +196,7 @@
     <span class="s1">&#39;mapsess&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">}</span>
 
-<div class="viewcode-block" id="newplotdict"><a class="viewcode-back" href="../../pymapmanager.html#pymapmanager.mmUtil.newplotdict">[docs]</a><span class="k">def</span> <span class="nf">newplotdict</span><span class="p">():</span>
+<div class="viewcode-block" id="newplotdict"><a class="viewcode-back" href="../../pymapmanager.mmUtil.html#pymapmanager.mmUtil.newplotdict">[docs]</a><span class="k">def</span> <span class="nf">newplotdict</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Get a new default plot dictionary.</span>
 
@@ -206,7 +206,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">PLOT_DICT</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="mmEvent"><a class="viewcode-back" href="../../pymapmanager.html#pymapmanager.mmUtil.mmEvent">[docs]</a><span class="k">class</span> <span class="nc">mmEvent</span><span class="p">:</span>
+<div class="viewcode-block" id="mmEvent"><a class="viewcode-back" href="../../pymapmanager.mmUtil.html#pymapmanager.mmUtil.mmEvent">[docs]</a><span class="k">class</span> <span class="nc">mmEvent</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Class used by Qt to broadcast events.</span>
 <span class="sd">    Events can be user events like &#39;spine selection&#39; or program events like &#39;map opened&#39;</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -222,7 +222,7 @@
         <span class="k">if</span> <span class="nb">map</span> <span class="ow">and</span> <span class="n">sessIdx</span><span class="o">&gt;=</span><span class="mi">0</span> <span class="ow">and</span> <span class="n">stackdbIdx</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">spineSelection</span><span class="p">(</span><span class="nb">map</span><span class="p">,</span> <span class="n">sessIdx</span><span class="p">,</span> <span class="n">stackdbIdx</span><span class="p">)</span>
 
-<div class="viewcode-block" id="mmEvent.spineSelection"><a class="viewcode-back" href="../../pymapmanager.html#pymapmanager.mmUtil.mmEvent.spineSelection">[docs]</a>    <span class="k">def</span> <span class="nf">spineSelection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">map</span><span class="p">,</span> <span class="n">sessIdx</span><span class="p">,</span> <span class="n">stackdbIdx</span><span class="p">):</span>
+<div class="viewcode-block" id="mmEvent.spineSelection"><a class="viewcode-back" href="../../pymapmanager.mmUtil.html#pymapmanager.mmUtil.mmEvent.spineSelection">[docs]</a>    <span class="k">def</span> <span class="nf">spineSelection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">map</span><span class="p">,</span> <span class="n">sessIdx</span><span class="p">,</span> <span class="n">stackdbIdx</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Make a single spine selection event</span>
 
@@ -241,7 +241,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">runMapRow</span> <span class="o">=</span> <span class="nb">map</span><span class="o">.</span><span class="n">objMap</span><span class="p">[</span><span class="n">runMapRowIdx</span><span class="p">,</span><span class="n">stackdbIdx</span><span class="p">,</span><span class="n">sessIdx</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">runMapRow</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">runMapRow</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="mmEvent.getText"><a class="viewcode-back" href="../../pymapmanager.html#pymapmanager.mmUtil.mmEvent.getText">[docs]</a>    <span class="k">def</span> <span class="nf">getText</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="mmEvent.getText"><a class="viewcode-back" href="../../pymapmanager.mmUtil.html#pymapmanager.mmUtil.mmEvent.getText">[docs]</a>    <span class="k">def</span> <span class="nf">getText</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns a human readable string describing the event.</span>
 

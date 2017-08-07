@@ -165,7 +165,7 @@
 <span class="kn">from</span> <span class="nn">pymapmanager.mmio</span> <span class="k">import</span> <span class="n">mmio</span>
 <span class="kn">from</span> <span class="nn">pymapmanager.mmUtil</span> <span class="k">import</span> <span class="n">newplotdict</span>
 
-<div class="viewcode-block" id="mmStack"><a class="viewcode-back" href="../../pymapmanager.html#pymapmanager.mmStack.mmStack">[docs]</a><span class="k">class</span> <span class="nc">mmStack</span><span class="p">():</span>
+<div class="viewcode-block" id="mmStack"><a class="viewcode-back" href="../../pymapmanager.mmStack.html#pymapmanager.mmStack.mmStack">[docs]</a><span class="k">class</span> <span class="nc">mmStack</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A stack contains a 3D Tiff, a list of 3D annotations, and optionally a number of segment tracings.</span>
 <span class="sd">    A stack can either be a single time-point or be embeded into a session of a :class:`pymapmanager.mmMap`.</span>
@@ -177,11 +177,6 @@
 <span class="sd">        map (object): Runtime object of :class:`pymapmanager.mmMap` that created the stack.</span>
 <span class="sd">        mapSession (int): The map session number for the stack.</span>
 
-<span class="sd">    Example::</span>
-
-<span class="sd">        xxx</span>
-<span class="sd">        yyy</span>
-<span class="sd">        zzz</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filePath</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">numChannels</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="nb">map</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">mapSession</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">urlmap</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -380,6 +375,16 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span>
 
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">annotationNames</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get a list of all annotations names in the stack.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Stirng list of valid names for stat passed to getStackValues2(stat) and names for</span>
+<span class="sd">            pd[&#39;xstat&#39;], pd[&#39;ystat&#39;], pd[&#39;zstat&#39;] passed to getStackValues3(pd).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stackdb</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+
     <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">mapname</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">map_</span><span class="o">.</span><span class="n">name</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">map_</span> <span class="k">else</span> <span class="s1">&#39;None&#39;</span>
         <span class="k">return</span> <span class="p">(</span><span class="s1">&#39;stack:&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
@@ -389,11 +394,7 @@
                 <span class="o">+</span> <span class="s1">&#39; segments:&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">numSegments</span><span class="p">)</span>
                 <span class="o">+</span> <span class="s1">&#39; channels:&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">numChannels</span><span class="p">))</span>
 
-<div class="viewcode-block" id="mmStack.getStatNames"><a class="viewcode-back" href="../../pymapmanager.html#pymapmanager.mmStack.mmStack.getStatNames">[docs]</a>    <span class="k">def</span> <span class="nf">getStatNames</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Get column names from stack. These are valid values for plot functions.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stackdb</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">values</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="mmStack.getStackValues2"><a class="viewcode-back" href="../../pymapmanager.html#pymapmanager.mmStack.mmStack.getStackValues2">[docs]</a>    <span class="k">def</span> <span class="nf">getStackValues2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stat</span><span class="p">,</span> <span class="n">roiType</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;spineROI&#39;</span><span class="p">],</span> <span class="n">segmentID</span><span class="o">=</span><span class="p">[],</span> <span class="n">plotBad</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">plotIntBad</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="mmStack.getStackValues2"><a class="viewcode-back" href="../../pymapmanager.mmStack.html#pymapmanager.mmStack.mmStack.getStackValues2">[docs]</a>    <span class="k">def</span> <span class="nf">getStackValues2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stat</span><span class="p">,</span> <span class="n">roiType</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;spineROI&#39;</span><span class="p">],</span> <span class="n">segmentID</span><span class="o">=</span><span class="p">[],</span> <span class="n">plotBad</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">plotIntBad</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get all values for a stack annotation.</span>
 
@@ -416,7 +417,7 @@
         <span class="n">plotDict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getStackValues3</span><span class="p">(</span><span class="n">plotDict</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">plotDict</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="mmStack.getStackValues3"><a class="viewcode-back" href="../../pymapmanager.html#pymapmanager.mmStack.mmStack.getStackValues3">[docs]</a>    <span class="k">def</span> <span class="nf">getStackValues3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pd</span><span class="p">):</span>
+<div class="viewcode-block" id="mmStack.getStackValues3"><a class="viewcode-back" href="../../pymapmanager.mmStack.html#pymapmanager.mmStack.mmStack.getStackValues3">[docs]</a>    <span class="k">def</span> <span class="nf">getStackValues3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pd</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get values of three annotations using a plot dictionary pd.</span>
 <span class="sd">        Get a default plot dictionary from mmUtil.newplotdict().</span>
 <span class="sd">        This is useful for getting annotation values for plotting.</span>
@@ -468,14 +469,15 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_line</span> <span class="o">=</span> <span class="n">mmStackLine</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
-<div class="viewcode-block" id="mmStack.loadStackImages"><a class="viewcode-back" href="../../pymapmanager.html#pymapmanager.mmStack.mmStack.loadStackImages">[docs]</a>    <span class="k">def</span> <span class="nf">loadStackImages</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">channel</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+<div class="viewcode-block" id="mmStack.loadStackImages"><a class="viewcode-back" href="../../pymapmanager.mmStack.html#pymapmanager.mmStack.mmStack.loadStackImages">[docs]</a>    <span class="k">def</span> <span class="nf">loadStackImages</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">channel</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Load the images for a stack. Sets &#39;images&#39; instance variable</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            channel (int): Specifies the channel number to load. MapManager uses single channel .tif files. Each channel has its own file: _ch1.tif, _ch2.tif, _ch3.tif.</span>
+<span class="sd">            channel (int): Specifies the channel number to load. MapManager uses single channel .tif files.</span>
+<span class="sd">            Each channel has its own file: _ch1.tif, _ch2.tif, _ch3.tif.</span>
 
-<span class="sd">        Return:</span>
+<span class="sd">        Returns:</span>
 <span class="sd">            images (3D ndarray): 3D numpy array of images.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">startTime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>

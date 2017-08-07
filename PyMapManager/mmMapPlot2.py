@@ -38,6 +38,13 @@ class mmMapPlot2():
         self.pd = None # plot dict
 
     def onclick(self, event):
+        """
+        Used by Qt interface.
+
+        Args:
+            event (:class:`pymapmanager.mmUtil.mmEvent`)
+
+        """
         print 'mmMapPlot2.onclick()', event.button, event.x, event.y, event.xdata, event.ydata
 
     def _plotMap(self, fig):
@@ -63,15 +70,16 @@ class mmMapPlot2():
 
     def plotMap0(self, fig, pd):
         """
-        Plot a canonical spine map.
+        Plot a canonical spine map of position along segment versus session.
 
         Args:
-            fig: A figure canvas from qt or a plt.figure() from matplotlib.
-            pd: PyMapManager PLOT_DICT
+            fig: Either a matplotlib.figure.Figure if using Qt or
+                plt.figure() if using command line or IPython/Jupyter.
+            pd: A plot dictionary describing what to plot. Get default from mmUtil.newplotdict().
 
         Returns: None
-
         """
+
         #fig.canvas.mpl_connect('button_press_event', self.onclick)
 
         #self.width = 4
@@ -107,7 +115,8 @@ class mmMapPlot2():
         Args:
             fig: Either a matplotlib.figure.Figure if using Qt or
                 plt.figure() if using command line or IPython/Jupyter.
-            pd: plot_struct with ['xstat'] and ['ystat'] filled in.
+            pd (dict): A plot dictionary describing what to plot. Get default from mmUtil.newplotdict().
+                Fill in ['xstat'] and ['ystat'] with valid stack annotation names.
 
         Returns: None
         """
@@ -149,10 +158,16 @@ class mmMapPlot2():
 
     @property
     def x(self):
+        """
+        Returns an array of x values in the plot.
+        """
         return self.pd['x']
 
     @property
     def y(self):
+        """
+        Returns an array of y values in the plot.
+        """
         return self.pd['y']
 
     def getUserSelection(self, pnt):

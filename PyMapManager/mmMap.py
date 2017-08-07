@@ -25,13 +25,13 @@ class mmMap():
 	Example::
 
 		from pymapmanager.mmMap import mmMap
-		file = '/Users/cudmore/Desktop/data/rr30a/rr30a.txt'
+		file = '/Users/cudmore/Desktop/data/cudmore/rr30a/rr30a.txt'
 		m = mmMap(filePath=path)
 
-		# Get the ith mmStack using::
-		stack = m.stacks[i]
+		# Get the 3rd mmStack using
+		stack = m.stacks[3]
 
-		# Use getMapValues2() to retrieve stack annotations (for the given segmentID) across the entire map::
+		# Use getMapValues2() to retrieve stack annotations (for the given segmentID) across the entire map
 		pDist_values = m.getMapValues2('pDist', segmentID=[3])
 	"""
 
@@ -39,41 +39,32 @@ class mmMap():
 		startTime = time.time()
 
 		self.filePath = ''
-		"""
-		Full file path to map file
-		"""
+		# Full file path to .txt file for the map.
+
 		self._folder = ''
-		"""
-		Path to enclosing folder, ends in '/'.
-		"""
+		# Path to enclosing folder, ends in '/'.
+
 		self.name = ''
-		"""
-		Name of the map. For a map loaded with file a5n.txt, name is a5b. Same as enclosing folder name.
-		If urlmap then this is the name of the map to fetch from a :class:`pymapmanager.mmio` server.
-		"""
+		# Name of the map. For a map loaded with file a5n.txt, name is a5b. Same as enclosing folder name.
+		# If urlmap then this is the name of the map to fetch from a :class:`pymapmanager.mmio` server.
+
 		self.table = None
-		"""
-		Pandas df loaded from file filePath or header if using url. Get values using getValue(name,session)
-		"""
+		# Pandas dataframe loaded from .txt file filePath or 'header' if using :class:`pymapmanager.mmio`.
+		# Get values from this dataframe using getValue(name,sessionNumber)
+
 		self.defaultRoiType = 'spineROI'
 
 		self.server = None
-		"""
-		Pointer to :class:`pymapmanager.mmio` server connection.
-		Only used to load from urlmap.
-		"""
+		# Pointer to :class:`pymapmanager.mmio` server connection.
+		# Only used to load from urlmap.
 
 		self.objMap = None
-		"""
-		2D array where each row is a run of annotations.
-		objMap[i][j] gives us a mmStack centric index into mmStack.stackdb.
-		"""
+		# 2D array where each row is a run of annotations.
+		# objMap[i][j] gives us a mmStack centric index into mmStack.stackdb.
 
 		self.segMap = None
-		"""
-		2D array where each row is a run of segments.
-		segMap[i][j] gives us mmStack centric index into mmStack._line
-		"""
+		# 2D array where each row is a run of segments.
+		# segMap[i][j] gives us mmStack centric index into mmStack._line
 
 		doFile = True
 		if filePath is not None:
@@ -205,16 +196,17 @@ class mmMap():
 		Get a value from the map (not from a stack!).
 
 		Args:
-			name: Name of map stat
-			sessionNumber: Session number
+			name: Name of map value
+			sessionNumber: Session number of the stack
 
 		Returns:
 			Str (this is a single value)
 
 		Examples::
 
-			m.getValue('voxelx', 5) # get the x voxel size of stack 5 (in um/pixel)
-			m.getValue('hsStack',3) # get the name of stack 3
+			m.getValue('pixelsz', 2) # get the number of z-slices (pixels) of stack 2.
+			m.getValue('voxelx', 5) # get the x voxel size of stack 5 (in um/pixel).
+			m.getValue('hsStack',3) # get the name of stack 3.
 		"""
 		return self.table.loc[name].iloc[sessionNumber] # .loc specifies row, .iloc specifies a column
 
@@ -227,6 +219,7 @@ class mmMap():
 
 	def getMapValues3(self, pd):
 		"""
+		Get values of a stack annotation across all stacks in the map.
 
 		Args:
 			pd (dict): A plot dictionary describing what to plot. Get default from mmUtil.newplotdict().
@@ -349,10 +342,10 @@ class mmMap():
 
 	def getMapValues2(self, stat, roiType=['spineROI'], segmentID=[], plotBad=False, plotIntBad=False):
 		"""
-		Get values of a stack statistic across all stacks in the map
+		Get values of a stack annotation across all stacks in the map.
 
 		Args:
-			stat (str): The stack statistic to get (corresponds to a column in mmStack.stackdb)
+			stat (str): The stack annotation to get (corresponds to a column in mmStack.stackdb)
 			roiType (str): xxx
 			segmentID (list): xxx
 			plotBad (boolean): xxx
@@ -444,3 +437,9 @@ class mmMap():
 		return self.segRunMap[segmentNumber][sessIdx] # can be nan
 
 
+class testmmMap():
+	"""
+	docstring for testmmMap
+	"""
+	def __init__(self):
+		pass

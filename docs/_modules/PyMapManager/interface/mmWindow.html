@@ -179,7 +179,7 @@
 <span class="kn">from</span> <span class="nn">pymapmanager.interface.mmCanvas</span> <span class="k">import</span> <span class="n">mmStackCanvas</span><span class="p">,</span> <span class="n">mmMapPlotCanvas</span><span class="p">,</span> <span class="n">mmStackPlotCanvas</span>
 <span class="kn">from</span> <span class="nn">pymapmanager.interface.mmTable</span> <span class="k">import</span> <span class="n">MyPandasModel</span>
 
-<div class="viewcode-block" id="mmWindow"><a class="viewcode-back" href="../../../pymapmanager.interface.html#pymapmanager.interface.mmWindow.mmWindow">[docs]</a><span class="k">class</span> <span class="nc">mmWindow</span><span class="p">(</span><span class="n">QtGui</span><span class="o">.</span><span class="n">QMainWindow</span><span class="p">):</span>
+<div class="viewcode-block" id="mmWindow"><a class="viewcode-back" href="../../../pymapmanager.interface.mmWindow.html#pymapmanager.interface.mmWindow.mmWindow">[docs]</a><span class="k">class</span> <span class="nc">mmWindow</span><span class="p">(</span><span class="n">QtGui</span><span class="o">.</span><span class="n">QMainWindow</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A second QMainWindow to hold a plot. Possible plots are: stack image, stack, and map. StackImageWindow derives from this to plot a stack image.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -224,15 +224,15 @@
 
         <span class="c1">#self.statusBar().showMessage(&quot;This is main MapManager plot window&quot;, 2000)</span>
 
-<div class="viewcode-block" id="mmWindow.closeEvent"><a class="viewcode-back" href="../../../pymapmanager.interface.html#pymapmanager.interface.mmWindow.mmWindow.closeEvent">[docs]</a>    <span class="k">def</span> <span class="nf">closeEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+<div class="viewcode-block" id="mmWindow.closeEvent"><a class="viewcode-back" href="../../../pymapmanager.interface.mmWindow.html#pymapmanager.interface.mmWindow.mmWindow.closeEvent">[docs]</a>    <span class="k">def</span> <span class="nf">closeEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;On close, remove self from xxx list&quot;&quot;&quot;</span>
         <span class="nb">print</span> <span class="s1">&#39;PlotWindow.closeEvent()&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">closechildwindow</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="mmWindow.setStatus"><a class="viewcode-back" href="../../../pymapmanager.interface.html#pymapmanager.interface.mmWindow.mmWindow.setStatus">[docs]</a>    <span class="k">def</span> <span class="nf">setStatus</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+<div class="viewcode-block" id="mmWindow.setStatus"><a class="viewcode-back" href="../../../pymapmanager.interface.mmWindow.html#pymapmanager.interface.mmWindow.mmWindow.setStatus">[docs]</a>    <span class="k">def</span> <span class="nf">setStatus</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">statusBar</span><span class="o">.</span><span class="n">showMessage</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="mmWindow.broadcastevent"><a class="viewcode-back" href="../../../pymapmanager.interface.html#pymapmanager.interface.mmWindow.mmWindow.broadcastevent">[docs]</a>    <span class="k">def</span> <span class="nf">broadcastevent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+<div class="viewcode-block" id="mmWindow.broadcastevent"><a class="viewcode-back" href="../../../pymapmanager.interface.mmWindow.html#pymapmanager.interface.mmWindow.mmWindow.broadcastevent">[docs]</a>    <span class="k">def</span> <span class="nf">broadcastevent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Broadcast an event to all open application windows (self._windows) and call receiveevent(event).</span>
 <span class="sd">        The main application is the only one who can broadcast.</span>
 
@@ -240,12 +240,12 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">broadcastevent</span><span class="p">(</span><span class="n">event</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="mmWindow.receiveevent"><a class="viewcode-back" href="../../../pymapmanager.interface.html#pymapmanager.interface.mmWindow.mmWindow.receiveevent">[docs]</a>    <span class="k">def</span> <span class="nf">receiveevent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+<div class="viewcode-block" id="mmWindow.receiveevent"><a class="viewcode-back" href="../../../pymapmanager.interface.mmWindow.html#pymapmanager.interface.mmWindow.mmWindow.receiveevent">[docs]</a>    <span class="k">def</span> <span class="nf">receiveevent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
         <span class="nb">print</span> <span class="s1">&#39;PlotWindow.receiveevent()&#39;</span><span class="p">,</span> <span class="n">event</span><span class="o">.</span><span class="n">type</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">myCanvas</span><span class="o">.</span><span class="n">receiveevent</span><span class="p">(</span><span class="n">event</span><span class="p">)</span></div></div>
 
 
-<div class="viewcode-block" id="mmStackWindow"><a class="viewcode-back" href="../../../pymapmanager.interface.html#pymapmanager.interface.mmWindow.mmStackWindow">[docs]</a><span class="k">class</span> <span class="nc">mmStackWindow</span><span class="p">(</span><span class="n">mmWindow</span><span class="p">):</span>
+<div class="viewcode-block" id="mmStackWindow"><a class="viewcode-back" href="../../../pymapmanager.interface.mmWindow.html#pymapmanager.interface.mmWindow.mmStackWindow">[docs]</a><span class="k">class</span> <span class="nc">mmStackWindow</span><span class="p">(</span><span class="n">mmWindow</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Hold a stack image plot.&quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stateDict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="n">mmWindow</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">)</span>
@@ -448,7 +448,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">myCanvas</span><span class="o">.</span><span class="n">setSliceContrast</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">myCanvas</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="mmMapPlotWindow"><a class="viewcode-back" href="../../../pymapmanager.interface.html#pymapmanager.interface.mmWindow.mmMapPlotWindow">[docs]</a><span class="k">class</span> <span class="nc">mmMapPlotWindow</span><span class="p">(</span><span class="n">mmWindow</span><span class="p">):</span>
+<div class="viewcode-block" id="mmMapPlotWindow"><a class="viewcode-back" href="../../../pymapmanager.interface.mmWindow.html#pymapmanager.interface.mmWindow.mmMapPlotWindow">[docs]</a><span class="k">class</span> <span class="nc">mmMapPlotWindow</span><span class="p">(</span><span class="n">mmWindow</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Display a map plot of points.</span>
 
 <span class="sd">    Todo: instantiate this with a stateStruct so we can figure out number of session for session spinner interface</span>
@@ -488,7 +488,7 @@
         <span class="n">d</span><span class="p">[</span><span class="s1">&#39;segmentID&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">val</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">myCanvas</span><span class="o">.</span><span class="n">plotMap0</span><span class="p">(</span><span class="n">d</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="mmStackPlotWindow"><a class="viewcode-back" href="../../../pymapmanager.interface.html#pymapmanager.interface.mmWindow.mmStackPlotWindow">[docs]</a><span class="k">class</span> <span class="nc">mmStackPlotWindow</span><span class="p">(</span><span class="n">mmWindow</span><span class="p">):</span>
+<div class="viewcode-block" id="mmStackPlotWindow"><a class="viewcode-back" href="../../../pymapmanager.interface.mmWindow.html#pymapmanager.interface.mmWindow.mmStackPlotWindow">[docs]</a><span class="k">class</span> <span class="nc">mmStackPlotWindow</span><span class="p">(</span><span class="n">mmWindow</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Display a stack plot of points.&quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="n">mmWindow</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">)</span>

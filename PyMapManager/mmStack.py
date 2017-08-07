@@ -22,11 +22,6 @@ class mmStack():
         map (object): Runtime object of :class:`pymapmanager.mmMap` that created the stack.
         mapSession (int): The map session number for the stack.
 
-    Example::
-
-        xxx
-        yyy
-        zzz
     """
 
     def __init__(self, filePath=None, name=None, numChannels=1, map=None, mapSession=None, urlmap=None):
@@ -225,6 +220,16 @@ class mmStack():
         else:
             return None
 
+    @property
+    def annotationNames(self):
+        """Get a list of all annotations names in the stack.
+
+        Returns:
+            Stirng list of valid names for stat passed to getStackValues2(stat) and names for
+            pd['xstat'], pd['ystat'], pd['zstat'] passed to getStackValues3(pd).
+        """
+        return list(self.stackdb.columns.values)
+
     def __str__(self):
         mapname = self.map_.name if self.map_ else 'None'
         return ('stack:' + self.name
@@ -233,10 +238,6 @@ class mmStack():
                 + ' objects:' + str(self.numObj)
                 + ' segments:' + str(self.numSegments)
                 + ' channels:' + str(self.numChannels))
-
-    def getStatNames(self):
-        """Get column names from stack. These are valid values for plot functions."""
-        return list(self.stackdb.columns.values)
 
     def getStackValues2(self, stat, roiType=['spineROI'], segmentID=[], plotBad=False, plotIntBad=False):
         """
@@ -318,9 +319,10 @@ class mmStack():
         Load the images for a stack. Sets 'images' instance variable
 
         Args:
-            channel (int): Specifies the channel number to load. MapManager uses single channel .tif files. Each channel has its own file: _ch1.tif, _ch2.tif, _ch3.tif.
+            channel (int): Specifies the channel number to load. MapManager uses single channel .tif files.
+            Each channel has its own file: _ch1.tif, _ch2.tif, _ch3.tif.
 
-        Return:
+        Returns:
             images (3D ndarray): 3D numpy array of images.
         """
         startTime = time.time()

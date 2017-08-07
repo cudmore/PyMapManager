@@ -164,7 +164,7 @@
 <span class="n">default_server_url</span> <span class="o">=</span> <span class="s1">&#39;http://127.0.0.1:5000/&#39;</span>
 <span class="n">default_user</span> <span class="o">=</span> <span class="s1">&#39;cudmore&#39;</span>
 
-<div class="viewcode-block" id="mmio"><a class="viewcode-back" href="../../../pymapmanager.mmio.html#pymapmanager.mmio.mmio.mmio">[docs]</a><span class="k">class</span> <span class="nc">mmio</span><span class="p">():</span>
+<div class="viewcode-block" id="mmio"><a class="viewcode-back" href="../../../pymapmanager.mmio.mmio.html#pymapmanager.mmio.mmio.mmio">[docs]</a><span class="k">class</span> <span class="nc">mmio</span><span class="p">():</span>
 
 	<span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">server_url</span><span class="o">=</span><span class="n">default_server_url</span><span class="p">,</span> <span class="n">username</span><span class="o">=</span><span class="n">default_user</span><span class="p">):</span>
 		<span class="sd">&quot;&quot;&quot;</span>
@@ -183,7 +183,7 @@
 		<span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">server_url</span><span class="p">)</span>
 		<span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
 
-<div class="viewcode-block" id="mmio.maplist"><a class="viewcode-back" href="../../../pymapmanager.mmio.html#pymapmanager.mmio.mmio.mmio.maplist">[docs]</a>	<span class="k">def</span> <span class="nf">maplist</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="mmio.maplist"><a class="viewcode-back" href="../../../pymapmanager.mmio.mmio.html#pymapmanager.mmio.mmio.mmio.maplist">[docs]</a>	<span class="k">def</span> <span class="nf">maplist</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 		<span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Return list of maps for user username</span>
 <span class="sd">		&quot;&quot;&quot;</span>
@@ -191,7 +191,7 @@
 		<span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span></div>
 		<span class="c1">#print response.content</span>
 
-<div class="viewcode-block" id="mmio.getfile"><a class="viewcode-back" href="../../../pymapmanager.mmio.html#pymapmanager.mmio.mmio.mmio.getfile">[docs]</a>	<span class="k">def</span> <span class="nf">getfile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="n">mapname</span><span class="p">,</span> <span class="n">timepoint</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">channel</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="mmio.getfile"><a class="viewcode-back" href="../../../pymapmanager.mmio.mmio.html#pymapmanager.mmio.mmio.mmio.getfile">[docs]</a>	<span class="k">def</span> <span class="nf">getfile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="n">mapname</span><span class="p">,</span> <span class="n">timepoint</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">channel</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 		<span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Get a file from a map.</span>
 <span class="sd">		</span>
@@ -223,7 +223,7 @@
 			<span class="nb">print</span> <span class="s1">&#39;error: mmio.getfile() received a 404 for url:&#39;</span><span class="p">,</span> <span class="n">url</span>
 		<span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">content</span></div>
 			
-<div class="viewcode-block" id="mmio.getimage"><a class="viewcode-back" href="../../../pymapmanager.mmio.html#pymapmanager.mmio.mmio.mmio.getimage">[docs]</a>	<span class="k">def</span> <span class="nf">getimage</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mapname</span><span class="p">,</span> <span class="n">timepoint</span><span class="p">,</span> <span class="nb">slice</span><span class="p">,</span> <span class="n">channel</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<div class="viewcode-block" id="mmio.getimage"><a class="viewcode-back" href="../../../pymapmanager.mmio.mmio.html#pymapmanager.mmio.mmio.mmio.getimage">[docs]</a>	<span class="k">def</span> <span class="nf">getimage</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mapname</span><span class="p">,</span> <span class="n">timepoint</span><span class="p">,</span> <span class="nb">slice</span><span class="p">,</span> <span class="n">channel</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
 		<span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Get an image from a map.</span>
 <span class="sd">		</span>

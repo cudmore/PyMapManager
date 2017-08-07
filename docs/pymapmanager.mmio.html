@@ -92,7 +92,6 @@
               <div class="local-toc"><ul>
 <li><a class="reference internal" href="#">pymapmanager.mmio package</a><ul>
 <li><a class="reference internal" href="#submodules">Submodules</a></li>
-<li><a class="reference internal" href="#module-pymapmanager.mmio.mmio">pymapmanager.mmio.mmio module</a></li>
 <li><a class="reference internal" href="#module-pymapmanager.mmio">Module contents</a></li>
 </ul>
 </li>
@@ -163,67 +162,11 @@
 <h1>pymapmanager.mmio package<a class="headerlink" href="#pymapmanager-mmio-package" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="pymapmanager.mmio.mmio.html">pymapmanager.mmio.mmio module</a></li>
+</ul>
 </div>
-<div class="section" id="module-pymapmanager.mmio.mmio">
-<span id="pymapmanager-mmio-mmio-module"></span><h2>pymapmanager.mmio.mmio module<a class="headerlink" href="#module-pymapmanager.mmio.mmio" title="Permalink to this headline">¶</a></h2>
-<p>Use this to load (get) files from a mmserver.
-This is a temporary wrapper as mmserver is currently a Flask server (slow).
-Eventually transition this to use proper online repository like ndio.</p>
-<dl class="class">
-<dt id="pymapmanager.mmio.mmio.mmio">
-<em class="property">class </em><code class="descclassname">pymapmanager.mmio.mmio.</code><code class="descname">mmio</code><span class="sig-paren">(</span><em>server_url='http://127.0.0.1:5000/'</em>, <em>username='cudmore'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymapmanager/mmio/mmio.html#mmio"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymapmanager.mmio.mmio.mmio" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="method">
-<dt id="pymapmanager.mmio.mmio.mmio.getfile">
-<code class="descname">getfile</code><span class="sig-paren">(</span><em>type</em>, <em>mapname</em>, <em>timepoint=None</em>, <em>channel=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymapmanager/mmio/mmio.html#mmio.getfile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymapmanager.mmio.mmio.mmio.getfile" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get a file from a map.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>type</strong> (<em>str</em>) &#8211; One of (header, objmap, segmap, stackdb, line, int)</li>
-<li><strong>mapname</strong> (<em>str</em>) &#8211; </li>
-<li><strong>timepoint</strong> (<em>int</em>) &#8211; </li>
-<li><strong>channel</strong> (<em>int</em>) &#8211; Required for type=int</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="pymapmanager.mmio.mmio.mmio.getimage">
-<code class="descname">getimage</code><span class="sig-paren">(</span><em>mapname</em>, <em>timepoint</em>, <em>slice</em>, <em>channel=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymapmanager/mmio/mmio.html#mmio.getimage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymapmanager.mmio.mmio.mmio.getimage" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get an image from a map.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>mapname</strong> (<em>str</em>) &#8211; </li>
-<li><strong>timepoint</strong> (<em>int</em>) &#8211; </li>
-<li><strong>slice</strong> (<em>int</em>) &#8211; </li>
-<li><strong>channel</strong> (<em>int</em>) &#8211; </li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-<dl class="docutils">
-<dt>Note::</dt>
-<dd>For now this is the whole 3D stack, need to make it one slice.</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="pymapmanager.mmio.mmio.mmio.maplist">
-<code class="descname">maplist</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymapmanager/mmio/mmio.html#mmio.maplist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymapmanager.mmio.mmio.mmio.maplist" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return list of maps for user username</p>
-</dd></dl>
-
-</dd></dl>
-
 </div>
 <div class="section" id="module-pymapmanager.mmio">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-pymapmanager.mmio" title="Permalink to this headline">¶</a></h2>

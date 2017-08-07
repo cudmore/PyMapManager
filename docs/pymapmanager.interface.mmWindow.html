@@ -1,0 +1,287 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pymapmanager.interface.mmWindow module &mdash; PyMapManager a1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="PyMapManager a1 documentation" href="index.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> PyMapManager
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                Version 0a1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">pymapmanager.interface.mmWindow module</a></li>
+</ul>
+</div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">PyMapManager</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>pymapmanager.interface.mmWindow module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/pymapmanager.interface.mmWindow.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-pymapmanager.interface.mmWindow">
+<span id="pymapmanager-interface-mmwindow-module"></span><h1>pymapmanager.interface.mmWindow module<a class="headerlink" href="#module-pymapmanager.interface.mmWindow" title="Permalink to this headline">¶</a></h1>
+<p>This module defines MapManager window classes.</p>
+<p><a class="reference internal" href="#module-pymapmanager.interface.mmWindow" title="pymapmanager.interface.mmWindow"><code class="xref py py-class docutils literal"><span class="pre">pymapmanager.interface.mmWindow</span></code></a>:
+Base class for other windows to inherit from</p>
+<p><code class="xref py py-class docutils literal"><span class="pre">pymapmanager.interface.mmStackWindow</span></code>:
+Display and interact with the 3D image and annotations from a <a class="reference internal" href="pymapmanager.mmStack.html#module-pymapmanager.mmStack" title="pymapmanager.mmStack"><code class="xref py py-class docutils literal"><span class="pre">pymapmanager.mmStack</span></code></a>.</p>
+<p><code class="xref py py-class docutils literal"><span class="pre">pymapmanager.interface.mmStackPlotWindow</span></code>:
+Display and interact with a plot of a annotations from a:class:<cite>pymapmanager.mmStack</cite>.</p>
+<p><code class="xref py py-class docutils literal"><span class="pre">pymapmanager.interface.mmMapPlotWindow</span></code>:
+Display and interact with a plot of <a class="reference internal" href="pymapmanager.mmStack.html#module-pymapmanager.mmStack" title="pymapmanager.mmStack"><code class="xref py py-class docutils literal"><span class="pre">pymapmanager.mmStack</span></code></a>
+annotations accross a <a class="reference internal" href="pymapmanager.mmMap.html#module-pymapmanager.mmMap" title="pymapmanager.mmMap"><code class="xref py py-class docutils literal"><span class="pre">pymapmanager.mmMap</span></code></a>.</p>
+<dl class="class">
+<dt id="pymapmanager.interface.mmWindow.mmMapPlotWindow">
+<em class="property">class </em><code class="descclassname">pymapmanager.interface.mmWindow.</code><code class="descname">mmMapPlotWindow</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymapmanager/interface/mmWindow.html#mmMapPlotWindow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymapmanager.interface.mmWindow.mmMapPlotWindow" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pymapmanager.interface.mmWindow.mmWindow" title="pymapmanager.interface.mmWindow.mmWindow"><code class="xref py py-class docutils literal"><span class="pre">pymapmanager.interface.mmWindow.mmWindow</span></code></a></p>
+<p>Display a map plot of points.</p>
+<p>Todo: instantiate this with a stateStruct so we can figure out number of session for session spinner interface</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="pymapmanager.interface.mmWindow.mmStackPlotWindow">
+<em class="property">class </em><code class="descclassname">pymapmanager.interface.mmWindow.</code><code class="descname">mmStackPlotWindow</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymapmanager/interface/mmWindow.html#mmStackPlotWindow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymapmanager.interface.mmWindow.mmStackPlotWindow" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pymapmanager.interface.mmWindow.mmWindow" title="pymapmanager.interface.mmWindow.mmWindow"><code class="xref py py-class docutils literal"><span class="pre">pymapmanager.interface.mmWindow.mmWindow</span></code></a></p>
+<p>Display a stack plot of points.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="pymapmanager.interface.mmWindow.mmStackWindow">
+<em class="property">class </em><code class="descclassname">pymapmanager.interface.mmWindow.</code><code class="descname">mmStackWindow</code><span class="sig-paren">(</span><em>stateDict=None</em>, <em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymapmanager/interface/mmWindow.html#mmStackWindow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymapmanager.interface.mmWindow.mmStackWindow" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pymapmanager.interface.mmWindow.mmWindow" title="pymapmanager.interface.mmWindow.mmWindow"><code class="xref py py-class docutils literal"><span class="pre">pymapmanager.interface.mmWindow.mmWindow</span></code></a></p>
+<p>Hold a stack image plot.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="pymapmanager.interface.mmWindow.mmWindow">
+<em class="property">class </em><code class="descclassname">pymapmanager.interface.mmWindow.</code><code class="descname">mmWindow</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymapmanager/interface/mmWindow.html#mmWindow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymapmanager.interface.mmWindow.mmWindow" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">PyQt4.QtGui.QMainWindow</span></code></p>
+<p>A second QMainWindow to hold a plot. Possible plots are: stack image, stack, and map. StackImageWindow derives from this to plot a stack image.</p>
+<dl class="method">
+<dt id="pymapmanager.interface.mmWindow.mmWindow.broadcastevent">
+<code class="descname">broadcastevent</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymapmanager/interface/mmWindow.html#mmWindow.broadcastevent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymapmanager.interface.mmWindow.mmWindow.broadcastevent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Broadcast an event to all open application windows (self._windows) and call receiveevent(event).
+The main application is the only one who can broadcast.</p>
+<p>event : A mmEvent object with params to describe the event</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymapmanager.interface.mmWindow.mmWindow.closeEvent">
+<code class="descname">closeEvent</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymapmanager/interface/mmWindow.html#mmWindow.closeEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymapmanager.interface.mmWindow.mmWindow.closeEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>On close, remove self from xxx list</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymapmanager.interface.mmWindow.mmWindow.receiveevent">
+<code class="descname">receiveevent</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymapmanager/interface/mmWindow.html#mmWindow.receiveevent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymapmanager.interface.mmWindow.mmWindow.receiveevent" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pymapmanager.interface.mmWindow.mmWindow.setStatus">
+<code class="descname">setStatus</code><span class="sig-paren">(</span><em>str</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymapmanager/interface/mmWindow.html#mmWindow.setStatus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymapmanager.interface.mmWindow.mmWindow.setStatus" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Robert H Cudmore.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'a1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

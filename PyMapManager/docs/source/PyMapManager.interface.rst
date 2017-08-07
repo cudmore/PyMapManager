@@ -4,46 +4,13 @@ pymapmanager\.interface package
 Submodules
 ----------
 
-pymapmanager\.interface\.main module
-------------------------------------
+.. toctree::
 
-.. automodule:: pymapmanager.interface.main
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-pymapmanager\.interface\.mmApp module
--------------------------------------
-
-.. automodule:: pymapmanager.interface.mmApp
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-pymapmanager\.interface\.mmCanvas module
-----------------------------------------
-
-.. automodule:: pymapmanager.interface.mmCanvas
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-pymapmanager\.interface\.mmTable module
----------------------------------------
-
-.. automodule:: pymapmanager.interface.mmTable
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-pymapmanager\.interface\.mmWindow module
-----------------------------------------
-
-.. automodule:: pymapmanager.interface.mmWindow
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
+   pymapmanager.interface.main
+   pymapmanager.interface.mmApp
+   pymapmanager.interface.mmCanvas
+   pymapmanager.interface.mmTable
+   pymapmanager.interface.mmWindow
 
 Module contents
 ---------------

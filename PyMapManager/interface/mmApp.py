@@ -205,7 +205,7 @@ class mmApplicationWindow(QtGui.QMainWindow):
         self.statusBar().showMessage("All hail matplotlib!", 2000)
 
         # load a mm map
-        if 0:
+        if 1:
             defaultMap = '/Users/cudmore/Desktop/data/cudmore/rr30a/rr30a.txt'
             #defaultMap = '/Volumes/fourt/MapManager_Data/stroke1/stroke1.txt'
             if not os.path.isfile(defaultMap):
@@ -222,7 +222,7 @@ class mmApplicationWindow(QtGui.QMainWindow):
             """
 
         # load from online repository
-        if 1:
+        if 0:
             urlmap = 'rr30a'
             self.loadMap(urlmap=urlmap)
 
