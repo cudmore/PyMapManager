@@ -32,9 +32,6 @@
   
 
   
-        <link rel="index" title="Index"
-              href="../../../genindex.html"/>
-        <link rel="search" title="Search" href="../../../search.html"/>
     <link rel="top" title="PyMapManager a1 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
@@ -193,7 +190,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">axes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">add_axes</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span> <span class="c1">#remove white border</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span> <span class="c1">#turn off axis labels</span>
 
-        <span class="n">FigureCanvas</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="p">)</span>
+        <span class="n">FigureCanvas</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">setParent</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
 
         <span class="n">FigureCanvas</span><span class="o">.</span><span class="n">setSizePolicy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
@@ -288,7 +285,7 @@
     <span class="sd">&quot;&quot;&quot;Plot and interact with a plot of stack values across a map&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="n">mmCanvas</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">)</span>
+        <span class="n">mmCanvas</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">)</span>
 
 <div class="viewcode-block" id="mmMapPlotCanvas.togglelines"><a class="viewcode-back" href="../../../pymapmanager.interface.mmCanvas.html#pymapmanager.interface.mmCanvas.mmMapPlotCanvas.togglelines">[docs]</a>    <span class="k">def</span> <span class="nf">togglelines</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">onoff</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Toggle lines connecting annotations between timepoint. Be carefull here on repeatedly plot these lines&quot;&quot;&quot;</span>
@@ -503,7 +500,7 @@
     <span class="sd">&quot;&quot;&quot;Plot and interact with a plot of stack values across a map&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="n">mmCanvas</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">)</span>
+        <span class="n">mmCanvas</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">)</span>
 
 <div class="viewcode-block" id="mmStackPlotCanvas.toggledynamics"><a class="viewcode-back" href="../../../pymapmanager.interface.mmCanvas.html#pymapmanager.interface.mmCanvas.mmStackPlotCanvas.toggledynamics">[docs]</a>    <span class="k">def</span> <span class="nf">toggledynamics</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">onoff</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Turn dynamics marker color on and off&quot;&quot;&quot;</span>
@@ -661,7 +658,7 @@
     <span class="sd">&quot;&quot;&quot;Plot and interact with a 3D images stack&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="n">mmCanvas</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">)</span>
+        <span class="n">mmCanvas</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">sliceNumber</span> <span class="o">=</span> <span class="kc">None</span>
 
@@ -938,7 +935,7 @@
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
+            SOURCELINK_SUFFIX: ''
         };
     </script>
       <script type="text/javascript" src="../../../_static/jquery.js"></script>

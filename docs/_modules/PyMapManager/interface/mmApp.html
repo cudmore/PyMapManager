@@ -32,9 +32,6 @@
   
 
   
-        <link rel="index" title="Index"
-              href="../../../genindex.html"/>
-        <link rel="search" title="Search" href="../../../search.html"/>
     <link rel="top" title="PyMapManager a1 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
@@ -188,7 +185,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">QtGui</span><span class="o">.</span><span class="n">QMainWindow</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">QtGui</span><span class="o">.</span><span class="n">QMainWindow</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">maps</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># List of open pymapmanager.map</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_windows</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># list of open windows (use this to propogate selections)</span>
@@ -360,7 +357,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">statusBar</span><span class="p">()</span><span class="o">.</span><span class="n">showMessage</span><span class="p">(</span><span class="s2">&quot;All hail matplotlib!&quot;</span><span class="p">,</span> <span class="mi">2000</span><span class="p">)</span>
 
         <span class="c1"># load a mm map</span>
-        <span class="k">if</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">if</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">defaultMap</span> <span class="o">=</span> <span class="s1">&#39;/Users/cudmore/Desktop/data/cudmore/rr30a/rr30a.txt&#39;</span>
             <span class="c1">#defaultMap = &#39;/Volumes/fourt/MapManager_Data/stroke1/stroke1.txt&#39;</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">defaultMap</span><span class="p">):</span>
@@ -375,9 +372,14 @@
 <span class="sd">            else:</span>
 <span class="sd">                print &#39;error loading map:&#39;, defaultMap</span>
 <span class="sd">            &quot;&quot;&quot;</span>
-
-        <span class="c1"># load from online repository</span>
         <span class="k">if</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">defaultMap</span> <span class="o">=</span> <span class="s1">&#39;/Users/cudmore/Dropbox/MapManagerData/server/public/amit1/amit1.txt&#39;</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">defaultMap</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="n">ENOENT</span><span class="p">,</span> <span class="s1">&#39;mmApp did not find defaultMap:&#39;</span><span class="p">,</span> <span class="n">defaultMap</span><span class="p">)</span>
+            <span class="nb">print</span> <span class="s1">&#39;loading default map:&#39;</span><span class="p">,</span> <span class="n">defaultMap</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">loadMap</span><span class="p">(</span><span class="n">defaultMap</span><span class="p">)</span>
+        <span class="c1"># load from online repository</span>
+        <span class="k">if</span> <span class="mi">1</span><span class="p">:</span>
             <span class="n">urlmap</span> <span class="o">=</span> <span class="s1">&#39;rr30a&#39;</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">loadMap</span><span class="p">(</span><span class="n">urlmap</span><span class="o">=</span><span class="n">urlmap</span><span class="p">)</span>
 
@@ -702,7 +704,7 @@
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
+            SOURCELINK_SUFFIX: ''
         };
     </script>
       <script type="text/javascript" src="../../../_static/jquery.js"></script>

@@ -12,7 +12,8 @@ from pymapmanager.mmUtil import newplotdict
 
 class mmStack():
     """
-    A stack contains a 3D Tiff, a list of 3D annotations, and optionally a number of segment tracings.
+    A stack contains a 3D Tiff, a list of 3D annotations, and optionally a number of segment tracings,
+    :class:`pymapmanager.mmStackLine`.
     A stack can either be a single time-point or be embeded into a session of a :class:`pymapmanager.mmMap`.
 
     Args:
@@ -170,8 +171,7 @@ class mmStack():
     @property
     def stackdb(self):
         """
-        stackdb (pandas dataframe): Pandas dataframe of annotations, one per row. Columns are statistic names.
-            See `pymapmanager.mmUtil STACK_STATS` for valid statistic names.
+        A pandas dataframe of annotations, one per row. Columns are annotation names.
         """
         return self._stackdb
 
@@ -186,16 +186,15 @@ class mmStack():
     @property
     def images(self):
         """
-        images (numpy ndarray): 3D numpy ndarray of image data.
-            This is not valid until :func:`loadStackImages` is called.
-            Slices are in the 1st dimension, use images[0,:,:] to get the first image.
+        3D numpy ndarray of images. This is not valid until :func:`loadStackImages` is called.
+        Images are in the 1st dimension, use images[0,:,:] to get the first image.
         """
         return self._images
 
     @property
     def numSlices(self):
         """
-        Number of image slices in the stack.
+        Number of images in the stack.
         """
         if self.images is not None:
             return self.images.shape[0]
@@ -205,7 +204,7 @@ class mmStack():
     @property
     def line(self):
         """
-        line (:class:`pymapmanager.mmStackLine`): A 3D tracing of segments.
+        A :class:`pymapmanager.mmStackLine` that holds 3D tracing of line segments.
         """
         return self._line
 
@@ -222,11 +221,14 @@ class mmStack():
 
     @property
     def annotationNames(self):
-        """Get a list of all annotations names in the stack.
+        """
+        A list of all annotation names in the stack.
+
+        These are valid names for stat passed to :func:`getStackValues2` and names for pd['xstat'],
+        pd['ystat'], pd['zstat'] passed to :func:`getStackValues3`.
 
         Returns:
-            Stirng list of valid names for stat passed to getStackValues2(stat) and names for
-            pd['xstat'], pd['ystat'], pd['zstat'] passed to getStackValues3(pd).
+            List (str).
         """
         return list(self.stackdb.columns.values)
 
@@ -241,12 +243,12 @@ class mmStack():
 
     def getStackValues2(self, stat, roiType=['spineROI'], segmentID=[], plotBad=False, plotIntBad=False):
         """
-        Get all values for a stack annotation.
+        Get all values for an annotation.
 
         Args:
             stat (str): Name of a stack annotation.
-            roiType: yyy
-            segmentID: zzz
+            roiType: spineROI or otherROI.
+            segmentID: Integer list specifying stack segment number.
 
         Returns:
             1D numpy ndarray of values
@@ -263,23 +265,29 @@ class mmStack():
         return plotDict['x']
 
     def getStackValues3(self, pd):
-        """Get values of three annotations using a plot dictionary pd.
-        Get a default plot dictionary from mmUtil.newplotdict().
-        This is useful for getting annotation values for plotting.
+        """
+        Get values of three annotations using a plot dictionary pd.
+
+        Get a default plot dictionary from :func:`pymapmanager.mmUtil.newplotdict` and Fill in
+        pd['xstat'], pd['ystat'], pd['ztat'] with valid :py:attr:`~annotationNames`.
 
         Args:
 
-            pd (dict): A plot dictionary telling us what to plot. Fill in x/y/z with stat names.
+            pd (dict): A plot dictionary describing what to plot.
 
         Returns:
 
-            | pd['x'], x stat values if pd['xstat'], length is number of annotations matching criteria in original pd argument
-            | pd['y'], y stat values if pd['ystat']
-            | pd['z'], z stat values if pd['zstat']
+            | pd['x'], values if pd['xstat'], length is number of annotations matching criteria in original pd argument
+            | pd['y'], values if pd['ystat']
+            | pd['z'], values if pd['zstat']
             | pd['stackidx'], stack index of returned values
             | pd['reverse'], same length as stackdb.numObj,
-            |     reverse[i]>=0 gives index into pd['x'] for annotation i, reverse[i]=='nan' means annotation i was not included
+            |     reverse[i]>=0 gives index into pd['x'] for annotation i.
+            |     reverse[i]=='nan' means annotation i was not included.
         """
+
+        # to do: check that segmentID is a list
+        # to do: check that roiType is a list
 
         ret = self.stackdb
         if pd['segmentid']:
@@ -307,7 +315,7 @@ class mmStack():
 
     def _loadLine(self):
         """
-        Load a line (mmStackLine) associated with the stack. Sets 'line' instance variable.
+        Load a :class:'pymapmanager.mmStackLine' associated with the stack. Sets 'line' instance variable.
 
         Returns:
             None.
@@ -318,9 +326,10 @@ class mmStack():
         """
         Load the images for a stack. Sets 'images' instance variable
 
+        MapManager uses single channel .tif files. Each channel has its own file: _ch1.tif, _ch2.tif, _ch3.tif.
+
         Args:
-            channel (int): Specifies the channel number to load. MapManager uses single channel .tif files.
-            Each channel has its own file: _ch1.tif, _ch2.tif, _ch3.tif.
+            channel (int): Specifies the channel number to load.
 
         Returns:
             images (3D ndarray): 3D numpy array of images.

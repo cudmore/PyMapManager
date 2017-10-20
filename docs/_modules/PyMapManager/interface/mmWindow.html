@@ -32,9 +32,6 @@
   
 
   
-        <link rel="index" title="Index"
-              href="../../../genindex.html"/>
-        <link rel="search" title="Search" href="../../../search.html"/>
     <link rel="top" title="PyMapManager a1 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
@@ -184,7 +181,7 @@
 <span class="sd">    A second QMainWindow to hold a plot. Possible plots are: stack image, stack, and map. StackImageWindow derives from this to plot a stack image.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">mmWindow</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">mmWindow</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">parent</span> <span class="o">=</span> <span class="n">parent</span>
 
@@ -248,7 +245,7 @@
 <div class="viewcode-block" id="mmStackWindow"><a class="viewcode-back" href="../../../pymapmanager.interface.mmWindow.html#pymapmanager.interface.mmWindow.mmStackWindow">[docs]</a><span class="k">class</span> <span class="nc">mmStackWindow</span><span class="p">(</span><span class="n">mmWindow</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Hold a stack image plot.&quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stateDict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="n">mmWindow</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">)</span>
+        <span class="n">mmWindow</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">stateDict</span> <span class="o">=</span> <span class="n">stateDict</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">myCanvas</span> <span class="o">=</span> <span class="kc">None</span>
@@ -454,7 +451,7 @@
 <span class="sd">    Todo: instantiate this with a stateStruct so we can figure out number of session for session spinner interface</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="n">mmWindow</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">)</span>
+        <span class="n">mmWindow</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">)</span>
 
         <span class="n">tmpMaxSession</span> <span class="o">=</span> <span class="mi">20</span>
 
@@ -491,7 +488,7 @@
 <div class="viewcode-block" id="mmStackPlotWindow"><a class="viewcode-back" href="../../../pymapmanager.interface.mmWindow.html#pymapmanager.interface.mmWindow.mmStackPlotWindow">[docs]</a><span class="k">class</span> <span class="nc">mmStackPlotWindow</span><span class="p">(</span><span class="n">mmWindow</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Display a stack plot of points.&quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="n">mmWindow</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">)</span>
+        <span class="n">mmWindow</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">myCanvas</span> <span class="o">=</span> <span class="n">mmStackPlotCanvas</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
         <span class="c1">#self.navBar = NavigationToolbar(self.myCanvas, self)</span>
@@ -540,7 +537,7 @@
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
+            SOURCELINK_SUFFIX: ''
         };
     </script>
       <script type="text/javascript" src="../../../_static/jquery.js"></script>

@@ -32,9 +32,6 @@
   
 
   
-        <link rel="index" title="Index"
-              href="../../genindex.html"/>
-        <link rel="search" title="Search" href="../../search.html"/>
     <link rel="top" title="PyMapManager a1 documentation" href="../../index.html"/>
         <link rel="up" title="Module code" href="../index.html"/> 
 
@@ -157,6 +154,38 @@
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
+<span class="c1">#from pandas.plotting import autocorrelation_plot</span>
+<span class="kn">from</span> <span class="nn">pandas.tools.plotting</span> <span class="k">import</span> <span class="n">autocorrelation_plot</span>
+
+<div class="viewcode-block" id="segmentAnalysis"><a class="viewcode-back" href="../../pymapmanager.mmMapAnalysis.html#pymapmanager.mmMapAnalysis.segmentAnalysis">[docs]</a><span class="k">def</span> <span class="nf">segmentAnalysis</span><span class="p">(</span><span class="nb">map</span><span class="p">,</span> <span class="n">ps</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        map: mmMap</span>
+<span class="sd">        ps (dictionary): From mmUtil.newplotdict().</span>
+<span class="sd">            Fill in plotStruct[&#39;xstat&#39;] with stat of interest</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">startTime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+    <span class="n">ps</span><span class="p">[</span><span class="s1">&#39;ystat&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;pDist&#39;</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">map</span><span class="o">.</span><span class="n">numMapSegments</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">map</span><span class="o">.</span><span class="n">numSessions</span><span class="p">):</span>
+            <span class="n">stackSegment</span> <span class="o">=</span> <span class="nb">map</span><span class="o">.</span><span class="n">_getStackSegmentID</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">stackSegment</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">ps</span><span class="p">[</span><span class="s1">&#39;segmentid&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">stackSegment</span><span class="p">]</span>
+                <span class="n">ps</span> <span class="o">=</span> <span class="nb">map</span><span class="o">.</span><span class="n">stacks</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">getStackValues3</span><span class="p">(</span><span class="n">ps</span><span class="p">)</span>
+                <span class="c1"># sort by pDist and make [&#39;x&#39;] values follow</span>
+                <span class="n">sortedIdx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">ps</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">])</span>
+                <span class="n">xSorted</span> <span class="o">=</span> <span class="n">ps</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">][</span><span class="n">sortedIdx</span><span class="p">]</span>
+                <span class="n">ySorted</span> <span class="o">=</span> <span class="n">ps</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">][</span><span class="n">sortedIdx</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">i</span><span class="o">==</span><span class="mi">0</span> <span class="ow">and</span> <span class="n">j</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+                    <span class="n">autocorrelation_plot</span><span class="p">(</span><span class="n">xSorted</span><span class="p">)</span>
+
+    <span class="n">stopTime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="nb">print</span> <span class="s1">&#39;segmentAnalysis() took&#39;</span><span class="p">,</span> <span class="n">stopTime</span> <span class="o">-</span> <span class="n">startTime</span><span class="p">,</span> <span class="s1">&#39;seconds&#39;</span></div>
+
 <div class="viewcode-block" id="getMapDynamics"><a class="viewcode-back" href="../../pymapmanager.mmMapAnalysis.html#pymapmanager.mmMapAnalysis.getMapDynamics">[docs]</a><span class="k">def</span> <span class="nf">getMapDynamics</span><span class="p">(</span><span class="nb">map</span><span class="p">,</span> <span class="n">plotDict</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculate dynamics of annotations across a map including added, subtracted,</span>
@@ -237,7 +266,7 @@
         <span class="n">prevtotalnum</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
         <span class="n">prevsub</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>  <span class="c1"># to fill in numSub2</span>
         <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">map</span><span class="o">.</span><span class="n">numSessions</span><span class="p">):</span>
-            <span class="n">segmentID</span> <span class="o">=</span> <span class="nb">map</span><span class="o">.</span><span class="n">_getSegmentID</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span>  <span class="c1"># segmentID is stack centric</span>
+            <span class="n">segmentID</span> <span class="o">=</span> <span class="nb">map</span><span class="o">.</span><span class="n">_getStackSegmentID</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span>  <span class="c1"># segmentID is stack centric</span>
             <span class="k">if</span> <span class="n">segmentID</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="n">segmentID</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">segmentID</span><span class="p">)</span>  <span class="c1"># this is annoying</span>
                 <span class="n">df</span> <span class="o">=</span> <span class="nb">map</span><span class="o">.</span><span class="n">stacks</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">stackdb</span>
@@ -297,7 +326,7 @@
             <span class="n">prevtotalnum</span> <span class="o">=</span> <span class="n">totalnum</span>
             <span class="n">prevsub</span> <span class="o">=</span> <span class="n">numsub</span>
     <span class="n">stopTime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-    <span class="nb">print</span> <span class="s1">&#39;mmMap.getDynamics() took&#39;</span><span class="p">,</span> <span class="n">stopTime</span> <span class="o">-</span> <span class="n">startTime</span><span class="p">,</span> <span class="s1">&#39;seconds&#39;</span>
+    <span class="nb">print</span> <span class="s1">&#39;getMapDynamics() took&#39;</span><span class="p">,</span> <span class="n">stopTime</span> <span class="o">-</span> <span class="n">startTime</span><span class="p">,</span> <span class="s1">&#39;seconds&#39;</span>
 
     <span class="k">if</span> <span class="mi">0</span><span class="p">:</span>
         <span class="nb">print</span> <span class="n">retList</span>
@@ -311,8 +340,18 @@
         <span class="c1"># convert to a pandas dataframe</span>
         <span class="n">out_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">retList</span><span class="p">[</span><span class="n">seg</span><span class="p">],</span> <span class="n">orient</span><span class="o">=</span><span class="s1">&#39;index&#39;</span><span class="p">)</span>
 
-
     <span class="k">return</span> <span class="n">retList</span></div>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">pymapmanager.mmMap</span> <span class="k">import</span> <span class="n">mmMap</span>
+    <span class="kn">from</span> <span class="nn">pymapmanager</span> <span class="k">import</span> <span class="n">mmUtil</span>
+
+    <span class="n">mapPath</span> <span class="o">=</span> <span class="s1">&#39;/Users/cudmore/MapManagerData/Richard/Nancy/rr30a/rr30a.txt&#39;</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="n">mmMap</span><span class="p">(</span><span class="n">mapPath</span><span class="p">)</span>
+
+    <span class="n">plotStruct</span> <span class="o">=</span> <span class="n">mmUtil</span><span class="o">.</span><span class="n">newplotdict</span><span class="p">()</span>
+    <span class="n">plotStruct</span><span class="p">[</span><span class="s1">&#39;xstat&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;ubssSum_int1&#39;</span>
+    <span class="n">plotStruct</span> <span class="o">=</span> <span class="n">segmentAnalysis</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">plotStruct</span><span class="p">)</span>
 </pre></div>
 
            </div>
@@ -353,7 +392,7 @@
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
+            SOURCELINK_SUFFIX: ''
         };
     </script>
       <script type="text/javascript" src="../../_static/jquery.js"></script>

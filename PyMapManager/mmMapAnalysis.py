@@ -2,6 +2,38 @@ import time, copy
 import pandas as pd
 import numpy as np
 
+#from pandas.plotting import autocorrelation_plot
+from pandas.tools.plotting import autocorrelation_plot
+
+def segmentAnalysis(map, ps):
+    """
+
+    Args:
+        map: mmMap
+        ps (dictionary): From mmUtil.newplotdict().
+            Fill in plotStruct['xstat'] with stat of interest
+
+    """
+    startTime = time.time()
+
+    ps['ystat'] = 'pDist'
+
+    for i in range(map.numMapSegments):
+        for j in range(map.numSessions):
+            stackSegment = map._getStackSegmentID(i, j)
+            if stackSegment is not None:
+                ps['segmentid'] = [stackSegment]
+                ps = map.stacks[j].getStackValues3(ps)
+                # sort by pDist and make ['x'] values follow
+                sortedIdx = np.argsort(ps['y'])
+                xSorted = ps['x'][sortedIdx]
+                ySorted = ps['y'][sortedIdx]
+                if i==0 and j==0:
+                    autocorrelation_plot(xSorted)
+
+    stopTime = time.time()
+    print 'segmentAnalysis() took', stopTime - startTime, 'seconds'
+
 def getMapDynamics(map, plotDict):
     """
     Calculate dynamics of annotations across a map including added, subtracted,
@@ -82,7 +114,7 @@ def getMapDynamics(map, plotDict):
         prevtotalnum = np.nan
         prevsub = np.nan  # to fill in numSub2
         for j in range(map.numSessions):
-            segmentID = map._getSegmentID(i, j)  # segmentID is stack centric
+            segmentID = map._getStackSegmentID(i, j)  # segmentID is stack centric
             if segmentID >= 0:
                 segmentID = int(segmentID)  # this is annoying
                 df = map.stacks[j].stackdb
@@ -142,7 +174,7 @@ def getMapDynamics(map, plotDict):
             prevtotalnum = totalnum
             prevsub = numsub
     stopTime = time.time()
-    print 'mmMap.getDynamics() took', stopTime - startTime, 'seconds'
+    print 'getMapDynamics() took', stopTime - startTime, 'seconds'
 
     if 0:
         print retList
@@ -156,5 +188,15 @@ def getMapDynamics(map, plotDict):
         # convert to a pandas dataframe
         out_df = pd.DataFrame.from_dict(retList[seg], orient='index')
 
-
     return retList
+
+if __name__ == '__main__':
+    from pymapmanager.mmMap import mmMap
+    from pymapmanager import mmUtil
+
+    mapPath = '/Users/cudmore/MapManagerData/Richard/Nancy/rr30a/rr30a.txt'
+    m = mmMap(mapPath)
+
+    plotStruct = mmUtil.newplotdict()
+    plotStruct['xstat'] = 'ubssSum_int1'
+    plotStruct = segmentAnalysis(m, plotStruct)

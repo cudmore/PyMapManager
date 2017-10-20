@@ -32,9 +32,6 @@
   
 
   
-        <link rel="index" title="Index"
-              href="../../genindex.html"/>
-        <link rel="search" title="Search" href="../../search.html"/>
     <link rel="top" title="PyMapManager a1 documentation" href="../../index.html"/>
         <link rel="up" title="Module code" href="../index.html"/> 
 
@@ -167,7 +164,8 @@
 
 <div class="viewcode-block" id="mmStack"><a class="viewcode-back" href="../../pymapmanager.mmStack.html#pymapmanager.mmStack.mmStack">[docs]</a><span class="k">class</span> <span class="nc">mmStack</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    A stack contains a 3D Tiff, a list of 3D annotations, and optionally a number of segment tracings.</span>
+<span class="sd">    A stack contains a 3D Tiff, a list of 3D annotations, and optionally a number of segment tracings,</span>
+<span class="sd">    :class:`pymapmanager.mmStackLine`.</span>
 <span class="sd">    A stack can either be a single time-point or be embeded into a session of a :class:`pymapmanager.mmMap`.</span>
 
 <span class="sd">    Args:</span>
@@ -325,8 +323,7 @@
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">stackdb</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        stackdb (pandas dataframe): Pandas dataframe of annotations, one per row. Columns are statistic names.</span>
-<span class="sd">            See `pymapmanager.mmUtil STACK_STATS` for valid statistic names.</span>
+<span class="sd">        A pandas dataframe of annotations, one per row. Columns are annotation names.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_stackdb</span>
 
@@ -341,16 +338,15 @@
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">images</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        images (numpy ndarray): 3D numpy ndarray of image data.</span>
-<span class="sd">            This is not valid until :func:`loadStackImages` is called.</span>
-<span class="sd">            Slices are in the 1st dimension, use images[0,:,:] to get the first image.</span>
+<span class="sd">        3D numpy ndarray of images. This is not valid until :func:`loadStackImages` is called.</span>
+<span class="sd">        Images are in the 1st dimension, use images[0,:,:] to get the first image.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_images</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">numSlices</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Number of image slices in the stack.</span>
+<span class="sd">        Number of images in the stack.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">images</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">images</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -360,7 +356,7 @@
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">line</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        line (:class:`pymapmanager.mmStackLine`): A 3D tracing of segments.</span>
+<span class="sd">        A :class:`pymapmanager.mmStackLine` that holds 3D tracing of line segments.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_line</span>
 
@@ -377,11 +373,14 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">annotationNames</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Get a list of all annotations names in the stack.</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A list of all annotation names in the stack.</span>
+
+<span class="sd">        These are valid names for stat passed to :func:`getStackValues2` and names for pd[&#39;xstat&#39;],</span>
+<span class="sd">        pd[&#39;ystat&#39;], pd[&#39;zstat&#39;] passed to :func:`getStackValues3`.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            Stirng list of valid names for stat passed to getStackValues2(stat) and names for</span>
-<span class="sd">            pd[&#39;xstat&#39;], pd[&#39;ystat&#39;], pd[&#39;zstat&#39;] passed to getStackValues3(pd).</span>
+<span class="sd">            List (str).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stackdb</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
 
@@ -396,12 +395,12 @@
 
 <div class="viewcode-block" id="mmStack.getStackValues2"><a class="viewcode-back" href="../../pymapmanager.mmStack.html#pymapmanager.mmStack.mmStack.getStackValues2">[docs]</a>    <span class="k">def</span> <span class="nf">getStackValues2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stat</span><span class="p">,</span> <span class="n">roiType</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;spineROI&#39;</span><span class="p">],</span> <span class="n">segmentID</span><span class="o">=</span><span class="p">[],</span> <span class="n">plotBad</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">plotIntBad</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Get all values for a stack annotation.</span>
+<span class="sd">        Get all values for an annotation.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            stat (str): Name of a stack annotation.</span>
-<span class="sd">            roiType: yyy</span>
-<span class="sd">            segmentID: zzz</span>
+<span class="sd">            roiType: spineROI or otherROI.</span>
+<span class="sd">            segmentID: Integer list specifying stack segment number.</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            1D numpy ndarray of values</span>
@@ -418,23 +417,29 @@
         <span class="k">return</span> <span class="n">plotDict</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span></div>
 
 <div class="viewcode-block" id="mmStack.getStackValues3"><a class="viewcode-back" href="../../pymapmanager.mmStack.html#pymapmanager.mmStack.mmStack.getStackValues3">[docs]</a>    <span class="k">def</span> <span class="nf">getStackValues3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pd</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Get values of three annotations using a plot dictionary pd.</span>
-<span class="sd">        Get a default plot dictionary from mmUtil.newplotdict().</span>
-<span class="sd">        This is useful for getting annotation values for plotting.</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get values of three annotations using a plot dictionary pd.</span>
+
+<span class="sd">        Get a default plot dictionary from :func:`pymapmanager.mmUtil.newplotdict` and Fill in</span>
+<span class="sd">        pd[&#39;xstat&#39;], pd[&#39;ystat&#39;], pd[&#39;ztat&#39;] with valid :py:attr:`~annotationNames`.</span>
 
 <span class="sd">        Args:</span>
 
-<span class="sd">            pd (dict): A plot dictionary telling us what to plot. Fill in x/y/z with stat names.</span>
+<span class="sd">            pd (dict): A plot dictionary describing what to plot.</span>
 
 <span class="sd">        Returns:</span>
 
-<span class="sd">            | pd[&#39;x&#39;], x stat values if pd[&#39;xstat&#39;], length is number of annotations matching criteria in original pd argument</span>
-<span class="sd">            | pd[&#39;y&#39;], y stat values if pd[&#39;ystat&#39;]</span>
-<span class="sd">            | pd[&#39;z&#39;], z stat values if pd[&#39;zstat&#39;]</span>
+<span class="sd">            | pd[&#39;x&#39;], values if pd[&#39;xstat&#39;], length is number of annotations matching criteria in original pd argument</span>
+<span class="sd">            | pd[&#39;y&#39;], values if pd[&#39;ystat&#39;]</span>
+<span class="sd">            | pd[&#39;z&#39;], values if pd[&#39;zstat&#39;]</span>
 <span class="sd">            | pd[&#39;stackidx&#39;], stack index of returned values</span>
 <span class="sd">            | pd[&#39;reverse&#39;], same length as stackdb.numObj,</span>
-<span class="sd">            |     reverse[i]&gt;=0 gives index into pd[&#39;x&#39;] for annotation i, reverse[i]==&#39;nan&#39; means annotation i was not included</span>
+<span class="sd">            |     reverse[i]&gt;=0 gives index into pd[&#39;x&#39;] for annotation i.</span>
+<span class="sd">            |     reverse[i]==&#39;nan&#39; means annotation i was not included.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># to do: check that segmentID is a list</span>
+        <span class="c1"># to do: check that roiType is a list</span>
 
         <span class="n">ret</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stackdb</span>
         <span class="k">if</span> <span class="n">pd</span><span class="p">[</span><span class="s1">&#39;segmentid&#39;</span><span class="p">]:</span>
@@ -462,7 +467,7 @@
 
     <span class="k">def</span> <span class="nf">_loadLine</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Load a line (mmStackLine) associated with the stack. Sets &#39;line&#39; instance variable.</span>
+<span class="sd">        Load a :class:&#39;pymapmanager.mmStackLine&#39; associated with the stack. Sets &#39;line&#39; instance variable.</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            None.</span>
@@ -473,9 +478,10 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Load the images for a stack. Sets &#39;images&#39; instance variable</span>
 
+<span class="sd">        MapManager uses single channel .tif files. Each channel has its own file: _ch1.tif, _ch2.tif, _ch3.tif.</span>
+
 <span class="sd">        Args:</span>
-<span class="sd">            channel (int): Specifies the channel number to load. MapManager uses single channel .tif files.</span>
-<span class="sd">            Each channel has its own file: _ch1.tif, _ch2.tif, _ch3.tif.</span>
+<span class="sd">            channel (int): Specifies the channel number to load.</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            images (3D ndarray): 3D numpy array of images.</span>
@@ -587,7 +593,7 @@
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
+            SOURCELINK_SUFFIX: ''
         };
     </script>
       <script type="text/javascript" src="../../_static/jquery.js"></script>

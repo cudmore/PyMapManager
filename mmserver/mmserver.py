@@ -1,7 +1,22 @@
 """
+Author: Robert Cudmore
+Date: 20170808
+
 A http server to serve mmMap files and images.
 Server is run using Flask.
 Implements a RESTful API.
+
+http://cudmore.duckdns.org:5010/public/rr30a/header
+http://cudmore.duckdns.org:5010/public/rr30a/objmap
+http://cudmore.duckdns.org:5010/public/rr30a/segmap
+http://cudmore.duckdns.org:5010/public/rr30a/1/stackdb
+http://cudmore.duckdns.org:5010/public/rr30a/1/int/2
+http://cudmore.duckdns.org:5010/public/rr30a/1/line
+http://cudmore.duckdns.org:5010/public/rr30a/1/image/10/2
+http://cudmore.duckdns.org:5010/public/rr30a/zip
+
+mmio is a Python wrapper to provide easy programming interface to the REST api
+
 """
 
 import os
@@ -9,15 +24,21 @@ import json
 from datetime import datetime
 
 from flask import Flask, make_response, send_file, send_from_directory, safe_join
-from flask import jsonify
+from flask import jsonify, request, redirect, url_for
+from werkzeug.utils import secure_filename
 
-static_folder = '/Users/cudmore/Desktop/data'
+# assuming data folder is in same folder as this source .py file
+#static_folder = '/Users/cudmore/Desktop/data'
+static_folder = './data'
+UPLOAD_FOLDER = './data'
 
 #app = Flask(__name__, static_url_path='/data')
 app = Flask(__name__, static_folder=static_folder)
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 @app.route('/')
 def hello_world():
+    print 'hello_world()'
     return 'Hello Fuckers. The time is ' + str(datetime.now()) + '<br>' \
     	+ '/plot' + '<br>' \
     	+ '/[username]/[mapname]/header' + '<br>' \
@@ -43,17 +64,22 @@ def get_header(username, mapname, item):
 	mapdir = safe_join(username, mapname)
 	mapdir = safe_join(app.static_folder, mapdir)
 	
+	as_attachment = False
 	if item == 'header':
 		mapfile = mapname + '.txt'
 	elif item == 'objmap':
 		mapfile = mapname + '_objMap.txt'
 	elif item == 'segmap':
 		mapfile = mapname + '_segMap.txt'
-	
+	elif item == 'zip':
+		mapfile = mapname + '.zip'
+		as_attachment = True
+		
 	print '=== get_header()', username, mapname, item
 	print 'mapdir:', mapdir
 	print 'mapfile:', mapfile
-	return send_from_directory(mapdir, mapfile)
+	return send_from_directory(mapdir, mapfile, as_attachment=True, attachment_filename=mapfile)
+	#return send_from_directory(mapdir, mapfile) #, as_attachment=as_attachment) #, mimetype='text/txt')
 
 @app.route('/<username>/<mapname>/<timepoint>/<item>')
 @app.route('/<username>/<mapname>/<timepoint>/<item>/<int:channel>')
@@ -92,11 +118,69 @@ def get_image(username, mapname, timepoint, slice=None, channel=None):
 	tpdir = safe_join(app.static_folder, tpdir)
 
 	print '=== get_image()', username, mapname, timepoint, slice, channel
-	print tpdir
-	print thefile
+	print 'tpdir:', tpdir
+	print 'thefile:', thefile
 	
-	return send_from_directory(tpdir, thefile, mimetype='image/tif')
+	return send_from_directory(tpdir, thefile, as_attachment=True, mimetype='image/tif')
 
+##
+# post
+##
+
+ALLOWED_EXTENSIONS = set(['txt', 'tif'])
+
+def allowed_file(filename):
+	return '.' in filename and \
+		filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+@app.route('/uploads/<filename>')
+def uploaded_file(filename):
+	return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+                               
+@app.route('/post/<username>/<mapname>/<item>', methods=['GET', 'POST'])
+def post_file(username, mapname, item):
+	if request.method == 'POST':
+		file = request.files['file']
+		print 'post_file() got request.files::', request.files
+		if file and allowed_file(file.filename):
+			filename = secure_filename(file.filename)
+
+			filePath = os.path.join(app.config['UPLOAD_FOLDER'], username)
+			# path to username has to exist, don't create it
+			if not os.path.isdir(filePath):
+				errStr = 'error: post_file() username does not exist:' + username
+				print errStr
+				return errStr
+			filePath = os.path.join(filePath, mapname)
+			# make map folder if necc.
+			if not os.path.isdir(filePath):
+				os.makedirs(filePath)
+			if item == 'header':
+				pass
+			elif item == 'stackdb':
+				filePath = os.path.join(filePath, 'stackdb')
+				if not os.path.isdir(filePath):
+					os.makedirs(filePath)
+			elif item == 'line':
+				filePath = os.path.join(filePath, 'line')
+				if not os.path.isdir(filePath):
+					os.makedirs(filePath)
+
+			# save file on server in correct spot
+			filePath = os.path.join(filePath,filename)
+			print 'post_file() saving file:', filePath
+
+			file.save(filePath)
+
+			retStr = 'post_file() saved to: ' + filePath
+			#return redirect(url_for('uploaded_file', filename=filename))
+			return retStr
+	else:
+		retStr = 'error: post_file() got bad request.method:' + request.method
+		return retStr
+#
+# old and testing
+#
 @app.route('/gettiff')
 def gettiff():
     filename='data/rr30a/raw/rr30a_s0_ch2_0032.tif'
@@ -152,5 +236,8 @@ def simple():
 
 if __name__ == '__main__':
     #gettiff()
-    app.run(debug=True)
+    # host= '0.0.0.0' will run on servers network ip
+    app.run(host='0.0.0.0', port=5010)
+    # this will run on localhost at port :5000
+    #app.run(debug=True)
 

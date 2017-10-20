@@ -32,9 +32,6 @@
   
 
   
-        <link rel="index" title="Index"
-              href="../../../genindex.html"/>
-        <link rel="search" title="Search" href="../../../search.html"/>
     <link rel="top" title="PyMapManager a1 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
@@ -157,12 +154,48 @@
 <span class="sd">Use this to load (get) files from a mmserver.</span>
 <span class="sd">This is a temporary wrapper as mmserver is currently a Flask server (slow).</span>
 <span class="sd">Eventually transition this to use proper online repository like ndio.</span>
+
+<span class="sd">To Do: add Rest interface to get number of timepoints in a map?</span>
+
+<span class="sd">Examples::</span>
+
+<span class="sd">	from pymapmanager.mmio import mmio</span>
+<span class="sd">	s = mmio.mmio()</span>
+<span class="sd">		Success, the server at http://robertcudmore.org/mmserver/ is up and running!</span>
+
+<span class="sd">	s.maplist()</span>
+<span class="sd">		[&quot;rr30a&quot;, &quot;rr58c&quot;]</span>
+<span class="sd">	</span>
+<span class="sd">	# these are the basic files that we can get for map &#39;rr30a&#39;</span>
+<span class="sd">	# they will each return text that can be converted to a stringio and read into python (numpy and/or panda)</span>
+<span class="sd">	s.getfile(&#39;header&#39;, &#39;rr30a&#39;)</span>
+<span class="sd">	s.getfile(&#39;objmap&#39;, &#39;rr30a&#39;)</span>
+<span class="sd">	s.getfile(&#39;segmap&#39;, &#39;rr30a&#39;)</span>
+<span class="sd">	s.getfile(&#39;stackdb&#39;, &#39;rr30a&#39;, timepoint=0)</span>
+<span class="sd">	s.getfile(&#39;line&#39;, &#39;rr30a&#39;, timepoint=0)</span>
+<span class="sd">	s.getfile(&#39;int&#39;, &#39;rr30a&#39;, timepoint=0, channel=1)</span>
+<span class="sd">	</span>
+<span class="sd">	# a bad request looks like this</span>
+<span class="sd">	s.getfile(&#39;header&#39;, &#39;bad map&#39;)</span>
+<span class="sd">		error: mmio.getfile() received a 404 for url: http://robertcudmore.org/mmserver/public/bad map/header</span>
+
+<span class="sd">	# upload a map</span>
+<span class="sd">	map = &#39;/Users/cudmore/MapManagerData/richard/Nancy/rr30a&#39;</span>
+<span class="sd">	s.postmap(map)</span>
+
+<span class="sd">Notes::</span>
+<span class="sd">	Header files are saved with \n</span>
+<span class="sd">	Stackdb, int, and line files are saved with \r</span>
+
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">import</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">requests</span>
 
-<span class="n">default_server_url</span> <span class="o">=</span> <span class="s1">&#39;http://127.0.0.1:5000/&#39;</span>
-<span class="n">default_user</span> <span class="o">=</span> <span class="s1">&#39;cudmore&#39;</span>
+<span class="c1">#default_server_url = &#39;http://127.0.0.1:5000/&#39;</span>
+<span class="n">default_server_url</span> <span class="o">=</span> <span class="s1">&#39;http://robertcudmore.org/mmserver/&#39;</span>
+<span class="n">default_user</span> <span class="o">=</span> <span class="s1">&#39;public&#39;</span>
+
+<span class="n">default_eol</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
 
 <div class="viewcode-block" id="mmio"><a class="viewcode-back" href="../../../pymapmanager.mmio.mmio.html#pymapmanager.mmio.mmio.mmio">[docs]</a><span class="k">class</span> <span class="nc">mmio</span><span class="p">():</span>
 
@@ -183,14 +216,18 @@
 		<span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">server_url</span><span class="p">)</span>
 		<span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
 
+		<span class="nb">print</span> <span class="s1">&#39;Success, the server at&#39;</span><span class="p">,</span> <span class="n">server_url</span><span class="p">,</span> <span class="s1">&#39;is up and running!&#39;</span>
+		
 <div class="viewcode-block" id="mmio.maplist"><a class="viewcode-back" href="../../../pymapmanager.mmio.mmio.html#pymapmanager.mmio.mmio.mmio.maplist">[docs]</a>	<span class="k">def</span> <span class="nf">maplist</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 		<span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Return list of maps for user username</span>
 <span class="sd">		&quot;&quot;&quot;</span>
 		<span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">server_url</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">username</span> <span class="o">+</span> <span class="s1">&#39;/maps&#39;</span>
-		<span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span></div>
-		<span class="c1">#print response.content</span>
-
+		<span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">404</span><span class="p">:</span>
+			<span class="nb">print</span> <span class="s1">&#39;error: mmio.maplist() received a 404 for url:&#39;</span><span class="p">,</span> <span class="n">url</span>
+		<span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">content</span></div>
+		
 <div class="viewcode-block" id="mmio.getfile"><a class="viewcode-back" href="../../../pymapmanager.mmio.mmio.html#pymapmanager.mmio.mmio.mmio.getfile">[docs]</a>	<span class="k">def</span> <span class="nf">getfile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="n">mapname</span><span class="p">,</span> <span class="n">timepoint</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">channel</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 		<span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Get a file from a map.</span>
@@ -218,6 +255,7 @@
 		<span class="k">else</span><span class="p">:</span>
 			<span class="c1"># error</span>
 			<span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+		<span class="nb">print</span> <span class="s1">&#39;url:&#39;</span><span class="p">,</span> <span class="n">url</span>
 		<span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
 		<span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">404</span><span class="p">:</span>
 			<span class="nb">print</span> <span class="s1">&#39;error: mmio.getfile() received a 404 for url:&#39;</span><span class="p">,</span> <span class="n">url</span>
@@ -242,9 +280,75 @@
 		<span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
 		<span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">404</span><span class="p">:</span>
 			<span class="nb">print</span> <span class="s1">&#39;error: mmio.getimage() received a 404 for url:&#39;</span><span class="p">,</span> <span class="n">url</span>
-		<span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">content</span></div></div>
-		
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+		<span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">content</span></div>
+
+<div class="viewcode-block" id="mmio.postmap"><a class="viewcode-back" href="../../../pymapmanager.mmio.mmio.html#pymapmanager.mmio.mmio.mmio.postmap">[docs]</a>	<span class="k">def</span> <span class="nf">postmap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mapFolder</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Post a map to the server.</span>
+
+<span class="sd">		Args:</span>
+<span class="sd">			mapFolder (str) full path to map folder (local machine).</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="nb">print</span> <span class="s1">&#39;posting map to server:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">server_url</span><span class="p">,</span> <span class="s1">&#39;user:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">username</span>
+
+		<span class="n">mapname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">mapFolder</span><span class="p">)</span>
+
+		<span class="c1"># main header file</span>
+		<span class="n">mapFile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">mapFolder</span><span class="p">,</span> <span class="n">mapname</span> <span class="o">+</span> <span class="s1">&#39;.txt&#39;</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">mapFile</span><span class="p">):</span>
+			<span class="n">file</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;file&#39;</span><span class="p">:</span> <span class="nb">open</span><span class="p">(</span><span class="n">mapFile</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)}</span>
+			<span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;post/&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">username</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="n">mapname</span> <span class="o">+</span> <span class="s1">&#39;/header&#39;</span>
+			<span class="nb">print</span> <span class="s1">&#39;uploading main map file with url:&#39;</span><span class="p">,</span> <span class="n">url</span>
+			<span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">default_server_url</span> <span class="o">+</span> <span class="n">url</span><span class="p">,</span> <span class="n">files</span><span class="o">=</span><span class="n">file</span><span class="p">)</span>
+			<span class="nb">print</span> <span class="s1">&#39;   Response:&#39;</span><span class="p">,</span> <span class="n">r</span><span class="o">.</span><span class="n">content</span>
+
+		<span class="c1"># obj map</span>
+		<span class="n">objMapFile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">mapFolder</span><span class="p">,</span> <span class="n">mapname</span> <span class="o">+</span> <span class="s1">&#39;_objMap.txt&#39;</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">objMapFile</span><span class="p">):</span>
+			<span class="n">file</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;file&#39;</span><span class="p">:</span> <span class="nb">open</span><span class="p">(</span><span class="n">objMapFile</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)}</span>
+			<span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;post/&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">username</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="n">mapname</span> <span class="o">+</span> <span class="s1">&#39;/header&#39;</span>
+			<span class="nb">print</span> <span class="s1">&#39;uploading obj map file with url:&#39;</span><span class="p">,</span> <span class="n">url</span>
+			<span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">default_server_url</span> <span class="o">+</span> <span class="n">url</span><span class="p">,</span> <span class="n">files</span><span class="o">=</span><span class="n">file</span><span class="p">)</span>
+			<span class="nb">print</span> <span class="s1">&#39;   Response:&#39;</span><span class="p">,</span> <span class="n">r</span><span class="o">.</span><span class="n">content</span>
+
+		<span class="c1"># seg map</span>
+		<span class="n">segMapFile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">mapFolder</span><span class="p">,</span> <span class="n">mapname</span> <span class="o">+</span> <span class="s1">&#39;_segMap.txt&#39;</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">segMapFile</span><span class="p">):</span>
+			<span class="n">file</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;file&#39;</span><span class="p">:</span> <span class="nb">open</span><span class="p">(</span><span class="n">segMapFile</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)}</span>
+			<span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;post/&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">username</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="n">mapname</span> <span class="o">+</span> <span class="s1">&#39;/header&#39;</span>
+			<span class="nb">print</span> <span class="s1">&#39;uploading seg map file with url:&#39;</span><span class="p">,</span> <span class="n">url</span>
+			<span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">default_server_url</span> <span class="o">+</span> <span class="n">url</span><span class="p">,</span> <span class="n">files</span><span class="o">=</span><span class="n">file</span><span class="p">)</span>
+			<span class="nb">print</span> <span class="s1">&#39;   Response:&#39;</span><span class="p">,</span> <span class="n">r</span><span class="o">.</span><span class="n">content</span>
+
+		<span class="c1"># all stackdb</span>
+		<span class="n">stackdbFolder</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">mapFolder</span><span class="p">,</span> <span class="s1">&#39;stackdb&#39;</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">stackdbFolder</span><span class="p">):</span>
+			<span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">stackdbFolder</span><span class="p">):</span>
+				<span class="k">if</span> <span class="n">file</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.txt&#39;</span><span class="p">):</span>
+					<span class="n">stackdbFile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">stackdbFolder</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span>
+					<span class="n">fileid</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;file&#39;</span><span class="p">:</span> <span class="nb">open</span><span class="p">(</span><span class="n">stackdbFile</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)}</span>
+					<span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;post/&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">username</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="n">mapname</span> <span class="o">+</span> <span class="s1">&#39;/stackdb&#39;</span>
+					<span class="nb">print</span> <span class="s1">&#39;uploading stackdb file:&#39;</span><span class="p">,</span> <span class="n">file</span><span class="p">,</span> <span class="n">url</span>
+					<span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">default_server_url</span> <span class="o">+</span> <span class="n">url</span><span class="p">,</span> <span class="n">files</span><span class="o">=</span><span class="n">fileid</span><span class="p">)</span>
+
+		<span class="c1"># all lines</span>
+		<span class="n">lineFolder</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">mapFolder</span><span class="p">,</span> <span class="s1">&#39;line&#39;</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">lineFolder</span><span class="p">):</span>
+			<span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">lineFolder</span><span class="p">):</span>
+				<span class="k">if</span> <span class="n">file</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.txt&#39;</span><span class="p">):</span>
+					<span class="n">lineFile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lineFolder</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span>
+					<span class="n">fileid</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;file&#39;</span><span class="p">:</span> <span class="nb">open</span><span class="p">(</span><span class="n">lineFile</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)}</span>
+					<span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;post/&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">username</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="n">mapname</span> <span class="o">+</span> <span class="s1">&#39;/line&#39;</span>
+					<span class="nb">print</span> <span class="s1">&#39;uploading line file:&#39;</span><span class="p">,</span> <span class="n">file</span><span class="p">,</span> <span class="n">url</span>
+					<span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">default_server_url</span> <span class="o">+</span> <span class="n">url</span><span class="p">,</span> <span class="n">files</span><span class="o">=</span><span class="n">fileid</span><span class="p">)</span>
+
+		<span class="nb">print</span> <span class="s1">&#39;Done uploading map:&#39;</span><span class="p">,</span> <span class="n">mapFolder</span></div></div>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+	<span class="k">if</span> <span class="mi">1</span><span class="p">:</span>
+		<span class="n">s</span> <span class="o">=</span> <span class="n">mmio</span><span class="p">()</span>
+		<span class="nb">map</span> <span class="o">=</span> <span class="s1">&#39;/Users/cudmore/MapManagerData/richard/Nancy/rr58c&#39;</span>
+		<span class="n">s</span><span class="o">.</span><span class="n">postmap</span><span class="p">(</span><span class="nb">map</span><span class="p">)</span>
 	<span class="k">if</span> <span class="mi">0</span><span class="p">:</span>
 		<span class="n">io</span> <span class="o">=</span> <span class="n">mmio</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="s1">&#39;cudmore&#39;</span><span class="p">)</span>
 		<span class="n">io</span><span class="o">.</span><span class="n">maplist</span><span class="p">()</span>
@@ -311,7 +415,7 @@
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
+            SOURCELINK_SUFFIX: ''
         };
     </script>
       <script type="text/javascript" src="../../../_static/jquery.js"></script>

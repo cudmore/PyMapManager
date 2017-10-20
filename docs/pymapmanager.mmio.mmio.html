@@ -32,9 +32,6 @@
   
 
   
-        <link rel="index" title="Index"
-              href="genindex.html"/>
-        <link rel="search" title="Search" href="search.html"/>
     <link rel="top" title="PyMapManager a1 documentation" href="index.html"/> 
 
   
@@ -141,7 +138,7 @@
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/pymapmanager.mmio.mmio.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/pymapmanager.mmio.mmio.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -159,9 +156,42 @@
 <p>Use this to load (get) files from a mmserver.
 This is a temporary wrapper as mmserver is currently a Flask server (slow).
 Eventually transition this to use proper online repository like ndio.</p>
+<p>To Do: add Rest interface to get number of timepoints in a map?</p>
+<p>Examples:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>from pymapmanager.mmio import mmio
+s = mmio.mmio()
+        Success, the server at http://robertcudmore.org/mmserver/ is up and running!
+
+s.maplist()
+        [&quot;rr30a&quot;, &quot;rr58c&quot;]
+
+# these are the basic files that we can get for map &#39;rr30a&#39;
+# they will each return text that can be converted to a stringio and read into python (numpy and/or panda)
+s.getfile(&#39;header&#39;, &#39;rr30a&#39;)
+s.getfile(&#39;objmap&#39;, &#39;rr30a&#39;)
+s.getfile(&#39;segmap&#39;, &#39;rr30a&#39;)
+s.getfile(&#39;stackdb&#39;, &#39;rr30a&#39;, timepoint=0)
+s.getfile(&#39;line&#39;, &#39;rr30a&#39;, timepoint=0)
+s.getfile(&#39;int&#39;, &#39;rr30a&#39;, timepoint=0, channel=1)
+
+# a bad request looks like this
+s.getfile(&#39;header&#39;, &#39;bad map&#39;)
+        error: mmio.getfile() received a 404 for url: http://robertcudmore.org/mmserver/public/bad map/header
+
+# upload a map
+map = &#39;/Users/cudmore/MapManagerData/richard/Nancy/rr30a&#39;
+s.postmap(map)
+</pre></div>
+</div>
+<dl class="docutils">
+<dt>Notes::</dt>
+<dd><p class="first">Header files are saved with</p>
+<p class="last">Stackdb, int, and line files are saved with</p>
+</dd>
+</dl>
 <dl class="class">
 <dt id="pymapmanager.mmio.mmio.mmio">
-<em class="property">class </em><code class="descclassname">pymapmanager.mmio.mmio.</code><code class="descname">mmio</code><span class="sig-paren">(</span><em>server_url='http://127.0.0.1:5000/'</em>, <em>username='cudmore'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymapmanager/mmio/mmio.html#mmio"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymapmanager.mmio.mmio.mmio" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">pymapmanager.mmio.mmio.</code><code class="descname">mmio</code><span class="sig-paren">(</span><em>server_url='http://robertcudmore.org/mmserver/'</em>, <em>username='public'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymapmanager/mmio/mmio.html#mmio"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymapmanager.mmio.mmio.mmio" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="method">
 <dt id="pymapmanager.mmio.mmio.mmio.getfile">
 <code class="descname">getfile</code><span class="sig-paren">(</span><em>type</em>, <em>mapname</em>, <em>timepoint=None</em>, <em>channel=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymapmanager/mmio/mmio.html#mmio.getfile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymapmanager.mmio.mmio.mmio.getfile" title="Permalink to this definition">¶</a></dt>
@@ -212,6 +242,20 @@ Eventually transition this to use proper online repository like ndio.</p>
 <dd><p>Return list of maps for user username</p>
 </dd></dl>
 
+<dl class="method">
+<dt id="pymapmanager.mmio.mmio.mmio.postmap">
+<code class="descname">postmap</code><span class="sig-paren">(</span><em>mapFolder</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymapmanager/mmio/mmio.html#mmio.postmap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymapmanager.mmio.mmio.mmio.postmap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Post a map to the server.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>mapFolder</strong> (<em>str</em>) &#8211; </td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </dd></dl>
 
 </div>
@@ -255,7 +299,7 @@ Eventually transition this to use proper online repository like ndio.</p>
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
+            SOURCELINK_SUFFIX: ''
         };
     </script>
       <script type="text/javascript" src="_static/jquery.js"></script>

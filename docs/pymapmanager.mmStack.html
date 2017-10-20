@@ -32,9 +32,6 @@
   
 
   
-        <link rel="index" title="Index"
-              href="genindex.html"/>
-        <link rel="search" title="Search" href="search.html"/>
     <link rel="top" title="PyMapManager a1 documentation" href="index.html"/> 
 
   
@@ -141,7 +138,7 @@
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/pymapmanager.mmStack.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/pymapmanager.mmStack.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -159,7 +156,8 @@
 <dl class="class">
 <dt id="pymapmanager.mmStack.mmStack">
 <em class="property">class </em><code class="descclassname">pymapmanager.mmStack.</code><code class="descname">mmStack</code><span class="sig-paren">(</span><em>filePath=None</em>, <em>name=None</em>, <em>numChannels=1</em>, <em>map=None</em>, <em>mapSession=None</em>, <em>urlmap=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymapmanager/mmStack.html#mmStack"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymapmanager.mmStack.mmStack" title="Permalink to this definition">¶</a></dt>
-<dd><p>A stack contains a 3D Tiff, a list of 3D annotations, and optionally a number of segment tracings.
+<dd><p>A stack contains a 3D Tiff, a list of 3D annotations, and optionally a number of segment tracings,
+<a class="reference internal" href="pymapmanager.mmStackLine.html#module-pymapmanager.mmStackLine" title="pymapmanager.mmStackLine"><code class="xref py py-class docutils literal"><span class="pre">pymapmanager.mmStackLine</span></code></a>.
 A stack can either be a single time-point or be embeded into a session of a <a class="reference internal" href="pymapmanager.mmMap.html#module-pymapmanager.mmMap" title="pymapmanager.mmMap"><code class="xref py py-class docutils literal"><span class="pre">pymapmanager.mmMap</span></code></a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -179,13 +177,14 @@ A stack can either be a single time-point or be embeded into a session of a <a c
 <dl class="attribute">
 <dt id="pymapmanager.mmStack.mmStack.annotationNames">
 <code class="descname">annotationNames</code><a class="headerlink" href="#pymapmanager.mmStack.mmStack.annotationNames" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get a list of all annotations names in the stack.</p>
+<dd><p>A list of all annotation names in the stack.</p>
+<p>These are valid names for stat passed to <a class="reference internal" href="#pymapmanager.mmStack.mmStack.getStackValues2" title="pymapmanager.mmStack.mmStack.getStackValues2"><code class="xref py py-func docutils literal"><span class="pre">getStackValues2()</span></code></a> and names for pd[&#8216;xstat&#8217;],
+pd[&#8216;ystat&#8217;], pd[&#8216;zstat&#8217;] passed to <a class="reference internal" href="#pymapmanager.mmStack.mmStack.getStackValues3" title="pymapmanager.mmStack.mmStack.getStackValues3"><code class="xref py py-func docutils literal"><span class="pre">getStackValues3()</span></code></a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Stirng list of valid names for stat passed to getStackValues2(stat) and names for
-pd[&#8216;xstat&#8217;], pd[&#8216;ystat&#8217;], pd[&#8216;zstat&#8217;] passed to getStackValues3(pd).</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">List (str).</td>
 </tr>
 </tbody>
 </table>
@@ -194,15 +193,15 @@ pd[&#8216;xstat&#8217;], pd[&#8216;ystat&#8217;], pd[&#8216;zstat&#8217;] passed
 <dl class="method">
 <dt id="pymapmanager.mmStack.mmStack.getStackValues2">
 <code class="descname">getStackValues2</code><span class="sig-paren">(</span><em>stat, roiType=['spineROI'], segmentID=[], plotBad=False, plotIntBad=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymapmanager/mmStack.html#mmStack.getStackValues2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymapmanager.mmStack.mmStack.getStackValues2" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get all values for a stack annotation.</p>
+<dd><p>Get all values for an annotation.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>stat</strong> (<em>str</em>) &#8211; Name of a stack annotation.</li>
-<li><strong>roiType</strong> &#8211; yyy</li>
-<li><strong>segmentID</strong> &#8211; zzz</li>
+<li><strong>roiType</strong> &#8211; spineROI or otherROI.</li>
+<li><strong>segmentID</strong> &#8211; Integer list specifying stack segment number.</li>
 </ul>
 </td>
 </tr>
@@ -216,23 +215,24 @@ pd[&#8216;xstat&#8217;], pd[&#8216;ystat&#8217;], pd[&#8216;zstat&#8217;] passed
 <dl class="method">
 <dt id="pymapmanager.mmStack.mmStack.getStackValues3">
 <code class="descname">getStackValues3</code><span class="sig-paren">(</span><em>pd</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymapmanager/mmStack.html#mmStack.getStackValues3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymapmanager.mmStack.mmStack.getStackValues3" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get values of three annotations using a plot dictionary pd.
-Get a default plot dictionary from mmUtil.newplotdict().
-This is useful for getting annotation values for plotting.</p>
+<dd><p>Get values of three annotations using a plot dictionary pd.</p>
+<p>Get a default plot dictionary from <a class="reference internal" href="pymapmanager.mmUtil.html#pymapmanager.mmUtil.newplotdict" title="pymapmanager.mmUtil.newplotdict"><code class="xref py py-func docutils literal"><span class="pre">pymapmanager.mmUtil.newplotdict()</span></code></a> and Fill in
+pd[&#8216;xstat&#8217;], pd[&#8216;ystat&#8217;], pd[&#8216;ztat&#8217;] with valid <a class="reference internal" href="#pymapmanager.mmStack.mmStack.annotationNames" title="pymapmanager.mmStack.mmStack.annotationNames"><code class="xref py py-attr docutils literal"><span class="pre">annotationNames</span></code></a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pd</strong> (<em>dict</em>) &#8211; A plot dictionary telling us what to plot. Fill in x/y/z with stat names.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pd</strong> (<em>dict</em>) &#8211; A plot dictionary describing what to plot.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><div class="line-block">
-<div class="line">pd[&#8216;x&#8217;], x stat values if pd[&#8216;xstat&#8217;], length is number of annotations matching criteria in original pd argument</div>
-<div class="line">pd[&#8216;y&#8217;], y stat values if pd[&#8216;ystat&#8217;]</div>
-<div class="line">pd[&#8216;z&#8217;], z stat values if pd[&#8216;zstat&#8217;]</div>
+<div class="line">pd[&#8216;x&#8217;], values if pd[&#8216;xstat&#8217;], length is number of annotations matching criteria in original pd argument</div>
+<div class="line">pd[&#8216;y&#8217;], values if pd[&#8216;ystat&#8217;]</div>
+<div class="line">pd[&#8216;z&#8217;], values if pd[&#8216;zstat&#8217;]</div>
 <div class="line">pd[&#8216;stackidx&#8217;], stack index of returned values</div>
 <div class="line">pd[&#8216;reverse&#8217;], same length as stackdb.numObj,</div>
 <div class="line-block">
-<div class="line">reverse[i]&gt;=0 gives index into pd[&#8216;x&#8217;] for annotation i, reverse[i]==&#8217;nan&#8217; means annotation i was not included</div>
+<div class="line">reverse[i]&gt;=0 gives index into pd[&#8216;x&#8217;] for annotation i.</div>
+<div class="line">reverse[i]==&#8217;nan&#8217; means annotation i was not included.</div>
 </div>
 </div>
 </td>
@@ -244,36 +244,30 @@ This is useful for getting annotation values for plotting.</p>
 <dl class="attribute">
 <dt id="pymapmanager.mmStack.mmStack.images">
 <code class="descname">images</code><a class="headerlink" href="#pymapmanager.mmStack.mmStack.images" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>images (numpy ndarray)</em> &#8211; 3D numpy ndarray of image data.
-This is not valid until <a class="reference internal" href="#pymapmanager.mmStack.mmStack.loadStackImages" title="pymapmanager.mmStack.mmStack.loadStackImages"><code class="xref py py-func docutils literal"><span class="pre">loadStackImages()</span></code></a> is called.
-Slices are in the 1st dimension, use images[0,:,:] to get the first image.</p>
+<dd><p>3D numpy ndarray of images. This is not valid until <a class="reference internal" href="#pymapmanager.mmStack.mmStack.loadStackImages" title="pymapmanager.mmStack.mmStack.loadStackImages"><code class="xref py py-func docutils literal"><span class="pre">loadStackImages()</span></code></a> is called.
+Images are in the 1st dimension, use images[0,:,:] to get the first image.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pymapmanager.mmStack.mmStack.line">
 <code class="descname">line</code><a class="headerlink" href="#pymapmanager.mmStack.mmStack.line" title="Permalink to this definition">¶</a></dt>
-<dd><p>line (<a class="reference internal" href="pymapmanager.mmStackLine.html#module-pymapmanager.mmStackLine" title="pymapmanager.mmStackLine"><code class="xref py py-class docutils literal"><span class="pre">pymapmanager.mmStackLine</span></code></a>) &#8211; A 3D tracing of segments.</p>
+<dd><p>A <a class="reference internal" href="pymapmanager.mmStackLine.html#module-pymapmanager.mmStackLine" title="pymapmanager.mmStackLine"><code class="xref py py-class docutils literal"><span class="pre">pymapmanager.mmStackLine</span></code></a> that holds 3D tracing of line segments.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pymapmanager.mmStack.mmStack.loadStackImages">
 <code class="descname">loadStackImages</code><span class="sig-paren">(</span><em>channel=2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymapmanager/mmStack.html#mmStack.loadStackImages"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymapmanager.mmStack.mmStack.loadStackImages" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load the images for a stack. Sets &#8216;images&#8217; instance variable</p>
+<p>MapManager uses single channel .tif files. Each channel has its own file: _ch1.tif, _ch2.tif, _ch3.tif.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>channel</strong> (<em>int</em>) &#8211; Specifies the channel number to load. MapManager uses single channel .tif files.</li>
-<li><strong>channel has its own file</strong> (<em>Each</em>) &#8211; _ch1.tif, _ch2.tif, _ch3.tif.</li>
-</ul>
-</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>channel</strong> (<em>int</em>) &#8211; Specifies the channel number to load.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">3D numpy array of images.</p>
-</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>images</strong> &#8211; 3D numpy array of images.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#pymapmanager.mmStack.mmStack.images" title="pymapmanager.mmStack.mmStack.images">images</a> (3D ndarray)</p>
-</td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">3D ndarray</td>
 </tr>
 </tbody>
 </table>
@@ -294,14 +288,13 @@ Slices are in the 1st dimension, use images[0,:,:] to get the first image.</p>
 <dl class="attribute">
 <dt id="pymapmanager.mmStack.mmStack.numSlices">
 <code class="descname">numSlices</code><a class="headerlink" href="#pymapmanager.mmStack.mmStack.numSlices" title="Permalink to this definition">¶</a></dt>
-<dd><p>Number of image slices in the stack.</p>
+<dd><p>Number of images in the stack.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pymapmanager.mmStack.mmStack.stackdb">
 <code class="descname">stackdb</code><a class="headerlink" href="#pymapmanager.mmStack.mmStack.stackdb" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>stackdb (pandas dataframe)</em> &#8211; Pandas dataframe of annotations, one per row. Columns are statistic names.
-See <cite>pymapmanager.mmUtil STACK_STATS</cite> for valid statistic names.</p>
+<dd><p>A pandas dataframe of annotations, one per row. Columns are annotation names.</p>
 </dd></dl>
 
 </dd></dl>
@@ -347,7 +340,7 @@ See <cite>pymapmanager.mmUtil STACK_STATS</cite> for valid statistic names.</p>
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
+            SOURCELINK_SUFFIX: ''
         };
     </script>
       <script type="text/javascript" src="_static/jquery.js"></script>

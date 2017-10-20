@@ -32,9 +32,6 @@
   
 
   
-        <link rel="index" title="Index"
-              href="../../genindex.html"/>
-        <link rel="search" title="Search" href="../../search.html"/>
     <link rel="top" title="PyMapManager a1 documentation" href="../../index.html"/>
         <link rel="up" title="Module code" href="../index.html"/> 
 
@@ -183,6 +180,7 @@
 <span class="sd">        Pandas dataframe of line with (x,y,z,ID) columns.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
+        <span class="n">header</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="n">stack</span><span class="o">.</span><span class="n">urlmap</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="c1"># careful, we use tmp later to load (we need to know # header rows)</span>
             <span class="n">tmp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stack</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">getfile</span><span class="p">(</span><span class="s1">&#39;line&#39;</span><span class="p">,</span> <span class="n">stack</span><span class="o">.</span><span class="n">urlmap</span><span class="p">,</span> <span class="n">timepoint</span><span class="o">=</span><span class="n">stack</span><span class="o">.</span><span class="n">mapSession</span><span class="p">)</span>
@@ -192,25 +190,27 @@
                 <span class="n">lineFile</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="n">_folder</span> <span class="o">+</span> <span class="s1">&#39;line&#39;</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="n">stack</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;_l.txt&#39;</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">lineFile</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="n">_folder</span> <span class="o">+</span> <span class="s1">&#39;stackdb&#39;</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="n">stack</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;_l.txt&#39;</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">lineFile</span><span class="p">):</span>
-                <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="n">ENOENT</span><span class="p">,</span> <span class="s1">&#39;mmStackLine did not find lineFile:&#39;</span><span class="p">,</span> <span class="n">lineFile</span><span class="p">)</span>
-            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">lineFile</span><span class="p">,</span> <span class="s1">&#39;rU&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-                <span class="n">header</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span>
+            <span class="c1">#if not os.path.isfile(lineFile):</span>
+            <span class="c1">#    raise IOError(ENOENT, &#39;mmStackLine did not find lineFile:&#39;, lineFile)</span>
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">lineFile</span><span class="p">):</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">lineFile</span><span class="p">,</span> <span class="s1">&#39;rU&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                    <span class="n">header</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span>
 
-        <span class="k">if</span> <span class="n">header</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;;&#39;</span><span class="p">):</span>
-            <span class="n">header</span> <span class="o">=</span> <span class="n">header</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-        <span class="n">header</span> <span class="o">=</span> <span class="n">header</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;;&#39;</span><span class="p">)</span>
-        <span class="n">d</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;=&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">header</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">header</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">header</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;;&#39;</span><span class="p">):</span>
+                <span class="n">header</span> <span class="o">=</span> <span class="n">header</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">header</span> <span class="o">=</span> <span class="n">header</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;;&#39;</span><span class="p">)</span>
+            <span class="n">d</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;=&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">header</span><span class="p">)</span>
 
-        <span class="c1"># line file has a header of segments</span>
-        <span class="c1"># 1 file header + 1 segment header + numHeaderRow</span>
-        <span class="n">numHeaderRow</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;numHeaderRow&#39;</span><span class="p">])</span>
-        <span class="n">startReadingRow</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">numHeaderRow</span>
+            <span class="c1"># line file has a header of segments</span>
+            <span class="c1"># 1 file header + 1 segment header + numHeaderRow</span>
+            <span class="n">numHeaderRow</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;numHeaderRow&#39;</span><span class="p">])</span>
+            <span class="n">startReadingRow</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">numHeaderRow</span>
 
-        <span class="k">if</span> <span class="n">stack</span><span class="o">.</span><span class="n">urlmap</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">linedb</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">StringIO</span><span class="p">(</span><span class="n">tmp</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)),</span> <span class="n">header</span><span class="o">=</span><span class="n">startReadingRow</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">linedb</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">lineFile</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="n">startReadingRow</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">stack</span><span class="o">.</span><span class="n">urlmap</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">linedb</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">StringIO</span><span class="p">(</span><span class="n">tmp</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)),</span> <span class="n">header</span><span class="o">=</span><span class="n">startReadingRow</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">linedb</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">lineFile</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="n">startReadingRow</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
 <div class="viewcode-block" id="mmStackLine.getLineValues3"><a class="viewcode-back" href="../../pymapmanager.mmStackLine.html#pymapmanager.mmStackLine.mmStackLine.getLineValues3">[docs]</a>    <span class="k">def</span> <span class="nf">getLineValues3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">pd</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -339,7 +339,7 @@
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
+            SOURCELINK_SUFFIX: ''
         };
     </script>
       <script type="text/javascript" src="../../_static/jquery.js"></script>

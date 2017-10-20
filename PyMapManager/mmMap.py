@@ -1,4 +1,4 @@
-import os, io, time, copy
+import os, io, time, math
 from errno import ENOENT
 import pandas as pd
 import numpy as np
@@ -109,6 +109,7 @@ class mmMap():
 
 		###############################################################################
 		# segMap (3d)
+		header = None
 		if doFile:
 			segMapFile = self._folder + self.name + '_segMap.txt'
 			if not os.path.isfile(segMapFile):
@@ -118,19 +119,21 @@ class mmMap():
 			self.segMap = np.loadtxt(segMapFile, skiprows=1)
 		else:
 			tmp = self.server.getfile('segmap', self.name)
-			header = tmp.split('\r')[0]
-			self.segMap = np.loadtxt(tmp.split('\r'), skiprows=1)
+			#header = tmp.split('\r')[0] # works when server is running on OSX
+			header = tmp.split('\n')[0]
+			self.segMap = np.loadtxt(tmp.split('\n'), skiprows=1)
 
-		if header.endswith(';'):
-			header = header[:-1]
-		header = header.split(';')
-		d = dict(s.split('=') for s in header)
-		numRow = int(d['rows'])
-		numCol = int(d['cols'])
-		numBlock = int(d['blocks'])
+		if header is not None:
+			if header.endswith(';'):
+				header = header[:-1]
+			header = header.split(';')
+			d = dict(s.split('=') for s in header)
+			numRow = int(d['rows'])
+			numCol = int(d['cols'])
+			numBlock = int(d['blocks'])
 
-		self.segMap.resize(numBlock,numRow,numCol)
-		self.segRunMap = self._buildRunMap(self.segMap)
+			self.segMap.resize(numBlock,numRow,numCol)
+			self.segRunMap = self._buildRunMap(self.segMap)
 
 		###############################################################################
 		#load each stack db
@@ -236,6 +239,10 @@ class mmMap():
 		"""
 		startTime = time.time()
 
+		# make sure pd['roitype'] is a list
+		if not isinstance(pd['roitype'], list):
+			pd['roitype'] = [pd['roitype']]
+
 		m = self.runMap.shape[0]
 		n = self.runMap.shape[1]
 
@@ -272,12 +279,13 @@ class mmMap():
 			orig_df = self.stacks[j].stackdb
 
 			currSegmentID = []
-			if pd['segmentid']:
-				currSegmentID = self.segRunMap[pd['segmentid'], j]  # this only works for one segment -- NOT A LIST
-				currSegmentID = currSegmentID.tolist()
-			if pd['segmentid'] and not currSegmentID:
-				# this session does not have segmentID that match
-				break
+			if self.numMapSegments:
+				if pd['segmentid']:
+					currSegmentID = self.segRunMap[pd['segmentid'], j]  # this only works for one segment -- NOT A LIST
+					currSegmentID = currSegmentID.tolist()
+				if pd['segmentid'] and not currSegmentID:
+					# this session does not have segmentID that match
+					break
 
 			goodIdx = self.runMap[:, j]  # valid indices from runMap
 
@@ -424,18 +432,23 @@ class mmMap():
 					nextNode = theMap[next,int(nextNode),k]
 		return retRunMap
 
-	def _getSegmentID(self, segmentNumber, sessIdx):
+	def _getStackSegmentID(self, mapSegmentNumber, sessIdx):
 		"""
 		Given a map centric segment index (row in segRunMap), tell us the stack centric segmentID for session sessIdx
 
 		Args:
-			segmentNumber (int): Map centric segment index, row in segRunMap
+			mapSegmentNumber (int): Map centric segment index, row in segRunMap
 			sessIdx (int): Session number
 
-		Returns: int: stack centric segmentID or nan if no corresponding segment in that session
+		Returns: int or nan: Stack centric segmentID or None if no corresponding segment in that session.
 		"""
-		return self.segRunMap[segmentNumber][sessIdx] # can be nan
-
+		stackSegment = np.nan
+		if self.segRunMap is not None:
+			stackSegment = self.segRunMap[mapSegmentNumber][sessIdx] # can be nan
+		if math.isnan(stackSegment):
+			return None
+		else:
+			return stackSegment
 
 class testmmMap():
 	"""

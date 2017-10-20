@@ -205,7 +205,7 @@ class mmApplicationWindow(QtGui.QMainWindow):
         self.statusBar().showMessage("All hail matplotlib!", 2000)
 
         # load a mm map
-        if 1:
+        if 0:
             defaultMap = '/Users/cudmore/Desktop/data/cudmore/rr30a/rr30a.txt'
             #defaultMap = '/Volumes/fourt/MapManager_Data/stroke1/stroke1.txt'
             if not os.path.isfile(defaultMap):
@@ -220,9 +220,14 @@ class mmApplicationWindow(QtGui.QMainWindow):
             else:
                 print 'error loading map:', defaultMap
             """
-
-        # load from online repository
         if 0:
+            defaultMap = '/Users/cudmore/Dropbox/MapManagerData/server/public/amit1/amit1.txt'
+            if not os.path.isfile(defaultMap):
+                raise IOError(ENOENT, 'mmApp did not find defaultMap:', defaultMap)
+            print 'loading default map:', defaultMap
+            self.loadMap(defaultMap)
+        # load from online repository
+        if 1:
             urlmap = 'rr30a'
             self.loadMap(urlmap=urlmap)
 
