@@ -1,0 +1,47 @@
+																																
+stringonly	1																															
+folder	root:maps:																															
+wname	rr30a																															
+rawpath	vasculature:Users:cudmore:Dropbox:MapManagerData:richard:																															
+savepath																																
+parent	none																															
+class	nv																															
+nvTemplate																																
+isDirty	1																															
+index	0	1	2	3	4	5	6	7	8																							
+hsIdx																																
+hsType	mm3	mm3	mm3	mm3	mm3	mm3	mm3	mm3	mm3																							
+hsStack	rr30a_s0_ch1	rr30a_s1_ch1	rr30a_s2_ch1	rr30a_s3_ch1	rr30a_s4_ch1	rr30a_s5_ch1	rr30a_s6_ch1	rr30a_s7_ch1	rr30a_s8_ch1																							
+hsStackPath	root:ScanImage:rr30a:raw:	root:ScanImage:rr30a:raw:	root:ScanImage:rr30a:raw:	root:ScanImage:rr30a:raw:	root:ScanImage:rr30a:raw:	root:ScanImage:rr30a:raw:	root:ScanImage:rr30a:raw:	root:ScanImage:rr30a:raw:	root:ScanImage:rr30a:raw:																							
+hsdb	rr30a_s0_db2	rr30a_s1_db2	rr30a_s2_db2	rr30a_s3_db2	rr30a_s4_db2	rr30a_s5_db2	rr30a_s6_db2	rr30a_s7_db2	rr30a_s8_db2																							
+hsStackNV	rr30a_s0	rr30a_s1	rr30a_s2	rr30a_s3	rr30a_s4	rr30a_s5	rr30a_s6	rr30a_s7	rr30a_s8																							
+date	20141009	20141013	20141016	20141017	20141018	20141020	20141021	20141022	20141029																							
+time	20:01:40	22:24:04	19:49:05	20:30:39	16:18:59	19:25:41	18:36:19	19:47:00	19:05:27																							
+hsStackSeconds	3495729700.000000	3496083844.000000	3496333745.000000	3496422639.000000	3496493939.000000	3496677941.000000	3496761379.000000	3496852020.000000	3497454327.000000																							
+fiducPnt	0	0	0	0	0	0	0	0	0																							
+numChannels	2	2	2	2	2	2	2	2	2																							
+defaultChannel	2	2	2	2	2	2	2	2	2																							
+px	1024	1024	1024	1024	1024	1024	1024	1024	1024																							
+py	1024	1024	1024	1024	1024	1024	1024	1024	1024																							
+pz	70	65	70	70	70	80	70	80	70																							
+dx	0.12	0.12	0.12	0.12	0.12	0.12	0.12	0.12	0.12																							
+dy	0.12	0.12	0.12	0.12	0.12	0.12	0.12	0.12	0.12																							
+dz	1	1	1	1	1	1	1	1	1																							
+stackdbVersion	20151224																															
+numSeg	5																															
+numObj	2467																															
+numSpine	1227																															
+importedStackName	RR30a_S0	RR30a_S1	RR30a_S2	RR30a_S3	RR30a_S4	RR30a_S5	RR30a_S6	RR30a_S7	RR30a_S8																							
+isDirty_stacknv	0	0	0	0	0	0	0	0	0																							
+isDirty_stackdb	0	0	0	0	0	0	0	0	0																							
+isDirty_line	0	0	0	0	0	0	0	0	0																							
+condStr	c	c1	c2		e1		e2	e3																								
+zeroSession	0																															
+sessions	0	1	2	3	4	5	6	7	8																							
+datetime	3495729700.000000	3496083844.000000	3496333745.000000	3496422639.000000	3496493939.000000	3496677941.000000	3496761379.000000	3496852020.000000	3497454327.000000																							
+days	0	4.0989	6.9913	8.0201	8.8454	10.975	11.941	12.99	19.961																							
+hours	0	98.373	167.79	192.48	212.29	263.4	286.58	311.76	479.06																							
+zsessions	0	1	2	3	4	5	6	7	8																							
+zdays	0	4.0989	6.9913	8.0201	8.8454	10.975	11.941	12.99	19.961																							
+zhours	0	98.373	167.79	192.48	212.29	263.4	286.58	311.76	479.06																							
+mapCond																																

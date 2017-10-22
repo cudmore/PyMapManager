@@ -27,6 +27,8 @@ from flask import Flask, make_response, send_file, send_from_directory, safe_joi
 from flask import jsonify, request, redirect, url_for
 from werkzeug.utils import secure_filename
 
+import pandas as pd
+
 # assuming data folder is in same folder as this source .py file
 #static_folder = '/Users/cudmore/Desktop/data'
 static_folder = './data'
@@ -67,6 +69,36 @@ def get_header(username, mapname, item):
 	as_attachment = False
 	if item == 'header':
 		mapfile = mapname + '.txt'
+	elif item == 'objmap':
+		mapfile = mapname + '_objMap.txt'
+	elif item == 'segmap':
+		mapfile = mapname + '_segMap.txt'
+	elif item == 'zip':
+		mapfile = mapname + '.zip'
+		as_attachment = True
+		
+	print '=== get_header()', username, mapname, item
+	print 'mapdir:', mapdir
+	print 'mapfile:', mapfile
+	return send_from_directory(mapdir, mapfile, as_attachment=True, attachment_filename=mapfile)
+	#return send_from_directory(mapdir, mapfile) #, as_attachment=as_attachment) #, mimetype='text/txt')
+
+@app.route('/v2/<username>/<mapname>/<item>')
+def get_header_v2(username, mapname, item):
+	# return a top level file of a map
+	# args: item (str): one of (header, objmap, segmap)
+		
+	mapdir = safe_join(username, mapname)
+	mapdir = safe_join(app.static_folder, mapdir)
+	
+	as_attachment = False
+	if item == 'header':
+		print '   get_header_v2: header'
+		mapfile = mapname + '.txt'
+		path = mapdir + '/' + mapfile
+		print '   path:', path
+		t = pd.read_table(path, index_col=0)
+		return t.to_json()
 	elif item == 'objmap':
 		mapfile = mapname + '_objMap.txt'
 	elif item == 'segmap':
@@ -237,7 +269,7 @@ def simple():
 if __name__ == '__main__':
     #gettiff()
     # host= '0.0.0.0' will run on servers network ip
-    app.run(host='0.0.0.0', port=5010)
+    #app.run(host='0.0.0.0', port=5010)
     # this will run on localhost at port :5000
-    #app.run(debug=True)
+    app.run(port=5010, debug=True)
 
