@@ -1,0 +1,9 @@
+{
+    "docs": [
+        {
+            "location": "/", 
+            "text": "This is template for PyMapManager documentation\n\n\nThere are three things\n\n\n\n\nPyMapManager Python Package. See the \nAPI Documentation\n\n\nPyMapManager server\n\n\nPyMapManager desktop", 
+            "title": "Home"
+        }
+    ]
+}
