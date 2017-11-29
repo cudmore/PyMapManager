@@ -100,6 +100,29 @@ Remove all references to .git
 
     find . -name .git -print0 | xargs -0 rm -rf
     
+### mkdocs 20171129
+
+`PyMapManager/docs` now has mkdocs website
+
+`PyMapManager/docs/api` now has Sphinx API documentation
+
+Push new Sphinx api with
+
+	sphinx-build -b html source/ ../../docs/api
+	
+Make new mkdocs with
+
+	cd ~/Dropbox/PyMapManager
+	mkdocs new docs
+	
+Push to mkdocs to github with
+
+	# need to do this in github repo, NOT Dropbox repo !!!
+	cd ~/Sites/PyMapManager/docs
+	mkdocs gh-deploy --clean
+
+Make sure github repo is using gh-branch for docs
+
 ### pdoc
 
 Download forked git repo from https://github.com/j6k4m8/pdoc
