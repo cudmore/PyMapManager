@@ -1,0 +1,177 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+
+	<title>Quick Start - Leaflet</title>
+
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link rel="shortcut icon" type="image/x-icon" href="docs/images/favicon.ico" />
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css" integrity="sha512-M2wvCLH6DSRazYeZRIm1JnYyh22purTM+FDB5CsyxtQJYeKq83arPe5wgbNmcFXGqiSH2XR8dT/fJISVA1r/zQ==" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js" integrity="sha512-lInM/apFSqyy1o6s89K4iQUKg6ppXEgsVxT35HbzUupEVRh2Eu9Wdl4tHj7dZO0s1uvplcYGmt3498TtHq+log==" crossorigin=""></script>
+
+    <!-- nvd3 -->
+	<link rel="stylesheet" href="static/myd3/myd3_style.css" />
+
+    <link rel="stylesheet" href="static/myd3/bower_components/nvd3/build/nv.d3.min.css"/>
+    <script src="static/myd3/bower_components/angular/angular.min.js"></script>
+    <script src="static/myd3/bower_components/d3/d3.min.js" charset="utf-8"></script>
+    <script src="static/myd3/bower_components/nvd3/build/nv.d3.min.js"></script>
+    <script src="static/myd3/bower_components/angular-nvd3/dist/angular-nvd3.min.js"></script>
+
+    <script src="static/myd3/myd3_app.js"></script>
+
+
+</head>
+
+
+  <body ng-controller="MainCtrl">
+
+  <script src="static/myleaflet_data.js" type="text/javascript"></script>
+
+    {% raw %}
+
+	This is from myd3_app.js (does not work)
+  	{{ bicycleRental }}
+  	<BR>
+
+    <button type="button" class="btn btn-danger btn-sm" ng-click="plotbutton()">Plot</button>
+    All sessions, xstat:x, ystat:y, zstat:z<BR>
+
+	{% endraw %}
+
+<div id="mapid2" style="width: 512px; height: 512px;"></div>
+<script>
+	var map2 = L.map('mapid2', {
+    	crs: L.CRS.Simple
+	});
+	var bounds = [[0,0], [512,512]];
+	var image = L.imageOverlay('static/MAX_rr30a_s0_ch2.png', bounds).addTo(map2);
+	map2.fitBounds(bounds);
+
+	//add a marker
+	//var sol = L.latLng([ 145, 175.2 ]);
+	//L.marker(sol).addTo(map2)
+	//	.bindPopup("<b>Hello world!</b><br />I am a popup.").openPopup();
+
+	//map2.setView( [70, 120], 1);
+
+	//utility function to convert x/y to y/x
+	var yx = L.latLng;
+	var xy = function(x, y) {
+	    if (L.Util.isArray(x)) {    // When doing xy([x, y]);
+	        return yx(x[1], x[0]);
+	    }
+	    return yx(y, x);  // When doing xy(x, y);
+	};
+
+	var sol      = xy(175.2, 145.0);
+	var mizar    = xy( 41.6, 130.1);
+	var kruegerZ = xy( 13.4,  56.5);
+	var deneb    = xy(218.7,   8.3);
+
+	L.marker(     sol).addTo(map2).bindPopup(      'Sol');
+	L.marker(   mizar).addTo(map2).bindPopup(    'Mizar');
+	L.marker(kruegerZ).addTo(map2).bindPopup('Krueger-Z');
+	L.marker(   deneb).addTo(map2).bindPopup(    'Deneb');
+
+	var travel = L.polyline([sol, deneb, kruegerZ]).addTo(map2);
+
+	//
+	//show popup on click
+	var popup2 = L.popup();
+
+	function onMapClick2(e) {
+		var userclick = xy(e.latlng.lat, e.latlng.lng)
+		console.log('userclick:', userclick)
+		userclick.lat = Math.round(userclick.lat) // * 100)/100
+		userclick.lng = Math.round(userclick.lng) // * 100)/100
+		console.log('userclick:', userclick)
+		popup2
+			.setLatLng(e.latlng)
+			//.setContent("You clicked the map at " + e.latlng.toString())
+			.setContent("You clicked the map at x:" + userclick.lat + " y:" + userclick.lng)
+			.openOn(map2);
+	}
+	map2.on('click', onMapClick2);
+
+	//
+	//don't use leaflet icons for markers, use geojson
+	var geojsonFeature = {
+	    "type": "Feature",
+	    "properties": {
+	        "name": "Coors Field",
+	        "amenity": "Baseball Stadium",
+	        "popupContent": "This is where the Rockies play!"
+	    },
+	    "geometry": {
+	        "type": "Point",
+	        "coordinates": [200, 200]
+	    }
+	};
+	L.geoJSON(geojsonFeature).addTo(map2);
+
+	//
+	//specify lines
+	var myLines = [{
+	    "type": "LineString",
+	    "coordinates": [[200, 40], [250, 55], [400, 65]]
+	}, {
+	    "type": "LineString",
+	    "coordinates": [[200, 50], [250, 65], [400, 75]]
+	}];
+
+	var myLineStyle = {
+	    "color": "#00ffff",
+	    "weight": 2,
+	    "opacity": 0.65
+	};
+
+	L.geoJSON(myLines, {
+    	style: myLineStyle
+	}).addTo(map2);
+
+	//
+	//use points specified in loaded .js file
+	function onEachFeature(feature, layer) {
+		//var popupContent = "<p>I started out as a GeoJSON " +
+		//		feature.geometry.type + ", but now I'm a Leaflet vector!</p>";
+		var popupContent = "Show spine index. ";
+
+		if (feature.properties && feature.properties.popupContent) {
+			popupContent += feature.properties.popupContent;
+		}
+
+		layer.bindPopup(popupContent);
+	}
+
+	//bicycleRental is defined in myleaflet_data.js
+	L.geoJSON([bicycleRental], {
+
+		style: function (feature) {
+			return feature.properties && feature.properties.style;
+		},
+
+		onEachFeature: onEachFeature,
+
+		pointToLayer: function (feature, latlng) {
+			return L.circleMarker(latlng, {
+				radius: 8,
+				fillColor: "#ffff00",
+				color: "#ffff00",
+				weight: 1,
+				opacity: 1,
+				fillOpacity: 0.8
+			});
+		}
+	}).addTo(map2);
+
+</script>
+
+
+
+</body>
+</html>

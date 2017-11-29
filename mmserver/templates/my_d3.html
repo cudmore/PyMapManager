@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html ng-app="plunker">
+
+  <head>
+    <meta charset="utf-8" />
+    <title>Angular-nvD3 Scatter Chart</title>
+    <script>document.write('<base href="' + document.location + '" />');</script>
+
+    <link rel="stylesheet" href="static/myd3/myd3_style.css" />
+    
+    <link rel="stylesheet" href="static/myd3/bower_components/nvd3/build/nv.d3.min.css"/>    
+    <script src="static/myd3/bower_components/angular/angular.min.js"></script>
+    <script src="static/myd3/bower_components/d3/d3.min.js" charset="utf-8"></script>
+    <script src="static/myd3/bower_components/nvd3/build/nv.d3.min.js"></script>
+    <script src="static/myd3/bower_components/angular-nvd3/dist/angular-nvd3.min.js"></script>
+
+    <script src="static/myd3/myd3_app.js"></script>
+  </head>
+
+  <body ng-controller="MainCtrl">
+    {% raw %}
+
+
+    <button type="button" class="btn btn-danger btn-sm" ng-click="plotbutton()">Plot</button>
+    All sessions, xstat:x, ystat:y, zstat:z<BR>
+
+    <!-- <nvd3 options="options" data="data"></nvd3> -->
+    <nvd3 options="options" data="data2"></nvd3>
+
+        <!-- mapvalues.mapsegment:{{mapvalues.mapsegment}} <BR>
+        mapvalues.x:{{mapvalues.x}} <BR>
+        mapvalues.y:{{mapvalues.y}} <BR>
+        mapvalues.z:{{mapvalues.z}} <BR>
+        -->
+
+		Table of plotted values
+        <table>
+		  <tr>
+          <th>Map Segment</th>
+          <th>x</th>
+          <th>y</th>
+          <th>z</th>
+          </tr>
+
+          </tr><tr ng-repeat="x1 in mapvalues.x track by $index">
+			<td>{{ mapvalues.mapsegment[$index] }}</td>
+			<td>{{ mapvalues.x[$index] }}</td>
+			<td>{{ mapvalues.y[$index] }}</td>
+			<td>{{ mapvalues.z[$index] }}</td>
+		  </tr>
+		</table>
+
+    <br><a href="http://krispo.github.io/angular-nvd3/" target="_blank" style="float: right;">See more</a>
+{% endraw %}
+  </body>
+
+</html>

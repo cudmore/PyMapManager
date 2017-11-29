@@ -268,6 +268,10 @@ class mmMap():
 		yRunRow = np.empty([m, n])
 		yRunRow[:] = np.NAN
 
+		# keep track of map segment id
+		yMapSegment = np.empty([m, n])
+		yMapSegment[:] = np.NAN
+
 		runIdxDim = 6
 
 		if pd['stacklist'] is not None and len(pd['stacklist'])>0:
@@ -312,9 +316,11 @@ class mmMap():
 			finalRows = self.objMap[runIdxDim, finalIndexList, j]
 			finalRows = finalRows.astype(int)
 
+			#print 'getMapValues3() final_df:', final_df
+
 			# convert to values at end
 			try:
-				if pd['xstat']:
+				if pd['xstat'] and pd['xstat'] != 'session':
 					pd['x'][finalRows, j] = final_df[pd['xstat']].values
 				if pd['ystat']:
 					pd['y'][finalRows, j] = final_df[pd['ystat']].values
@@ -327,6 +333,15 @@ class mmMap():
 			yIdx[finalRows, j] = final_df.index.values
 			ySess[finalRows, j] = j
 			yRunRow[finalRows, j] = finalRows  # final_df.index
+
+			# 20171119 finish this
+			#print 'a', final_df['parentID'].values.astype(int)
+			#print 'b', self.segMap[0, final_df['parentID'].values.astype(int), j]
+			yMapSegment[finalRows, j] = self.segMap[0, final_df['parentID'].values.astype(int), j]
+
+			if pd['xstat'] == 'session':
+				#print 'swapping x for session'
+				pd['x'][finalRows, j] = j #ySess[finalRows,j]
 
 		# strip out a nan rows, can't do this until we have gone through all sessions
 		# makes plotting way faster
@@ -346,6 +361,11 @@ class mmMap():
 		pd['stackidx'] = yIdx
 		pd['mapsess'] = ySess
 		pd['runrow'] = yRunRow
+		pd['mapsegment'] = yMapSegment
+
+		#print pd['x']
+		#print pd['y']
+
 		return pd
 
 	def getMapValues2(self, stat, roiType=['spineROI'], segmentID=[], plotBad=False, plotIntBad=False):

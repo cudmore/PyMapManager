@@ -21,6 +21,8 @@ Example::
 #from matplotlib.figure import Figure
 import matplotlib.pyplot as plt
 
+#from bokeh.plotting import figure, output_file, show
+
 import numpy as np
 
 #from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
