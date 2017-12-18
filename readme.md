@@ -5,7 +5,7 @@ This project will be merged with <A HREF="https://github.com/cmicek1/TiffViewer"
 
 ## Python API interface
 
-Python library to open and analyze Map Manager files.
+Python package to open and analyze Map Manager files.
 
 Please see the <A HREF="http://blog.cudmore.io/PyMapManager">API Documentation</A>. We keep another copy at <A HREF="http://pymapmanager.readthedocs.io/en/latest/">API Documentation</A> and a third at <A HREF="http://robertcudmore.org/mapmanager/PyMapManager/docs/">here</A>.
 
@@ -13,17 +13,21 @@ See the <A HREF="https://github.com/cudmore/PyMapManager/tree/master/PyMapManage
 
 ## Map Manager server
 
-A server to browse and share Map Manager files via the web
+A server to browse and share Map Manager files via the web. The server used the PyMapManager package as an engine.
 
 <IMG SRC="images/mmserver_purejs.png" width=800>
 
 This screenshot shows the web based browsing and plotting of Map Manager annotations.
 
+<IMG SRC="images/mmserver_leaflet.png" width=800>
+
+This screenshot shows browsing a stack with spine annotations overlaid.
+
 ## PyQt interface
 
-The next generation desktop application version of Map Manager. Written in Python using PyQt interface and using backend PyMapManager as an engine.
+The next generation desktop application version of Map Manager. Written in Python using the Qt interface library and using PyMapManager package as an engine.
 
-A PyQt GUI interface is in <A HREF="https://github.com/cudmore/PyMapManager/tree/master/PyMapManager/interface">/PyMapManager/interface</A>
+The PyQt GUI interface is in <A HREF="https://github.com/cudmore/PyMapManager/tree/master/PyMapManager/interface">/PyMapManager/interface</A>
 
 <IMG SRC="images/pyMapManager_v2.png" width=800>
 
