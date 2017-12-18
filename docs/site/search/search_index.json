@@ -2,8 +2,23 @@
     "docs": [
         {
             "location": "/", 
-            "text": "This is template for PyMapManager documentation\n\n\nThere are three things\n\n\n\n\nPyMapManager Python Package. See the \nAPI Documentation\n\n\nPyMapManager server\n\n\nPyMapManager desktop", 
+            "text": "PyMapManager is a Python package to analyze time-series image stacks.\n\n\nIt is designed to open Map Manager annotations created with the Igor Pro version of \nMap Manager\n.\n\n\nThere are three components to PyMapManager:\n\n\n\n\nPyMapManager Python Package. See the \nAPI Documentation\n\n\nPyMapManager server. See the \nserver documentation\n\n\nPyMapManager desktop application. See the \ngithub repository\n\n\n\n\nPyMapManager Python package\n\n\nPyMapManager server\n\n\nThe PyMapManager sevrer allows web-based browsing of annotations and stacks.\n\n\n\n\n\n\nPyMapManager deskop application\n\n\nThe Qt version of PyMapManager is a desktop application", 
             "title": "Home"
+        }, 
+        {
+            "location": "/#pymapmanager-python-package", 
+            "text": "", 
+            "title": "PyMapManager Python package"
+        }, 
+        {
+            "location": "/#pymapmanager-server", 
+            "text": "The PyMapManager sevrer allows web-based browsing of annotations and stacks.", 
+            "title": "PyMapManager server"
+        }, 
+        {
+            "location": "/#pymapmanager-deskop-application", 
+            "text": "The Qt version of PyMapManager is a desktop application", 
+            "title": "PyMapManager deskop application"
         }
     ]
 }

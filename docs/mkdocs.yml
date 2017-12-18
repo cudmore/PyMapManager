@@ -1,1 +1,8 @@
-site_name: My Docs
+site_name: PyMapManager
+
+theme:
+  name: 'material'
+  #name: 'readthedocs'
+  #name: 'mkdocs'
+
+repo_url: http://github.com/cudmore/homecage

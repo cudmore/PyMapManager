@@ -1,0 +1,623 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pymapmanager.mmStack &mdash; PyMapManager a1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="PyMapManager a1 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> PyMapManager
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                Version 0a1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">PyMapManager</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>pymapmanager.mmStack</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pymapmanager.mmStack</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">io</span><span class="o">,</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">glob</span> <span class="k">import</span> <span class="n">glob</span> <span class="c1"># for mmStackPool</span>
+<span class="kn">from</span> <span class="nn">errno</span> <span class="k">import</span> <span class="n">ENOENT</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="c1">#import uuid # to generate a unique id for each spine</span>
+<span class="kn">import</span> <span class="nn">tifffile</span>
+
+<span class="kn">from</span> <span class="nn">pymapmanager.mmStackLine</span> <span class="k">import</span> <span class="n">mmStackLine</span>
+<span class="kn">from</span> <span class="nn">pymapmanager.mmio</span> <span class="k">import</span> <span class="n">mmio</span>
+<span class="kn">from</span> <span class="nn">pymapmanager.mmUtil</span> <span class="k">import</span> <span class="n">newplotdict</span>
+
+<div class="viewcode-block" id="mmStack"><a class="viewcode-back" href="../../pymapmanager.mmStack.html#pymapmanager.mmStack.mmStack">[docs]</a><span class="k">class</span> <span class="nc">mmStack</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A stack contains a 3D Tiff, a list of 3D annotations, and optionally a number of segment tracings,</span>
+<span class="sd">    :class:`pymapmanager.mmStackLine`.</span>
+<span class="sd">    A stack can either be a single time-point or be embeded into a session of a :class:`pymapmanager.mmMap`.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        filePath (str): Full path to tiff file, this is used to open single timepoint stacks (not stacks in a map)</span>
+<span class="sd">        name (str): Name of the stack. Used to fetch .tif file</span>
+<span class="sd">        numChannels (int): Number of channels.</span>
+<span class="sd">        map (object): Runtime object of :class:`pymapmanager.mmMap` that created the stack.</span>
+<span class="sd">        mapSession (int): The map session number for the stack.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filePath</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">numChannels</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="nb">map</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">mapSession</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">urlmap</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fileName</span> <span class="o">=</span> <span class="n">filePath</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_folder</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span> <span class="c1">#map.folder #re-route this to load a single time-point stack from its .tif !!!</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span> <span class="c1">#re-route this for single channel stack</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">numChannels</span> <span class="o">=</span> <span class="n">numChannels</span> <span class="c1">#get this from stackdb???</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_stackdb</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">map_</span> <span class="o">=</span> <span class="nb">map</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mapSession</span> <span class="o">=</span> <span class="n">mapSession</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">doFile</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">server</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">urlmap</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="n">urlmap</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1">#from server</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">doFile</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">urlmap</span> <span class="o">=</span> <span class="n">urlmap</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">server</span> <span class="o">=</span> <span class="n">mmio</span><span class="o">.</span><span class="n">mmio</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="nb">map</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># from mm map</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_folder</span> <span class="o">=</span> <span class="nb">map</span><span class="o">.</span><span class="n">_folder</span>
+        <span class="k">elif</span> <span class="n">filePath</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># single timepoint</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_folder</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">filePath</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="c1">#  Path to enclosing folder, ends in &#39;/&#39;.</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">filePath</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39;.tiff&#39;</span><span class="p">)</span>  <span class="c1">#  Name of the stack</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;_ch1&#39;</span><span class="p">):</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">[:</span><span class="o">-</span><span class="mi">4</span><span class="p">]</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;_ch2&#39;</span><span class="p">):</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">[:</span><span class="o">-</span><span class="mi">4</span><span class="p">]</span>
+            <span class="c1"># todo: we don&#39;t have numChannel in header, infer this from other _ch1.tif and _ch2.tif files in same directory</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># undefined</span>
+            <span class="nb">print</span> <span class="s1">&#39;error: mmStack() constructor got bad parameters.&#39;</span>
+            <span class="k">return</span>
+
+        <span class="c1">#todo: to open generic tif (no stackdb), we need to use tifffile load of first image, query tif header values (gonna be a pain)</span>
+        <span class="c1">#f = tifffile.TiffFile(&#39;/Users/cudmore/Desktop/data/rr30a/raw/rr30a_s0_ch2.tif&#39;, pages=[0])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">voxelx</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="c1">#float(map.getValue(&#39;dx&#39;, mapSession))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">voxely</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="c1">#float(map.getValue(&#39;dy&#39;, mapSession))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">voxelz</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="c1">#int(map.getValue(&#39;dz&#39;, mapSession)) #we use z as index into numpy array, can&#39;t be int !!!</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_images</span> <span class="o">=</span> <span class="kc">None</span> <span class="c1">#  3D numpy array of the stacks images, axis 0 is slices&quot;&quot;&quot;</span>
+
+        <span class="c1">###############################################################################</span>
+        <span class="c1">#stackdb</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">doFile</span><span class="p">:</span>
+            <span class="n">stackdbFile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_folder</span> <span class="o">+</span> <span class="s1">&#39;stackdb&#39;</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;_db2.txt&#39;</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">stackdbFile</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="n">ENOENT</span><span class="p">,</span> <span class="s1">&#39;mmStack did not find stackdbFile:&#39;</span><span class="p">,</span> <span class="n">stackdbFile</span><span class="p">)</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">stackdbFile</span><span class="p">,</span> <span class="s1">&#39;rU&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">header</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_stackdb</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">stackdbFile</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_stackdb</span><span class="p">[</span><span class="s1">&#39;Idx&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stackdb</span><span class="o">.</span><span class="n">index</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">tmp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">getfile</span><span class="p">(</span><span class="s1">&#39;stackdb&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">urlmap</span><span class="p">,</span> <span class="n">timepoint</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mapSession</span><span class="p">)</span>
+            <span class="n">header</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\r</span><span class="s1">&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_stackdb</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">StringIO</span><span class="p">(</span><span class="n">tmp</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)),</span> <span class="n">header</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_stackdb</span><span class="p">[</span><span class="s1">&#39;Idx&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stackdb</span><span class="o">.</span><span class="n">index</span>
+
+        <span class="c1"># stackdb file headers has (voxelx=0.12;voxely=0.12;voxelz=1;)</span>
+        <span class="k">if</span> <span class="n">header</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;;&#39;</span><span class="p">):</span>
+            <span class="n">header</span> <span class="o">=</span> <span class="n">header</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">header</span> <span class="o">=</span> <span class="n">header</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;;&#39;</span><span class="p">)</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;=&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">header</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">voxelx</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;voxelx&#39;</span><span class="p">])</span> <span class="c1"># um</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">voxely</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;voxely&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">voxelz</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;voxelz&#39;</span><span class="p">])</span>
+
+        <span class="c1"># julias single time-point stack have pixels=NaN ???</span>
+        <span class="c1">#self.pixelsx = int(d[&#39;pixelx&#39;]) # pixels</span>
+        <span class="c1">#self.pixelsy = int(d[&#39;pixely&#39;])</span>
+        <span class="c1">#self.numSlices = int(d[&#39;pixelz&#39;])</span>
+
+        <span class="c1">#not currently using, good idea for EVERY spine to have unique ID?</span>
+        <span class="c1"># hashID = [uuid.uuid4().hex for i in range(self.stackdb.shape[0])]</span>
+        <span class="c1"># self.stackdb[&#39;hashID&#39;] = hashID #32 character hexadecimal string</span>
+
+        <span class="n">m</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stackdb</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="c1"># append columns (map, hashID, next, nexttp, prev, prevtp, runIdx)</span>
+        <span class="k">if</span> <span class="nb">map</span> <span class="ow">and</span> <span class="n">mapSession</span><span class="o">&gt;=</span><span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stackdb</span><span class="p">[</span><span class="s1">&#39;mapName&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">map</span><span class="o">.</span><span class="n">name</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stackdb</span><span class="p">[</span><span class="s1">&#39;mapSession&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapSession</span>
+            <span class="n">mapCond</span> <span class="o">=</span> <span class="nb">map</span><span class="o">.</span><span class="n">getValue</span><span class="p">(</span><span class="s1">&#39;mapCond&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>  <span class="c1"># one map condition, in column zero</span>
+            <span class="c1">#should have numObj()-1 here ???</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stackdb</span><span class="p">[</span><span class="s1">&#39;next&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">map</span><span class="o">.</span><span class="n">objMap</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">numObj</span><span class="p">,</span><span class="n">mapSession</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span> <span class="c1"># 1: next</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stackdb</span><span class="p">[</span><span class="s1">&#39;nexttp&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">map</span><span class="o">.</span><span class="n">objMap</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">numObj</span><span class="p">,</span><span class="n">mapSession</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span> <span class="c1"># 2: nextTP</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stackdb</span><span class="p">[</span><span class="s1">&#39;prev&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">map</span><span class="o">.</span><span class="n">objMap</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">0</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">numObj</span><span class="p">,</span><span class="n">mapSession</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span> <span class="c1"># 3: prev</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stackdb</span><span class="p">[</span><span class="s1">&#39;prevtp&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">map</span><span class="o">.</span><span class="n">objMap</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span><span class="mi">0</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">numObj</span><span class="p">,</span><span class="n">mapSession</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span> <span class="c1"># 4: prevTP</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stackdb</span><span class="p">[</span><span class="s1">&#39;runIdx&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">map</span><span class="o">.</span><span class="n">objMap</span><span class="p">[</span><span class="mi">6</span><span class="p">,</span><span class="mi">0</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">numObj</span><span class="p">,</span><span class="n">mapSession</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span> <span class="c1"># 4: runIdx</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stackdb</span><span class="p">[</span><span class="s1">&#39;days&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">map</span><span class="o">.</span><span class="n">getValue</span><span class="p">(</span><span class="s1">&#39;days&#39;</span><span class="p">,</span> <span class="n">mapSession</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stackdb</span><span class="p">[</span><span class="s1">&#39;sessCond&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">map</span><span class="o">.</span><span class="n">getValue</span><span class="p">(</span><span class="s1">&#39;condStr&#39;</span><span class="p">,</span> <span class="n">mapSession</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stackdb</span><span class="p">[</span><span class="s1">&#39;mapCond&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapCond</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">stackdb</span><span class="p">[</span><span class="s1">&#39;isAdd&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stackdb</span><span class="p">[</span><span class="s1">&#39;isSub&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+            <span class="k">if</span> <span class="n">mapSession</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">stackdb</span><span class="p">[</span><span class="s1">&#39;isAdd&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span> <span class="k">if</span> <span class="n">a</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">1</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="nb">map</span><span class="o">.</span><span class="n">objMap</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">0</span><span class="p">:</span><span class="n">m</span><span class="p">,</span><span class="n">mapSession</span><span class="p">]]</span> <span class="c1"># 3 is prev</span>
+            <span class="k">if</span> <span class="n">mapSession</span> <span class="o">&lt;</span> <span class="nb">map</span><span class="o">.</span><span class="n">numSessions</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">stackdb</span><span class="p">[</span><span class="s1">&#39;isSub&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span> <span class="k">if</span> <span class="n">a</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">1</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="nb">map</span><span class="o">.</span><span class="n">objMap</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">:</span><span class="n">m</span><span class="p">,</span><span class="n">mapSession</span><span class="p">]]</span> <span class="c1"># 1 is next</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stackdb</span><span class="p">[</span><span class="s1">&#39;isTransient&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stackdb</span><span class="p">[</span><span class="s1">&#39;isAdd&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">([</span><span class="mi">1</span><span class="p">])</span> <span class="o">&amp;</span> <span class="bp">self</span><span class="o">.</span><span class="n">stackdb</span><span class="p">[</span><span class="s1">&#39;isSub&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">([</span><span class="mi">1</span><span class="p">])</span>
+
+
+        <span class="c1"># int1 and in2 will have some column names in common with stackdb</span>
+        <span class="c1">#assuming we want values from stackdb, just drop them</span>
+        <span class="c1">#droplist = [&#39;x&#39;,&#39;y&#39;,&#39;z&#39;,&#39;isDirty&#39;,&#39;intBad&#39;]</span>
+
+        <span class="c1">###############################################################################</span>
+        <span class="c1"># int1</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">doFile</span><span class="p">:</span>
+            <span class="n">int1File</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_folder</span> <span class="o">+</span> <span class="s1">&#39;stackdb&#39;</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;_Int1.txt&#39;</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">int1File</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="n">ENOENT</span><span class="p">,</span> <span class="s1">&#39;mmStack did not find int1File:&#39;</span><span class="p">,</span> <span class="n">int1File</span><span class="p">)</span>
+            <span class="n">int1</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">int1File</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">int1</span> <span class="o">=</span> <span class="n">int1</span><span class="o">.</span><span class="n">add_suffix</span><span class="p">(</span><span class="s1">&#39;_int1&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_stackdb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stackdb</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">int1</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">tmp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">getfile</span><span class="p">(</span><span class="s1">&#39;int&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">urlmap</span><span class="p">,</span> <span class="n">timepoint</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mapSession</span><span class="p">,</span> <span class="n">channel</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">int1</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">StringIO</span><span class="p">(</span><span class="n">tmp</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)),</span> <span class="n">header</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">int1</span> <span class="o">=</span> <span class="n">int1</span><span class="o">.</span><span class="n">add_suffix</span><span class="p">(</span><span class="s1">&#39;_int1&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_stackdb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stackdb</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">int1</span><span class="p">)</span>
+
+        <span class="c1">###############################################################################</span>
+        <span class="c1"># int2</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">numChannels</span><span class="o">==</span><span class="mi">2</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">doFile</span><span class="p">:</span>
+                <span class="n">int2File</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_folder</span> <span class="o">+</span> <span class="s1">&#39;stackdb&#39;</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;_Int2.txt&#39;</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">int2File</span><span class="p">):</span>
+                    <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="n">ENOENT</span><span class="p">,</span> <span class="s1">&#39;mmStack did not find int2File:&#39;</span><span class="p">,</span> <span class="n">int2File</span><span class="p">)</span>
+                <span class="n">int2</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">int2File</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                <span class="n">int2</span> <span class="o">=</span> <span class="n">int2</span><span class="o">.</span><span class="n">add_suffix</span><span class="p">(</span><span class="s1">&#39;_int2&#39;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_stackdb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stackdb</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">int2</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">tmp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">getfile</span><span class="p">(</span><span class="s1">&#39;int&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">urlmap</span><span class="p">,</span> <span class="n">timepoint</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mapSession</span><span class="p">,</span> <span class="n">channel</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+                <span class="n">int2</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">StringIO</span><span class="p">(</span><span class="n">tmp</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)),</span> <span class="n">header</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                <span class="n">int2</span> <span class="o">=</span> <span class="n">int2</span><span class="o">.</span><span class="n">add_suffix</span><span class="p">(</span><span class="s1">&#39;_int2&#39;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_stackdb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stackdb</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">int2</span><span class="p">)</span>
+
+        <span class="c1">###############################################################################</span>
+        <span class="c1"># line</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_line</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_loadLine</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">stackdb</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A pandas dataframe of annotations, one per row. Columns are annotation names.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_stackdb</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">numObj</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The number of objects (annotations) in the stack. This is the number of rows in stackdb&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stackdb</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">stackdb</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">0</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">images</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        3D numpy ndarray of images. This is not valid until :func:`loadStackImages` is called.</span>
+<span class="sd">        Images are in the 1st dimension, use images[0,:,:] to get the first image.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_images</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">numSlices</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Number of images in the stack.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">images</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">images</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">line</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A :class:`pymapmanager.mmStackLine` that holds 3D tracing of line segments.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_line</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">numSegments</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Number of line segments in the stack.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stackdb</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">unique</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stackdb</span><span class="p">[</span><span class="s1">&#39;parentID&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">count_nonzero</span><span class="p">(</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">unique</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">annotationNames</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A list of all annotation names in the stack.</span>
+
+<span class="sd">        These are valid names for stat passed to :func:`getStackValues2` and names for pd[&#39;xstat&#39;],</span>
+<span class="sd">        pd[&#39;ystat&#39;], pd[&#39;zstat&#39;] passed to :func:`getStackValues3`.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List (str).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stackdb</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">mapname</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">map_</span><span class="o">.</span><span class="n">name</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">map_</span> <span class="k">else</span> <span class="s1">&#39;None&#39;</span>
+        <span class="k">return</span> <span class="p">(</span><span class="s1">&#39;stack:&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
+                <span class="o">+</span> <span class="s1">&#39; map:&#39;</span> <span class="o">+</span> <span class="n">mapname</span>
+                <span class="o">+</span> <span class="s1">&#39; session:&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mapSession</span><span class="p">)</span>
+                <span class="o">+</span> <span class="s1">&#39; objects:&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">numObj</span><span class="p">)</span>
+                <span class="o">+</span> <span class="s1">&#39; segments:&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">numSegments</span><span class="p">)</span>
+                <span class="o">+</span> <span class="s1">&#39; channels:&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">numChannels</span><span class="p">))</span>
+
+<div class="viewcode-block" id="mmStack.getStackValues2"><a class="viewcode-back" href="../../pymapmanager.mmStack.html#pymapmanager.mmStack.mmStack.getStackValues2">[docs]</a>    <span class="k">def</span> <span class="nf">getStackValues2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stat</span><span class="p">,</span> <span class="n">roiType</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;spineROI&#39;</span><span class="p">],</span> <span class="n">segmentID</span><span class="o">=</span><span class="p">[],</span> <span class="n">plotBad</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">plotIntBad</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get all values for an annotation.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            stat (str): Name of a stack annotation.</span>
+<span class="sd">            roiType: spineROI or otherROI.</span>
+<span class="sd">            segmentID: Integer list specifying stack segment number.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            1D numpy ndarray of values</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">plotDict</span> <span class="o">=</span> <span class="n">newplotdict</span><span class="p">()</span>
+        <span class="n">plotDict</span><span class="p">[</span><span class="s1">&#39;roitype&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">roiType</span>
+        <span class="n">plotDict</span><span class="p">[</span><span class="s1">&#39;xstat&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">stat</span>
+        <span class="n">plotDict</span><span class="p">[</span><span class="s1">&#39;segmentid&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">segmentID</span>
+        <span class="n">plotDict</span><span class="p">[</span><span class="s1">&#39;plotbad&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">plotBad</span>
+        <span class="n">plotDict</span><span class="p">[</span><span class="s1">&#39;plotIntBad&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">plotIntBad</span>
+
+        <span class="n">plotDict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getStackValues3</span><span class="p">(</span><span class="n">plotDict</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">plotDict</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="mmStack.getStackValues3"><a class="viewcode-back" href="../../pymapmanager.mmStack.html#pymapmanager.mmStack.mmStack.getStackValues3">[docs]</a>    <span class="k">def</span> <span class="nf">getStackValues3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pd</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get values of three annotations using a plot dictionary pd.</span>
+
+<span class="sd">        Get a default plot dictionary from :func:`pymapmanager.mmUtil.newplotdict` and Fill in</span>
+<span class="sd">        pd[&#39;xstat&#39;], pd[&#39;ystat&#39;], pd[&#39;ztat&#39;] with valid :py:attr:`~annotationNames`.</span>
+
+<span class="sd">        Args:</span>
+
+<span class="sd">            pd (dict): A plot dictionary describing what to plot.</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">            | pd[&#39;x&#39;], values if pd[&#39;xstat&#39;], length is number of annotations matching criteria in original pd argument</span>
+<span class="sd">            | pd[&#39;y&#39;], values if pd[&#39;ystat&#39;]</span>
+<span class="sd">            | pd[&#39;z&#39;], values if pd[&#39;zstat&#39;]</span>
+<span class="sd">            | pd[&#39;stackidx&#39;], stack index of returned values</span>
+<span class="sd">            | pd[&#39;reverse&#39;], same length as stackdb.numObj,</span>
+<span class="sd">            |     reverse[i]&gt;=0 gives index into pd[&#39;x&#39;] for annotation i.</span>
+<span class="sd">            |     reverse[i]==&#39;nan&#39; means annotation i was not included.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># to do: check that segmentID is a list</span>
+        <span class="c1"># to do: check that roiType is a list</span>
+
+        <span class="n">ret</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stackdb</span>
+        <span class="k">if</span> <span class="n">pd</span><span class="p">[</span><span class="s1">&#39;segmentid&#39;</span><span class="p">]:</span>
+            <span class="n">ret</span> <span class="o">=</span> <span class="n">ret</span><span class="p">[</span><span class="n">ret</span><span class="p">[</span><span class="s1">&#39;parentID&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">pd</span><span class="p">[</span><span class="s1">&#39;segmentid&#39;</span><span class="p">])]</span>
+        <span class="k">if</span> <span class="n">pd</span><span class="p">[</span><span class="s1">&#39;roitype&#39;</span><span class="p">]:</span>
+            <span class="n">ret</span> <span class="o">=</span> <span class="n">ret</span><span class="p">[</span><span class="n">ret</span><span class="p">[</span><span class="s1">&#39;roiType&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">pd</span><span class="p">[</span><span class="s1">&#39;roitype&#39;</span><span class="p">])]</span>
+
+        <span class="k">if</span> <span class="n">pd</span><span class="p">[</span><span class="s1">&#39;xstat&#39;</span><span class="p">]:</span>
+            <span class="n">pd</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ret</span><span class="p">[</span><span class="n">pd</span><span class="p">[</span><span class="s1">&#39;xstat&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span>
+        <span class="k">if</span> <span class="n">pd</span><span class="p">[</span><span class="s1">&#39;ystat&#39;</span><span class="p">]:</span>
+            <span class="n">pd</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ret</span><span class="p">[</span><span class="n">pd</span><span class="p">[</span><span class="s1">&#39;ystat&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span>
+        <span class="k">if</span> <span class="n">pd</span><span class="p">[</span><span class="s1">&#39;zstat&#39;</span><span class="p">]:</span>
+            <span class="n">pd</span><span class="p">[</span><span class="s1">&#39;z&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ret</span><span class="p">[</span><span class="n">pd</span><span class="p">[</span><span class="s1">&#39;zstat&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span>
+
+        <span class="n">pd</span><span class="p">[</span><span class="s1">&#39;stackidx&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ret</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">values</span>
+
+        <span class="n">reverse</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">numObj</span><span class="p">)</span>
+        <span class="n">reverse</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">NaN</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">pd</span><span class="p">[</span><span class="s1">&#39;stackidx&#39;</span><span class="p">]):</span>
+            <span class="k">if</span> <span class="n">val</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">reverse</span><span class="p">[</span><span class="n">val</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span>
+        <span class="n">pd</span><span class="p">[</span><span class="s1">&#39;reverse&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">reverse</span>
+
+        <span class="k">return</span> <span class="n">pd</span></div>
+
+    <span class="k">def</span> <span class="nf">_loadLine</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Load a :class:&#39;pymapmanager.mmStackLine&#39; associated with the stack. Sets &#39;line&#39; instance variable.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_line</span> <span class="o">=</span> <span class="n">mmStackLine</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+<div class="viewcode-block" id="mmStack.loadStackImages"><a class="viewcode-back" href="../../pymapmanager.mmStack.html#pymapmanager.mmStack.mmStack.loadStackImages">[docs]</a>    <span class="k">def</span> <span class="nf">loadStackImages</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">channel</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Load the images for a stack. Sets &#39;images&#39; instance variable</span>
+
+<span class="sd">        MapManager uses single channel .tif files. Each channel has its own file: _ch1.tif, _ch2.tif, _ch3.tif.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            channel (int): Specifies the channel number to load.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            images (3D ndarray): 3D numpy array of images.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">startTime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">urlmap</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">sliceNotUsed</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">content</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">getimage</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">urlmap</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mapSession</span><span class="p">,</span> <span class="n">sliceNotUsed</span><span class="p">,</span> <span class="n">channel</span><span class="o">=</span><span class="n">channel</span><span class="p">)</span>
+            <span class="k">with</span> <span class="n">tifffile</span><span class="o">.</span><span class="n">TiffFile</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="n">content</span><span class="p">))</span> <span class="k">as</span> <span class="n">tif</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_images</span> <span class="o">=</span> <span class="n">tif</span><span class="o">.</span><span class="n">asarray</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">channel</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">channel</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">chStr</span> <span class="o">=</span> <span class="s1">&#39;_ch1&#39;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">chStr</span> <span class="o">=</span> <span class="s1">&#39;_ch2&#39;</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">map_</span><span class="p">:</span>
+                <span class="n">tiffFileName</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_folder</span> <span class="o">+</span> <span class="s1">&#39;raw&#39;</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="n">chStr</span> <span class="o">+</span> <span class="s1">&#39;.tif&#39;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">tiffFileName</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_folder</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="n">chStr</span> <span class="o">+</span> <span class="s1">&#39;.tif&#39;</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">tiffFileName</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="n">ENOENT</span><span class="p">,</span> <span class="s1">&#39;mmStack did not find tiffFileName:&#39;</span><span class="p">,</span> <span class="n">tiffFileName</span><span class="p">)</span>
+
+            <span class="k">try</span><span class="p">:</span>
+                <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">                tmp = tifffile.TiffFile(tiffFileName)</span>
+<span class="sd">                print tmp.is_imagej</span>
+<span class="sd">                print tmp.pages #.imagej_tags()</span>
+<span class="sd">                &quot;&quot;&quot;</span>
+
+                <span class="k">with</span> <span class="n">tifffile</span><span class="o">.</span><span class="n">TiffFile</span><span class="p">(</span><span class="n">tiffFileName</span><span class="p">)</span> <span class="k">as</span> <span class="n">tif</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_images</span> <span class="o">=</span> <span class="n">tif</span><span class="o">.</span><span class="n">asarray</span><span class="p">()</span>
+
+            <span class="k">except</span><span class="p">:</span>
+                <span class="nb">print</span> <span class="s1">&#39;ERROR: mmStack.loadStackImages() did not load tiff file:&#39;</span><span class="p">,</span> <span class="n">tiffFileName</span>
+                <span class="k">raise</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">images</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="nb">print</span> <span class="s1">&#39;WARNING: mmStack.loadStackImages() just loaded a stack with a bizarre shape:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">images</span><span class="o">.</span><span class="n">shape</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">images</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">images</span><span class="p">[:,:,:,</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="c1"># this is read from stackdb header</span>
+        <span class="c1">#if self.numSlices is None:</span>
+        <span class="c1">#    self.numSlices = self.images.shape[0]</span>
+
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        # load both channels and make an rgb image</span>
+<span class="sd">        self.rgb = np.zeros(4)</span>
+<span class="sd">        tiffFileName = self._folder + &#39;raw&#39; + &#39;/&#39; + self.name + &#39;_ch1.tif&#39;</span>
+<span class="sd">        with tifffile.TiffFile(tiffFileName) as tif:</span>
+<span class="sd">            self.rgb[...,1] = tif.asarray()</span>
+<span class="sd">        tiffFileName = self._folder + &#39;raw&#39; + &#39;/&#39; + self.name + &#39;_ch2.tif&#39;</span>
+<span class="sd">        with tifffile.TiffFile(tiffFileName) as tif:</span>
+<span class="sd">            self.rgb[...,2] = tif.asarray()</span>
+<span class="sd">        imshow(self.rgb)</span>
+<span class="sd">        plt.show()</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="n">stopTime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="nb">print</span> <span class="s1">&#39;mmStack.loadStack() loaded map session&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mapSession</span><span class="p">,</span> <span class="s1">&#39;channel&#39;</span><span class="p">,</span> <span class="n">channel</span><span class="p">,</span> <span class="s1">&#39;in&#39;</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">stopTime</span><span class="o">-</span><span class="n">startTime</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span> <span class="s1">&#39;seconds.&#39;</span>
+
+        <span class="c1"># debug</span>
+        <span class="c1"># print self.images</span>
+        <span class="c1">#import matplotlib.pyplot as plt</span>
+        <span class="c1">#self.imgplot = plt.imshow(self.images[0,:,:])</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">images</span></div></div>
+
+
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Robert H Cudmore.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'a1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

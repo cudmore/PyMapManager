@@ -1,0 +1,361 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pymapmanager.mmMap module &mdash; PyMapManager a1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="PyMapManager a1 documentation" href="index.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> PyMapManager
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                Version 0a1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">pymapmanager.mmMap module</a></li>
+</ul>
+</div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">PyMapManager</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>pymapmanager.mmMap module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/pymapmanager.mmMap.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-pymapmanager.mmMap">
+<span id="pymapmanager-mmmap-module"></span><h1>pymapmanager.mmMap module<a class="headerlink" href="#module-pymapmanager.mmMap" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pymapmanager.mmMap.mmMap">
+<em class="property">class </em><code class="descclassname">pymapmanager.mmMap.</code><code class="descname">mmMap</code><span class="sig-paren">(</span><em>filePath=None</em>, <em>urlmap=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymapmanager/mmMap.html#mmMap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymapmanager.mmMap.mmMap" title="Permalink to this definition">¶</a></dt>
+<dd><p>A time-series of <a class="reference internal" href="pymapmanager.mmStack.html#module-pymapmanager.mmStack" title="pymapmanager.mmStack"><code class="xref py py-class docutils literal"><span class="pre">pymapmanager.mmStack</span></code></a> plus some book-keeping to link corresponding annotations
+and segments between stacks.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>filePath</strong> (<em>str</em>) &#8211; Full file path to .txt file for the map. File is inside map folder, for map a5n it is /a5n/a5n.txt</li>
+<li><strong>urlmap</strong> (<em>str</em>) &#8211; Name of the map to load from a <a class="reference internal" href="pymapmanager.mmio.html#module-pymapmanager.mmio" title="pymapmanager.mmio"><code class="xref py py-class docutils literal"><span class="pre">pymapmanager.mmio</span></code></a> online repository.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pymapmanager.mmMap</span> <span class="k">import</span> <span class="n">mmMap</span>
+<span class="n">file</span> <span class="o">=</span> <span class="s1">&#39;/Users/cudmore/Desktop/data/cudmore/rr30a/rr30a.txt&#39;</span>
+<span class="n">m</span> <span class="o">=</span> <span class="n">mmMap</span><span class="p">(</span><span class="n">filePath</span><span class="o">=</span><span class="n">path</span><span class="p">)</span>
+
+<span class="c1"># Get the 3rd mmStack using</span>
+<span class="n">stack</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">stacks</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+
+<span class="c1"># Use getMapValues2() to retrieve stack annotations (for the given segmentID) across the entire map</span>
+<span class="n">pDist_values</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">getMapValues2</span><span class="p">(</span><span class="s1">&#39;pDist&#39;</span><span class="p">,</span> <span class="n">segmentID</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+</pre></div>
+</div>
+<dl class="method">
+<dt id="pymapmanager.mmMap.mmMap.getMapValues2">
+<code class="descname">getMapValues2</code><span class="sig-paren">(</span><em>stat, roiType=['spineROI'], segmentID=[], plotBad=False, plotIntBad=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymapmanager/mmMap.html#mmMap.getMapValues2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymapmanager.mmMap.mmMap.getMapValues2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get values of a stack annotation across all stacks in the map.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>stat</strong> (<em>str</em>) &#8211; The stack annotation to get (corresponds to a column in mmStack.stackdb)</li>
+<li><strong>roiType</strong> (<em>str</em>) &#8211; xxx</li>
+<li><strong>segmentID</strong> (<em>list</em>) &#8211; xxx</li>
+<li><strong>plotBad</strong> (<em>boolean</em>) &#8211; xxx</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">2D numpy array of stat values. Each row is a run of objects connected across sessions,
+columns are sessions, each [i][j] is a stat value</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymapmanager.mmMap.mmMap.getMapValues3">
+<code class="descname">getMapValues3</code><span class="sig-paren">(</span><em>pd</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymapmanager/mmMap.html#mmMap.getMapValues3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymapmanager.mmMap.mmMap.getMapValues3" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get values of a stack annotation across all stacks in the map.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pd</strong> (<em>dict</em>) &#8211; A plot dictionary describing what to plot. Get default from mmUtil.newplotdict().</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><div class="line-block">
+<div class="line">pd[&#8216;x&#8217;], 2D ndarray of xstat values, rows are runs, cols are sessions, nan is where there is no stackdb annotation</div>
+<div class="line">pd[&#8216;y&#8217;], same</div>
+<div class="line">pd[&#8216;z&#8217;], same</div>
+<div class="line">pd[&#8216;stackidx&#8217;], Each [i]j[] gives the stack centric index of annotation value at [i][j].</div>
+<div class="line">pd[&#8216;mapsess&#8217;], Each [i][j] gives the map session of value at annotation [i][j].</div>
+<div class="line">pd[&#8216;runrow&#8217;],</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymapmanager.mmMap.mmMap.getValue">
+<code class="descname">getValue</code><span class="sig-paren">(</span><em>name</em>, <em>sessionNumber</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymapmanager/mmMap.html#mmMap.getValue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymapmanager.mmMap.mmMap.getValue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a value from the map (not from a stack!).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>name</strong> &#8211; Name of map value</li>
+<li><strong>sessionNumber</strong> &#8211; Session number of the stack</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Str (this is a single value)</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Examples:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">getValue</span><span class="p">(</span><span class="s1">&#39;pixelsz&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="c1"># get the number of z-slices (pixels) of stack 2.</span>
+<span class="n">m</span><span class="o">.</span><span class="n">getValue</span><span class="p">(</span><span class="s1">&#39;voxelx&#39;</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span> <span class="c1"># get the x voxel size of stack 5 (in um/pixel).</span>
+<span class="n">m</span><span class="o">.</span><span class="n">getValue</span><span class="p">(</span><span class="s1">&#39;hsStack&#39;</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span> <span class="c1"># get the name of stack 3.</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pymapmanager.mmMap.mmMap.numChannels">
+<code class="descname">numChannels</code><a class="headerlink" href="#pymapmanager.mmMap.mmMap.numChannels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of image channels in each stack (must be the same for all stacks).</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pymapmanager.mmMap.mmMap.numMapSegments">
+<code class="descname">numMapSegments</code><a class="headerlink" href="#pymapmanager.mmMap.mmMap.numMapSegments" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of line segments in the map.
+Corresponding segments are connected together with the segMap.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pymapmanager.mmMap.mmMap.numSessions">
+<code class="descname">numSessions</code><a class="headerlink" href="#pymapmanager.mmMap.mmMap.numSessions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of sessions (timepoints) in the map (time-series).</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pymapmanager.mmMap.mmMap.stacks">
+<code class="descname">stacks</code><a class="headerlink" href="#pymapmanager.mmMap.mmMap.stacks" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of <a class="reference internal" href="pymapmanager.mmStack.html#module-pymapmanager.mmStack" title="pymapmanager.mmStack"><code class="xref py py-class docutils literal"><span class="pre">pymapmanager.mmStack</span></code></a> in the map.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="pymapmanager.mmMap.testmmMap">
+<em class="property">class </em><code class="descclassname">pymapmanager.mmMap.</code><code class="descname">testmmMap</code><a class="reference internal" href="_modules/pymapmanager/mmMap.html#testmmMap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymapmanager.mmMap.testmmMap" title="Permalink to this definition">¶</a></dt>
+<dd><p>docstring for testmmMap</p>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Robert H Cudmore.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'a1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
