@@ -14,15 +14,15 @@ There are three components to PyMapManager:
  
 The PyMapManager sevrer allows web-based browsing of annotations and stacks.
 
-<IMG SRC="../images/mmserver_leaflet.png">
+<IMG SRC="images/mmserver_leaflet.png">
  
-<IMG SRC="../images/mmserver_purejs.png">
+<IMG SRC="images/mmserver_purejs.png">
  
 ## PyMapManager deskop application
  
 The Qt version of PyMapManager is a desktop application
  
-<IMG SRC="../images/pyMapManager_v2.png">
+<IMG SRC="images/pyMapManager_v2.png">
  
 [1]: http://blog.cudmore.io/mapmanager
 [2]: http://pymapmanager.readthedocs.io/en/latest/
