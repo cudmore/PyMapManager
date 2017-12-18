@@ -11,19 +11,19 @@ Please see the <A HREF="http://blog.cudmore.io/PyMapManager">API Documentation</
 
 See the <A HREF="https://github.com/cudmore/PyMapManager/tree/master/PyMapManager/examples">PyMapManager/examples/</A> folder for ipython notebooks with code examples.
 
-## mmserver interface
+## Map Manager server
 
-An server to browse and share Map Manager files via the web
+A server to browse and share Map Manager files via the web
 
-<IMG SRC="images/mmserver_purejs.png">
+<IMG SRC="images/mmserver_purejs.png" width=400>
+
+This screenshot shows the web based browsing and plotting of Map Manager annotations.
 
 ## PyQt interface
 
-The next generation desktop application version of Map MAnager.
+The next generation desktop application version of Map Manager. Written in Python using PyQt interface and using backend PyMapManager as an engine.
 
 A PyQt GUI interface is in <A HREF="https://github.com/cudmore/PyMapManager/tree/master/PyMapManager/interface">/PyMapManager/interface</A>
-
-## PyQt interface examples
 
 <IMG SRC="images/pyMapManager_v2.png">
 
