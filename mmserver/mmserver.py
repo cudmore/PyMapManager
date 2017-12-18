@@ -25,6 +25,7 @@ from datetime import datetime
 
 from flask import Flask, render_template, make_response, send_file, send_from_directory, safe_join
 from flask import jsonify, request, redirect, url_for
+from flask_cors import CORS
 from werkzeug.utils import secure_filename
 
 import pandas as pd
@@ -45,6 +46,7 @@ data_folder = './data'
 #app = Flask(__name__, static_url_path='/data')
 #app = Flask(__name__, static_folder=static_folder)
 app = Flask(__name__)
+CORS(app)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['data_folder'] = data_folder
 
@@ -54,6 +56,11 @@ myMap = None
 def hello_world():
 	print 'hello_world()'
 	return render_template('index.html')
+
+@app.route('/purejs')
+def hello_world2():
+	print 'hello_world2()'
+	return render_template('purejs/index.html')
 
 @app.route('/help')
 def help():
@@ -114,15 +121,21 @@ def get_header(username, mapname, item):
 
 @app.route('/getmapvalues')
 def getmapvalues():
+	mapsegment = request.args.get('mapsegment', '')
 	session = request.args.get('session', '')
 	xstat = request.args.get('xstat', '')
 	ystat = request.args.get('ystat', '')
 	zstat = request.args.get('zstat', '')
 
-	print 'getmapvalues() xstat:', xstat, 'ystat:', ystat, 'zstat:', zstat
+	print 'getmapvalues() mapsegment:', mapsegment, 'session:', session, 'xstat:', xstat, 'ystat:', ystat, 'zstat:', zstat
 
 	ret = {}
+	
 	pd = mmUtil.newplotdict()
+	if mapsegment:
+		pd['segmentid'] = int(mapsegment)
+	else:
+		pd['segmentid'] = None
 	if session:
 		pd['stacklist'] = [int(session)]
 	else:
@@ -131,6 +144,7 @@ def getmapvalues():
 	pd['ystat'] = ystat
 	pd['zstat'] = zstat
 	print 'getmapvalues() pd:', pd
+	global myMap
 	if myMap:
 		pd = myMap.getMapValues3(pd)
 		#print 'xxx:', pd['x'][:,0]
@@ -138,6 +152,8 @@ def getmapvalues():
 		ret['y'] = pd['y'][:]
 		ret['z'] = pd['z'][:]
 		ret['mapsegment'] = pd['mapsegment'][:]
+	else:
+		print 'getmapvalues(): no map loaded'
 	# remove nan
 	ret['x'] = ret['x'][~np.isnan(ret['x'])].tolist()
 	ret['y'] = ret['y'][~np.isnan(ret['y'])].tolist()
@@ -167,13 +183,23 @@ def get_header_v2(username, mapname, item):
 		path = mapdir + '/' + mapfile
 		print '   path:', path
 		t = pd.read_table(path, index_col=0)
-		ret = {}
+		#ret = {}
+		ret = []
 		for idx, i in enumerate(t.loc['hsStack']):
 			if str(i) != 'nan':
-				ret['s'+str(idx)] = i
+				#ret.append({'s'+str(idx) : i})
+				#ret.append({idx : i})
+				ret.append(i)
+				#ret['s' + str(idx)] = i
 		#print 'ret:', ret
 		#print jsonify(ret)
 		#return jsonify(ret)
+		return jsonify(ret)
+	elif item == 'mapsegments':
+		numRows = myMap.segRunMap.shape[0]
+		ret = []
+		for i in range(numRows):
+			ret.append(i)
 		return jsonify(ret)
 	elif item == 'objmap':
 		mapfile = mapname + '_objMap.txt'

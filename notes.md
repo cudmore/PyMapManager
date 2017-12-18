@@ -17,6 +17,24 @@
     # install PyMapMAnager
     pip install -e Dropbox/PyMapManager
 
+### Install
+
+Main archive folder has caps `PyMapManager`, this contains:
+
+ - `setup.py` file
+ - folder of `pymapmanager` code
+ - auto generated `docs` folder
+
+Code folder inside of PyMapManager is lower-case `pymapmanager`, at same level as setup.py and contians all the code
+
+In this way `pip install -e Dropbox/PyMapManager` can then be used in python with `import pymapmanager`
+
+Dropbox is NOT case sensitive, when I change case of enclosing `pymapmanager` folder it DOES NOT sync.
+
+	cd
+	pip install -e Dropbox/PyMapManager
+	
+
 ### spreadsheet for pandas in qt
 
     https://github.com/draperjames/qtpandas

@@ -1,0 +1,31 @@
+body{
+  background-color: #bdc3c7;
+}
+
+.mySelected {
+    background-color:black;
+    color:white;
+    font-weight:bold;
+}
+
+.myScrollBar {
+  display: block;
+  height:200px;
+  overflow-y: scroll;
+}
+
+.myScrollBar2 {
+  display: block;
+  height:50px;
+  overflow-y: scroll;
+}
+
+/*
+thead, tbody { display: block; }
+
+tbody {
+    height: 200px;       
+    overflow-y: auto;    
+    overflow-x: hidden;  
+}
+*/

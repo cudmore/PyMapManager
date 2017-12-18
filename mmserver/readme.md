@@ -7,6 +7,14 @@
 Username is 'public'
 Map is 'rr30a'
 
+#### Load a map
+
+	http://127.0.0.1:5010/loadmap/public/rr30a
+	
+#### Get values for session 1
+
+	http://127.0.0.1:5010/getmapvalues?session=1&xstat=x&ystat=y&zstat=z
+	
 #### Get Map Header
 
     [http://cudmore.duckdns.org:5010/public/rr30a/header][1]
