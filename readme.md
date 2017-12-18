@@ -40,13 +40,12 @@ Once installed, PyMapManager is available in python as `import pymapmanager`
 
  - Install [anaconda][1]
  - Install [tifffile][2]. This version is for Python 2.7, newer versions are for Python 3.x
- 
+
     conda install -c conda-forge tifffile=0.12.1
 
  - Install PyMapManager
   
-      # cd into folder that contains `PyMapMAnager` folder
-      pip install -e PyMapManager
+    pip install -e PyMapManager
 
 ## Run the `mmserver` server
 
