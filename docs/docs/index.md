@@ -16,15 +16,15 @@ See the [/examples][5] folder in the main GitHub repository for example Python c
  
 The PyMapManager server allows web-based browsing of annotations and stacks.
 
-<IMG SRC="../img/mmserver_leaflet.png">
+<IMG SRC="mmserver_leaflet.png">
  
-<IMG SRC="../img/mmserver_purejs.png">
+<IMG SRC="mmserver_purejs.png">
  
 ## PyMapManager deskop application
  
 The Qt version of PyMapManager is a desktop application
  
-<IMG SRC="../img/pyMapManager_v2.png">
+<IMG SRC="pyMapManager_v2.png">
  
 [1]: http://blog.cudmore.io/mapmanager
 [2]: http://pymapmanager.readthedocs.io/en/latest/
