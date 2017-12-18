@@ -15,7 +15,7 @@ See the <A HREF="https://github.com/cudmore/PyMapManager/tree/master/PyMapManage
 
 A server to browse and share Map Manager files via the web
 
-<IMG SRC="images/mmserver_purejs.png" width=700>
+<IMG SRC="images/mmserver_purejs.png" width=800>
 
 This screenshot shows the web based browsing and plotting of Map Manager annotations.
 
@@ -25,7 +25,7 @@ The next generation desktop application version of Map Manager. Written in Pytho
 
 A PyQt GUI interface is in <A HREF="https://github.com/cudmore/PyMapManager/tree/master/PyMapManager/interface">/PyMapManager/interface</A>
 
-<IMG SRC="images/pyMapManager_v2.png" width=700>
+<IMG SRC="images/pyMapManager_v2.png" width=800>
 
 This screen shot shows the main interface window (left), a map plot (top center), a stack plot (top right), and a stack image plot (bottom right).
 
