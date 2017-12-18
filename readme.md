@@ -56,8 +56,8 @@ Once the serve is running, it is available at `http://0.0.0.0:5010/`
 
  - For pyqt interface, Downgrade anaconda from PyQt5 to PyQt4
  
-    conda uninstall pyqt
-    conda install pyqt=4	
+	conda uninstall pyqt
+	conda install pyqt=4	
 	  
 ## To do
 
