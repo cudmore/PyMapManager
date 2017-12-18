@@ -45,8 +45,8 @@ Once installed, PyMapManager is available in python as `import pymapmanager`
 
  - Install PyMapManager
   
-    # cd into folder that contains `PyMapMAnager` folder
-    pip install -e PyMapManager
+      # cd into folder that contains `PyMapMAnager` folder
+      pip install -e PyMapManager
 
 ## Run the `mmserver` server
 
