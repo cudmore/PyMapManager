@@ -27,6 +27,8 @@ $scope.userClickStackIndex = null
 $scope.userClickSessionIndex = null
 $scope.userClickMapSegment = null
 
+//$scope.mapSizePixels = 512
+
 $scope.statList = {
 	'1': 'session',
 	'2': 'x',
@@ -35,9 +37,11 @@ $scope.statList = {
 	'5': 'pDist',
 	'6': 'ubssSum_int2',
 	'7': 'ubsdSum_int2',
+	'8': 'ubssSum_int1',
+	'9': 'ubsdSum_int1',
 }
-$scope.xStatSelection = 'ubsdSum_int2'
-$scope.yStatSelection = 'ubssSum_int2'
+$scope.xStatSelection = 'x'
+$scope.yStatSelection = 'y'
 
 $scope.setSelecetedMap = function(map) {
 	//console.log('setSelecetedMap():' + map)
@@ -414,7 +418,7 @@ function userClick(pnt) {
   	});
 	var bounds = [[0,0], [512,512]];
 	$scope.image = L.imageOverlay('static/MAX_rr30a_s0_ch2.png', bounds).addTo(myMap);
-	console.log('$scope.image:', $scope.image)
+	//console.log('$scope.image:', $scope.image)
 	myMap.fitBounds(bounds);
 
     //scale bar
