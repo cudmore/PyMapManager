@@ -1,0 +1,153 @@
+<!doctype html>
+<html ng-app="mmserver_app">
+	<head>
+		<title>mmserver</title>
+
+		<link rel="stylesheet" href="static/mmserver.css">
+		<link rel="stylesheet" href="static/bootstrap/css/bootstrap.min.css">
+		<link rel="stylesheet" href="static/font-awesome-4.7.0/css/font-awesome.min.css">
+
+		<script src="static/angular/angular.min.js"></script>
+		<!-- <script src="static/bootstrap/js/bootstrap.min.js"></script> -->
+
+		<!-- nvd3 -->
+		<link rel="stylesheet" href="static/myd3/myd3_style.css" />
+
+	    <link rel="stylesheet" href="static/myd3/bower_components/nvd3/build/nv.d3.min.css"/>
+	    <script src="static/myd3/bower_components/angular/angular.min.js"></script>
+	    <script src="static/myd3/bower_components/d3/d3.min.js" charset="utf-8"></script>
+	    <script src="static/myd3/bower_components/nvd3/build/nv.d3.min.js"></script>
+	    <script src="static/myd3/bower_components/angular-nvd3/dist/angular-nvd3.min.js"></script>
+
+
+    	<!-- leaflet -->
+	    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css" integrity="sha512-M2wvCLH6DSRazYeZRIm1JnYyh22purTM+FDB5CsyxtQJYeKq83arPe5wgbNmcFXGqiSH2XR8dT/fJISVA1r/zQ==" crossorigin=""/>
+	    <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js" integrity="sha512-lInM/apFSqyy1o6s89K4iQUKg6ppXEgsVxT35HbzUupEVRh2Eu9Wdl4tHj7dZO0s1uvplcYGmt3498TtHq+log==" crossorigin=""></script>
+
+		<!-- -->
+		<script src="static/mmserver.js"></script>
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	</head>
+
+<body>
+{% raw %}
+	<div ng-controller="mmserver_controller">
+
+	See attempt at simplified version <A HREF="purejs">purejs</A><BR>
+	
+	Usage 20171120, time-series -> load, plot -> load, image -> display
+
+	User: {{user}}<BR>
+	Time-series:
+	<select ng-model="map" ng-init="maps[0]" ng-options="x for x in maps">
+	</select>
+    <button type="button" class="btn btn-info btn-sm" ng-click="loadbutton()">Load</button>
+
+
+	<HR>
+	<button class="btn btn-info btn-sm"  ng-click="myInterface.showImage = !myInterface.showImage">
+		<i class="fa fa-chevron-right" ng-class="{true: 'fa-chevron-down', false: 'fa-chevron-right'}[myInterface.showImage]" aria-hidden="true"></i>
+	</button>
+	Image
+<BR>
+	<span ng-show="myInterface.showImage">
+	Time-point:
+	<select ng-model="session" ng-options="y for (x,y) in sessions">
+	</select>
+	Channel:
+	<select ng-model="channel" ng-options="y for (x,y) in channels">
+	</select>
+    <button type="button" class="btn btn-info btn-sm" ng-click="loadvaluesbutton0()">Load</button>
+    <button type="button" class="btn btn-info btn-sm" ng-click="displaybutton()">Display</button>
+    <button type="button" class="btn btn-info btn-sm" ng-click="setslicebutton(+1)">+</button>
+    <button type="button" class="btn btn-info btn-sm" ng-click="setslicebutton(-1)">-</button>
+	Slice {{currSlice}} of xxx
+
+		<!--
+			<table class="myTable-small">
+			<tr
+				ng-repeat="session in sessions track by $index"
+				ng-click="setSelectedSession(session, $index)"
+				ng-class="$index == selectedSessionIdx ? 'highlight' : ''">
+				<td>
+					{{$index}}
+				</td><td>{{session}}</td>
+			</tr>
+			</table>
+			Selected session: {{selectedSession}}
+		-->
+
+		<div id="mymapid" style="width: 512px; height: 512px;"></div>
+	</span>
+
+
+	<HR>
+	<button class="btn btn-info btn-sm"  ng-click="myInterface.showPlot = !myInterface.showPlot">
+		<i class="fa fa-chevron-right" ng-class="{true: 'fa-chevron-down', false: 'fa-chevron-right'}[myInterface.showPlot]" aria-hidden="true"></i>
+	</button>
+	Plot
+<BR>
+	<span ng-show="myInterface.showPlot">
+	y-stat:
+	<select ng-model="ystat" ng-options="y for (x,y) in stats">
+	</select>
+	x-stat:
+	<select ng-model="xstat" ng-options="y for (x,y) in stats">
+	</select>
+    <button type="button" class="btn btn-info btn-sm" ng-click="loadvaluesbutton()">Load</button>
+    <button type="button" class="btn btn-info btn-sm" ng-click="plotbutton()">Plot</button>
+
+	    <nvd3 options="options" data="data2" api="api"></nvd3>
+
+	</span>
+
+
+	<HR>
+	<button class="btn btn-info btn-sm"  ng-click="myInterface.showTable = !myInterface.showTable">
+		<i class="fa fa-chevron-right" ng-class="{true: 'fa-chevron-down', false: 'fa-chevron-right'}[myInterface.showTable]" aria-hidden="true"></i>
+	</button>
+	Values
+
+	<span ng-show="myInterface.showTable">
+        <table class="myTable-small">
+		  <tr>
+          <th>Idx</th>
+          <th>Map Segment</th>
+          <th>x</th>
+          <th>y</th>
+          <th>z</th>
+          </tr>
+
+          <tr ng-repeat="x1 in mapvalues.x track by $index">
+			<td>{{ $index }}</td>
+			<td>{{ mapvalues.mapsegment[$index] }}</td>
+			<td>{{ mapvalues.x[$index] }}</td>
+			<td>{{ mapvalues.y[$index] }}</td>
+			<td>{{ mapvalues.z[$index] }}</td>
+		  </tr>
+		</table>
+	</span>
+
+	<HR>
+	<button class="btn btn-info btn-sm"  ng-click="myInterface.showOld = !myInterface.showOld">
+		<i class="fa fa-chevron-right" ng-class="{true: 'fa-chevron-down', false: 'fa-chevron-right'}[myInterface.showOld]" aria-hidden="true"></i>
+	</button>
+	Old
+
+	<span ng-show="myInterface.showOld">
+	/plot makes static image with matplotlib
+	<IMG SRC="http://127.0.0.1:5010/plot">
+	<BR>
+	</span>
+
+	<BR>
+		<HR>
+	<A HREF="http://127.0.0.1:5010/my_d3">my_d3</A><BR>
+	<A HREF="http://127.0.0.1:5010/myleaflet">myleaflet</A><BR>
+
+	</div>
+{% endraw %}
+</body>
+</html>

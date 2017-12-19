@@ -1,5 +1,6 @@
 body{
   background-color: #bdc3c7;
+  margin:1em;padding:1em;
 }
 
 .mySelected {
@@ -10,15 +11,22 @@ body{
 
 .myScrollBar {
   display: block;
-  height:200px;
+  height:204px;
   overflow-y: scroll;
+  font-size: 14px;
 }
 
 .myScrollBar2 {
   display: block;
-  height:50px;
+  height:96px;
   overflow-y: scroll;
+  font-size: 14px;
 }
+
+// for additional leaflet buttons (up/down slices)
+.star{
+  font-size: 1.5em;
+} 
 
 /*
 thead, tbody { display: block; }

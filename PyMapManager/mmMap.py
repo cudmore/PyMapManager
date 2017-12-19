@@ -287,7 +287,7 @@ class mmMap():
 				if pd['segmentid'] >= 0:
 					currSegmentID = self.segRunMap[pd['segmentid'], j]  # this only works for one segment -- NOT A LIST
 					currSegmentID = int(currSegmentID)
-					print 'getMapValues3() j:', j, 'currSegmentID:', currSegmentID
+					# print 'getMapValues3() j:', j, 'currSegmentID:', currSegmentID
 					currSegmentID = [currSegmentID]
 				if pd['segmentid']>=0 and not currSegmentID:
 					# this session does not have segmentID that match

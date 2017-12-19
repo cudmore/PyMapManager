@@ -152,6 +152,8 @@ def getmapvalues():
 		ret['y'] = pd['y'][:]
 		ret['z'] = pd['z'][:]
 		ret['mapsegment'] = pd['mapsegment'][:]
+		ret['stackidx'] = pd['stackidx'][:]
+		ret['mapsess'] = pd['mapsess'][:]
 	else:
 		print 'getmapvalues(): no map loaded'
 	# remove nan
@@ -159,6 +161,8 @@ def getmapvalues():
 	ret['y'] = ret['y'][~np.isnan(ret['y'])].tolist()
 	ret['z'] = ret['z'][~np.isnan(ret['z'])].tolist()
 	ret['mapsegment'] = ret['mapsegment'][~np.isnan(ret['mapsegment'])].tolist()
+	ret['stackidx'] = ret['stackidx'][~np.isnan(ret['stackidx'])].tolist()
+	ret['mapsess'] = ret['mapsess'][~np.isnan(ret['mapsess'])].tolist()
 	#print 'getmapvalues:', ret
 	return jsonify(ret)
 
