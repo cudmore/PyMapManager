@@ -49,10 +49,11 @@ $scope.statList = {
 	'4': 'y',
 	'5': 'z',
 	'6': 'pDist',
-	'7': 'ubssSum_int2',
-	'8': 'ubsdSum_int2',
-	'9': 'ubssSum_int1',
-	'10': 'ubsdSum_int1',
+	'7': 'sLen3d_int1',
+	'8': 'ubssSum_int2',
+	'9': 'ubsdSum_int2',
+	'10': 'ubssSum_int1',
+	'11': 'ubsdSum_int1',
 }
 $scope.xStatSelection = 'days'
 $scope.yStatSelection = 'pDist'
@@ -194,9 +195,12 @@ function loadMap(map) {
 
 			$scope.userRowSelection = null
 			
-			//getLeafletData()
-			
 			myplot0()
+			
+			//
+			// leaflet
+			getLeafletMapData()
+			
 		})
 		.catch(function(data, status) {
 			$log.info(data)
@@ -470,12 +474,20 @@ function updateScatterPlot(xydata) {
 		xaxis: {
 			title: xydata.xstat,
 			titlefont: { size: 20 },
-			tickfont: { size: 16 }
+			tickfont: { size: 16 },
+			zeroline: false,
+	        showline : true,
+	        autotick: true,
 		},
 		yaxis: {
 			title: xydata.ystat,
 			titlefont: { size: 20 },
-			tickfont: { size: 16 }
+			tickfont: { size: 16 },
+			zeroline: false,
+	        showline : true,
+	        autotick: true,
+	        ticks: '',
+       		showticklabels: true,
 		},
 		margin: {
 			l: myMargin,
@@ -489,7 +501,8 @@ function updateScatterPlot(xydata) {
 	Plotly.purge('scatterPlot');
 	
 	scatterPlot = Plotly.newPlot('scatterPlot', data, layout, {
-		displayModeBar: true
+		displayModeBar: true,
+		scrollZoom: true,
 	});
 	
 	var scatterPlotDiv = document.getElementById('scatterPlot');
@@ -522,7 +535,7 @@ function updateScatterPlot(xydata) {
 
 
 function userClick(pnt, data) {
-	console.log('userClick()', pnt)
+	console.log('=== userClick()', pnt)
 	//console.log('xydata:')
 	//console.log(xydata)
 	//console.log('data:')
@@ -548,6 +561,14 @@ function userClick(pnt, data) {
 	
   	$scope.$apply(); // to update html showing userClickStackIndex, etc. etc.
 
+	//
+	// leaflet
+	// if map is rr30a, segment is NOT all, sessions is all
+	// to do this I need plotly to get ALL so row is in sync with leaflet
+	console.log('todo: link with leaflet !!!')
+	if ($scope.selectedSession==0 && $scope.selectedMapSegment==0) {
+		selectRun(selRunCol, selRunRow)
+	}
   }
 
 function selectInPlotly(runRow, runCol) {
@@ -615,7 +636,7 @@ function selectInPlotly(runRow, runCol) {
 
 	leafletRun = []
 
-	var tmpNumTimepoint = 3
+	var tmpNumTimepoint = 6
 	for (var thisTP=0; thisTP<tmpNumTimepoint; thisTP+=1) {
 
 		var thisDIV = 'myLeafletID' + thisTP
@@ -623,6 +644,7 @@ function selectInPlotly(runRow, runCol) {
 		leafletRun[thisTP] = L.map(thisDIV, {
 			crs: L.CRS.Simple,
 			scrollWheelZoom: false,
+			attributionControl: false,
 			//zoomControl: $scope.showImageControls ? true : false,
 			//fullscreenControl: true,
 			//fullscreenControlOptions: {
@@ -677,7 +699,7 @@ function selectInPlotly(runRow, runCol) {
 				var latDiff = thisCenter.lat - linkedCenter[tp].lat
 				var lngDiff = thisCenter.lng - linkedCenter[tp].lng
 				
-				for (var i=0; i<3; i+=1){
+				for (var i=0; i<tmpNumTimepoint; i+=1){
 					if (i==tp) {
 						continue
 					}
@@ -704,7 +726,7 @@ function selectInPlotly(runRow, runCol) {
 				//console.log(e.target.getContainer())
 				var thisCenter = e.target.getCenter()
 				var thisZoom = e.target.getZoom()
-				for (var i=0; i<3; i+=1){	
+				for (var i=0; i<tmpNumTimepoint; i+=1){	
 					leafletRun[i].setView(thisCenter,thisZoom)
 				}
 			}
@@ -1464,5 +1486,84 @@ $scope.example2settings = {displayProp: 'id', showCheckAll: false, showUncheckAl
 //
 getMapList($scope.username)
 loadMap('rr30a')
+
+///
+///
+
+//abb fill in options based on globals
+
+/*
+options = [];
+if ($scope.showAnnotations) {
+	options.push('option1')
+}
+if ($scope.showTracing) {
+	options.push('option2')
+}
+console.log('options:', options)
+
+$( '.dropdown-menu a' ).on( 'click', function( event ) {
+
+   console.log( 'start options:', options );
+
+   var $target = $( event.currentTarget ),
+       val = $target.attr( 'data-value' ),
+       $inp = $target.find( 'input' ),
+       idx;
+
+   if ( ( idx = options.indexOf( val ) ) > -1 ) {
+      options.splice( idx, 1 );
+      setTimeout( function() { $inp.prop( 'checked', false ) }, 0);
+   } else {
+      console.log('val:', val)
+      options.push( val );
+      setTimeout( function() { $inp.prop( 'checked', true ) }, 0);
+   }
+
+   $( event.target ).blur();
+      
+   console.log( 'end options:', options );
+   
+   //abb go through options Array and switch on option1, option2, option3, ...
+   //set my global angular variable and refresh
+   
+   // set all options to false, set to true if checked
+   
+   $scope.showAnnotations = false
+   $scope.showTracing = false
+   //$scope.showMaxProject = false
+   $scope.showImageControls = false
+   
+   for (var tmpi=0; tmpi<options.length; tmpi+=1) {
+   	switch (options[tmpi]) {
+   		case 'option1': //annotations
+   			$scope.showAnnotations = true
+   			$scope.userToggleAnnotations()
+   			break;
+   		case 'option2': //tracing
+   			$scope.showTracing = true
+   			$scope.userToggleTracing()
+   			break;
+   		case 'option3': //showMaxProject
+   			$scope.showMaxProject = true
+   			$scope.userToggleMaxProject()
+   			break;
+   		case 'option4': //showImageControls
+   			$scope.showImageControls = true
+   			$scope.userToggleshowImageControls()
+   			break;
+   	} //switch
+   	} //for
+   	
+   	//$scope.$apply();
+   	//for (var currTP=0; currTP<tmpNumTimepoint; currTP+=1) {
+   	//	redrawLayers(currTP)
+   	//}
+   	
+   return false;
+});
+*/
+///
+///
 }) //controller
 

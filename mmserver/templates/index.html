@@ -57,17 +57,24 @@
 				<div class="card-block" style="padding: 1em">
 
 					<!-- user -->
+					<!--
 					<div class="row">
 					<div class="col">
 					Username: public
 					</div>
 					</div>
-
+					-->
+					
 					<!-- list of maps -->
 					<div class="row">
 										
 					<div class="col">
-						Select a map<table>
+						<table>
+							<thead>
+							<tr>
+							<th>Maps</th>
+							</tr>
+							</thead>
 						<tbody class="tbody myScrollBar2">
 							<tr ng-repeat="map in maps" ng-class="{'mySelected':map == selectedMap}" ng-click="setSelecetedMap(map)">
 							<td>{{map}}</td>
@@ -80,7 +87,9 @@
 						<p>
 						<button id="loadMapButtonID" type="button" class="btn btn-primary btn-sm">Load a map</button>
 						</p>
+						<p>
 						Loaded map: {{loadedMap}}
+						</p>
 					</div>
 
 					</div>
@@ -94,12 +103,7 @@
 					-->
 					
 					<!-- list of stats -->
-						<BR>
-					<div class="row">
-						<div class="col">
-						Select an x and y stat
-						</div>
-					</div>
+					<BR>
 					<div class="row">
 						<div class="col">
 							<table>
@@ -134,10 +138,15 @@
 					</div>
 
 					<!-- list of sessions -->
+					<BR>
 					<div class="row">
 					<div class="col">
-						Select a session
 							<table>
+								<thead>
+								<tr>
+								<th>Time-point</th>
+								</tr>
+								</thead>
 							<tbody class="tbody myScrollBar">
 								<tr ng-repeat="session in sessions" ng-class="{'mySelected':$index == selectedSession}" ng-click="setSelectedSession($index)">
 									<td>{{$index}} </td>
@@ -147,8 +156,12 @@
 							</table>
 					</div>
 					<div class="col">
-						Select a map segment
 							<table>
+								<thead>
+								<tr>
+								<th>Map segment</th>
+								</tr>
+								</thead>
 							<tbody class="tbody myScrollBar">
 								<tr ng-repeat="segment in mapsegments" ng-class="{'mySelected':$index == selectedMapSegment}" ng-click="setSelectedMapSegment($index)">
 									<td>{{segment}} </td>
@@ -171,21 +184,29 @@
 
 					<div class="row">
 						<div class="col">
+						<div class="myIndentDiv">
 						<label>Marker size <input type="range" min="1" max="20" value="5" class="slider" id="dotSize"></label>
-
+						</div>
+						</div>
+						
+						<div class="col">
+						<div class="myIndentDiv">
 						<input type="checkbox" id="showPlotLinesID" ng-model="showPlotLines" ng-change="userTogglePlotLines()" ng-checked="showPlotLines">
-						<label for="showTracingID">Plot Lines</label>
+						<label for="showTracingID">Lines</label>
+						</div>
 						</div>
 					</div>
 
 					<div class="row">
 					<div class="col">
-					<div ng-if="userClickSessionIndex>=0">
+					<div class="myIndentDiv" ng-if="userClickSessionIndex>=0">
 					Clicked on time-point: {{userClickSessionIndex}}, stack index {{userClickStackIndex}}, map segment {{userClickMapSegment}}
 					</div>
+<!--
 					<div ng-if="!userClickSessionIndex">
 					&nbsp;
 					</div>
+-->
 					</div>
 					</div>
 				</div>
@@ -204,7 +225,45 @@
 		<button id="showStackButtonID" type="button" class="btn btn-primary btn-sm" ng-click="plotRunButton()">Plot Run</button>
 		</div>
 		-->
+
+<!-- -->
+<div class="myIndentDiv">
+<div class="button-group">
+	<!-- see https://codepen.io/bseth99/pen/fboKH -->
+	<!-- <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"></span> <i class="fa fa-cog" aria-hidden="true"></i></button> -->
+	<button type="button" class="btn btn-default btn-sm" data-toggle="dropdown"></span> <i class="fa fa-cog" aria-hidden="true"></i></button>
+	<ul class="dropdown-menu">
+	<!--
+	<li><a href="#" class="small" data-value="option1" tabIndex="-1"><input type="checkbox" ng-model="showAnnotations"/>&nbsp;Annotations</a></li>
+	<li><a href="#" class="small" data-value="option2" tabIndex="-1"><input type="checkbox" ng-model="showTracing"/>&nbsp;Tracing</a></li>
+	<li><a href="#" class="small" data-value="option3" tabIndex="-1"><input type="checkbox" ng-model="showMaxProject"/>&nbsp;Max Projection</a></li>
+	<li><a href="#" class="small" data-value="option4" tabIndex="-1"><input type="checkbox" ng-model="showImageControls"/>&nbsp;Image Controls</a></li>
+	-->
+	<li>
+		<input type="checkbox" id="showAnnotationsID" ng-model="showAnnotations" ng-change="userToggleAnnotations()" ng-checked="showAnnotations">
+		<label for="showAnnotationsID">Annotations </label>
+	</li>
+	<li>
+		<input type="checkbox" id="showTracingID" ng-model="showTracing" ng-change="userToggleTracing()" ng-checked="showTracing">
+		<label for="showTracingID">Tracing </label>
+	</li>
+	<li>
+		<input type="checkbox" id="showMaxProjectID" ng-model="showMaxProject" ng-change="userToggleMaxProject()" ng-checked="showMaxProject">
+		<label for="showMaxProjectID">Max Project </label>
+	</li>
+	<li>
+		<input type="checkbox" id="showImageControlsID" ng-model="showImageControls" ng-change="userToggleshowImageControls()" ng-checked="showImageControls">
+		<label for="showImageControlsID">Image controls</label>
+	</li>
+	<li>
+		<button id="resetTimepointsButtonID" type="button" class="btn btn-primary btn-sm" ng-click="resetTimepoints()">Reset Images</button>
+	</li>
+	</ul>
+</div>
+</div>
+<!-- -->
 		
+	<!--
 		<div class="myIndentDiv">
 		<input type="checkbox" id="showAnnotationsID" ng-model="showAnnotations" ng-change="userToggleAnnotations()" ng-checked="showAnnotations">
 		<label for="showAnnotationsID">Annotations </label>
@@ -220,14 +279,16 @@
 		<label for="showMaxProjectID">Max Project </label>
 		</div>		
 
-		<div class="myIndentDiv">
-		<input type="checkbox" id="linkTimepointsID" ng-model="linkTimepoints" ng-change="userToggleLinkTimepoints()" ng-checked="linkTimepoints">
-		<label for="linkTimepointsID"><i class="fa fa-link" aria-hidden="true"></i></label>
-		</div>		
 
 		<div class="myIndentDiv">
 		<input type="checkbox" id="showImageControlsID" ng-model="showImageControls" ng-change="userToggleshowImageControls()" ng-checked="showImageControls">
 		<label for="showImageControlsID">Image controls</label>
+		</div>		
+	-->
+
+		<div class="myIndentDiv">
+		<input type="checkbox" id="linkTimepointsID" ng-model="linkTimepoints" ng-change="userToggleLinkTimepoints()" ng-checked="linkTimepoints">
+		<label for="linkTimepointsID"><i class="fa fa-link" aria-hidden="true"></i></label>
 		</div>		
 		
 		<div class="myIndentDiv">
@@ -235,10 +296,12 @@
 		<input type="range" id="imageBrightnessID" min="1" max="200" ng-model="imageBrightness">
 		</div>		
 
+		<!--
 		<div class="myIndentDiv">
 		<button id="resetTimepointsButtonID" type="button" class="btn btn-primary btn-sm" ng-click="resetTimepoints()">Reset Images</button>
 		</div>		
-
+		-->
+		
 	</div>
 
 <!-- this almost work, allowing a drop down with check boxes
@@ -306,12 +369,21 @@
 		<div id="myLeafletID2" style="width: 512px; height: 512px;"></div>
 		</div>
 		
+		<div class="myIndentDiv">
 		<div id="myLeafletID3" style="width: 512px; height: 512px;"></div>
+		</div>
+
+		<div class="myIndentDiv">
 		<div id="myLeafletID4" style="width: 512px; height: 512px;"></div>
+		</div>
+
+		<div class="myIndentDiv">
 		<div id="myLeafletID5" style="width: 512px; height: 512px;"></div>
+		</div>
 		
 	</div> <!-- row -->
-	
+
+
 </div> <!-- ng-controller="mmserver_controller" -->
 {% endraw %}
 </body>
