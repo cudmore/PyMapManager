@@ -68,15 +68,19 @@ class mmStackLine():
         Returns: pd with ['x'], ['y'], and ['z'] values filled in as numpy ndarray
         """
         if self.linedb is None:
+            print 'warning: getLineValues3() did not find a line'
             return None
 
         df = self.linedb
-        if pd['segmentid']:
+        if pd['segmentid'] >= 0:
             df = df[df['ID'].isin(pd['segmentid'])]
         pd['x'] = df['x'].values
         pd['y'] = df['y'].values
         pd['z'] = df['z'].values
-
+        # 20171222 adding sDist and ID for web client
+        pd['sDist'] = df['sDist'].values
+        pd['ID'] = df['ID'].values
+        
         return pd
 
     def getLine(self,segmentID=[]):

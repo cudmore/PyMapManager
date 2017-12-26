@@ -241,6 +241,17 @@ class mmStack():
                 + ' segments:' + str(self.numSegments)
                 + ' channels:' + str(self.numChannels))
 
+    def countObj(self, roiType=None):
+        """Count the number of roiType in stack
+        """
+        if self.stackdb is not None:
+            if roiType is not None:
+            	return self.stackdb.roiType.value_counts()[roiType]
+            else:
+            	return self.stackdb.shape[0]
+        else:
+            return 0
+
     def getStackValues2(self, stat, roiType=['spineROI'], segmentID=[], plotBad=False, plotIntBad=False):
         """
         Get all values for an annotation.
@@ -304,6 +315,7 @@ class mmStack():
 
         pd['stackidx'] = ret.index.values
 
+        # reverse lookup for efficiency
         reverse = np.zeros(self.numObj)
         reverse[:] = np.NaN
         for i, val in enumerate(pd['stackidx']):

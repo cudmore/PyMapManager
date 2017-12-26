@@ -53,7 +53,8 @@ class mmMap():
 		# Get values from this dataframe using getValue(name,sessionNumber)
 
 		self.defaultRoiType = 'spineROI'
-
+		self.defaultRoiTypeID = 0
+		
 		self.server = None
 		# Pointer to :class:`pymapmanager.mmio` server connection.
 		# Only used to load from urlmap.
@@ -105,7 +106,7 @@ class mmMap():
 		numBlock = int(d['blocks'])
 
 		self.objMap.resize(numBlock,numRow,numCol)
-		self.runMap = self._buildRunMap(self.objMap)
+		self.runMap = self._buildRunMap(self.objMap, roiTypeID=self.defaultRoiTypeID)
 
 		###############################################################################
 		# segMap (3d)
@@ -133,10 +134,11 @@ class mmMap():
 			numBlock = int(d['blocks'])
 
 			self.segMap.resize(numBlock,numRow,numCol)
-			self.segRunMap = self._buildRunMap(self.segMap)
+			self.segRunMap = self._buildRunMap(self.segMap, roiTypeID = None)
 
 		###############################################################################
 		#load each stack db
+		# this assumes self.objMap has already been loaded
 		self._stacks = [] #  A list of mmStack
 		for i in range(0, self.numSessions):
 			if doFile:
@@ -194,6 +196,58 @@ class mmMap():
 			yield self.stacks[i]
 			i += 1
 
+	def mapInfo(self):
+		"""
+		Get information on the map
+		
+		Returns:
+			| ['mapName'],
+			| ['stackNames'],
+			| ['dx'], Voxel size in um
+			| ['dy'], Voxel size in um
+			| ...
+		"""
+		theRet = {}
+		theRet['mapName'] = self.name
+		theRet['numSessions'] = self.numSessions
+		# lists, one value per session
+		theRet['stackNames'] = []
+		theRet['date'] = []
+		theRet['time'] = []
+		theRet['px'] = [] # pixels
+		theRet['py'] = []
+		theRet['numSlices'] = []
+		theRet['dx'] = [] # voxels in um
+		theRet['dy'] = []
+		theRet['dz'] = []
+		theRet['numROI'] = []
+		for idx in range(self.numSessions):
+			theRet['stackNames'].append(self.table.loc['hsStack'][idx])
+			theRet['date'].append(self.table.loc['date'][idx])
+			theRet['time'].append(self.table.loc['time'][idx])
+			theRet['px'].append(self.table.loc['px'][idx])
+			theRet['py'].append(self.table.loc['py'][idx])
+			theRet['numSlices'].append(self.table.loc['pz'][idx]) # changing name
+
+			theRet['dx'].append(self.table.loc['dx'][idx])
+			theRet['dy'].append(self.table.loc['dy'][idx])
+			theRet['dz'].append(self.table.loc['dz'][idx])
+			
+			thisNum = self.stacks[idx].countObj(roiType=self.defaultRoiType)
+			theRet['numROI'].append(thisNum)
+			
+			runIdx = 6
+		theRet['objMap'] = self.objMap[runIdx].astype('int') # from spine index to run index
+		theRet['runMap'] = self.runMap.astype('int') # from run idx to spine idx
+		theRet['segMap'] = None
+		theRet['numMapSegments'] = 0
+		if self.segMap is not None:
+			theRet['segMap'] = self.segMap.astype('int')
+			theRet['numMapSegments'] = self.segMap.shape[0]
+					
+		#print 'mapInfo() theRet:', theRet
+		return theRet
+
 	def getValue(self, name, sessionNumber):
 		"""
 		Get a value from the map (not from a stack!).
@@ -220,6 +274,52 @@ class mmMap():
 			ret = ret[:-4]
 		return ret
 
+	def getMapDynamics(self, pd, thisMatrix=None):
+	
+		if thisMatrix is None:
+			pd = self.getMapValues3(pd)
+			thisMatrix = pd['stackidx']
+		
+		m = thisMatrix.shape[0]
+		n = thisMatrix.shape[1]
+			
+		pd['dynamics'] = np.empty([m,n])
+		pd['dynamics'][:] = np.NAN
+		
+		# 1:add, 2:sub, 3:transient, 4:persisten
+		kAdd = 1
+		kSubtract = 2
+		kTransient = 3
+		kPersistent = 4
+		
+		for i in range(m):
+			for j in range(n):
+				if not thisMatrix[i,j]>=0:
+					continue
+				if j==0:
+					if thisMatrix[i,j+1]>=0:
+						pd['dynamics'][i,j] = kPersistent
+					else:
+						pd['dynamics'][i,j] = kSubtract
+				elif j==n-1:
+					if thisMatrix[i,j-1]>=0:
+						pd['dynamics'][i,j] = kPersistent
+					else:
+						pd['dynamics'][i,j] = kAdd
+				else:
+					added = not thisMatrix[i,j-1]>=0
+					subtracted = not thisMatrix[i,j+1]>=0
+					if added and subtracted:
+						pd['dynamics'][i,j] = kTransient
+					elif added:
+						pd['dynamics'][i,j] = kAdd
+					elif subtracted:
+						pd['dynamics'][i,j] = kSubtract
+					else:
+						pd['dynamics'][i,j] = kPersistent
+				
+		return pd
+		
 	def getMapValues3(self, pd):
 		"""
 		Get values of a stack annotation across all stacks in the map.
@@ -272,6 +372,11 @@ class mmMap():
 		yMapSegment = np.empty([m, n])
 		yMapSegment[:] = np.NAN
 
+		# 20171225, cPnt is overkill but until I rewrite REST
+		# to get list of stat (x,y,z,pDist, cPnt, cx, cy, cz) etc. etc.
+		cPnt = np.empty([m, n])
+		cPnt[:] = np.NAN
+		
 		runIdxDim = 6
 
 		if pd['stacklist'] is not None and len(pd['stacklist'])>0:
@@ -295,6 +400,8 @@ class mmMap():
 
 			goodIdx = self.runMap[:, j]  # valid indices from runMap
 
+			#print goodIdx
+			
 			runMap_idx = orig_df.index.isin(goodIdx)  # series of boolean (Seems to play nice with nparray)
 
 			if pd['roitype']:
@@ -330,6 +437,8 @@ class mmMap():
 					pd['z'][finalRows, j] = final_df[pd['zstat']].values
 			except KeyError, e:
 				print 'getMapValues3() KeyError - reason "%s"' % str(e)
+			except:
+				print 'getMapValues3() error in assignment'
 
 			# keep track of stack centric spine idx
 			yIdx[finalRows, j] = final_df.index.values
@@ -341,6 +450,9 @@ class mmMap():
 			#print 'b', self.segMap[0, final_df['parentID'].values.astype(int), j]
 			yMapSegment[finalRows, j] = self.segMap[0, final_df['parentID'].values.astype(int), j]
 
+			# 20171225
+			cPnt[finalRows, j] = final_df['cPnt'].values
+			
 			if pd['xstat'] == 'session':
 				#print 'swapping x for session'
 				pd['x'][finalRows, j] = j #ySess[finalRows,j]
@@ -349,6 +461,8 @@ class mmMap():
 		# makes plotting way faster
 		ySess = ySess[~np.isnan(yIdx).all(axis=1)]
 		yRunRow = yRunRow[~np.isnan(yIdx).all(axis=1)]
+		yMapSegment = yMapSegment[~np.isnan(yIdx).all(axis=1)] # added 20171220
+		cPnt = cPnt[~np.isnan(yIdx).all(axis=1)] # added 20171225
 		if pd['xstat']:
 			pd['x'] = pd['x'][~np.isnan(yIdx).all(axis=1)]
 		if pd['ystat']:
@@ -364,10 +478,12 @@ class mmMap():
 		pd['mapsess'] = ySess
 		pd['runrow'] = yRunRow
 		pd['mapsegment'] = yMapSegment
+		pd['cPnt'] = cPnt
 
-		#print pd['x']
-		#print pd['y']
-
+		if pd['getMapDynamics']:
+			# creates pd['dynamics']
+			pd = self.getMapDynamics(pd, thisMatrix=pd['stackidx'])
+		
 		return pd
 
 	def getMapValues2(self, stat, roiType=['spineROI'], segmentID=[], plotBad=False, plotIntBad=False):
@@ -400,7 +516,7 @@ class mmMap():
 
 		return plotDict['x']
 
-	def _buildRunMap(self, theMap):
+	def _buildRunMap(self, theMap, roiTypeID=None):
 		"""Internal function. Converts 3D objMap into a 2D run map. A run map must be float as it uses np.NaN
 
 		Args:
@@ -416,32 +532,75 @@ class mmMap():
 		prev = 3
 		#prevtp = 4
 		runIdx = 6 #if this is correct we can build really fast
+		nodeType = 9 # integer encoding type, spineROI==0
 		m = theMap.shape[1]
 		n = theMap.shape[2]
 		k = theMap.shape[0]
-		numRows = np.count_nonzero(~np.isnan(theMap[idx,:,0]))
-		retRunMap = np.empty([numRows,n]) #, dtype=int)
+
+		# reset 
+		theMap[runIdx][:][:] = '-1'
+		
+		# 20171222
+		# was this
+		#numRows = np.count_nonzero(~np.isnan(theMap[idx,:,0]))
+		#retRunMap = np.empty([numRows,n]) #, dtype=int)
+		# new
+		retRunMap = np.empty([1, n])  #, dtype=int) # start as one row in run map
 		retRunMap[:] = 'nan'
 
 		emptyRow = np.empty([1, n])
 		emptyRow[:] = 'nan'
 
+		# thisroitype = 'spineROI'
+		
 		currRow = 0
 		for j in range(0,n): #sessions
+			# not loaded yet
+			#stackdb = self.stacks[j].stackdb
+			if j == 0:
+				firstSessionAdded = 0
 			for i in range(0,m):
 				#retRunMap[i,j] = 'nan'
-				if theMap[idx,i,j]>=0:
+				# 20171221, if i just break on ! roiType (e.g. spine) then we get a run map without nan rows?
+				# we need to add an updated %runIdx as we do this, e.g. theMap[runIdx][i][j]= currRow
+				# new
+				#if theMap[idx,i,j]>=0 and stackdb[i][%roiType] == thisroitype:
+				#	pass
+				#else:
+				#	break
+				# was this
+				# if theMap[idx,i,j]>=0:
+				if theMap[idx,i,j]>=0 and (roiTypeID is None or theMap[nodeType][i][j] == roiTypeID):
 					pass
 				else:
-					break
+					continue
 				if j==0:
+					'''
+					# was this 20171222
 					currRow = i
+					#currRow = firstSessionAdded
+					# new one line 20171222
+					# retRunMap = np.vstack([retRunMap, emptyRow])
 					retRunMap[currRow, j] = i
+					# new
+					#theMap[runIdx,i,j] = currRow
+					'''
+
+					if firstSessionAdded == 0:
+						currRow = 0
+						firstSessionAdded += 1
+					else:
+						retRunMap = np.vstack([retRunMap, emptyRow])
+						currRow += 1
+					retRunMap[currRow, j] = i
+					# new
+					theMap[runIdx,i,j] = currRow
 				elif not (theMap[prev,i,j]>=0):
 					currRow += 1
 					retRunMap = np.vstack([retRunMap, emptyRow])
 					retRunMap[currRow, j] = i
-					#retRunMap[retRunMap.size[0]-1,:] = 'nan'
+					# new
+					theMap[runIdx,i,j] = currRow
 				else:
 					continue
 				#retRunMap[currRow,j] = i
@@ -449,6 +608,8 @@ class mmMap():
 				for k in range(j+1,n):
 					if nextNode >= 0:
 						retRunMap[currRow,k] = nextNode
+						# new, double check this
+						theMap[runIdx,int(nextNode),k] = currRow
 					else:
 						break
 					nextNode = theMap[next,int(nextNode),k]
@@ -478,3 +639,42 @@ class testmmMap():
 	"""
 	def __init__(self):
 		pass
+
+
+if __name__ == '__main__':
+	path = 'examples/exampleMaps/rr30a/rr30a.txt'
+	print 'path:', path
+	m = mmMap(path)
+
+	print m
+	print 'm.runMap.shape : ', m.runMap.shape
+	for idx, stack in enumerate(m.stacks):
+		print 'tp:', idx, 'n:', stack.stackdb.shape
+
+	from pymapmanager.mmUtil import newplotdict
+
+	plotDict = newplotdict()
+	plotDict['xstat'] = 'days'
+	plotDict['ystat'] = 'pDist'
+	plotDict['zstat'] = 'ubssSum_int2'  # 'sLen3d_int1' #swap in any stat you like, e.g. 'ubssSum_int2'
+	plotDict['segmentid'] = [0]
+	plotDict['getMapDynamics'] = True
+	plotDict = m.getMapValues3(plotDict)
+
+	print "\nplotDict['x'].shape : ", plotDict['x'].shape
+
+	# test line
+	session = 0
+	plotDict = m.stacks[session].line.getLineValues3(plotDict)
+	print "line plotDict['x'].shape:", plotDict['x'].shape
+	print "line plotDict['sDist'].shape:", plotDict['sDist'].shape
+		
+	print '\nm.mapInfo():'
+	mapInfo = m.mapInfo()
+	for key, value in mapInfo.iteritems():
+		print key, value
+		
+	# dynamics
+	#plotDict = m.getMapDynamics(plotDict)
+	#print plotDict['dynamics']
+	

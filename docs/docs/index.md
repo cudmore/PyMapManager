@@ -4,25 +4,31 @@ PyMapManager opens annotations created with the Igor Pro version of [Map Manager
 
 There are three components to PyMapManager:
 
- - PyMapManager Python Package. See the [API Documentation][2]
- - PyMapManager server. See the [server documentation][3]
- - PyMapManager desktop application. See the [github repository][4]
+ - Python Package
+ - Server
+ - Desktop application
  
 ## PyMapManager Python package
 
-See the [/examples][5] folder in the main GitHub repository for example Python code to easily perform additional analysis.
+See the [/examples][5] folder in the main GitHub repository for example Python code to easily perform additional analysis. Please also see the [API Documentation][2].
 
 ## PyMapManager server
  
-The PyMapManager server allows web-based browsing of annotations and stacks.
+The PyMapManager server allows web-based browsing of annotations and stacks. See [server documentation][3] for additional information.
+
+### Browsing annotations
+
+<IMG SRC="mmserver_purejs.png">
+
+### Browsing annotations in time series stacks
 
 <IMG SRC="mmserver_leaflet.png">
+<IMG SRC="mmserver_leaflet2.png">
  
-<IMG SRC="mmserver_purejs.png">
  
 ## PyMapManager deskop application
  
-The Qt version of PyMapManager is a desktop application
+The Qt version of PyMapManager is a desktop application. See [github repository][4].
  
 <IMG SRC="pyMapManager_v2.png">
  

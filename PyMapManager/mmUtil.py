@@ -26,6 +26,8 @@ PLOT_DICT = {
 
     'stacklist' : [],   # list of int to specify sessions/stacks to plot, [] will plot all
 
+	'getMapDynamics' : False, # set True to get map 'dynamics'
+	
     'plotbad' : False,
     'plotintbad' : False,
     'showlines' : True,

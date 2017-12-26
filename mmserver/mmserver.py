@@ -17,6 +17,13 @@ http://cudmore.duckdns.org:5010/public/rr30a/zip
 
 mmio is a Python wrapper to provide easy programming interface to the REST api
 
+todo:
+	there should be two main routes here: api and data
+	- api: is for javascript to get json data
+	- data: is for python to get files
+	
+	add another playground route to plot directly off server
+	
 """
 
 import os
@@ -28,14 +35,20 @@ from flask import jsonify, request, redirect, url_for
 from flask_cors import CORS
 from werkzeug.utils import secure_filename
 
-import pandas as pd
+import pandas as pandas
 import numpy as np
 
-from bokeh.plotting import figure, output_file, show
-from bokeh.embed import components
+#from bokeh.plotting import figure, output_file, show
+#from bokeh.embed import components
 
 from pymapmanager import mmMap
 from pymapmanager import mmUtil
+
+# turn off printing to console
+if 1:
+	import logging
+	log = logging.getLogger('werkzeug')
+	log.setLevel(logging.ERROR)
 
 # assuming data folder is in same folder as this source .py file
 #static_folder = '/Users/cudmore/Desktop/data'
@@ -50,20 +63,24 @@ CORS(app)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['data_folder'] = data_folder
 
-myMap = None
+#myMap = None
+myMapList = {}
 
 @app.route('/')
 def hello_world():
 	print 'hello_world()'
 	return render_template('index.html')
 
+'''
 @app.route('/purejs')
 def hello_world2():
 	print 'hello_world2()'
 	return render_template('purejs/index.html')
+'''
 
 @app.route('/help')
 def help():
+	#todo: make this an html template and pass server ip
 	return 'The time is ' + str(datetime.now()) + '<br>' \
 		+ '/plot' + '<br>' \
 		+ '/[username]/[mapname]/header' + '<br>' \
@@ -76,12 +93,31 @@ def loadmap(username, mapname):
 	mapdir = safe_join(app.config['data_folder'], mapdir)
 	mapfile = mapname + '.txt'
 	mappath = safe_join(mapdir, mapfile)
-	print 'loadmap() loading map:', mappath
-	global myMap
-	myMap = mmMap.mmMap(mappath)
-	print 'myMap:', myMap
-	return ''
+	
+	global myMapList
+	if mapname in myMapList:
+		# already loaded
+		pass
+	else:
+		print 'loadmap() loading map:', mappath
+		myMapList[mapname] = mmMap.mmMap(mappath)
+		print 'myMap:', myMapList[mapname]
+	ret = mapInfo(mapname)
+	return jsonify(ret)
 
+def mapInfo(mapname):
+	theRet = {}
+	if mapname in myMapList:
+		theRet = myMapList[mapname].mapInfo()
+		# tweak 2d arrays for json
+		theRet['objMap'] = theRet['objMap'].astype('str').tolist() # spine i, session j, [i][j] gives us runIdx
+		theRet['runMap'] = theRet['runMap'].astype('str').tolist() # run index i, session j, [i][j] gives us stack idx
+		theRet['segMap'] = theRet['segMap'].astype('str').tolist()
+	else:
+		print 'error: mapInfo() map not loaded:', mapname
+	#return json.dumps(theRet)
+	return theRet
+	
 @app.route('/api/<username>/maps')
 def maps(username):
 	# return a list of folders in username folder
@@ -119,8 +155,45 @@ def get_header(username, mapname, item):
 	return send_from_directory(mapdir, mapfile, as_attachment=True, attachment_filename=mapfile)
 	#return send_from_directory(mapdir, mapfile) #, as_attachment=as_attachment) #, mimetype='text/txt')
 
-@app.route('/getmapvalues')
-def getmapvalues():
+'''
+@app.route('/v2/<username>/<mapname>/getmapdynamics')
+def getmapdynamics(username, mapname):
+	mapsegment = request.args.get('mapsegment', '')
+	session = request.args.get('session', '')
+
+	pd = mmUtil.newplotdict()
+	if mapsegment:
+		pd['segmentid'] = int(mapsegment)
+	else:
+		pd['segmentid'] = None
+	if session:
+		pd['stacklist'] = [int(session)]
+	else:
+		pd['stacklist'] = []
+
+	ret = {}
+
+	global myMapList
+	if mapname in myMapList:
+		pd = myMapList[mapname].getMapDynamics(pd)
+		ret['dynamics'] = pd['dynamics']
+		ret['mapsegment'] = pd['mapsegment']
+		ret['stackidx'] = pd['stackidx']
+		ret['mapsess'] = pd['mapsess']
+
+		ret['dynamics'] = ret['dynamics'].astype('str').tolist()
+		ret['mapsegment'] = ret['mapsegment'].astype('str').tolist()
+		ret['stackidx'] = ret['stackidx'].astype('str').tolist()
+		ret['mapsess'] = ret['mapsess'].astype('str').tolist()
+
+	else:
+		print 'warning: getmapvalues(): map', mapname, 'is not loaded'
+
+	return jsonify(ret)
+'''
+		
+@app.route('/v2/<username>/<mapname>/getmapvalues')
+def getmapvalues(username, mapname):
 	mapsegment = request.args.get('mapsegment', '')
 	session = request.args.get('session', '')
 	xstat = request.args.get('xstat', '')
@@ -143,29 +216,96 @@ def getmapvalues():
 	pd['xstat'] = xstat
 	pd['ystat'] = ystat
 	pd['zstat'] = zstat
-	print 'getmapvalues() pd:', pd
-	global myMap
-	if myMap:
-		pd = myMap.getMapValues3(pd)
-		#print 'xxx:', pd['x'][:,0]
-		ret['x'] = pd['x'][:]
-		ret['y'] = pd['y'][:]
-		ret['z'] = pd['z'][:]
-		ret['mapsegment'] = pd['mapsegment'][:]
-		ret['stackidx'] = pd['stackidx'][:]
-		ret['mapsess'] = pd['mapsess'][:]
+	
+	# always detch map dynamics into pd['dynamics']
+	pd['getMapDynamics'] = True
+	
+	#print 'getmapvalues() pd:', pd
+	global myMapList
+	if mapname in myMapList:
+		pd = myMapList[mapname].getMapValues3(pd)
+		
+		doFlatten = 0
+		if doFlatten:
+			ret['x'] = pd['x'][:]
+			ret['y'] = pd['y'][:]
+			ret['z'] = pd['z'][:]
+			ret['mapsegment'] = pd['mapsegment'][:]
+			ret['stackidx'] = pd['stackidx'][:]
+			ret['mapsess'] = pd['mapsess'][:]
+		else:
+			ret['x'] = pd['x']
+			ret['y'] = pd['y']
+			ret['z'] = pd['z']
+			ret['mapsegment'] = pd['mapsegment']
+			ret['stackidx'] = pd['stackidx']
+			ret['mapsess'] = pd['mapsess']
+			ret['dynamics'] = pd['dynamics']
+			ret['cPnt'] = pd['cPnt']
+		# remove nan AND flatten to list
+		if 0:
+			ret['x'] = ret['x'][~np.isnan(ret['x'])].tolist()
+			ret['y'] = ret['y'][~np.isnan(ret['y'])].tolist()
+			ret['z'] = ret['z'][~np.isnan(ret['z'])].tolist()
+			ret['mapsegment'] = ret['mapsegment'][~np.isnan(ret['mapsegment'])].tolist()
+			ret['stackidx'] = ret['stackidx'][~np.isnan(ret['stackidx'])].tolist()
+			ret['mapsess'] = ret['mapsess'][~np.isnan(ret['mapsess'])].tolist()
+			#print ret['x']
+		if 1:
+			#print 'getmapvalues()', ret['x'].dtype # this is float64
+			ret['x'] = ret['x'].astype('str').tolist()
+			ret['y'] = ret['y'].astype('str').tolist()
+			ret['z'] = ret['z'].astype('str').tolist()
+			ret['mapsegment'] = ret['mapsegment'].astype('str').tolist()
+			ret['stackidx'] = ret['stackidx'].astype('str').tolist()
+			ret['mapsess'] = ret['mapsess'].astype('str').tolist()
+			ret['dynamics'] = ret['dynamics'].astype('str').tolist()
+			ret['cPnt'] = ret['cPnt'].astype('str').tolist()
+			#print ret['x']
 	else:
-		print 'getmapvalues(): no map loaded'
-	# remove nan
-	ret['x'] = ret['x'][~np.isnan(ret['x'])].tolist()
-	ret['y'] = ret['y'][~np.isnan(ret['y'])].tolist()
-	ret['z'] = ret['z'][~np.isnan(ret['z'])].tolist()
-	ret['mapsegment'] = ret['mapsegment'][~np.isnan(ret['mapsegment'])].tolist()
-	ret['stackidx'] = ret['stackidx'][~np.isnan(ret['stackidx'])].tolist()
-	ret['mapsess'] = ret['mapsess'][~np.isnan(ret['mapsess'])].tolist()
+		print 'warning: getmapvalues(): map', mapname, 'is not loaded'
 	#print 'getmapvalues:', ret
 	return jsonify(ret)
 
+@app.route('/v2/<username>/<mapname>/getmaptracing')
+def getmaptracing(username, mapname):
+	mapsegment = request.args.get('mapsegment', '')
+	session = request.args.get('session', '')
+	
+	print 'getmaptracing() mapsegment:', mapsegment, mapsegment == None
+	
+	ret = {}
+	global myMapList
+	if mapname in myMapList:
+		pd = mmUtil.newplotdict()
+		if mapsegment:
+			pd['segmentid'] = int(mapsegment)
+		else:
+			pd['segmentid'] = None
+		if session:
+			pd['stacklist'] = [int(session)]
+		else:
+			pd['stacklist'] = []
+		
+		session = int(session)
+		pd = myMapList[mapname].stacks[session].line.getLineValues3(pd)
+		
+		ret['x'] = pd['x'][:]
+		ret['y'] = pd['y'][:]
+		ret['z'] = pd['z'][:]
+		ret['sDist'] = pd['sDist'][:]
+		ret['ID'] = pd['ID'][:]
+		
+		# remove nan
+		ret['x'] = ret['x'][~np.isnan(ret['x'])].tolist()
+		ret['y'] = ret['y'][~np.isnan(ret['y'])].tolist()
+		ret['z'] = ret['z'][~np.isnan(ret['z'])].tolist()
+		ret['sDist'] = ret['sDist'][~np.isnan(ret['sDist'])].tolist()
+		ret['ID'] = ret['ID'][~np.isnan(ret['ID'])].tolist()
+	else:
+		print 'warning: getmaptracing(): map', mapname, 'is not loaded'
+	return jsonify(ret)
+		
 @app.route('/v2/<username>/<mapname>/<item>')
 def get_header_v2(username, mapname, item):
 	# return a top level file of a map
@@ -180,13 +320,13 @@ def get_header_v2(username, mapname, item):
 		mapfile = mapname + '.txt'
 		path = mapdir + '/' + mapfile
 		print '   path:', path
-		t = pd.read_table(path, index_col=0)
+		t = pandas.read_table(path, index_col=0)
 		return t.to_json()
 	elif item == 'sessions':
 		mapfile = mapname + '.txt'
 		path = mapdir + '/' + mapfile
 		print '   path:', path
-		t = pd.read_table(path, index_col=0)
+		t = pandas.read_table(path, index_col=0)
 		#ret = {}
 		ret = []
 		for idx, i in enumerate(t.loc['hsStack']):
@@ -200,11 +340,16 @@ def get_header_v2(username, mapname, item):
 		#return jsonify(ret)
 		return jsonify(ret)
 	elif item == 'mapsegments':
-		numRows = myMap.segRunMap.shape[0]
-		ret = []
-		for i in range(numRows):
-			ret.append(i)
-		return jsonify(ret)
+		global myMapList
+		if mapname in myMapList:
+			numRows = myMapList[mapname].segRunMap.shape[0]
+			ret = []
+			for i in range(numRows):
+				ret.append(i)
+			return jsonify(ret)
+		else:
+			# map not loaded
+			return jsonify('')
 	elif item == 'objmap':
 		mapfile = mapname + '_objMap.txt'
 	elif item == 'segmap':
@@ -251,8 +396,8 @@ def get_file(username, mapname, timepoint, item, channel=None):
 
 @app.route('/getimage/<username>/<mapname>/<int:timepoint>/<int:channel>/<int:slice>')
 def get_image(username, mapname, timepoint, channel, slice):
+	# get an image (slice) from a stack
 	# http://127.0.0.1:5010/getimage/public/rr30a/0/1/5
-	# rr30a_s0_ch1.tif
 	sliceStr = str(slice).zfill(4)
 	thefile = mapname + '_tp' + str(timepoint) + '_ch' + str(channel) + '_s' + sliceStr + '.png'
 	#thefolder = 'raw'
@@ -260,6 +405,7 @@ def get_image(username, mapname, timepoint, channel, slice):
 	tpdir = safe_join(username, mapname)
 	tpdir = safe_join(tpdir, 'raw')
 	tpdir = safe_join(tpdir, 'ingested')
+	tpdir = safe_join(tpdir, 'tp' + str(timepoint))
 	tpdir = safe_join(app.config['data_folder'], tpdir)
 
 	print '=== get_image()', username, mapname, timepoint, slice, channel
@@ -268,9 +414,29 @@ def get_image(username, mapname, timepoint, channel, slice):
 	
 	return send_from_directory(tpdir, thefile, as_attachment=True, mimetype='image/tif')
 
-##
+@app.route('/getmaximage/<username>/<mapname>/<int:timepoint>/<int:channel>')
+def get_maximage(username, mapname, timepoint, channel):
+	# get the max project
+	# http://127.0.0.1:5010/getimage/public/rr30a/0/1/5
+	# MAX_rr30a_tp0_ch2.jpg
+
+	print '=== get_maximage()', username, mapname, timepoint, channel
+
+	thefile = 'MAX_' + mapname + '_tp' + str(timepoint) + '_ch' + str(channel) + '.png'
+
+	tpdir = safe_join(username, mapname)
+	tpdir = safe_join(tpdir, 'raw')
+	tpdir = safe_join(tpdir, 'ingested')
+	tpdir = safe_join(app.config['data_folder'], tpdir)
+
+	print 'tpdir:', tpdir
+	print 'thefile:', thefile
+	
+	return send_from_directory(tpdir, thefile, as_attachment=True, mimetype='image/tif')
+
+############################################################
 # post
-##
+############################################################
 
 ALLOWED_EXTENSIONS = set(['txt', 'tif'])
 
@@ -323,9 +489,11 @@ def post_file(username, mapname, item):
 	else:
 		retStr = 'error: post_file() got bad request.method:' + request.method
 		return retStr
-#
-# old and testing
-#
+
+############################################################
+# post
+############################################################
+
 @app.route('/gettiff')
 def gettiff():
 	filename='data/rr30a/raw/rr30a_s0_ch2_0032.tif'
