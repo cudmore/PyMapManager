@@ -3,11 +3,7 @@ PyMapManager is python package to load and visualize time series annotations cre
 
 ## PyMapManager Python package
 
-Python package to open and analyze Map Manager files.
-
-Please see the <A HREF="http://pymapmanager.readthedocs.io/en/latest/">API Documentation</A> and a backup copy at <A HREF="http://robertcudmore.org/mapmanager/PyMapManager/docs/">here</A>.
-
-See the <A HREF="https://github.com/cudmore/PyMapManager/tree/master/PyMapManager/examples">PyMapManager/examples/</A> folder for iPython notebooks with code examples.
+Python package to open and analyze Map Manager files. Please see the <A HREF="http://pymapmanager.readthedocs.io/en/latest/">API Documentation</A> and a backup copy at <A HREF="http://robertcudmore.org/mapmanager/PyMapManager/docs/">here</A>. See the <A HREF="https://github.com/cudmore/PyMapManager/tree/master/PyMapManager/examples">PyMapManager/examples/</A> folder for iPython notebooks with code examples.
 
 ## Map Manager server
 
@@ -15,12 +11,12 @@ A server to browse and share Map Manager files via the web. The server uses the 
 
 This screenshot shows web based browsing and plotting of Map Manager annotations.
 
-<IMG SRC="images/mmserver_purejs.png" width=800>
+<IMG SRC="images/mmserver_purejs.png" width=900>
 
 These screenshots show web based browsing of 3D image volume time series with spine annotations overlaid.
 
-<IMG SRC="images/mmserver_leaflet.png" width=800>
-<IMG SRC="images/mmserver_leaflet2.png" width=800>
+<IMG SRC="images/mmserver_leaflet.png" width=900>
+<IMG SRC="images/mmserver_leaflet2.png" width=900>
 
 
 ## PyQt interface
