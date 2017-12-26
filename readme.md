@@ -1,5 +1,5 @@
 
-PyMapManager is python package to load and visualize MapManager files. The workflow is to use the Igor Pro version of <A HREF="http://blog.cudmore.io/mapmanager/">Map Manager</A> to create annotated maps and stacks. Then, use the PyMapManager Python package to easily perform additional analysis.
+PyMapManager is python package to load and visualize time series annotations created in Map Manager. The workflow is to use the Igor Pro version of <A HREF="http://blog.cudmore.io/mapmanager/">Map Manager</A> to create annotated maps and stacks. Then, use the PyMapManager Python package to easily perform additional analysis.
 
 ## PyMapManager Python package
 
@@ -13,13 +13,15 @@ See the <A HREF="https://github.com/cudmore/PyMapManager/tree/master/PyMapManage
 
 A server to browse and share Map Manager files via the web. The server uses the PyMapManager Python package as an back-end.
 
-<IMG SRC="images/mmserver_purejs.png" width=800>
-
 This screenshot shows web based browsing and plotting of Map Manager annotations.
 
-<IMG SRC="images/mmserver_leaflet.png" width=800>
+<IMG SRC="images/mmserver_purejs.png" width=800>
 
-This screenshot shows web based browsing of a stack with spine annotations overlaid.
+These screenshots show web based browsing of 3D image volume time series with spine annotations overlaid.
+
+<IMG SRC="images/mmserver_leaflet.png" width=800>
+<IMG SRC="images/mmserver_leaflet2.png" width=800>
+
 
 ## PyQt interface
 

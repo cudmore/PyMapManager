@@ -2,32 +2,22 @@
     "docs": [
         {
             "location": "/", 
-            "text": "PyMapManager is a Python package to analyze time-series image stacks.\n\n\nPyMapManager opens annotations created with the Igor Pro version of \nMap Manager\n. Allowing additional analysis to easily be performed.\n\n\nThere are three components to PyMapManager:\n\n\n\n\nPython Package\n\n\nServer\n\n\nDesktop application\n\n\n\n\nPyMapManager Python package\n\n\nSee the \n/examples\n folder in the main GitHub repository for example Python code to easily perform additional analysis. Please also see the \nAPI Documentation\n.\n\n\nPyMapManager server\n\n\nThe PyMapManager server allows web-based browsing of annotations and stacks. See \nserver documentation\n for additional information.\n\n\nBrowsing annotations\n\n\n\n\nBrowsing annotations in time series stacks\n\n\n\n\n\n\nPyMapManager deskop application\n\n\nThe Qt version of PyMapManager is a desktop application. See \ngithub repository\n.", 
+            "text": "PyMapManager is a Python package to analyze time-series image stacks.\n\n\nPyMapManager opens annotations created with the Igor Pro version of \nMap Manager\n. Allowing additional analysis to easily be performed.\n\n\nThere are three components to PyMapManager:\n\n\n\n\nPyMapManager Python Package. See the \nAPI Documentation\n\n\nPyMapManager server. See the \nserver documentation\n\n\nPyMapManager desktop application. See the \ngithub repository\n\n\n\n\nPyMapManager Python package\n\n\nSee the \n/examples\n folder in the main GitHub repository for example Python code to easily perform additional analysis.\n\n\nPyMapManager server\n\n\nThe PyMapManager server allows web-based browsing of annotations and stacks.\n\n\n\n\n\n\nPyMapManager deskop application\n\n\nThe Qt version of PyMapManager is a desktop application", 
             "title": "Home"
         }, 
         {
             "location": "/#pymapmanager-python-package", 
-            "text": "See the  /examples  folder in the main GitHub repository for example Python code to easily perform additional analysis. Please also see the  API Documentation .", 
+            "text": "See the  /examples  folder in the main GitHub repository for example Python code to easily perform additional analysis.", 
             "title": "PyMapManager Python package"
         }, 
         {
             "location": "/#pymapmanager-server", 
-            "text": "The PyMapManager server allows web-based browsing of annotations and stacks. See  server documentation  for additional information.", 
+            "text": "The PyMapManager server allows web-based browsing of annotations and stacks.", 
             "title": "PyMapManager server"
         }, 
         {
-            "location": "/#browsing-annotations", 
-            "text": "", 
-            "title": "Browsing annotations"
-        }, 
-        {
-            "location": "/#browsing-annotations-in-time-series-stacks", 
-            "text": "", 
-            "title": "Browsing annotations in time series stacks"
-        }, 
-        {
             "location": "/#pymapmanager-deskop-application", 
-            "text": "The Qt version of PyMapManager is a desktop application. See  github repository .", 
+            "text": "The Qt version of PyMapManager is a desktop application", 
             "title": "PyMapManager deskop application"
         }
     ]
