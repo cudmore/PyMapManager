@@ -610,6 +610,7 @@ function selectInPlotly(runRow, runCol) {
 	$scope.maskPoints = true
 	
 	$scope.linkTimepoints = false
+	$scope.showSlidingZ = false
 	$scope.showImageControls = false
 	
 	$scope.currSlice = []
@@ -963,7 +964,18 @@ $scope.$watch("imageBrightness", function(){
 	    // /getimage/<username>/<mapname>/<int:timepoint>/<int:channel>/<int:slice>
 	    //console.log('setSlice() sliceNum:', sliceNum)
 	    //var imageUrl = serverurl + '/getimage/' + $scope.leafletUser + '/' + $scope.leafletMap + '/' + $scope.leafletTimepoint + '/' + $scope.leafletChannel + '/' + sliceNum
+	    
+	    // one image
 	    var imageUrl = serverurl + '/getimage/' + $scope.leafletUser + '/' + $scope.leafletMap + '/' + tp + '/' + $scope.leafletChannel + '/' + sliceNum
+	    
+	    // sliding z
+	    var imageUrl = ''
+	    if ($scope.showSlidingZ) {
+	    	imageUrl = serverurl + '/getslidingz/' + $scope.leafletUser + '/' + $scope.leafletMap + '/' + tp + '/' + $scope.leafletChannel + '/' + sliceNum
+	    } else {
+	    	imageUrl = serverurl + '/getimage/' + $scope.leafletUser + '/' + $scope.leafletMap + '/' + tp + '/' + $scope.leafletChannel + '/' + sliceNum
+	    }
+	    
 	    //console.log('setSlice() tp:', tp, 'sliceNum:', sliceNum, 'imageUrl:', imageUrl)
 	    $scope.image[tp].setUrl(imageUrl)
 	    
@@ -1443,6 +1455,10 @@ $scope.$watch("imageBrightness", function(){
 		for (var i=0; i<tmpNumTimepoint; i+=1) {
 			linkedCenter[i] = leafletRun[i].getCenter()
 		}
+	}
+
+	$scope.userToggleShowSlidingZ = function() {
+		console.log('userToggleSlidingZ() ', $scope.showSlidingZ)
 	}
 
 	$scope.userToggleshowImageControls = function() {

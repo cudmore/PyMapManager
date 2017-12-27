@@ -38,6 +38,9 @@ from werkzeug.utils import secure_filename
 import pandas as pandas
 import numpy as np
 
+from cStringIO import StringIO # for sending a numpy array back as a .png image
+from skimage.io import imsave, imread
+
 #from bokeh.plotting import figure, output_file, show
 #from bokeh.embed import components
 
@@ -89,6 +92,7 @@ def help():
 
 @app.route('/loadmap/<username>/<mapname>')
 def loadmap(username, mapname):
+	print ('=== loadmap()')
 	mapdir = safe_join(username, mapname)
 	mapdir = safe_join(app.config['data_folder'], mapdir)
 	mapfile = mapname + '.txt'
@@ -97,6 +101,7 @@ def loadmap(username, mapname):
 	global myMapList
 	if mapname in myMapList:
 		# already loaded
+		print 'map already loaded'
 		pass
 	else:
 		print 'loadmap() loading map:', mappath
@@ -408,11 +413,73 @@ def get_image(username, mapname, timepoint, channel, slice):
 	tpdir = safe_join(tpdir, 'tp' + str(timepoint))
 	tpdir = safe_join(app.config['data_folder'], tpdir)
 
+	'''
 	print '=== get_image()', username, mapname, timepoint, slice, channel
 	print 'tpdir:', tpdir
 	print 'thefile:', thefile
+	'''
 	
 	return send_from_directory(tpdir, thefile, as_attachment=True, mimetype='image/tif')
+
+# 20171227, returning a numpy array as a .png
+# for now, sliding z will be three images [slice-1, slice, slice+1]
+#@app.route('/getslidingz')
+# http://127.0.0.1:5010/getslidingz/public/rr30a/1/2/20
+@app.route('/getslidingz/<username>/<mapname>/<int:timepoint>/<int:channel>/<int:slice>')
+def getslidingz(username, mapname, timepoint, channel, slice):
+	"""
+	Return a generated image as a png by
+	saving it into a StringIO and using send_file.
+	"""
+	plusMinus = 2
+	# print '=== getslidingz() slice:', slice, 'plusMinus:', plusMinus
+	
+	# the folder the images are in
+	tpdir = safe_join(username, mapname)
+	tpdir = safe_join(tpdir, 'raw')
+	tpdir = safe_join(tpdir, 'ingested')
+	tpdir = safe_join(tpdir, 'tp' + str(timepoint))
+	tpdir = safe_join(app.config['data_folder'], tpdir)
+
+	# load the central image (we know it exists)
+	paddedStr = str(slice).zfill(4)
+	centralImageFile = tpdir + '/' + mapname + '_tp' + str(timepoint) + '_ch' + str(channel) + '_s' + paddedStr + '.png'
+
+	myArray = imread(centralImageFile) #, flatten=False, mode=None)
+	[m, n] = myArray.shape
+	myArray = myArray.reshape((1,m,n))
+	
+	startSlice = slice - plusMinus
+	stopSlice = slice + plusMinus
+	firstTimeThrough = 1
+	for i in range(startSlice,stopSlice):
+		if i<0:
+			continue
+		paddedStr = str(i).zfill(4)
+		currFile = tpdir + '/' + mapname + '_tp' + str(timepoint) + '_ch' + str(channel) + '_s' + paddedStr + '.png'
+		if os.path.isfile(currFile):
+			currArray = imread(currFile) #, flatten=False, mode=None)
+			currArray = currArray.reshape((1,m,n))
+			if firstTimeThrough:
+				firstTimeThrough = 0
+				myArray = currArray
+			else:
+				myArray = np.vstack((myArray,currArray)) 
+	
+	# print 'myArray.shape:', myArray.shape
+			
+	# take maximal intensity projection into final nd array
+	[slicesFinal, mFinal, nFinal] = myArray.shape
+	max_ = np.zeros((m, n), dtype='uint8')
+	for i in range(slicesFinal):
+		max_ = np.maximum(max_, myArray[i])
+	
+	# We make sure to use the PIL plugin here because not all skimage.io plugins
+	# support writing to a file object.
+	strIO = StringIO()
+	imsave(strIO, max_, plugin='pil', format_str='png')
+	strIO.seek(0)
+	return send_file(strIO, mimetype='image/png')
 
 @app.route('/getmaximage/<username>/<mapname>/<int:timepoint>/<int:channel>')
 def get_maximage(username, mapname, timepoint, channel):
@@ -504,7 +571,6 @@ def gettiff():
 
 @app.route("/data")
 def data():
-	from cStringIO import StringIO
 	
 	import numpy as np
 

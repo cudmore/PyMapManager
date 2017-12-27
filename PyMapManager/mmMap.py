@@ -674,6 +674,13 @@ if __name__ == '__main__':
 	for key, value in mapInfo.iteritems():
 		print key, value
 		
+	#from flask import jsonify
+	#print jsonify(mapInfo)
+	
+	#import json
+	#print json.dumps(mapInfo)
+	
+	
 	# dynamics
 	#plotDict = m.getMapDynamics(plotDict)
 	#print plotDict['dynamics']
