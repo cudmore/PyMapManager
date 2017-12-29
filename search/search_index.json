@@ -117,7 +117,7 @@
         }, 
         {
             "location": "/rest-api/", 
-            "text": "Run the server\n\n\ncd mmserver\npython mmserver.py\n\n\n\n\nThis will run the server locally at \nhttp://127.0.0.1:5010\n\n\nIn Python\n\n\nimport json\nimport urllib2\n\nurl='http://cudmore.duckdns.org:5010/v2/public/rr30a/getmaptracing?mapsegment=\nsession=3\nxstat=x\nystat=y\nzstat=z'\n\nmytracing = json.load(urllib2.urlopen(\nurl\n))\n\n# plot with matplotlib\nimport matplotlib.pyplot as plt\nplt.plot(tracing['x'],tracing['y'])\n\n\n\n\nIn Matlab\n\n\nurl='http://cudmore.duckdns.org:5010/getmaximage/public/rr30a/0/2'\nmyimage = webread(url);\nimshow(myimage)\n\n\n\n\nREST API\n\n\nThe following REST routes specify end-points that will return JSON text or images. To use these examples prepend each one with \nhttp://127/0/1/1:5010\n. \n\n\nWe will be using the \npublic\n user and the \nrr30a\n map included in the \nexampleMaps/\n folder.\n\n\nusername\n = public\n\nmapname\n = rr30a\n\n\n\n\nGet help\n\n\n/help\n\n\nGet a list of maps\n\n\n/api/public/maps\n\n\nLoad a map\n\n\n/loadmap/public/rr30a\n\n\nGet annotation values\n\n\nHere we will get an x-stat \ndays\n, a y-stat \npDist\n, and a z-stat \nz\n for map segment 0 across all sessions\n\n\n/v2/public/rr30a/getmapvalues?mapsegment=0\nsession=\nxstat=days\nystat=pDist\nzstat=z\n\n\nGet a tracing\n\n\nHere we will get the x/y/z of a tracing (in um) for all map segments in session 3\n\n\n/v2/public/rr30a/getmaptracing?mapsegment=\nsession=3\nxstat=x\nystat=y\nzstat=z\n\n\nGet an image\n\n\nHere we will get the 20th image in the stack for timepoint 3, channel 2\n\n\n/getimage/public/rr30a/3/2/20\n\n\nGet a sliding Z-Projection image\n\n\nHere we will get a sliding z-projection of the 14th image in the stack for timepoint 5, channel 2\n\n\n/getslidingz/public/rr30a/5/2/14\n\n\nGet a maximal intensity projection\n\n\nHere we will get the maximal intensity projection of timepoint 0, channel 2\n\n\n/getmaximage/public/rr30a/0/2", 
+            "text": "Run the server\n\n\ncd mmserver\npython mmserver.py\n\n\n\n\nThis will run the server locally at \nhttp://127.0.0.1:5010\n\n\nUsing the REST API in a program\n\n\nIn Python\n\n\nimport json\nimport urllib2\n\nurl='http://127.0.0.1:5010/v2/public/rr30a/getmaptracing?mapsegment=\nsession=3\nxstat=x\nystat=y\nzstat=z'\n\nmytracing = json.load(urllib2.urlopen(\nurl\n))\n\n# plot with matplotlib\nimport matplotlib.pyplot as plt\nplt.plot(mytracing['x'],mytracing['y'])\n\n\n\n\nIn Matlab\n\n\nurl='http://127.0.0.1:5010/getmaximage/public/rr30a/0/2'\nmyimage = webread(url);\nimshow(myimage)\n\n\n\n\nREST API\n\n\nThe following REST routes specify end-points that will return JSON text or images. \n\n\nWe will be using the \npublic\n user and the \nrr30a\n map included in the \nmmserver/data/\n folder.\n\n\nThe links on this page point to a development server that may or may not be running.\n\n\nGet help\n\n\nhttp://127.0.0.1:5010/help\n\n\nGet a list of maps\n\n\nhttp://127.0.0.1:5010/api/public/maps\n\n\nLoad a map\n\n\n/loadmap/public/rr30a\n\n\nGet annotation values\n\n\nHere we will get an x-stat \ndays\n, a y-stat \npDist\n, and a z-stat \nz\n for map segment 0 across all sessions\n\n\nhttp://127.0.0.1:5010/v2/public/rr30a/getmapvalues?mapsegment=0\nsession=\nxstat=days\nystat=pDist\nzstat=z\n\n\nGet a tracing\n\n\nHere we will get the x/y/z of a tracing (in um) for all map segments in session 3\n\n\nhttp://127.0.0.1:5010/v2/public/rr30a/getmaptracing?mapsegment=\nsession=3\nxstat=x\nystat=y\nzstat=z\n\n\nGet an image\n\n\nHere we will get the 20th image in the stack for timepoint 3, channel 2\n\n\nhttp://127.0.0.1:5010/getimage/public/rr30a/3/2/20\n\n\nGet a sliding Z-Projection image\n\n\nHere we will get a sliding z-projection of the 14th image in the stack for timepoint 5, channel 2\n\n\nhttp://127.0.0.1:5010/getslidingz/public/rr30a/5/2/14\n\n\nGet a maximal intensity projection\n\n\nHere we will get the maximal intensity projection of timepoint 0, channel 2\n\n\nhttp://127.0.0.1:5010/getmaximage/public/rr30a/0/2", 
             "title": "REST API"
         }, 
         {
@@ -126,28 +126,33 @@
             "title": "Run the server"
         }, 
         {
+            "location": "/rest-api/#using-the-rest-api-in-a-program", 
+            "text": "", 
+            "title": "Using the REST API in a program"
+        }, 
+        {
             "location": "/rest-api/#in-python", 
-            "text": "import json\nimport urllib2\n\nurl='http://cudmore.duckdns.org:5010/v2/public/rr30a/getmaptracing?mapsegment= session=3 xstat=x ystat=y zstat=z'\n\nmytracing = json.load(urllib2.urlopen( url ))\n\n# plot with matplotlib\nimport matplotlib.pyplot as plt\nplt.plot(tracing['x'],tracing['y'])", 
+            "text": "import json\nimport urllib2\n\nurl='http://127.0.0.1:5010/v2/public/rr30a/getmaptracing?mapsegment= session=3 xstat=x ystat=y zstat=z'\n\nmytracing = json.load(urllib2.urlopen( url ))\n\n# plot with matplotlib\nimport matplotlib.pyplot as plt\nplt.plot(mytracing['x'],mytracing['y'])", 
             "title": "In Python"
         }, 
         {
             "location": "/rest-api/#in-matlab", 
-            "text": "url='http://cudmore.duckdns.org:5010/getmaximage/public/rr30a/0/2'\nmyimage = webread(url);\nimshow(myimage)", 
+            "text": "url='http://127.0.0.1:5010/getmaximage/public/rr30a/0/2'\nmyimage = webread(url);\nimshow(myimage)", 
             "title": "In Matlab"
         }, 
         {
             "location": "/rest-api/#rest-api", 
-            "text": "The following REST routes specify end-points that will return JSON text or images. To use these examples prepend each one with  http://127/0/1/1:5010 .   We will be using the  public  user and the  rr30a  map included in the  exampleMaps/  folder.  username  = public mapname  = rr30a", 
+            "text": "The following REST routes specify end-points that will return JSON text or images.   We will be using the  public  user and the  rr30a  map included in the  mmserver/data/  folder.  The links on this page point to a development server that may or may not be running.", 
             "title": "REST API"
         }, 
         {
             "location": "/rest-api/#get-help", 
-            "text": "/help", 
+            "text": "http://127.0.0.1:5010/help", 
             "title": "Get help"
         }, 
         {
             "location": "/rest-api/#get-a-list-of-maps", 
-            "text": "/api/public/maps", 
+            "text": "http://127.0.0.1:5010/api/public/maps", 
             "title": "Get a list of maps"
         }, 
         {
@@ -157,27 +162,27 @@
         }, 
         {
             "location": "/rest-api/#get-annotation-values", 
-            "text": "Here we will get an x-stat  days , a y-stat  pDist , and a z-stat  z  for map segment 0 across all sessions  /v2/public/rr30a/getmapvalues?mapsegment=0 session= xstat=days ystat=pDist zstat=z", 
+            "text": "Here we will get an x-stat  days , a y-stat  pDist , and a z-stat  z  for map segment 0 across all sessions  http://127.0.0.1:5010/v2/public/rr30a/getmapvalues?mapsegment=0 session= xstat=days ystat=pDist zstat=z", 
             "title": "Get annotation values"
         }, 
         {
             "location": "/rest-api/#get-a-tracing", 
-            "text": "Here we will get the x/y/z of a tracing (in um) for all map segments in session 3  /v2/public/rr30a/getmaptracing?mapsegment= session=3 xstat=x ystat=y zstat=z", 
+            "text": "Here we will get the x/y/z of a tracing (in um) for all map segments in session 3  http://127.0.0.1:5010/v2/public/rr30a/getmaptracing?mapsegment= session=3 xstat=x ystat=y zstat=z", 
             "title": "Get a tracing"
         }, 
         {
             "location": "/rest-api/#get-an-image", 
-            "text": "Here we will get the 20th image in the stack for timepoint 3, channel 2  /getimage/public/rr30a/3/2/20", 
+            "text": "Here we will get the 20th image in the stack for timepoint 3, channel 2  http://127.0.0.1:5010/getimage/public/rr30a/3/2/20", 
             "title": "Get an image"
         }, 
         {
             "location": "/rest-api/#get-a-sliding-z-projection-image", 
-            "text": "Here we will get a sliding z-projection of the 14th image in the stack for timepoint 5, channel 2  /getslidingz/public/rr30a/5/2/14", 
+            "text": "Here we will get a sliding z-projection of the 14th image in the stack for timepoint 5, channel 2  http://127.0.0.1:5010/getslidingz/public/rr30a/5/2/14", 
             "title": "Get a sliding Z-Projection image"
         }, 
         {
             "location": "/rest-api/#get-a-maximal-intensity-projection", 
-            "text": "Here we will get the maximal intensity projection of timepoint 0, channel 2  /getmaximage/public/rr30a/0/2", 
+            "text": "Here we will get the maximal intensity projection of timepoint 0, channel 2  http://127.0.0.1:5010/getmaximage/public/rr30a/0/2", 
             "title": "Get a maximal intensity projection"
         }, 
         {
