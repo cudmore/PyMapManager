@@ -4,7 +4,7 @@ Please see the main [PyMapManager][PyMapManager] documentation website.
 
 ## The cool part
 
-### Load maps from the server in Python
+### Load maps from a Map Manager server in Python
 
 ```
 from pymapmanager.mmMap import mmMap
