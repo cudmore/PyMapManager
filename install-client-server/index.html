@@ -27,20 +27,20 @@
       
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
-      <link rel="shortcut icon" href="./assets/images/favicon.png">
+      <link rel="shortcut icon" href="../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-0.17.2, mkdocs-material-2.2.2">
     
     
       
-        <title>PyMapManager</title>
+        <title>Install server/client - PyMapManager</title>
       
     
     
-      <link rel="stylesheet" href="./assets/stylesheets/application.7a4cdee3.css">
+      <link rel="stylesheet" href="../assets/stylesheets/application.7a4cdee3.css">
       
     
     
-      <script src="./assets/javascripts/modernizr.1aa3b519.js"></script>
+      <script src="../assets/javascripts/modernizr.1aa3b519.js"></script>
     
     
       
@@ -71,7 +71,7 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="." title="PyMapManager" class="md-header-nav__button md-logo">
+        <a href=".." title="PyMapManager" class="md-header-nav__button md-logo">
           
             <i class="md-icon"></i>
           
@@ -88,7 +88,7 @@
                 PyMapManager
               </span>
               <span class="md-header-nav__topic">
-                Home
+                Install server/client
               </span>
             
           
@@ -201,6 +201,30 @@
       
       
 
+
+  <li class="md-nav__item">
+    <a href=".." title="Home" class="md-nav__link">
+      Home
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../install-pymapmanager/" title="Install PyMapManager" class="md-nav__link">
+      Install PyMapManager
+    </a>
+  </li>
+
+    
+      
+      
+      
+
   
 
 
@@ -210,11 +234,11 @@
     
     
       <label class="md-nav__link md-nav__link--active" for="toc">
-        Home
+        Install server/client
       </label>
     
-    <a href="." title="Home" class="md-nav__link md-nav__link--active">
-      Home
+    <a href="./" title="Install server/client" class="md-nav__link md-nav__link--active">
+      Install server/client
     </a>
     
       
@@ -226,30 +250,43 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#pymapmanager-python-package" title="PyMapManager Python package" class="md-nav__link">
-    PyMapManager Python package
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#pymapmanager-server" title="PyMapManager server" class="md-nav__link">
-    PyMapManager server
+  <a href="#running-the-mmclientmmserver-web-servers" title="Running the mmclient/mmserver web servers" class="md-nav__link">
+    Running the mmclient/mmserver web servers
   </a>
   
     <nav class="md-nav">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#browsing-annotations" title="Browsing annotations" class="md-nav__link">
-    Browsing annotations
+  <a href="#starting-the-clientserver-for-local-use-basic" title="Starting the client/server for local use (basic)" class="md-nav__link">
+    Starting the client/server for local use (basic)
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-start-the-servermmserverpy-rest-server" title="1) Start the server/mmserver.py rest server" class="md-nav__link">
+    1) Start the server/mmserver.py rest server
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#browsing-annotations-in-time-series-stacks" title="Browsing annotations in time series stacks" class="md-nav__link">
-    Browsing annotations in time series stacks
+  <a href="#2-start-a-server-to-serve-indexhtml-and-javascript" title="2) start a server to serve index.html and javascript" class="md-nav__link">
+    2) start a server to serve index.html and javascript
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#starting-the-server-for-wider-use-advanced" title="Starting the server for wider use (advanced)" class="md-nav__link">
+    Starting the server for wider use (advanced)
   </a>
   
 </li>
@@ -260,8 +297,15 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#pymapmanager-deskop-application" title="PyMapManager deskop application" class="md-nav__link">
-    PyMapManager deskop application
+  <a href="#to-do" title="To Do" class="md-nav__link">
+    To Do
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#install-the-qt-desktop-app" title="Install the Qt desktop app" class="md-nav__link">
+    Install the Qt desktop app
   </a>
   
 </li>
@@ -272,30 +316,6 @@
   
 </nav>
     
-  </li>
-
-    
-      
-      
-      
-
-
-  <li class="md-nav__item">
-    <a href="install-pymapmanager/" title="Install PyMapManager" class="md-nav__link">
-      Install PyMapManager
-    </a>
-  </li>
-
-    
-      
-      
-      
-
-
-  <li class="md-nav__item">
-    <a href="install-client-server/" title="Install server/client" class="md-nav__link">
-      Install server/client
-    </a>
   </li>
 
     
@@ -318,30 +338,43 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#pymapmanager-python-package" title="PyMapManager Python package" class="md-nav__link">
-    PyMapManager Python package
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#pymapmanager-server" title="PyMapManager server" class="md-nav__link">
-    PyMapManager server
+  <a href="#running-the-mmclientmmserver-web-servers" title="Running the mmclient/mmserver web servers" class="md-nav__link">
+    Running the mmclient/mmserver web servers
   </a>
   
     <nav class="md-nav">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#browsing-annotations" title="Browsing annotations" class="md-nav__link">
-    Browsing annotations
+  <a href="#starting-the-clientserver-for-local-use-basic" title="Starting the client/server for local use (basic)" class="md-nav__link">
+    Starting the client/server for local use (basic)
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-start-the-servermmserverpy-rest-server" title="1) Start the server/mmserver.py rest server" class="md-nav__link">
+    1) Start the server/mmserver.py rest server
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#browsing-annotations-in-time-series-stacks" title="Browsing annotations in time series stacks" class="md-nav__link">
-    Browsing annotations in time series stacks
+  <a href="#2-start-a-server-to-serve-indexhtml-and-javascript" title="2) start a server to serve index.html and javascript" class="md-nav__link">
+    2) start a server to serve index.html and javascript
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#starting-the-server-for-wider-use-advanced" title="Starting the server for wider use (advanced)" class="md-nav__link">
+    Starting the server for wider use (advanced)
   </a>
   
 </li>
@@ -352,8 +385,15 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#pymapmanager-deskop-application" title="PyMapManager deskop application" class="md-nav__link">
-    PyMapManager deskop application
+  <a href="#to-do" title="To Do" class="md-nav__link">
+    To Do
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#install-the-qt-desktop-app" title="Install the Qt desktop app" class="md-nav__link">
+    Install the Qt desktop app
   </a>
   
 </li>
@@ -372,31 +412,107 @@
             <article class="md-content__inner md-typeset">
               
                 
-                  <a href="http://github.com/cudmore/PyMapManager/edit/master/docs/index.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
+                  <a href="http://github.com/cudmore/PyMapManager/edit/master/docs/install-client-server.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
                 
                 
-                  <h1>Home</h1>
+                  <h1>Install server/client</h1>
                 
-                <p>PyMapManager is a Python package to analyze time-series image stacks.</p>
-<p>PyMapManager opens annotations created with the Igor Pro version of <a href="http://blog.cudmore.io/mapmanager">Map Manager</a>. Allowing additional analysis to easily be performed.</p>
-<p>There are three components to PyMapManager:</p>
+                <h2 id="running-the-mmclientmmserver-web-servers">Running the mmclient/mmserver web servers</h2>
+<p>The <code>mmserver/mmserver.py</code> Flask server requires the following libraries</p>
+<pre><code>pip install flask
+pip install flask-cors
+pip install scikit-image
+</code></pre>
+<h3 id="starting-the-clientserver-for-local-use-basic">Starting the client/server for local use (basic)</h3>
+<p>This will work well if you are only going to be browsing the client/server from the same machine.</p>
+<h4 id="1-start-the-servermmserverpy-rest-server">1) Start the <code>server/mmserver.py</code> rest server</h4>
+<pre><code>cd mmserver
+python mmserver.py
+</code></pre>
+<p>Test this out by pointing a web browser to</p>
+<pre><code>http://127.0.0.1:5010
+</code></pre>
+<p>Alternativaly, start the <code>mmserver.py</code> rest server with</p>
+<pre><code>cd mmserver
+gunicorn -b 127.0.0.1:5010 mmserver:app
+</code></pre>
+<p>Wrapping the <code>mmserver</code> to run inside of gunicorn provides a <strong>synchronous</strong> web server. This should handle fast interaction with the web interface much better than the <strong>asynchronous</strong> version provided by <code>python mmserver.py</code>. This is most noticeable when viewing linked sliding z-projections.</p>
+<p>To install gunicorn</p>
+<pre><code>pip install gunicorn
+</code></pre>
+<h4 id="2-start-a-server-to-serve-indexhtml-and-javascript">2) start a server to serve index.html and javascript</h4>
+<p>This is assuming you have node and npm installed. In addition, we are assuming you have used npm to install http-server</p>
+<p>Make sure <code>mmclient/static/mmserver.js</code> points to the Rest interface. This file should have</p>
+<pre><code>serverurl = 'http://127.0.0.1:5010/'
+</code></pre>
+<p>Run the mmclient</p>
+<pre><code>cd mmclient
+http-server
+</code></pre>
+<p>The output should look like this</p>
+<pre><code>Starting up http-server, serving ./
+Available on:
+  http://127.0.0.1:8080
+  http://192.168.1.10:8080
+Hit CTRL-C to stop the server
+</code></pre>
+<p>You can then browse the client at</p>
+<pre><code>http://127.0.0.1:8080
+</code></pre>
+<p>This requires node and npm. It is using http-server from npm.</p>
+<h3 id="starting-the-server-for-wider-use-advanced">Starting the server for wider use (advanced)</h3>
+<p>This requires a world-accessible web server to server <code>mmclient/index.html</code> and for the Flask Rest server in <code>mmserver/mmserver.py</code> to also be running. For the world-accessible server we have used <code>nginx</code> with success.</p>
 <ul>
-<li>Python Package</li>
-<li>Server</li>
-<li>Desktop application</li>
+<li>Get a debian system</li>
+<li>
+<p>Install nginx</p>
+</li>
+<li>
+<p>Copy <code>mmclient</code> into <code>/var/www/html/client</code></p>
+<p>sudo cp PyMapManager/mmserver/mmclient /var/www/html/</p>
+</li>
 </ul>
-<h2 id="pymapmanager-python-package">PyMapManager Python package</h2>
-<p>See the <a href="https://github.com/cudmore/PyMapManager/tree/master/PyMapManager/examples">/examples</a> folder in the main GitHub repository for example Python code to easily perform additional analysis. Please also see the <a href="http://pymapmanager.readthedocs.io/en/latest/">API Documentation</a>.</p>
-<h2 id="pymapmanager-server">PyMapManager server</h2>
-<p>The PyMapManager server allows web-based browsing of annotations and stacks. See <a href="https://github.com/cudmore/PyMapManager/tree/master/mmserver">server documentation</a> for additional information.</p>
-<h3 id="browsing-annotations">Browsing annotations</h3>
-<p><IMG SRC="mmserver_purejs.png"></p>
-<h3 id="browsing-annotations-in-time-series-stacks">Browsing annotations in time series stacks</h3>
-<p><IMG SRC="mmserver_leaflet.png">
-<IMG SRC="mmserver_leaflet2.png"></p>
-<h2 id="pymapmanager-deskop-application">PyMapManager deskop application</h2>
-<p>The Qt version of PyMapManager is a desktop application. See <a href="https://github.com/cudmore/PyMapManager/tree/master/PyMapManager/interface">github repository</a>.</p>
-<p><IMG SRC="pyMapManager_v2.png"></p>
+<p>You can now access mmclient as http://nginx_server_ip/mmclient</p>
+<ul>
+<li>Run the Flask server with</li>
+</ul>
+<p>cd mmserver
+   screen
+   gunicorn -b 0.0.0.0:5010 mmserver:app
+   # exit screen with ctrl+a then d </p>
+<p>This runs the Flask app <code>app</code> in the python file <code>mmserver.py</code> on a world accessible address `http://nginx_server_ip:5010</p>
+<p>Check the Rest server manually by browsing to</p>
+<pre><code>http://nginx_server_ip:5010
+</code></pre>
+<p>Make sure the client in <code>mmclient/static/mmserver.js</code> is pointing to this rest server</p>
+<p>sudo pico /var/www/html/mmclient/index.html</p>
+<p># make sure the file has
+   serverurl = 'http://nginx_server_ip:5010/'</p>
+<p>If that all works, you can browse some maps at</p>
+<pre><code>http://nginx_server_ip/mmclient
+</code></pre>
+<p>This will serve the <code>mmclient/index.html</code> and use the <code>static/mmserver.js</code> file. The .js file will talk to the mmserver REST server via http://nginx_server_ip:5010</p>
+<h2 id="to-do">To Do</h2>
+<p>1) I can put mmserver.py plus /data/ into /var/www/html/mmserver.</p>
+<p>2) Then point mmserver.js to http://cudmore.duckdns.org/mmserver</p>
+<p>3) I need to configure nginx to take http://nginx_server_ip/mmRest and point it to the gunicorn process?</p>
+<p>Starting the server with <code>python mmserver.py</code> will run Flask as a single <strong>asynchronous</strong> process. Problems will arise when multiple requests are made rapidly and the Flask server is still processing the last request. This mostly happens when using sliding z-projection images. To solve this, Flask needs to be run inside a <strong>synchronous</strong> web server such as gunicorn.</p>
+<p>If needed, install gunicorn</p>
+<pre><code>pip install gunicorn
+</code></pre>
+<p>Start the Flask server inside gunicorn</p>
+<pre><code># on osx (requires sudo)
+sudo gunicorn -bind 0.0.0.0:5010 mmserver:app
+
+# on debian
+gunicorn -b 0.0.0.0:5010 mmserver:app
+</code></pre>
+<p>On another machine, point a browser to the ip address of the machine running the server</p>
+<pre><code>http://ip:5010
+</code></pre>
+<h2 id="install-the-qt-desktop-app">Install the Qt desktop app</h2>
+<pre><code>Not done yet
+</code></pre>
                 
                   
                 
@@ -415,20 +531,20 @@
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid">
         
-        
-          <a href="install-pymapmanager/" title="Install PyMapManager" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../install-pymapmanager/" title="Install PyMapManager" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+            </div>
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
-                  Next
+                  Previous
                 </span>
                 Install PyMapManager
               </span>
             </div>
-            <div class="md-flex__cell md-flex__cell--shrink">
-              <i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
-            </div>
           </a>
+        
         
       </nav>
     </div>
@@ -452,9 +568,9 @@
       
     </div>
     
-      <script src="./assets/javascripts/application.6cdc17f0.js"></script>
+      <script src="../assets/javascripts/application.6cdc17f0.js"></script>
       
-      <script>app.initialize({version:"0.17.2",url:{base:"."}})</script>
+      <script>app.initialize({version:"0.17.2",url:{base:".."}})</script>
       
     
     
