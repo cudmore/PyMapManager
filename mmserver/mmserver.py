@@ -55,6 +55,7 @@ if 1:
 
 # assuming data folder is in same folder as this source .py file
 #static_folder = '/Users/cudmore/Desktop/data'
+template_dir = os.path.abspath('../mmclient')
 static_folder = './data'
 UPLOAD_FOLDER = './data'
 data_folder = './data'
@@ -64,7 +65,7 @@ myMapList = {}
 
 #app = Flask(__name__, static_url_path='/data')
 #app = Flask(__name__, static_folder=static_folder)
-app = Flask(__name__)
+app = Flask(__name__, template_folder=template_dir)
 CORS(app)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['data_folder'] = data_folder
@@ -84,12 +85,16 @@ def hello_world2():
 @app.route('/help')
 def help():
 	#todo: make this an html template and pass server ip
-	return 'The time is ' + str(datetime.now()) + '<br>' \
+	theRet = ''
+	theRet = 'This is the mmserver REST interface. It is designed to respond to http addresses and return data. It is not designed to be interacted directly by a user. <BR>'
+	theRet += '<BR>'
+	theRet += 'The time is ' + str(datetime.now()) + '<br>' \
 		+ '/plot' + '<br>' \
 		+ '/[username]/[mapname]/header' + '<br>' \
 		+ '/[username]/[mapname]/timepoint/[n]/stackdb' + '<br>' \
 		+ '/[username]/[mapname]/timepoint/[n]/image/[n]/[channel]' + '<br>'
-
+	return theRet
+	
 @app.route('/loadmap/<username>/<mapname>')
 def loadmap(username, mapname):
 	print ('=== loadmap()')

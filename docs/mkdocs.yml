@@ -9,4 +9,5 @@ repo_url: http://github.com/cudmore/PyMapManager
 
 pages:
     - Home: index.md
-    - Install: install.md
+    - Install PyMapManager: install-pymapmanager.md
+    - Install client/server: install-client-server.md

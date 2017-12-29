@@ -28,19 +28,19 @@
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
       <link rel="shortcut icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-0.17.1, mkdocs-material-2.0.4">
+      <meta name="generator" content="mkdocs-0.17.2, mkdocs-material-2.2.2">
     
     
       
-        <title>Install - PyMapManager</title>
+        <title>Install PyMapManager - PyMapManager</title>
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/application-709eec9410.css">
+      <link rel="stylesheet" href="../assets/stylesheets/application.7a4cdee3.css">
       
     
     
-      <script src="../assets/javascripts/modernizr-e826f8942a.js"></script>
+      <script src="../assets/javascripts/modernizr.1aa3b519.js"></script>
     
     
       
@@ -81,14 +81,18 @@
         <label class="md-icon md-icon--menu md-header-nav__button" for="drawer"></label>
       </div>
       <div class="md-flex__cell md-flex__cell--stretch">
-        <span class="md-flex__ellipsis md-header-nav__title">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
           
             
-              
+              <span class="md-header-nav__topic">
+                PyMapManager
+              </span>
+              <span class="md-header-nav__topic">
+                Install PyMapManager
+              </span>
             
-            Install
           
-        </span>
+        </div>
       </div>
       <div class="md-flex__cell md-flex__cell--shrink">
         
@@ -148,6 +152,9 @@
 </header>
     
     <div class="md-container">
+      
+        
+      
       
       <main class="md-main">
         <div class="md-main__inner md-grid" data-md-component="container">
@@ -215,11 +222,11 @@
     
     
       <label class="md-nav__link md-nav__link--active" for="toc">
-        Install
+        Install PyMapManager
       </label>
     
-    <a href="./" title="Install" class="md-nav__link md-nav__link--active">
-      Install
+    <a href="./" title="Install PyMapManager" class="md-nav__link md-nav__link--active">
+      Install PyMapManager
     </a>
     
       
@@ -257,46 +264,24 @@
   
 </li>
       
-        <li class="md-nav__item">
-  <a href="#install-mmserverpy" title="Install mmserver.py" class="md-nav__link">
-    Install mmserver.py
-  </a>
-  
-    <nav class="md-nav">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#starting-the-server-for-local-use" title="Starting the server for local use" class="md-nav__link">
-    Starting the server for local use
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#starting-the-server-for-wider-use" title="Starting the server for wider use" class="md-nav__link">
-    Starting the server for wider use
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#install-the-qt-desktop-app" title="Install the Qt desktop app" class="md-nav__link">
-    Install the Qt desktop app
-  </a>
-  
-</li>
-      
       
       
     </ul>
   
 </nav>
     
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../install-client-server/" title="Install server/client" class="md-nav__link">
+      Install server/client
+    </a>
   </li>
 
     
@@ -345,40 +330,6 @@
   
 </li>
       
-        <li class="md-nav__item">
-  <a href="#install-mmserverpy" title="Install mmserver.py" class="md-nav__link">
-    Install mmserver.py
-  </a>
-  
-    <nav class="md-nav">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#starting-the-server-for-local-use" title="Starting the server for local use" class="md-nav__link">
-    Starting the server for local use
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#starting-the-server-for-wider-use" title="Starting the server for wider use" class="md-nav__link">
-    Starting the server for wider use
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#install-the-qt-desktop-app" title="Install the Qt desktop app" class="md-nav__link">
-    Install the Qt desktop app
-  </a>
-  
-</li>
-      
       
       
     </ul>
@@ -393,10 +344,10 @@
             <article class="md-content__inner md-typeset">
               
                 
-                  <a href="http://github.com/cudmore/PyMapManager/edit/master/docs/install.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
+                  <a href="http://github.com/cudmore/PyMapManager/edit/master/docs/install-pymapmanager.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
                 
                 
-                  <h1>Install</h1>
+                  <h1>Install PyMapManager</h1>
                 
                 <h2 id="install-pymapmanager-python-package">Install pyMapManager Python package</h2>
 <h3 id="download-the-repo">Download the repo</h3>
@@ -407,62 +358,6 @@
 </code></pre>
 <p>From within Python, include the libraries like:</p>
 <pre><code>from pymapmanager import mmMap
-</code></pre>
-<h2 id="install-mmserverpy">Install <code>mmserver.py</code></h2>
-<p>The <code>mmserver.py</code> Flask server requires the following libraries</p>
-<pre><code>pip install flask
-pip install flask-cors
-pip install scikit-image
-</code></pre>
-<h3 id="starting-the-server-for-local-use">Starting the server for local use</h3>
-<p>This will work well if you are only going to be browsing the server from the same machine.</p>
-<pre><code>python mmserver.py
-</code></pre>
-<p>Point your browser to</p>
-<pre><code>http://127/0/0/1:5010
-</code></pre>
-<h3 id="starting-the-server-for-wider-use">Starting the server for wider use</h3>
-<ul>
-<li>Get a debian system</li>
-<li>Install nginx</li>
-<li>put into /var/www/html/mmclient</li>
-<li>index.html</li>
-<li>/static/ folder</li>
-<li>You can now access mmclient as http://nginx_server_ip/mmclient</li>
-<li>
-<p>run the Flask server with
-   gunicorn -b 0.0.0.0:5010 mmserver:app</p>
-</li>
-<li>
-<p>modify mmserver.js to point to the Flask server (this is now just a rest server)</p>
-</li>
-<li>
-<p>something like http://nginx_server_ip:5010</p>
-</li>
-<li>
-<p>browse to http://nginx_server_ip/mmclient and browse some maps</p>
-</li>
-</ul>
-<p>This will serve the index.html using the mmserver.js file. The .js file will talk to the mmserver REST server via http://nginx_server_ip:5010</p>
-<p>todo:</p>
-<p>1) I can put mmserver.py plus /data/ into /var/www/html/mmserver.</p>
-<p>2) Then point mmserver.js to http://cudmore.duckdns.org/mmserver</p>
-<p>Starting the server with <code>python mmserver.py</code> will run Flask as a single <strong>asynchronous</strong> process. Problems will arise when multiple requests are made rapidly and the Flask server is still processing the last request. This mostly happens when using sliding z-projection images. To solve this, Flask needs to be run inside a <strong>synchronous</strong> web server such as gunicorn.</p>
-<p>If needed, install gunicorn</p>
-<pre><code>pip install gunicorn
-</code></pre>
-<p>Start the Flask server inside gunicorn</p>
-<pre><code># on osx (requires sudo)
-sudo gunicorn -bind 0.0.0.0:5010 mmserver:app
-
-# on debian
-gunicorn -b 0.0.0.0:5010 mmserver:app
-</code></pre>
-<p>On another machine, point a browser to the ip address of the machine running the server</p>
-<pre><code>http://ip:5010
-</code></pre>
-<h2 id="install-the-qt-desktop-app">Install the Qt desktop app</h2>
-<pre><code>Not done yet
 </code></pre>
                 
                   
@@ -497,6 +392,20 @@ gunicorn -b 0.0.0.0:5010 mmserver:app
           </a>
         
         
+          <a href="../install-client-server/" title="Install server/client" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                Install server/client
+              </span>
+            </div>
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+            </div>
+          </a>
+        
       </nav>
     </div>
   
@@ -505,9 +414,9 @@ gunicorn -b 0.0.0.0:5010 mmserver:app
       <div class="md-footer-copyright">
         
         powered by
-        <a href="http://www.mkdocs.org" title="MkDocs">MkDocs</a>
+        <a href="http://www.mkdocs.org">MkDocs</a>
         and
-        <a href="http://squidfunk.github.io/mkdocs-material/" title="Material for MkDocs">
+        <a href="https://squidfunk.github.io/mkdocs-material/">
           Material for MkDocs</a>
       </div>
       
@@ -519,9 +428,9 @@ gunicorn -b 0.0.0.0:5010 mmserver:app
       
     </div>
     
-      <script src="../assets/javascripts/application-8e4952e681.js"></script>
+      <script src="../assets/javascripts/application.6cdc17f0.js"></script>
       
-      <script>app.initialize({version:"0.17.1",url:{base:".."}})</script>
+      <script>app.initialize({version:"0.17.2",url:{base:".."}})</script>
       
     
     

@@ -1,10 +1,10 @@
 // 20171216
 
-//angular.module('mmserver_app', ['angularjs-dropdown-multiselect'])
+//angular.module('mmclient_app', ['angularjs-dropdown-multiselect'])
 //20171226 list [] was empty
-angular.module('mmserver_app', [])
+angular.module('mmclient_app', [])
 
-.controller('mmserver_controller', function($scope, $http, $location, $interval, $sce, $timeout, $log) {
+.controller('mmclient_controller', function($scope, $http, $location, $interval, $sce, $timeout, $log) {
 
 //disable console.log
 //see: https://stackoverflow.com/questions/1215392/how-to-quickly-and-conveniently-disable-all-console-log-statements-in-my-code
@@ -17,7 +17,9 @@ serverurl = 'http://' + $location.host() + ':5010'
 serverurl = absUrl
 
 // ip of mmserver rest interface
-serverurl = 'http://127.0.0.1:8000/'
+//run locally with
+// sudo gunicorn -b 127.0.0.1:5010 mmserver:app
+serverurl = 'http://127.0.0.1:5010/'
 //serverurl = 'http://127.0.0.1:8000/'
 
 console.log('serverurl:' + serverurl)

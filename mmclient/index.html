@@ -1,5 +1,5 @@
 <!doctype html>
-<html ng-app="mmserver_app">
+<html ng-app="mmclient_app">
 <head>
 
     <!-- added tether for bootstrap -->
@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="static/lib/bootstrap-4.0.0-beta.2-dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="static/lib/font-awesome-4.7.0/css/font-awesome.min.css">
    
-    <link rel="stylesheet" href="static/mmserver.css">
+    <link rel="stylesheet" href="static/mmclient.css">
 
 	<script src="static/lib/angular/angular.min.js"></script>
 
@@ -37,7 +37,7 @@
  	<link rel="stylesheet" href="static/lib/leaflet/fullscreen/Control.FullScreen.css" />
  	<script src="static/lib/leaflet/fullscreen/Control.FullScreen.js"></script>
  
-	<script src='static/mmserver.js'></script>
+	<script src='static/mmclient.js'></script>
 
 	<!-- <script type="text/javascript" src="static/lib/angularjs-dropdown-multiselect.min.js"></script> -->
 
@@ -45,7 +45,8 @@
 <body>
 <!-- {% raw %} -->
 
-<div ng-controller="mmserver_controller" ng-init="load()">
+
+<div ng-controller="mmclient_controller" ng-init="load()">
 
 	<div class="container">
 		<div class="jumbotron" style="margin-top: 1em; padding-top: 1em; margin-bottom: 1em; padding-bottom: 1em">
@@ -367,9 +368,8 @@
 	</div> <!-- row -->
 
 
-</div> <!-- ng-controller="mmserver_controller" -->
+</div> <!-- ng-controller="mmclient_controller" -->
 
 <!-- {% endraw %} -->
-
 </body>
 </html>

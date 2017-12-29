@@ -4,15 +4,23 @@
     
     <url>
      <loc>/</loc>
-     <lastmod>2017-12-27</lastmod>
+     <lastmod>2017-12-29</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
 
     
     <url>
-     <loc>/install/</loc>
-     <lastmod>2017-12-27</lastmod>
+     <loc>/install-pymapmanager/</loc>
+     <lastmod>2017-12-29</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    
+
+    
+    <url>
+     <loc>/install-client-server/</loc>
+     <lastmod>2017-12-29</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
