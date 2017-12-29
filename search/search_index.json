@@ -114,6 +114,76 @@
             "location": "/install-client-server/#4-running-the-clientserver-on-a-linux-system-with-an-existing-web-server", 
             "text": "This requires a pre-existing web server to serve both the client server  mmclient/index.html  and the Python Flask REST server  mmserver/mmserver.py .  We have used  nginx  with success.   Get a debian system  Install nginx   sudo apt-get install nginx   Copy the  mmclient/  folder into  /var/www/html/mmclient   sudo cp PyMapManager/mmclient /var/www/html/    You can now access the mmclient as http://nginx_server_ip/mmclient    Make sure the client in  mmclient/static/mmserver.js  is pointing to the REST server (we will run that next).    sudo pico /var/www/html/mmclient/static/mmserver.js\n\n# make sure the file has\nserverurl = 'http://nginx_server_ip:5010/'   Run the Flask server with   cd mmserver\nscreen\ngunicorn -b 0.0.0.0:5010 mmserver:app\n# exit screen with ctrl+a then d   This runs the Flask app  app  in the python file  mmserver.py  at the address  http://nginx_server_ip:5010 . We have used  screen  so that when you logout of the terminal, the server continues to run. If you need to stop the server, you can use  PyMapManager/serve_local.sh stop  or return to the  screen  session with  screen -r  and hit ctrl+c.  Check the REST server manually by browsing to  http://nginx_server_ip:5010/help  If that all works, you can browse some maps at  http://nginx_server_ip/mmclient  This will serve the  mmclient/index.html  and use the  mmclient/static/mmserver.js  file. The  mmclient/static/mmserver.js  file will grab annotations and images from the  mmserver/mmserver.py  Python Flask REST server via  http://nginx_server_ip:5010 .", 
             "title": "4) Running the client/server on a Linux system with an existing web-server"
+        }, 
+        {
+            "location": "/rest-api/", 
+            "text": "Run the server\n\n\ncd mmserver\npython mmserver.py\n\n\n\n\nThis will run the server locally at \nhttp://127.0.0.1:5010\n\n\nREST interface\n\n\nThe following REST routes specify end-points that will return JSON text or images. To use these examples prepend each one with \n`http://127/0/1/1:5010\n. \n\n\nWe will be using the \npublic\n user and the \nrr30a\n map included in the \nexampleMaps/\n folder.\n\n\nusername\n = public\n\nmapname\n = rr30a\n\n\n\n\nGet help\n\n\n/help\n\n\nGet a list of maps\n\n\n/api/public/maps\n\n\nLoad a map\n\n\n/loadmap/public/rr30a\n\n\nGet annotation values\n\n\nHere we will get an x-stat \ndays\n, a y-stat \npDist\n, and a z-stat \nz\n for map segment 0 across all sessions\n\n\n/v2/public/rr30a/getmapvalues?mapsegment=0\nsession=\nxstat=days\nystat=pDist\nzstat=z\n\n\nGet a tracing\n\n\nHere we will get the x/y/z of a tracing (in um) for all map segments in session 3\n\n\n/v2/public/rr30a/getmaptracing?mapsegment=\nsession=3\nxstat=x\nystat=y\nzstat=z\n\n\nGet an image\n\n\nHere we will get the 20th image in the stack for timepoint 3, channel 2\n\n\n/getimage/public/rr30a/3/2/20\n\n\nGet a sliding Z-Projection image\n\n\nHere we will get a sliding z-projection of the 14th image in the stack for timepoint 5, channel 2\n\n\n/getslidingz/public/rr30a/5/2/14\n\n\nGet a maximal intensity projection\n\n\nHere we will get the maximal intensity projection of timepoint 0, channel 2\n\n\n/getmaximage/public/rr30a/0/2", 
+            "title": "REST API"
+        }, 
+        {
+            "location": "/rest-api/#run-the-server", 
+            "text": "cd mmserver\npython mmserver.py  This will run the server locally at  http://127.0.0.1:5010", 
+            "title": "Run the server"
+        }, 
+        {
+            "location": "/rest-api/#rest-interface", 
+            "text": "The following REST routes specify end-points that will return JSON text or images. To use these examples prepend each one with  `http://127/0/1/1:5010 .   We will be using the  public  user and the  rr30a  map included in the  exampleMaps/  folder.  username  = public mapname  = rr30a", 
+            "title": "REST interface"
+        }, 
+        {
+            "location": "/rest-api/#get-help", 
+            "text": "/help", 
+            "title": "Get help"
+        }, 
+        {
+            "location": "/rest-api/#get-a-list-of-maps", 
+            "text": "/api/public/maps", 
+            "title": "Get a list of maps"
+        }, 
+        {
+            "location": "/rest-api/#load-a-map", 
+            "text": "/loadmap/public/rr30a", 
+            "title": "Load a map"
+        }, 
+        {
+            "location": "/rest-api/#get-annotation-values", 
+            "text": "Here we will get an x-stat  days , a y-stat  pDist , and a z-stat  z  for map segment 0 across all sessions  /v2/public/rr30a/getmapvalues?mapsegment=0 session= xstat=days ystat=pDist zstat=z", 
+            "title": "Get annotation values"
+        }, 
+        {
+            "location": "/rest-api/#get-a-tracing", 
+            "text": "Here we will get the x/y/z of a tracing (in um) for all map segments in session 3  /v2/public/rr30a/getmaptracing?mapsegment= session=3 xstat=x ystat=y zstat=z", 
+            "title": "Get a tracing"
+        }, 
+        {
+            "location": "/rest-api/#get-an-image", 
+            "text": "Here we will get the 20th image in the stack for timepoint 3, channel 2  /getimage/public/rr30a/3/2/20", 
+            "title": "Get an image"
+        }, 
+        {
+            "location": "/rest-api/#get-a-sliding-z-projection-image", 
+            "text": "Here we will get a sliding z-projection of the 14th image in the stack for timepoint 5, channel 2  /getslidingz/public/rr30a/5/2/14", 
+            "title": "Get a sliding Z-Projection image"
+        }, 
+        {
+            "location": "/rest-api/#get-a-maximal-intensity-projection", 
+            "text": "Here we will get the maximal intensity projection of timepoint 0, channel 2  /getmaximage/public/rr30a/0/2", 
+            "title": "Get a maximal intensity projection"
+        }, 
+        {
+            "location": "/release-notes/", 
+            "text": "To do\n\n\n\n\n[done] Generate API documentation from doc strings\n\n\n[done] Load individual slices dynamically (how to query number of slices in .tif file?)\n\n\n[done] Use the mmserver REST API to make a standalone web-app using Flask, Angular, and Plotly\n\n\n[done] Implement visualization of a spine run in mmserver.\n\n\nMake mmserver link all plot, clicking in one will highlight in other.\n\n\nmmserver needs to use \nmap pool\n so publication data can easily be presented.\n\n\n\n\nMkDocs\n\n\nServe locally\n\n\ncd ~/Dropbox/PyMapManager/docs\nmkdocs serve\n\n\n\n\nPush to github. This needs to be pushed from local github repo, not Dropbox repo.\n\n\ncd ~/Sites/PyMapManager/docs\nmkdocs gh-deploy --clean", 
+            "title": "Release Notes"
+        }, 
+        {
+            "location": "/release-notes/#to-do", 
+            "text": "[done] Generate API documentation from doc strings  [done] Load individual slices dynamically (how to query number of slices in .tif file?)  [done] Use the mmserver REST API to make a standalone web-app using Flask, Angular, and Plotly  [done] Implement visualization of a spine run in mmserver.  Make mmserver link all plot, clicking in one will highlight in other.  mmserver needs to use  map pool  so publication data can easily be presented.", 
+            "title": "To do"
+        }, 
+        {
+            "location": "/release-notes/#mkdocs", 
+            "text": "Serve locally  cd ~/Dropbox/PyMapManager/docs\nmkdocs serve  Push to github. This needs to be pushed from local github repo, not Dropbox repo.  cd ~/Sites/PyMapManager/docs\nmkdocs gh-deploy --clean", 
+            "title": "MkDocs"
         }
     ]
 }
