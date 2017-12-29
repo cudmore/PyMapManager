@@ -1,24 +1,27 @@
+Please see the main [PyMapManager][PyMapManager] documentation website.
+
 ## Contents
 
-### 1) Python code to run a Flask server to serve Map Manager files.
+### 1) Python code to run a REST interface with Python Flask.
 
-    mmserver.py
+    mmserver/mmserver.py
     
 ### 2) Client side interface to browse maps on the server
 
-	/templates/index.html
-	/static/mmserver.js
-	/static/mmserver.css
+```
+mmclient/index.html
+mmclient/static/mmserver.js
+mmclient/static/mmserver.css
+```
 	
-## See [mmio][3] for a wrapper to streamline loading map Manager maps from the server
+## See [mmio][3] to seemlesly load Map Manager annotations from the REST server using Python.
 
 ## Running the server
 
-	python mmserver.py
-	
-### Once the serve is running locally, browse to
-
-	http://127.0.0.1:5010
+```
+cd mmserver
+python mmserver.py
+```
 
 ## Rest interface
 
@@ -66,3 +69,4 @@
 [1]: http://127.0.0.1:5010/public/rr30a/header
 [2]: http://cudmore.duckdns.org
 [3]: https://github.com/cudmore/PyMapManager/tree/master/PyMapManager/mmio
+[PyMapManager]: http://blog.cudmore.io/PyMapManager/

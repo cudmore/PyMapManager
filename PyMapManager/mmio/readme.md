@@ -1,15 +1,19 @@
-Python code to act as a liaison between PyMapManager maps (mmMap) and an online repository served by [mmserver][1].
+Python code to act as a liaison between PyMapManager annotations in `PyMapManager:mmMap` and an online repository served by [mmserver/mmserver.py][1].
+
+Please see the main [PyMapManager][PyMapManager] documentation website.
 
 ## The cool part
 
-### Load maps from the server using mmMap
+### Load maps from the server in Python
 
-    from pymapmanager.mmMap import mmMap
-    myMap = mmMap(urlmap='rr30a')
-    
-    print myMap
-    
-    #map:rr30a map segments:5 stacks:9 total object:2467
+```
+from pymapmanager.mmMap import mmMap
+myMap = mmMap(urlmap='rr30a')
+
+print myMap
+
+#map:rr30a map segments:5 stacks:9 total object:2467
+```
 
 ## Using mmio to manually interact with an [mmserver][1]
 
@@ -32,3 +36,4 @@ Python code to act as a liaison between PyMapManager maps (mmMap) and an online 
         
 
 [1]: https://github.com/cudmore/PyMapManager/tree/master/mmserver
+[PyMapManager]: http://blog.cudmore.io/PyMapManager/
