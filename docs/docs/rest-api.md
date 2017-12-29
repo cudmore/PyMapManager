@@ -7,9 +7,32 @@ python mmserver.py
 
 This will run the server locally at `http://127.0.0.1:5010`
 
-## REST interface
+## In Python
 
-The following REST routes specify end-points that will return JSON text or images. To use these examples prepend each one with ``http://127/0/1/1:5010`. 
+```python
+import json
+import urllib2
+
+url='http://cudmore.duckdns.org:5010/v2/public/rr30a/getmaptracing?mapsegment=&session=3&xstat=x&ystat=y&zstat=z'
+
+mytracing = json.load(urllib2.urlopen("url"))
+
+# plot with matplotlib
+import matplotlib.pyplot as plt
+plt.plot(tracing['x'],tracing['y'])
+```
+
+## In Matlab
+
+```matlab
+url='http://cudmore.duckdns.org:5010/getmaximage/public/rr30a/0/2'
+myimage = webread(url);
+imshow(myimage)
+```
+
+## REST API
+
+The following REST routes specify end-points that will return JSON text or images. To use these examples prepend each one with `http://127/0/1/1:5010`. 
 
 We will be using the `public` user and the `rr30a` map included in the `exampleMaps/` folder.
 
