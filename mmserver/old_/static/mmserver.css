@@ -1,0 +1,81 @@
+body{
+  background-color: #bdc3c7;
+  margin:1em;padding:1em;
+}
+
+.mySelected {
+    background-color:black;
+    color:white;
+    font-weight:bold;
+}
+
+.myScrollBar {
+  display: block;
+  height:120px; //204px;
+  overflow-y: scroll;
+  font-size: 12px;
+}
+
+.myScrollBar2 {
+  display: block;
+  height:120px; //96px;
+  overflow-y: scroll;
+  font-size: 12px;
+}
+
+// for additional leaflet buttons (up/down slices)
+.star{
+  font-size: 1.5em;
+} 
+
+/*
+thead, tbody { display: block; }
+
+tbody {
+    height: 200px;       
+    overflow-y: auto;    
+    overflow-x: hidden;  
+}
+*/
+
+.myIndentDiv {
+	margin-left: 0.3em;
+	margin-top: 0.3em;
+	margin-right: 0.3em;
+	margin-bottom: 0.3em;
+}
+
+.myIndentDiv2 {
+	margin-left: 0.5em;
+	margin-top: 0.3em;
+	margin-right: 0.5em;
+	margin-bottom: 0.3em;
+}
+
+//.leaflet-image-layer {
+//    filter: brightness(100%);
+//    //-webkit-filter: brightness(1);
+//    //filter: brightness(1);
+//}
+
+//for L.LabelOverlay
+//see: https://stackoverflow.com/questions/11979729/how-to-add-text-for-display-on-map-to-a-geojson-object-in-leaflet
+.leaflet-popup-close-button {
+	display:none;
+}
+
+.leaflet-label-overlay {
+	line-height:0px;
+	margin-top: 9px;
+	position:absolute;
+}
+
+// to give some left/right padding on dropdown
+.myDropdown {
+    padding:20px 0 0 20px;
+}
+
+// remove bullets
+myul {
+  list-style-type: none;
+}

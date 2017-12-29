@@ -2,23 +2,73 @@
     "docs": [
         {
             "location": "/", 
-            "text": "PyMapManager is a Python package to analyze time-series image stacks.\n\n\nPyMapManager opens annotations created with the Igor Pro version of \nMap Manager\n. Allowing additional analysis to easily be performed.\n\n\nThere are three components to PyMapManager:\n\n\n\n\nPyMapManager Python Package. See the \nAPI Documentation\n\n\nPyMapManager server. See the \nserver documentation\n\n\nPyMapManager desktop application. See the \ngithub repository\n\n\n\n\nPyMapManager Python package\n\n\nSee the \n/examples\n folder in the main GitHub repository for example Python code to easily perform additional analysis.\n\n\nPyMapManager server\n\n\nThe PyMapManager server allows web-based browsing of annotations and stacks.\n\n\n\n\n\n\nPyMapManager deskop application\n\n\nThe Qt version of PyMapManager is a desktop application", 
+            "text": "PyMapManager is a Python package to analyze time-series image stacks.\n\n\nPyMapManager opens annotations created with the Igor Pro version of \nMap Manager\n. Allowing additional analysis to easily be performed.\n\n\nThere are three components to PyMapManager:\n\n\n\n\nPython Package\n\n\nServer\n\n\nDesktop application\n\n\n\n\nPyMapManager Python package\n\n\nSee the \n/examples\n folder in the main GitHub repository for example Python code to easily perform additional analysis. Please also see the \nAPI Documentation\n.\n\n\nPyMapManager server\n\n\nThe PyMapManager server allows web-based browsing of annotations and stacks. See \nserver documentation\n for additional information.\n\n\nBrowsing annotations\n\n\n\n\nBrowsing annotations in time series stacks\n\n\n\n\n\n\nPyMapManager deskop application\n\n\nThe Qt version of PyMapManager is a desktop application. See \ngithub repository\n.", 
             "title": "Home"
         }, 
         {
             "location": "/#pymapmanager-python-package", 
-            "text": "See the  /examples  folder in the main GitHub repository for example Python code to easily perform additional analysis.", 
+            "text": "See the  /examples  folder in the main GitHub repository for example Python code to easily perform additional analysis. Please also see the  API Documentation .", 
             "title": "PyMapManager Python package"
         }, 
         {
             "location": "/#pymapmanager-server", 
-            "text": "The PyMapManager server allows web-based browsing of annotations and stacks.", 
+            "text": "The PyMapManager server allows web-based browsing of annotations and stacks. See  server documentation  for additional information.", 
             "title": "PyMapManager server"
         }, 
         {
+            "location": "/#browsing-annotations", 
+            "text": "", 
+            "title": "Browsing annotations"
+        }, 
+        {
+            "location": "/#browsing-annotations-in-time-series-stacks", 
+            "text": "", 
+            "title": "Browsing annotations in time series stacks"
+        }, 
+        {
             "location": "/#pymapmanager-deskop-application", 
-            "text": "The Qt version of PyMapManager is a desktop application", 
+            "text": "The Qt version of PyMapManager is a desktop application. See  github repository .", 
             "title": "PyMapManager deskop application"
+        }, 
+        {
+            "location": "/install/", 
+            "text": "Install pyMapManager Python package\n\n\nDownload the repo\n\n\ngit clone https://github.com/cudmore/PyMapManager.git\n\n\n\nInstall PyMapManager\n\n\npip install -e PyMapManager\n\n\n\nFrom within Python, include the libraries like:\n\n\nfrom pymapmanager import mmMap\n\n\n\nInstall \nmmserver.py\n\n\nThe \nmmserver.py\n Flask server requires the following libraries\n\n\npip install flask\npip install flask-cors\npip install scikit-image\n\n\n\nStarting the server for local use\n\n\nThis will work well if you are only going to be browsing the server from the same machine.\n\n\npython mmserver.py\n\n\n\nPoint your browser to\n\n\nhttp://127/0/0/1:5010\n\n\n\nStarting the server for wider use\n\n\n\n\nGet a debian system\n\n\nInstall nginx\n\n\nput into /var/www/html/mmclient\n\n\nindex.html\n\n\n/static/ folder\n\n\nYou can now access mmclient as http://nginx_server_ip/mmclient\n\n\n\n\nrun the Flask server with\n   gunicorn -b 0.0.0.0:5010 mmserver:app\n\n\n\n\n\n\nmodify mmserver.js to point to the Flask server (this is now just a rest server)\n\n\n\n\n\n\nsomething like http://nginx_server_ip:5010\n\n\n\n\n\n\nbrowse to http://nginx_server_ip/mmclient and browse some maps\n\n\n\n\n\n\nThis will serve the index.html using the mmserver.js file. The .js file will talk to the mmserver REST server via http://nginx_server_ip:5010\n\n\ntodo:\n\n\n1) I can put mmserver.py plus /data/ into /var/www/html/mmserver.\n\n\n2) Then point mmserver.js to http://cudmore.duckdns.org/mmserver\n\n\nStarting the server with \npython mmserver.py\n will run Flask as a single \nasynchronous\n process. Problems will arise when multiple requests are made rapidly and the Flask server is still processing the last request. This mostly happens when using sliding z-projection images. To solve this, Flask needs to be run inside a \nsynchronous\n web server such as gunicorn.\n\n\nIf needed, install gunicorn\n\n\npip install gunicorn\n\n\n\nStart the Flask server inside gunicorn\n\n\n# on osx (requires sudo)\nsudo gunicorn -bind 0.0.0.0:5010 mmserver:app\n\n# on debian\ngunicorn -b 0.0.0.0:5010 mmserver:app\n\n\n\nOn another machine, point a browser to the ip address of the machine running the server\n\n\nhttp://ip:5010\n\n\n\nInstall the Qt desktop app\n\n\nNot done yet", 
+            "title": "Install"
+        }, 
+        {
+            "location": "/install/#install-pymapmanager-python-package", 
+            "text": "", 
+            "title": "Install pyMapManager Python package"
+        }, 
+        {
+            "location": "/install/#download-the-repo", 
+            "text": "git clone https://github.com/cudmore/PyMapManager.git", 
+            "title": "Download the repo"
+        }, 
+        {
+            "location": "/install/#install-pymapmanager", 
+            "text": "pip install -e PyMapManager  From within Python, include the libraries like:  from pymapmanager import mmMap", 
+            "title": "Install PyMapManager"
+        }, 
+        {
+            "location": "/install/#install-mmserverpy", 
+            "text": "The  mmserver.py  Flask server requires the following libraries  pip install flask\npip install flask-cors\npip install scikit-image", 
+            "title": "Install mmserver.py"
+        }, 
+        {
+            "location": "/install/#starting-the-server-for-local-use", 
+            "text": "This will work well if you are only going to be browsing the server from the same machine.  python mmserver.py  Point your browser to  http://127/0/0/1:5010", 
+            "title": "Starting the server for local use"
+        }, 
+        {
+            "location": "/install/#starting-the-server-for-wider-use", 
+            "text": "Get a debian system  Install nginx  put into /var/www/html/mmclient  index.html  /static/ folder  You can now access mmclient as http://nginx_server_ip/mmclient   run the Flask server with\n   gunicorn -b 0.0.0.0:5010 mmserver:app    modify mmserver.js to point to the Flask server (this is now just a rest server)    something like http://nginx_server_ip:5010    browse to http://nginx_server_ip/mmclient and browse some maps    This will serve the index.html using the mmserver.js file. The .js file will talk to the mmserver REST server via http://nginx_server_ip:5010  todo:  1) I can put mmserver.py plus /data/ into /var/www/html/mmserver.  2) Then point mmserver.js to http://cudmore.duckdns.org/mmserver  Starting the server with  python mmserver.py  will run Flask as a single  asynchronous  process. Problems will arise when multiple requests are made rapidly and the Flask server is still processing the last request. This mostly happens when using sliding z-projection images. To solve this, Flask needs to be run inside a  synchronous  web server such as gunicorn.  If needed, install gunicorn  pip install gunicorn  Start the Flask server inside gunicorn  # on osx (requires sudo)\nsudo gunicorn -bind 0.0.0.0:5010 mmserver:app\n\n# on debian\ngunicorn -b 0.0.0.0:5010 mmserver:app  On another machine, point a browser to the ip address of the machine running the server  http://ip:5010", 
+            "title": "Starting the server for wider use"
+        }, 
+        {
+            "location": "/install/#install-the-qt-desktop-app", 
+            "text": "Not done yet", 
+            "title": "Install the Qt desktop app"
         }
     ]
 }

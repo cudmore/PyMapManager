@@ -59,15 +59,15 @@ static_folder = './data'
 UPLOAD_FOLDER = './data'
 data_folder = './data'
 
+#myMap = None
+myMapList = {}
+
 #app = Flask(__name__, static_url_path='/data')
 #app = Flask(__name__, static_folder=static_folder)
 app = Flask(__name__)
 CORS(app)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['data_folder'] = data_folder
-
-#myMap = None
-myMapList = {}
 
 @app.route('/')
 def hello_world():
@@ -277,7 +277,7 @@ def getmaptracing(username, mapname):
 	mapsegment = request.args.get('mapsegment', '')
 	session = request.args.get('session', '')
 	
-	print 'getmaptracing() mapsegment:', mapsegment, mapsegment == None
+	# print 'getmaptracing() mapsegment:', mapsegment, mapsegment == None
 	
 	ret = {}
 	global myMapList
@@ -419,7 +419,7 @@ def get_image(username, mapname, timepoint, channel, slice):
 	print 'thefile:', thefile
 	'''
 	
-	return send_from_directory(tpdir, thefile, as_attachment=True, mimetype='image/tif')
+	return send_from_directory(tpdir, thefile, as_attachment=True, mimetype='image/png')
 
 # 20171227, returning a numpy array as a .png
 # for now, sliding z will be three images [slice-1, slice, slice+1]
@@ -441,6 +441,8 @@ def getslidingz(username, mapname, timepoint, channel, slice):
 	tpdir = safe_join(tpdir, 'tp' + str(timepoint))
 	tpdir = safe_join(app.config['data_folder'], tpdir)
 
+	#print '= getslidingz() tpdir:', tpdir
+	
 	# load the central image (we know it exists)
 	paddedStr = str(slice).zfill(4)
 	centralImageFile = tpdir + '/' + mapname + '_tp' + str(timepoint) + '_ch' + str(channel) + '_s' + paddedStr + '.png'
@@ -457,6 +459,7 @@ def getslidingz(username, mapname, timepoint, channel, slice):
 			continue
 		paddedStr = str(i).zfill(4)
 		currFile = tpdir + '/' + mapname + '_tp' + str(timepoint) + '_ch' + str(channel) + '_s' + paddedStr + '.png'
+		#print 'currFile:', currFile
 		if os.path.isfile(currFile):
 			currArray = imread(currFile) #, flatten=False, mode=None)
 			currArray = currArray.reshape((1,m,n))
@@ -465,6 +468,7 @@ def getslidingz(username, mapname, timepoint, channel, slice):
 				myArray = currArray
 			else:
 				myArray = np.vstack((myArray,currArray)) 
+				#myArray = np.vstack([myArray,currArray]) 
 	
 	# print 'myArray.shape:', myArray.shape
 			
@@ -476,9 +480,12 @@ def getslidingz(username, mapname, timepoint, channel, slice):
 	
 	# We make sure to use the PIL plugin here because not all skimage.io plugins
 	# support writing to a file object.
-	strIO = StringIO()
-	imsave(strIO, max_, plugin='pil', format_str='png')
-	strIO.seek(0)
+	try:
+		strIO = StringIO()
+		imsave(strIO, max_, plugin='pil', format_str='png')
+		strIO.seek(0)
+	except:
+		print '\r\r\t\tgetslidingz() exception\r\r'
 	return send_file(strIO, mimetype='image/png')
 
 @app.route('/getmaximage/<username>/<mapname>/<int:timepoint>/<int:channel>')
@@ -487,7 +494,7 @@ def get_maximage(username, mapname, timepoint, channel):
 	# http://127.0.0.1:5010/getimage/public/rr30a/0/1/5
 	# MAX_rr30a_tp0_ch2.jpg
 
-	print '=== get_maximage()', username, mapname, timepoint, channel
+	#print '=== get_maximage()', username, mapname, timepoint, channel
 
 	thefile = 'MAX_' + mapname + '_tp' + str(timepoint) + '_ch' + str(channel) + '.png'
 
@@ -496,10 +503,10 @@ def get_maximage(username, mapname, timepoint, channel):
 	tpdir = safe_join(tpdir, 'ingested')
 	tpdir = safe_join(app.config['data_folder'], tpdir)
 
-	print 'tpdir:', tpdir
-	print 'thefile:', thefile
+	#print 'tpdir:', tpdir
+	#print 'thefile:', thefile
 	
-	return send_from_directory(tpdir, thefile, as_attachment=True, mimetype='image/tif')
+	return send_from_directory(tpdir, thefile, as_attachment=True, mimetype='image/png')
 
 ############################################################
 # post
@@ -582,6 +589,7 @@ def data():
 	print csv_string
 	return csv_string
 
+'''
 @app.route("/plot")
 def simple():
 	# static figure using matplotlib
@@ -612,6 +620,7 @@ def simple():
 	response=make_response(png_output.getvalue())
 	response.headers['Content-Type'] = 'image/png'
 	return response
+'''
 
 @app.route("/plot2")
 def plot2():
@@ -638,6 +647,6 @@ if __name__ == '__main__':
 	#gettiff()
 	# host= '0.0.0.0' will run on servers network ip
 	#app.run(host='0.0.0.0', port=5010)
-	# this will run on localhost at port :5000
+	# this will run on localhost at port :5010
 	app.run(host='0.0.0.0',port=5010, debug=True)
 
