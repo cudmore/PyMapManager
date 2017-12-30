@@ -28,19 +28,19 @@
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
       <link rel="shortcut icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-0.17.1, mkdocs-material-2.0.4">
+      <meta name="generator" content="mkdocs-0.17.2, mkdocs-material-2.2.2">
     
     
       
-        <title>Release Notes - PyMapManager</title>
+        <title>Development Notes - PyMapManager</title>
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/application-709eec9410.css">
+      <link rel="stylesheet" href="../assets/stylesheets/application.7a4cdee3.css">
       
     
     
-      <script src="../assets/javascripts/modernizr-e826f8942a.js"></script>
+      <script src="../assets/javascripts/modernizr.1aa3b519.js"></script>
     
     
       
@@ -49,6 +49,8 @@
       
       <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     
+    
+      <link rel="stylesheet" href="../css/extra.css">
     
     
   </head>
@@ -81,14 +83,18 @@
         <label class="md-icon md-icon--menu md-header-nav__button" for="drawer"></label>
       </div>
       <div class="md-flex__cell md-flex__cell--stretch">
-        <span class="md-flex__ellipsis md-header-nav__title">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
           
             
-              
+              <span class="md-header-nav__topic">
+                PyMapManager
+              </span>
+              <span class="md-header-nav__topic">
+                Development Notes
+              </span>
             
-            Release Notes
           
-        </span>
+        </div>
       </div>
       <div class="md-flex__cell md-flex__cell--shrink">
         
@@ -148,6 +154,9 @@
 </header>
     
     <div class="md-container">
+      
+        
+      
       
       <main class="md-main">
         <div class="md-main__inner md-grid" data-md-component="container">
@@ -242,6 +251,42 @@
       
       
 
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5" type="checkbox" id="nav-5">
+    
+    <label class="md-nav__link" for="nav-5">
+      Examples
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-5">
+        Examples
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../examples/a-plotting-annotations/" title="a-plotting-annotations" class="md-nav__link">
+      a-plotting-annotations
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
   
 
 
@@ -251,11 +296,11 @@
     
     
       <label class="md-nav__link md-nav__link--active" for="toc">
-        Release Notes
+        Development Notes
       </label>
     
-    <a href="./" title="Release Notes" class="md-nav__link md-nav__link--active">
-      Release Notes
+    <a href="./" title="Development Notes" class="md-nav__link md-nav__link--active">
+      Development Notes
     </a>
     
       
@@ -283,6 +328,20 @@
         <li class="md-nav__item">
   <a href="#synchronize-with-unison" title="Synchronize with Unison" class="md-nav__link">
     Synchronize with Unison
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#export-ipython-notebooks-to-html" title="Export iPython notebooks to html" class="md-nav__link">
+    Export iPython notebooks to html
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#search-and-replace-across-a-number-of-files" title="Search and replace across a number of files" class="md-nav__link">
+    Search and replace across a number of files
   </a>
   
 </li>
@@ -335,6 +394,20 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#export-ipython-notebooks-to-html" title="Export iPython notebooks to html" class="md-nav__link">
+    Export iPython notebooks to html
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#search-and-replace-across-a-number-of-files" title="Search and replace across a number of files" class="md-nav__link">
+    Search and replace across a number of files
+  </a>
+  
+</li>
+      
       
       
     </ul>
@@ -350,7 +423,7 @@
               
                 
                 
-                  <h1>Release Notes</h1>
+                  <h1>Development Notes</h1>
                 
                 <h2 id="to-do">To do</h2>
 <ol>
@@ -394,6 +467,27 @@ ignore = Path .idea
 
 #servercmd=/home1/robertcu/unison
 </code></pre>
+
+<h2 id="export-ipython-notebooks-to-html">Export iPython notebooks to html</h2>
+<pre><code>jupyter nbconvert --ExecutePreprocessor.kernel_name=python3 --to html --execute --ExecutePreprocessor.timeout=120
+
+jupyter nbconvert --ExecutePreprocessor.kernel_name=python2 --to html --execute --ExecutePreprocessor.timeout=120
+</code></pre>
+
+<h2 id="search-and-replace-across-a-number-of-files">Search and replace across a number of files</h2>
+<p>search for <code>windows</code> and replace with <code>linux</code></p>
+<pre><code>grep -rl 'windows' ./ | xargs sed -i 's/windows/linux/g'
+
+grep -rl 'windows' ./ | xargs sed -i "" 's/windows/linux/g'
+
+find ./ -type f -exec sed -i "" "s/oldstring/new string/g" {} \;
+</code></pre>
+<p>search all files in current directory <code>./</code> for <code></code> and replace with ``</p>
+<pre><code>grep -rl '    ' ./ | xargs sed -i "" 's/    //g'
+</code></pre>
+<p>from /PyMapMAnager/docs, search for '    ' and replace it with ''</p>
+<pre><code>grep -rl '    ' ./docs/examples | xargs sed -i "" 's/    //g'
+</code></pre>
                 
                   
                 
@@ -412,7 +506,7 @@ ignore = Path .idea
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid">
         
-          <a href="../rest-api/" title="REST API" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../examples/a-plotting-annotations/" title="a-plotting-annotations" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-flex__cell md-flex__cell--shrink">
               <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
             </div>
@@ -421,7 +515,7 @@ ignore = Path .idea
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                REST API
+                a-plotting-annotations
               </span>
             </div>
           </a>
@@ -435,9 +529,9 @@ ignore = Path .idea
       <div class="md-footer-copyright">
         
         powered by
-        <a href="http://www.mkdocs.org" title="MkDocs">MkDocs</a>
+        <a href="http://www.mkdocs.org">MkDocs</a>
         and
-        <a href="http://squidfunk.github.io/mkdocs-material/" title="Material for MkDocs">
+        <a href="https://squidfunk.github.io/mkdocs-material/">
           Material for MkDocs</a>
       </div>
       
@@ -449,9 +543,9 @@ ignore = Path .idea
       
     </div>
     
-      <script src="../assets/javascripts/application-8e4952e681.js"></script>
+      <script src="../assets/javascripts/application.6cdc17f0.js"></script>
       
-      <script>app.initialize({version:"0.17.1",url:{base:".."}})</script>
+      <script>app.initialize({version:"0.17.2",url:{base:".."}})</script>
       
     
     

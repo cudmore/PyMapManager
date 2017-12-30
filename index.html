@@ -28,7 +28,7 @@
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
       <link rel="shortcut icon" href="./assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-0.17.1, mkdocs-material-2.0.4">
+      <meta name="generator" content="mkdocs-0.17.2, mkdocs-material-2.2.2">
     
     
       
@@ -36,11 +36,11 @@
       
     
     
-      <link rel="stylesheet" href="./assets/stylesheets/application-709eec9410.css">
+      <link rel="stylesheet" href="./assets/stylesheets/application.7a4cdee3.css">
       
     
     
-      <script src="./assets/javascripts/modernizr-e826f8942a.js"></script>
+      <script src="./assets/javascripts/modernizr.1aa3b519.js"></script>
     
     
       
@@ -49,6 +49,8 @@
       
       <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     
+    
+      <link rel="stylesheet" href="./css/extra.css">
     
     
   </head>
@@ -81,14 +83,18 @@
         <label class="md-icon md-icon--menu md-header-nav__button" for="drawer"></label>
       </div>
       <div class="md-flex__cell md-flex__cell--stretch">
-        <span class="md-flex__ellipsis md-header-nav__title">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
           
             
-              
+              <span class="md-header-nav__topic">
+                PyMapManager
+              </span>
+              <span class="md-header-nav__topic">
+                Home
+              </span>
             
-            Home
           
-        </span>
+        </div>
       </div>
       <div class="md-flex__cell md-flex__cell--shrink">
         
@@ -148,6 +154,9 @@
 </header>
     
     <div class="md-container">
+      
+        
+      
       
       <main class="md-main">
         <div class="md-main__inner md-grid" data-md-component="container">
@@ -226,8 +235,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#pymapmanager-server" title="PyMapManager server" class="md-nav__link">
-    PyMapManager server
+  <a href="#pymapmanager-clientserver" title="PyMapManager client/server" class="md-nav__link">
+    PyMapManager client/server
   </a>
   
     <nav class="md-nav">
@@ -309,9 +318,45 @@
       
 
 
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5" type="checkbox" id="nav-5">
+    
+    <label class="md-nav__link" for="nav-5">
+      Examples
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-5">
+        Examples
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
   <li class="md-nav__item">
-    <a href="release-notes/" title="Release Notes" class="md-nav__link">
-      Release Notes
+    <a href="examples/a-plotting-annotations/" title="a-plotting-annotations" class="md-nav__link">
+      a-plotting-annotations
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="dev-notes/" title="Development Notes" class="md-nav__link">
+      Development Notes
     </a>
   </li>
 
@@ -342,8 +387,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#pymapmanager-server" title="PyMapManager server" class="md-nav__link">
-    PyMapManager server
+  <a href="#pymapmanager-clientserver" title="PyMapManager client/server" class="md-nav__link">
+    PyMapManager client/server
   </a>
   
     <nav class="md-nav">
@@ -392,18 +437,16 @@
                 
                   <h1>Home</h1>
                 
-                <p>PyMapManager is a Python package to analyze time-series image stacks.</p>
-<p>PyMapManager opens annotations created with the Igor Pro version of <a href="http://blog.cudmore.io/mapmanager">Map Manager</a>. Allowing additional analysis to easily be performed.</p>
-<p>There are three components to PyMapManager:</p>
-<ul>
-<li>Python Package</li>
-<li>Server</li>
-<li>Desktop application</li>
-</ul>
+                <p>PyMapManager is a suite of Python tools to analyze time-series image stacks.</p>
+<p>PyMapManager opens annotations created with the Igor Pro version of <a href="http://blog.cudmore.io/mapmanager">Map Manager</a>. Allowing additional visualization and analysis to easily be performed.</p>
+<p>There are three components to PyMapManager: a Python package, a data client/server, and a desktop application.</p>
 <h2 id="pymapmanager-python-package">PyMapManager Python package</h2>
-<p>See the <a href="https://github.com/cudmore/PyMapManager/tree/master/PyMapManager/examples">/examples</a> folder in the main GitHub repository for example Python code to easily perform additional analysis. Please also see the <a href="http://pymapmanager.readthedocs.io/en/latest/">API Documentation</a>.</p>
-<h2 id="pymapmanager-server">PyMapManager server</h2>
-<p>The PyMapManager server allows web-based browsing of annotations and stacks. See <a href="https://github.com/cudmore/PyMapManager/tree/master/mmserver">server documentation</a> for additional information.</p>
+<p>To get started writing Python code to interface with Map Manager analysis, see the iPython notebooks in <a href="https://github.com/cudmore/PyMapManager/tree/master/PyMapManager/examples">/examples</a>.</p>
+<p>For full class documentation, see the <a href="http://pymapmanager.readthedocs.io/en/latest/">API Documentation</a>.</p>
+<h2 id="pymapmanager-clientserver">PyMapManager client/server</h2>
+<p>The PyMapManager server provides a web based <a href="./rest-api">REST API</a> to retrieve Map Manager annotations and images.</p>
+<p>The PyMapManager client provides a web-based front-end to browse annotations and images off the server.</p>
+<p>We have an <a href="http://robertcudmore.org/mmclient">example client/server</a> to see this in action.</p>
 <h3 id="browsing-annotations">Browsing annotations</h3>
 <p><IMG SRC="mmserver_purejs.png"></p>
 <h3 id="browsing-annotations-in-time-series-stacks">Browsing annotations in time series stacks</h3>
@@ -453,9 +496,9 @@
       <div class="md-footer-copyright">
         
         powered by
-        <a href="http://www.mkdocs.org" title="MkDocs">MkDocs</a>
+        <a href="http://www.mkdocs.org">MkDocs</a>
         and
-        <a href="http://squidfunk.github.io/mkdocs-material/" title="Material for MkDocs">
+        <a href="https://squidfunk.github.io/mkdocs-material/">
           Material for MkDocs</a>
       </div>
       
@@ -467,9 +510,9 @@
       
     </div>
     
-      <script src="./assets/javascripts/application-8e4952e681.js"></script>
+      <script src="./assets/javascripts/application.6cdc17f0.js"></script>
       
-      <script>app.initialize({version:"0.17.1",url:{base:"."}})</script>
+      <script>app.initialize({version:"0.17.2",url:{base:"."}})</script>
       
     
     

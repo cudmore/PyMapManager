@@ -28,7 +28,7 @@
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
       <link rel="shortcut icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-0.17.1, mkdocs-material-2.0.4">
+      <meta name="generator" content="mkdocs-0.17.2, mkdocs-material-2.2.2">
     
     
       
@@ -36,11 +36,11 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/application-709eec9410.css">
+      <link rel="stylesheet" href="../assets/stylesheets/application.7a4cdee3.css">
       
     
     
-      <script src="../assets/javascripts/modernizr-e826f8942a.js"></script>
+      <script src="../assets/javascripts/modernizr.1aa3b519.js"></script>
     
     
       
@@ -49,6 +49,8 @@
       
       <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     
+    
+      <link rel="stylesheet" href="../css/extra.css">
     
     
   </head>
@@ -81,14 +83,18 @@
         <label class="md-icon md-icon--menu md-header-nav__button" for="drawer"></label>
       </div>
       <div class="md-flex__cell md-flex__cell--stretch">
-        <span class="md-flex__ellipsis md-header-nav__title">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
           
             
-              
+              <span class="md-header-nav__topic">
+                PyMapManager
+              </span>
+              <span class="md-header-nav__topic">
+                Install client/server
+              </span>
             
-            Install client/server
           
-        </span>
+        </div>
       </div>
       <div class="md-flex__cell md-flex__cell--shrink">
         
@@ -148,6 +154,9 @@
 </header>
     
     <div class="md-container">
+      
+        
+      
       
       <main class="md-main">
         <div class="md-main__inner md-grid" data-md-component="container">
@@ -305,14 +314,21 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#access-local-servers" title="Access local servers" class="md-nav__link">
+    Access local servers
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-manually-start-both-client-and-server-servers" title="3) Manually start both client and server servers" class="md-nav__link">
-    3) Manually start both client and server servers
+  <a href="#3-manually-start-both-client-and-server" title="3) Manually start both client and server" class="md-nav__link">
+    3) Manually start both client and server
   </a>
   
     <nav class="md-nav">
@@ -326,8 +342,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#start-the-mmclientindexhtml-client-server" title="Start the mmclient/index.html client server" class="md-nav__link">
-    Start the mmclient/index.html client server
+  <a href="#start-the-mmclientindexhtml-client" title="Start the mmclient/index.html client" class="md-nav__link">
+    Start the mmclient/index.html client
   </a>
   
 </li>
@@ -338,8 +354,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4-running-the-clientserver-on-a-linux-system-with-an-existing-web-server" title="4) Running the client/server on a Linux system with an existing web-server" class="md-nav__link">
-    4) Running the client/server on a Linux system with an existing web-server
+  <a href="#4-running-the-clientserver-on-a-linux-system-with-a-pre-existing-web-server" title="4) Running the client/server on a Linux system with a pre-existing web-server" class="md-nav__link">
+    4) Running the client/server on a Linux system with a pre-existing web-server
   </a>
   
 </li>
@@ -370,9 +386,45 @@
       
 
 
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5" type="checkbox" id="nav-5">
+    
+    <label class="md-nav__link" for="nav-5">
+      Examples
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-5">
+        Examples
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
   <li class="md-nav__item">
-    <a href="../release-notes/" title="Release Notes" class="md-nav__link">
-      Release Notes
+    <a href="../examples/a-plotting-annotations/" title="a-plotting-annotations" class="md-nav__link">
+      a-plotting-annotations
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../dev-notes/" title="Development Notes" class="md-nav__link">
+      Development Notes
     </a>
   </li>
 
@@ -458,14 +510,21 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#access-local-servers" title="Access local servers" class="md-nav__link">
+    Access local servers
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-manually-start-both-client-and-server-servers" title="3) Manually start both client and server servers" class="md-nav__link">
-    3) Manually start both client and server servers
+  <a href="#3-manually-start-both-client-and-server" title="3) Manually start both client and server" class="md-nav__link">
+    3) Manually start both client and server
   </a>
   
     <nav class="md-nav">
@@ -479,8 +538,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#start-the-mmclientindexhtml-client-server" title="Start the mmclient/index.html client server" class="md-nav__link">
-    Start the mmclient/index.html client server
+  <a href="#start-the-mmclientindexhtml-client" title="Start the mmclient/index.html client" class="md-nav__link">
+    Start the mmclient/index.html client
   </a>
   
 </li>
@@ -491,8 +550,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4-running-the-clientserver-on-a-linux-system-with-an-existing-web-server" title="4) Running the client/server on a Linux system with an existing web-server" class="md-nav__link">
-    4) Running the client/server on a Linux system with an existing web-server
+  <a href="#4-running-the-clientserver-on-a-linux-system-with-a-pre-existing-web-server" title="4) Running the client/server on a Linux system with a pre-existing web-server" class="md-nav__link">
+    4) Running the client/server on a Linux system with a pre-existing web-server
   </a>
   
 </li>
@@ -515,7 +574,7 @@
                   <h1>Install client/server</h1>
                 
                 <h2 id="web-based-browsing">Web based browsing</h2>
-<p>Once the PyMapManager client/server servers are running, there is a point and click web interface to browse Map Manager annotations and images.</p>
+<p>Once the PyMapManager <code>mmclient</code> and <code>mmserver</code> are running, there is a point and click web interface to browse Map Manager annotations and images.</p>
 <h3 id="browsing-annotations">Browsing annotations</h3>
 <p><IMG SRC="../img/mmserver_purejs.png"></p>
 <h3 id="browsing-images">Browsing images</h3>
@@ -534,7 +593,7 @@ pip install flask-cors
 pip install scikit-image
 </code></pre>
 
-<p>Running the servers requires <code>gunicorn</code> for the mmserver Flask REST server and <code>http-server</code> for the mmclient server.</p>
+<p>Running the servers requires <code>gunicorn</code> for the <code>mmserver</code> Flask REST server and <code>http-server</code> for the <code>mmclient</code> server.</p>
 <pre><code>pip install gunicorn
 
 # this assumes you have node and npm install
@@ -543,8 +602,8 @@ npm install http-server -g
 
 <p>This is only one way of running these two servers. If you want to run them a different way you are free to do this.</p>
 <h2 id="2-starting-the-clientserver-for-local-use-basic">2) Starting the client/server for local use (basic)</h2>
-<p>Start both unicorn and http-server with our <code>PyMapManager/serve_local.sh</code> script.</p>
-<p>This will work well if you are only going to be browsing the client/server from the same machine. This will work on MacOS (and Linux).</p>
+<p>Start both unicorn and http-server with our <a href="https://github.com/cudmore/PyMapManager/blob/master/serve_local.sh"><code>PyMapManager/serve_local.sh</code></a> script.</p>
+<p>This will work well if you are only going to be browsing the client/server from the same machine (e.g. localhost). This will work on MacOS and Linux.</p>
 <h3 id="start-the-servers-with">Start the servers with</h3>
 <pre><code>cd PyMapManager
 ./serve_local.sh start
@@ -555,28 +614,46 @@ npm install http-server -g
 ./serve_local.sh stop
 </code></pre>
 
-<h2 id="3-manually-start-both-client-and-server-servers">3) Manually start both client and server servers</h2>
+<h3 id="access-local-servers">Access local servers</h3>
+<p>The front-end client can be accessed at</p>
+<pre><code>http://localhost:8080
+</code></pre>
+
+<p>The back-end REST server can be accessed at</p>
+<pre><code>http://localhost:5010/help
+</code></pre>
+
+<h2 id="3-manually-start-both-client-and-server">3) Manually start both client and server</h2>
 <h3 id="start-the-mmservermmserverpy-rest-server">Start the <code>mmserver/mmserver.py</code> REST server</h3>
 <pre><code>cd mmserver
 python mmserver.py
 </code></pre>
 
-<p>Test this out by pointing a web browser to</p>
-<pre><code>http://127.0.0.1:5010/help
+<p>Alternatively, start the <code>mmserver/mmserver.py</code> REST server with <code>gunicorn</code></p>
+<p>Install <code>gunicorn</code></p>
+<pre><code>pip install gunicorn
+</code></pre>
+<p>On OSX (requires sudo)</p>
+<pre><code>cd mmserver
+sudo gunicorn -b 0.0.0.0:5010 mmserver:app
 </code></pre>
 
-<p>Alternatively, start the <code>mmserver.py</code> REST server with gunicorn</p>
+<p>On Linux (no sudo)</p>
 <pre><code>cd mmserver
-gunicorn -b 127.0.0.1:5010 mmserver:app
+gunicorn -b 0.0.0.0:5010 mmserver:app
 </code></pre>
 
 <p>Wrapping the <code>mmserver</code> to run inside of gunicorn provides a <strong>synchronous</strong> web server. This should handle fast interaction with the web interface much better than the <strong>asynchronous</strong> version provided by <code>python mmserver.py</code>. This is most noticeable when viewing linked sliding z-projections.</p>
-<h3 id="start-the-mmclientindexhtml-client-server">Start the <code>mmclient/index.html</code> client server</h3>
+<h3 id="start-the-mmclientindexhtml-client">Start the <code>mmclient/index.html</code> client</h3>
 <p>This is assuming you have node and npm installed. In addition, we are assuming you have used npm to install http-server with <code>npm install http-server -g</code>.</p>
-<p>Make sure <code>mmclient/static/mmserver.js</code> points to the REST interface. This file should have</p>
+<p>Make sure <code>mmclient/static/mmserver.js</code> points to the <strong>localhost</strong> REST interface. This file should have</p>
 <pre><code>serverurl = 'http://127.0.0.1:5010/'
 </code></pre>
 
+<p>Install http-server</p>
+<pre><code># this assumes you have node and npm install
+npm install http-server -g
+</code></pre>
 <p>Run the mmclient client server</p>
 <pre><code>cd mmclient
 http-server
@@ -591,10 +668,10 @@ Hit CTRL-C to stop the server
 </code></pre>
 
 <p>You can then browse the client server at</p>
-<pre><code>http://127.0.0.1:8080
+<pre><code>http://localhost:8080
 </code></pre>
 
-<h2 id="4-running-the-clientserver-on-a-linux-system-with-an-existing-web-server">4) Running the client/server on a Linux system with an existing web-server</h2>
+<h2 id="4-running-the-clientserver-on-a-linux-system-with-a-pre-existing-web-server">4) Running the client/server on a Linux system with a pre-existing web-server</h2>
 <p>This requires a pre-existing web server to serve both the client server <code>mmclient/index.html</code> and the Python Flask REST server <code>mmserver/mmserver.py</code>.</p>
 <p>We have used <code>nginx</code> with success.</p>
 <ul>
@@ -642,7 +719,7 @@ gunicorn -b 0.0.0.0:5010 mmserver:app
 <pre><code>http://nginx_server_ip/mmclient
 </code></pre>
 
-<p>This will serve the <code>mmclient/index.html</code> and use the <code>mmclient/static/mmserver.js</code> file. The <code>mmclient/static/mmserver.js</code> file will grab annotations and images from the <code>mmserver/mmserver.py</code> Python Flask REST server via <code>http://nginx_server_ip:5010</code>.</p>
+<p>This will serve the <code>mmclient/index.html</code> and use the <code>mmclient/static/mmserver.js</code> file. The <code>mmclient/static/mmserver.js</code> file will grab annotations and images from the <code>mmserver/mmserver.py</code> REST server via <code>http://nginx_server_ip:5010</code>.</p>
                 
                   
                 
@@ -698,9 +775,9 @@ gunicorn -b 0.0.0.0:5010 mmserver:app
       <div class="md-footer-copyright">
         
         powered by
-        <a href="http://www.mkdocs.org" title="MkDocs">MkDocs</a>
+        <a href="http://www.mkdocs.org">MkDocs</a>
         and
-        <a href="http://squidfunk.github.io/mkdocs-material/" title="Material for MkDocs">
+        <a href="https://squidfunk.github.io/mkdocs-material/">
           Material for MkDocs</a>
       </div>
       
@@ -712,9 +789,9 @@ gunicorn -b 0.0.0.0:5010 mmserver:app
       
     </div>
     
-      <script src="../assets/javascripts/application-8e4952e681.js"></script>
+      <script src="../assets/javascripts/application.6cdc17f0.js"></script>
       
-      <script>app.initialize({version:"0.17.1",url:{base:".."}})</script>
+      <script>app.initialize({version:"0.17.2",url:{base:".."}})</script>
       
     
     
