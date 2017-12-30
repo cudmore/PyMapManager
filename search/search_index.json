@@ -187,7 +187,7 @@
         }, 
         {
             "location": "/release-notes/", 
-            "text": "To do\n\n\n\n\n[done] Generate API documentation from doc strings\n\n\n[done] Load individual slices dynamically (how to query number of slices in .tif file?)\n\n\n[done] Use the mmserver REST API to make a standalone web-app using Flask, Angular, and Plotly\n\n\n[done] Implement visualization of a spine run in mmserver.\n\n\nMake mmserver link all plot, clicking in one will highlight in other.\n\n\nmmserver needs to use \nmap pool\n so publication data can easily be presented.\n\n\n\n\nMkDocs\n\n\nServe locally\n\n\ncd ~/Dropbox/PyMapManager/docs\nmkdocs serve\n\n\n\n\nPush to github. This needs to be pushed from local github repo, not Dropbox repo.\n\n\ncd ~/Sites/PyMapManager/docs\nmkdocs gh-deploy --clean", 
+            "text": "To do\n\n\n\n\n[done] Generate API documentation from doc strings\n\n\n[done] Load individual slices dynamically (how to query number of slices in .tif file?)\n\n\n[done] Use the mmserver REST API to make a standalone web-app using Flask, Angular, and Plotly\n\n\n[done] Implement visualization of a spine run in mmserver.\n\n\nMake mmserver link all plot, clicking in one will highlight in other.\n\n\nmmserver needs to use \nmap pool\n so publication data can easily be presented.\n\n\n\n\nMkDocs\n\n\nServe locally\n\n\ncd ~/Dropbox/PyMapManager/docs\nmkdocs serve\n\n\n\n\nPush to github. This needs to be pushed from local github repo, not Dropbox repo.\n\n\ncd ~/Sites/PyMapManager/docs\nmkdocs gh-deploy --clean\n\n\n\n\nSynchronize with Unison\n\n\n# Unison preferences file\nroot = /Users/cudmore/Dropbox/PyMapManager/\nroot = /Users/cudmore/Sites/PyMapManager\n\nignore = Name .DS_Store\nignore = Name *.DS_Store\nignore = Name *.pyc\nignore = Name *.tif\nignore = Name *.egg-info\nignore = Path .git\nignore = Path .idea\n\n#when synchronizing between platforms or hdd formats\n#rsrc = false\n#perms = 0\n\n# Be fast even on Windows\n#fastcheck = yes\n\n#servercmd=/home1/robertcu/unison", 
             "title": "Release Notes"
         }, 
         {
@@ -199,6 +199,11 @@
             "location": "/release-notes/#mkdocs", 
             "text": "Serve locally  cd ~/Dropbox/PyMapManager/docs\nmkdocs serve  Push to github. This needs to be pushed from local github repo, not Dropbox repo.  cd ~/Sites/PyMapManager/docs\nmkdocs gh-deploy --clean", 
             "title": "MkDocs"
+        }, 
+        {
+            "location": "/release-notes/#synchronize-with-unison", 
+            "text": "# Unison preferences file\nroot = /Users/cudmore/Dropbox/PyMapManager/\nroot = /Users/cudmore/Sites/PyMapManager\n\nignore = Name .DS_Store\nignore = Name *.DS_Store\nignore = Name *.pyc\nignore = Name *.tif\nignore = Name *.egg-info\nignore = Path .git\nignore = Path .idea\n\n#when synchronizing between platforms or hdd formats\n#rsrc = false\n#perms = 0\n\n# Be fast even on Windows\n#fastcheck = yes\n\n#servercmd=/home1/robertcu/unison", 
+            "title": "Synchronize with Unison"
         }
     ]
 }

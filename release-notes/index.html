@@ -28,7 +28,7 @@
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
       <link rel="shortcut icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-0.17.2, mkdocs-material-2.2.2">
+      <meta name="generator" content="mkdocs-0.17.1, mkdocs-material-2.0.4">
     
     
       
@@ -36,11 +36,11 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/application.7a4cdee3.css">
+      <link rel="stylesheet" href="../assets/stylesheets/application-709eec9410.css">
       
     
     
-      <script src="../assets/javascripts/modernizr.1aa3b519.js"></script>
+      <script src="../assets/javascripts/modernizr-e826f8942a.js"></script>
     
     
       
@@ -81,18 +81,14 @@
         <label class="md-icon md-icon--menu md-header-nav__button" for="drawer"></label>
       </div>
       <div class="md-flex__cell md-flex__cell--stretch">
-        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+        <span class="md-flex__ellipsis md-header-nav__title">
           
             
-              <span class="md-header-nav__topic">
-                PyMapManager
-              </span>
-              <span class="md-header-nav__topic">
-                Release Notes
-              </span>
+              
             
+            Release Notes
           
-        </div>
+        </span>
       </div>
       <div class="md-flex__cell md-flex__cell--shrink">
         
@@ -131,7 +127,7 @@
   
 
 
-  <a href="http://github.com/cudmore/PyMapManager/" title="Go to repository" class="md-source" data-md-source="github">
+  <a href="http://github.com/cudmore/PyMapManager" title="Go to repository" class="md-source" data-md-source="github">
     
       <div class="md-source__icon">
         <svg viewBox="0 0 24 24" width="24" height="24">
@@ -152,9 +148,6 @@
 </header>
     
     <div class="md-container">
-      
-        
-      
       
       <main class="md-main">
         <div class="md-main__inner md-grid" data-md-component="container">
@@ -180,7 +173,7 @@
   
 
 
-  <a href="http://github.com/cudmore/PyMapManager/" title="Go to repository" class="md-source" data-md-source="github">
+  <a href="http://github.com/cudmore/PyMapManager" title="Go to repository" class="md-source" data-md-source="github">
     
       <div class="md-source__icon">
         <svg viewBox="0 0 24 24" width="24" height="24">
@@ -287,6 +280,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#synchronize-with-unison" title="Synchronize with Unison" class="md-nav__link">
+    Synchronize with Unison
+  </a>
+  
+</li>
+      
       
       
     </ul>
@@ -328,6 +328,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#synchronize-with-unison" title="Synchronize with Unison" class="md-nav__link">
+    Synchronize with Unison
+  </a>
+  
+</li>
+      
       
       
     </ul>
@@ -341,8 +348,6 @@
           <div class="md-content">
             <article class="md-content__inner md-typeset">
               
-                
-                  <a href="http://github.com/cudmore/PyMapManager/edit/master/docs/release-notes.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
                 
                 
                   <h1>Release Notes</h1>
@@ -365,6 +370,29 @@ mkdocs serve
 <p>Push to github. This needs to be pushed from local github repo, not Dropbox repo.</p>
 <pre><code>cd ~/Sites/PyMapManager/docs
 mkdocs gh-deploy --clean
+</code></pre>
+
+<h2 id="synchronize-with-unison">Synchronize with Unison</h2>
+<pre><code># Unison preferences file
+root = /Users/cudmore/Dropbox/PyMapManager/
+root = /Users/cudmore/Sites/PyMapManager
+
+ignore = Name .DS_Store
+ignore = Name *.DS_Store
+ignore = Name *.pyc
+ignore = Name *.tif
+ignore = Name *.egg-info
+ignore = Path .git
+ignore = Path .idea
+
+#when synchronizing between platforms or hdd formats
+#rsrc = false
+#perms = 0
+
+# Be fast even on Windows
+#fastcheck = yes
+
+#servercmd=/home1/robertcu/unison
 </code></pre>
                 
                   
@@ -407,9 +435,9 @@ mkdocs gh-deploy --clean
       <div class="md-footer-copyright">
         
         powered by
-        <a href="http://www.mkdocs.org">MkDocs</a>
+        <a href="http://www.mkdocs.org" title="MkDocs">MkDocs</a>
         and
-        <a href="https://squidfunk.github.io/mkdocs-material/">
+        <a href="http://squidfunk.github.io/mkdocs-material/" title="Material for MkDocs">
           Material for MkDocs</a>
       </div>
       
@@ -421,9 +449,9 @@ mkdocs gh-deploy --clean
       
     </div>
     
-      <script src="../assets/javascripts/application.6cdc17f0.js"></script>
+      <script src="../assets/javascripts/application-8e4952e681.js"></script>
       
-      <script>app.initialize({version:"0.17.2",url:{base:".."}})</script>
+      <script>app.initialize({version:"0.17.1",url:{base:".."}})</script>
       
     
     
