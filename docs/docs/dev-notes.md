@@ -75,3 +75,39 @@ search all files in current directory `./` for `    ` and replace with ``
 from /PyMapMAnager/docs, search for '    ' and replace it with ''
 
 	grep -rl '    ' ./docs/examples | xargs sed -i "" 's/    //g'
+	
+## Pushing changes to home Debian server
+
+ 1. Use Unison to update entire PyMapManager folder (pymapmanager, mmclient, mmserver)
+ 
+ This lives in `/home/cudmore/PyMapManager`
+ 
+ 2. If I changed core soure code, make sure `pymapmanager` is updated
+ 
+```
+cd
+pip uninstall PyMapManager
+pip install -e PyMapManager
+```
+
+ 3. Copy mmclient into /var/www/html
+ 
+```
+cd
+cd PyMapManager
+sudo cp -fr mmclient /var/www/html/
+```
+
+ 4. Run mmserver/ in screen using gunicorn
+ 
+Make sure it is not already running with `screen -r`. Or with `ps -aux | grep gunicorn`
+ 
+```
+cd
+cd PyMapManager/mmserver
+screen
+gunicorn -b 0.0.0.0:5010 mmserver:app
+```
+
+
+## Pushing changes in mmclient/ to robertcudmore.org

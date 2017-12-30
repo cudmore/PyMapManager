@@ -13,11 +13,11 @@ For this to work, the back-end `mmserver` REST server must also be running. See 
 - `mmclient/static/mmclient.js` : Angular Javascript code that communicates with the back-end `mmserver` REST server to retrieve data, plot annotations, and display images.
 
 
-## Configure `mmclient/static/mmserver.js`
+## Configure the client
 
-By default, `mmclient/static/mmserver.js` will try to retrieve data from a publicly available `mmserver` at `http://cudmore.duckdns.org:5010`.
+By default, `mmclient/static/mmserver.js` will retrieve data from a publicly available `mmserver` at `http://cudmore.duckdns.org:5010`.
 
-If you want to run the `mmserver` on localhost, you need to modify the `mmclient/static/mmserver.js` file.
+If you want to run the `mmserver` on localhost, you need to modify the `mmclient/static/mmserver.js` file. MAke sure `serverurl` is as follows...
 
 ```
 serverurl = 'http://127.0.0.1:5010/'
