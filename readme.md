@@ -3,6 +3,14 @@ PyMapManager is Python package to load and visualize time-series annotations cre
 
 Please see the main [PyMapManager](http://blog.cudmore.io/PyMapManager) documentation website.
 
+## REpository contents
+
+ - pymapmanager/ : Core Python package.
+ - examples/ : Jupyter notebooks with example usage of PyMapManager.
+ - mmserver/ : A Python Flask server that provides a REST interface to easily retreive Map MAnager annotations and images.
+ - mmclient/ : A user friendly front-end Javascript client to plot annotations and images from a mmserver REST server.
+ - mmio/ : Helper class allowing pymapmanager Python code to load annotations and images from a mmserver REST server.
+ 
 ## PyMapManager Python package
 
 Python package to open and analyze Map Manager files. Please see the <A HREF="http://pymapmanager.readthedocs.io/en/latest/">API Documentation</A> and a backup copy <A HREF="http://robertcudmore.org/mapmanager/PyMapManager/docs/">here</A>. See the <A HREF="https://github.com/cudmore/PyMapManager/tree/master/PyMapManager/examples">PyMapManager/examples/</A> folder for iPython notebooks with code examples.

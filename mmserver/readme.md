@@ -2,9 +2,9 @@ This is Python code to run a Flask server that provides a REST interface allowin
 
 Please see the main [PyMapManager](http://blog.cudmore.io/PyMapManager) documentation website.
 
-For a full list of REST aPI endpoint, please see the full REST API [documentaiton](http://blog.cudmore.io/PyMapManager/rest-api/)
+This REST server is accessed by the Javascript client in [mmclient](https://github.com/cudmore/PyMapManager/tree/master/mmclient).
 
-Also see [mmio](https://github.com/cudmore/PyMapManager/tree/master/PyMapManager/mmio) to seemlesly load Map Manager annotations from the REST server using Python.
+See [here](http://blog.cudmore.io/PyMapManager/rest-api/) For a full list of REST API endpoints.
 
 ## Running the server
 
@@ -33,6 +33,10 @@ On Linux (no sudo needed)
 	
 ## Using the REST API in a scripting language
 
+### In Javascript
+
+See the [mmclient](https://github.com/cudmore/PyMapManager/tree/master/mmclient).
+
 ### In Python
 
 ```python
@@ -47,6 +51,8 @@ mytracing = json.load(urllib2.urlopen("url"))
 import matplotlib.pyplot as plt
 plt.plot(mytracing['x'],mytracing['y'])
 ```
+
+Also see [mmio](https://github.com/cudmore/PyMapManager/tree/master/PyMapManager/mmio) to seemlesly load Map Manager annotations from the REST server using Python.
 
 ### In Matlab
 
