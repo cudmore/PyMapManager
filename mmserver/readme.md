@@ -1,10 +1,10 @@
 This is Python code to run a Flask server that provides a REST interface allowing Map Manager annotations and images to be retrieved.
 
-Please see the main [PyMapManager][PyMapManager] documentation website.
+Please see the main [PyMapManager](http://blog.cudmore.io/PyMapManager) documentation website.
 
-For a full list of REST aPI endpoint, please see the full REST API [documentaiton][restapi]
+For a full list of REST aPI endpoint, please see the full REST API [documentaiton](http://blog.cudmore.io/PyMapManager/rest-api/)
 
-Also see [mmio][mmio] to seemlesly load Map Manager annotations from the REST server using Python.
+Also see [mmio](https://github.com/cudmore/PyMapManager/tree/master/PyMapManager/mmio) to seemlesly load Map Manager annotations from the REST server using Python.
 
 ## Running the server
 
@@ -56,8 +56,3 @@ myimage = webread(url);
 imshow(myimage)
 ```
 
-[1]: http://127.0.0.1:5010/public/rr30a/header
-[2]: http://cudmore.duckdns.org
-[mmio]: https://github.com/cudmore/PyMapManager/tree/master/PyMapManager/mmio
-[PyMapManager]: http://blog.cudmore.io/PyMapManager/
-[restapi]: http://blog.cudmore.io/PyMapManager/rest-api/

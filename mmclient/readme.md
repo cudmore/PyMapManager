@@ -1,8 +1,8 @@
 This is html/javascript code that can be served using a web-server and then accessed as a user-friendly web-page.
 
-The dynamic content is generated using a combination of [Javascript][javascript], [Angular JS][angular], and [Plotly JS][plotly].
+The dynamic content is generated using a combination of [Javascript](https://www.javascript.com/), [Angular JS](https://angularjs.org/), [Plotly JS](https://plot.ly/javascript/), and [Leaflet](http://leafletjs.com).
 
-For this to work, the back-end Python Flask REST server must also be running. See the [mmserver][mmserver] documentation.
+For this to work, the back-end Python Flask REST server must also be running. See the [mmserver](https://github.com/cudmore/PyMapManager/tree/master/mmserver) documentation.
 
 ## Files
 
@@ -23,9 +23,9 @@ serverurl = 'http://127.0.0.1:5010/'
 
 ## Running the code (local)
 
-This will use node npm to create a local server.
+This will use [node](https://nodejs.org/) to create a local server.
 
-To install the http-server (assuming you have node and npm)
+To install the http-server (assuming you have node and [npm](https://www.npmjs.com/))
 
 ```
 npm install http-server -g
@@ -54,9 +54,3 @@ The website is then available at
 
 THis is very simple, just drop the `mmclient/` folder into a web accessible locations. Something like `/var/www/html/`. We have tested this on a Debian server using `nginx` as well as a commercial provider `bluehost` and it all works fine.
 
-[javascript]: https://www.javascript.com/
-[angular]: https://angularjs.org/
-[plotly]: https://plot.ly/javascript/
-[mmserver]: https://github.com/cudmore/PyMapManager/tree/master/mmserver
-[node]: https://nodejs.org/
-[npm]: https://www.npmjs.com/
