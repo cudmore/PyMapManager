@@ -25,4 +25,28 @@ cd ~/Sites/PyMapManager/docs
 mkdocs gh-deploy --clean
 ```
 
+## Synchronize with Unison
+
+```
+# Unison preferences file
+root = /Users/cudmore/Dropbox/PyMapManager/
+root = /Users/cudmore/Sites/PyMapManager
+
+ignore = Name .DS_Store
+ignore = Name *.DS_Store
+ignore = Name *.pyc
+ignore = Name *.tif
+ignore = Name *.egg-info
+ignore = Path .git
+ignore = Path .idea
+
+#when synchronizing between platforms or hdd formats
+#rsrc = false
+#perms = 0
+
+# Be fast even on Windows
+#fastcheck = yes
+
+#servercmd=/home1/robertcu/unison
+```
 
