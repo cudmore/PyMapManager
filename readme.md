@@ -5,8 +5,8 @@ Please see the main [PyMapManager](http://blog.cudmore.io/PyMapManager) document
 
 ## Repository contents
 
- - [pymapmanager/](pymapmanager/) : Core Python package.
- - examples/ : Jupyter notebooks with example usage of PyMapManager.
+ - [pymapmanager/](PyMapManager/) : Core Python package.
+ - [examples/](example/) : Jupyter notebooks with example usage of PyMapManager.
  - mmserver/ : A Python Flask server that provides a REST interface to easily retrieve Map Manager annotations and images.
  - mmclient/ : A user friendly front-end Javascript client to plot annotations and view image time-series from a `mmserver` REST server.
  - mmio/ : Helper class allowing pymapmanager Python code to load annotations and images from a `mmserver` REST server.
