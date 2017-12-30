@@ -339,6 +339,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#search-and-replace-across-a-number-of-files" title="Search and replace across a number of files" class="md-nav__link">
+    Search and replace across a number of files
+  </a>
+  
+</li>
+      
       
       
     </ul>
@@ -390,6 +397,13 @@
         <li class="md-nav__item">
   <a href="#export-ipython-notebooks-to-html" title="Export iPython notebooks to html" class="md-nav__link">
     Export iPython notebooks to html
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#search-and-replace-across-a-number-of-files" title="Search and replace across a number of files" class="md-nav__link">
+    Search and replace across a number of files
   </a>
   
 </li>
@@ -456,6 +470,23 @@ ignore = Path .idea
 
 <h2 id="export-ipython-notebooks-to-html">Export iPython notebooks to html</h2>
 <pre><code>jupyter nbconvert --ExecutePreprocessor.kernel_name=python3 --to html --execute --ExecutePreprocessor.timeout=120
+
+jupyter nbconvert --ExecutePreprocessor.kernel_name=python2 --to html --execute --ExecutePreprocessor.timeout=120
+</code></pre>
+
+<h2 id="search-and-replace-across-a-number-of-files">Search and replace across a number of files</h2>
+<p>search for <code>windows</code> and replace with <code>linux</code></p>
+<pre><code>grep -rl 'windows' ./ | xargs sed -i 's/windows/linux/g'
+
+grep -rl 'windows' ./ | xargs sed -i "" 's/windows/linux/g'
+
+find ./ -type f -exec sed -i "" "s/oldstring/new string/g" {} \;
+</code></pre>
+<p>search all files in current directory <code>./</code> for <code></code> and replace with ``</p>
+<pre><code>grep -rl '    ' ./ | xargs sed -i "" 's/    //g'
+</code></pre>
+<p>from /PyMapMAnager/docs, search for '    ' and replace it with ''</p>
+<pre><code>grep -rl '    ' ./docs/examples | xargs sed -i "" 's/    //g'
 </code></pre>
                 
                   
