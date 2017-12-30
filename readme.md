@@ -38,8 +38,14 @@ This screen shot shows the main PyQt interface window (left), a map plot (top ce
 
 Once installed, PyMapManager is available in python as `import pymapmanager`
 
- - Install [anaconda][1]
- - Install [tifffile][2]. This version is for Python 2.7, newer versions are for Python 3.x
+```
+pip install numpy
+pip install pandas
+pip install requests
+pip install tifffile
+```
+
+ - Install [tifffile][tifffile]. This version is for Python 2.7, newer versions are for Python 3.x
 
 ```
 conda install -c conda-forge tifffile=0.12.1
@@ -48,17 +54,17 @@ conda install -c conda-forge tifffile=0.12.1
  - Install PyMapManager
   
 ```
-pip install -e PyMapManager
+pip install PyMapManager
 ```
 
 ## Run the Map Manager server
 
-The server is made of two components, a back-end server and a client-side javascript server.
+The server is made of two components, a back-end REST server and a client-side Javascript server.
 
  1. The back-end server is in `mmserver/mmserver.py` and provides a REST interface using Python Flask
- 2. The client-side javascript server is in `mmclient/index.html` and provides a front end gui that can be browsed with a web browser.
+ 2. The client-side Javascript server is in `mmclient/index.html` and provides a front end gui that can be browsed with a web browser.
 
-### Run the back-end Python Flask REST api
+### Run the back-end REST server
 
 ```
 cd mmserver
@@ -68,10 +74,10 @@ python mmserver.py
 Once running, the REST interface can be accessed via
 
 ```
-http://127.0.0.1:5010
+http://localhost:5010
 ```
 
-### Run the client-side javascript server
+### Run the client-side Javascript server
 
 ```
 cd mmclient
@@ -81,13 +87,13 @@ http-server
 Once running, the client-side server can be accessed via
 
 ```
-http://127.0.0.1:8080
+http://localhost:8080
 ```
 	
    
 ## Run the PyQt interface
 
-We have ceased development of the PyQt interface to focus on the web client/server version of Map Manager
+We have downgraded development of the PyQt interface to focus on the web client/server version of Map Manager
 
 ### Downgrade anaconda from PyQt5 to PyQt4
  
@@ -104,7 +110,6 @@ python main.py
 ```
 	  
  
-[1]: https://www.continuum.io/downloads
-[2]: http://www.lfd.uci.edu/~gohlke/
+[tifffile]: https://www.lfd.uci.edu/~gohlke/
 [PyMapManager]: http://blog.cudmore.io/PyMapManager/
 
