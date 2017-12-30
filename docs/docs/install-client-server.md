@@ -1,6 +1,6 @@
 ## Web based browsing
 
-Once the PyMapManager client/server servers are running, there is a point and click web interface to browse Map Manager annotations and images.
+Once the PyMapManager `mmclient` and `mmserver` are running, there is a point and click web interface to browse Map Manager annotations and images.
 
 ### Browsing annotations
 
@@ -31,7 +31,7 @@ pip install flask-cors
 pip install scikit-image
 ```
 
-Running the servers requires `gunicorn` for the mmserver Flask REST server and `http-server` for the mmclient server.
+Running the servers requires `gunicorn` for the `mmserver` Flask REST server and `http-server` for the `mmclient` server.
 
 ```
 pip install gunicorn
@@ -46,7 +46,7 @@ This is only one way of running these two servers. If you want to run them a dif
 
 Start both unicorn and http-server with our `PyMapManager/serve_local.sh` script.
 
-This will work well if you are only going to be browsing the client/server from the same machine. This will work on MacOS (and Linux).
+This will work well if you are only going to be browsing the client/server from the same machine (e.g. localhost). This will work on MacOS (and Linux).
 
 ### Start the servers with
 
@@ -61,8 +61,23 @@ cd PyMapManager
 cd PyMapManager
 ./serve_local.sh stop
 ```
+
+### Access local servers
+
+The front-end client can be accessed at
+
+```
+http://localhost:8080
+```
+
+The back-end REST server can be accessed at
+
+```
+http://localhost:5010/help
+```
+
 	
-## 3) Manually start both client and server servers
+## 3) Manually start both client and server
 
 ### Start the `mmserver/mmserver.py` REST server
  
@@ -71,31 +86,43 @@ cd mmserver
 python mmserver.py
 ```
 
-Test this out by pointing a web browser to
+Alternatively, start the `mmserver/mmserver.py` REST server with `gunicorn`
 
-```
-http://127.0.0.1:5010/help
-```
+Install `gunicorn`
 
-Alternatively, start the `mmserver.py` REST server with gunicorn
+	pip install gunicorn
+	
+On OSX (requires sudo)
 
 ```
 cd mmserver
-gunicorn -b 127.0.0.1:5010 mmserver:app
+sudo gunicorn -b 0.0.0.0:5010 mmserver:app
+```
+	
+On Linux (no sudo)
+
+```
+cd mmserver
+gunicorn -b 0.0.0.0:5010 mmserver:app
 ```
 	
 Wrapping the `mmserver` to run inside of gunicorn provides a **synchronous** web server. This should handle fast interaction with the web interface much better than the **asynchronous** version provided by `python mmserver.py`. This is most noticeable when viewing linked sliding z-projections.
 
-### Start the `mmclient/index.html` client server
+### Start the `mmclient/index.html` client
 
 This is assuming you have node and npm installed. In addition, we are assuming you have used npm to install http-server with `npm install http-server -g`.
 
-Make sure `mmclient/static/mmserver.js` points to the REST interface. This file should have
+Make sure `mmclient/static/mmserver.js` points to the **localhost** REST interface. This file should have
 
 ```
 serverurl = 'http://127.0.0.1:5010/'
 ```
 	
+Install http-server
+
+	# this assumes you have node and npm install
+	npm install http-server -g
+
 Run the mmclient client server
 
 ```
@@ -120,7 +147,7 @@ http://127.0.0.1:8080
 ```
 	
 
-## 4) Running the client/server on a Linux system with an existing web-server
+## 4) Running the client/server on a Linux system with a pre-existing web-server
 
 This requires a pre-existing web server to serve both the client server `mmclient/index.html` and the Python Flask REST server `mmserver/mmserver.py`.
 
@@ -173,6 +200,6 @@ If that all works, you can browse some maps at
 http://nginx_server_ip/mmclient
 ```
  
-This will serve the `mmclient/index.html` and use the `mmclient/static/mmserver.js` file. The `mmclient/static/mmserver.js` file will grab annotations and images from the `mmserver/mmserver.py` Python Flask REST server via `http://nginx_server_ip:5010`.
+This will serve the `mmclient/index.html` and use the `mmclient/static/mmserver.js` file. The `mmclient/static/mmserver.js` file will grab annotations and images from the `mmserver/mmserver.py` REST server via `http://nginx_server_ip:5010`.
 
 

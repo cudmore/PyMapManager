@@ -1,20 +1,22 @@
-PyMapManager is a Python package to analyze time-series image stacks.
+PyMapManager is a suite of Python tools to analyze time-series image stacks.
 
-PyMapManager opens annotations created with the Igor Pro version of [Map Manager][1]. Allowing additional analysis to easily be performed.
+PyMapManager opens annotations created with the Igor Pro version of [Map Manager][1]. Allowing additional visualization and analysis to easily be performed.
 
-There are three components to PyMapManager:
+There are three components to PyMapManager: a Python package, a data client/server, and a desktop application.
 
- - Python Package
- - Server
- - Desktop application
- 
 ## PyMapManager Python package
 
-See the [/examples][5] folder in the main GitHub repository for example Python code to easily perform additional analysis. Please also see the [API Documentation][2].
+To get started writing Python code to interface with Map Manager analysis, see the iPython notebooks in [/examples][5].
 
-## PyMapManager server
+For full class documentation, see the [API Documentation][2].
+
+## PyMapManager client/server
  
-The PyMapManager server allows web-based browsing of annotations and stacks. See [server documentation][3] for additional information.
+The PyMapManager server provides a web based [REST API][6] to retrieve Map Manager annotations and images.
+
+The PyMapManager client provides a web-based front-end to browse annotations and images off the server.
+
+We have an [example client/server][client/server] to see this in action.
 
 ### Browsing annotations
 
@@ -34,6 +36,8 @@ The Qt version of PyMapManager is a desktop application. See [github repository]
  
 [1]: http://blog.cudmore.io/mapmanager
 [2]: http://pymapmanager.readthedocs.io/en/latest/
-[3]: https://github.com/cudmore/PyMapManager/tree/master/mmserver
+[3]: install-client-server
 [4]: https://github.com/cudmore/PyMapManager/tree/master/PyMapManager/interface
 [5]: https://github.com/cudmore/PyMapManager/tree/master/PyMapManager/examples
+[6]: rest-api
+[client/server]: http://robertcudmore.org/mmclient

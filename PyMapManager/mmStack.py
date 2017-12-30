@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 import os, io, time
 from glob import glob # for mmStackPool
 from errno import ENOENT
@@ -57,7 +59,7 @@ class mmStack():
             # todo: we don't have numChannel in header, infer this from other _ch1.tif and _ch2.tif files in same directory
         else:
             # undefined
-            print 'error: mmStack() constructor got bad parameters.'
+            print('error: mmStack() constructor got bad parameters.')
             return
 
         #todo: to open generic tif (no stackdb), we need to use tifffile load of first image, query tif header values (gonna be a pain)
@@ -378,11 +380,11 @@ class mmStack():
                         self._images = tif.asarray()
 
             except:
-                print 'ERROR: mmStack.loadStackImages() did not load tiff file:', tiffFileName
+                print('ERROR: mmStack.loadStackImages() did not load tiff file:', tiffFileName)
                 raise
 
         if len(self.images.shape) > 3:
-            print 'WARNING: mmStack.loadStackImages() just loaded a stack with a bizarre shape:', self.images.shape
+            print('WARNING: mmStack.loadStackImages() just loaded a stack with a bizarre shape:', self.images.shape)
             self.images = self.images[:,:,:,1]
 
         # this is read from stackdb header
@@ -403,7 +405,7 @@ class mmStack():
         '''
 
         stopTime = time.time()
-        print 'mmStack.loadStack() loaded map session', self.mapSession, 'channel', channel, 'in', round(stopTime-startTime,2), 'seconds.'
+        print('mmStack.loadStack() loaded map session', self.mapSession, 'channel', channel, 'in', round(stopTime-startTime,2), 'seconds.')
 
         # debug
         # print self.images

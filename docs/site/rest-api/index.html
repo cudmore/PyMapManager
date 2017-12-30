@@ -50,6 +50,8 @@
       <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     
     
+      <link rel="stylesheet" href="../css/extra.css">
+    
     
   </head>
   
@@ -131,7 +133,7 @@
   
 
 
-  <a href="http://github.com/cudmore/PyMapManager/" title="Go to repository" class="md-source" data-md-source="github">
+  <a href="http://github.com/cudmore/PyMapManager" title="Go to repository" class="md-source" data-md-source="github">
     
       <div class="md-source__icon">
         <svg viewBox="0 0 24 24" width="24" height="24">
@@ -180,7 +182,7 @@
   
 
 
-  <a href="http://github.com/cudmore/PyMapManager/" title="Go to repository" class="md-source" data-md-source="github">
+  <a href="http://github.com/cudmore/PyMapManager" title="Go to repository" class="md-source" data-md-source="github">
     
       <div class="md-source__icon">
         <svg viewBox="0 0 24 24" width="24" height="24">
@@ -269,16 +271,29 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#using-the-rest-api-in-a-program" title="Using the REST API in a program" class="md-nav__link">
+    Using the REST API in a program
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
   <a href="#in-python" title="In Python" class="md-nav__link">
     In Python
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
+        
+          <li class="md-nav__item">
   <a href="#in-matlab" title="In Matlab" class="md-nav__link">
     In Matlab
   </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -365,9 +380,45 @@
       
 
 
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5" type="checkbox" id="nav-5">
+    
+    <label class="md-nav__link" for="nav-5">
+      Examples
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-5">
+        Examples
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
   <li class="md-nav__item">
-    <a href="../release-notes/" title="Release Notes" class="md-nav__link">
-      Release Notes
+    <a href="../examples/a-plotting-annotations/" title="a-plotting-annotations" class="md-nav__link">
+      a-plotting-annotations
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../dev-notes/" title="Development Notes" class="md-nav__link">
+      Development Notes
     </a>
   </li>
 
@@ -398,16 +449,29 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#using-the-rest-api-in-a-program" title="Using the REST API in a program" class="md-nav__link">
+    Using the REST API in a program
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
   <a href="#in-python" title="In Python" class="md-nav__link">
     In Python
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
+        
+          <li class="md-nav__item">
   <a href="#in-matlab" title="In Matlab" class="md-nav__link">
     In Matlab
   </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -494,8 +558,6 @@
             <article class="md-content__inner md-typeset">
               
                 
-                  <a href="http://github.com/cudmore/PyMapManager/edit/master/docs/rest-api.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
-                
                 
                   <h1>REST API</h1>
                 
@@ -505,53 +567,51 @@ python mmserver.py
 </code></pre>
 
 <p>This will run the server locally at <code>http://127.0.0.1:5010</code></p>
-<h2 id="in-python">In Python</h2>
+<h2 id="using-the-rest-api-in-a-program">Using the REST API in a program</h2>
+<h3 id="in-python">In Python</h3>
 <pre><code class="python">import json
 import urllib2
 
-url='http://cudmore.duckdns.org:5010/v2/public/rr30a/getmaptracing?mapsegment=&amp;session=3&amp;xstat=x&amp;ystat=y&amp;zstat=z'
+url='http://127.0.0.1:5010/v2/public/rr30a/getmaptracing?mapsegment=&amp;session=3&amp;xstat=x&amp;ystat=y&amp;zstat=z'
 
 mytracing = json.load(urllib2.urlopen(&quot;url&quot;))
 
 # plot with matplotlib
 import matplotlib.pyplot as plt
-plt.plot(tracing['x'],tracing['y'])
+plt.plot(mytracing['x'],mytracing['y'])
 </code></pre>
 
-<h2 id="in-matlab">In Matlab</h2>
-<pre><code class="matlab">url='http://cudmore.duckdns.org:5010/getmaximage/public/rr30a/0/2'
+<h3 id="in-matlab">In Matlab</h3>
+<pre><code class="matlab">url='http://127.0.0.1:5010/getmaximage/public/rr30a/0/2'
 myimage = webread(url);
 imshow(myimage)
 </code></pre>
 
 <h2 id="rest-api">REST API</h2>
-<p>The following REST routes specify end-points that will return JSON text or images. To use these examples prepend each one with <code>http://127/0/1/1:5010</code>. </p>
-<p>We will be using the <code>public</code> user and the <code>rr30a</code> map included in the <code>exampleMaps/</code> folder.</p>
-<pre><code>&lt;username&gt; = public
-&lt;mapname&gt; = rr30a
-</code></pre>
-
+<p>The following REST routes specify end-points that will return JSON text or images. </p>
+<p>We will be using the <code>public</code> user and the <code>rr30a</code> map included in the <code>mmserver/data/</code> folder.</p>
+<p>The links on this page point to a development server that may or may not be running.</p>
 <h3 id="get-help">Get help</h3>
-<p><a href="http://cudmore.duckdns.org:5010/help">/help</a></p>
+<p><a href="http://cudmore.duckdns.org:5010/help">http://127.0.0.1:5010/help</a></p>
 <h3 id="get-a-list-of-maps">Get a list of maps</h3>
-<p><a href="http://cudmore.duckdns.org:5010/api/public/maps">/api/public/maps</a></p>
+<p><a href="http://cudmore.duckdns.org:5010/api/public/maps">http://127.0.0.1:5010/api/public/maps</a></p>
 <h3 id="load-a-map">Load a map</h3>
 <p><a href="http://cudmore.duckdns.org:5010/loadmap/public/rr30a">/loadmap/public/rr30a</a></p>
 <h3 id="get-annotation-values">Get annotation values</h3>
 <p>Here we will get an x-stat <code>days</code>, a y-stat <code>pDist</code>, and a z-stat <code>z</code> for map segment 0 across all sessions</p>
-<p><a href="http://cudmore.duckdns.org:5010/v2/public/rr30a/getmapvalues?mapsegment=0&amp;session=&amp;xstat=days&amp;ystat=pDist&amp;zstat=z">/v2/public/rr30a/getmapvalues?mapsegment=0&amp;session=&amp;xstat=days&amp;ystat=pDist&amp;zstat=z</a></p>
+<p><a href="http://cudmore.duckdns.org:5010/v2/public/rr30a/getmapvalues?mapsegment=0&amp;session=&amp;xstat=days&amp;ystat=pDist&amp;zstat=z">http://127.0.0.1:5010/v2/public/rr30a/getmapvalues?mapsegment=0&amp;session=&amp;xstat=days&amp;ystat=pDist&amp;zstat=z</a></p>
 <h3 id="get-a-tracing">Get a tracing</h3>
 <p>Here we will get the x/y/z of a tracing (in um) for all map segments in session 3</p>
-<p><a href="http://cudmore.duckdns.org:5010/v2/public/rr30a/getmaptracing?mapsegment=&amp;session=3&amp;xstat=x&amp;ystat=y&amp;zstat=z">/v2/public/rr30a/getmaptracing?mapsegment=&amp;session=3&amp;xstat=x&amp;ystat=y&amp;zstat=z</a></p>
+<p><a href="http://cudmore.duckdns.org:5010/v2/public/rr30a/getmaptracing?mapsegment=&amp;session=3&amp;xstat=x&amp;ystat=y&amp;zstat=z">http://127.0.0.1:5010/v2/public/rr30a/getmaptracing?mapsegment=&amp;session=3&amp;xstat=x&amp;ystat=y&amp;zstat=z</a></p>
 <h3 id="get-an-image">Get an image</h3>
 <p>Here we will get the 20th image in the stack for timepoint 3, channel 2</p>
-<p><a href="http://cudmore.duckdns.org:5010/getimage/public/rr30a/3/2/20">/getimage/public/rr30a/3/2/20</a></p>
+<p><a href="http://cudmore.duckdns.org:5010/getimage/public/rr30a/3/2/20">http://127.0.0.1:5010/getimage/public/rr30a/3/2/20</a></p>
 <h3 id="get-a-sliding-z-projection-image">Get a sliding Z-Projection image</h3>
 <p>Here we will get a sliding z-projection of the 14th image in the stack for timepoint 5, channel 2</p>
-<p><a href="http://cudmore.duckdns.org:5010/getslidingz/public/rr30a/5/2/14">/getslidingz/public/rr30a/5/2/14</a></p>
+<p><a href="http://cudmore.duckdns.org:5010/getslidingz/public/rr30a/5/2/14">http://127.0.0.1:5010/getslidingz/public/rr30a/5/2/14</a></p>
 <h2 id="get-a-maximal-intensity-projection">Get a maximal intensity projection</h2>
 <p>Here we will get the maximal intensity projection of timepoint 0, channel 2</p>
-<p><a href="http://cudmore.duckdns.org:5010/getmaximage/public/rr30a/0/2">/getmaximage/public/rr30a/0/2</a></p>
+<p><a href="http://cudmore.duckdns.org:5010/getmaximage/public/rr30a/0/2">http://127.0.0.1:5010/getmaximage/public/rr30a/0/2</a></p>
                 
                   
                 
@@ -585,13 +645,13 @@ imshow(myimage)
           </a>
         
         
-          <a href="../release-notes/" title="Release Notes" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../examples/a-plotting-annotations/" title="a-plotting-annotations" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                Release Notes
+                a-plotting-annotations
               </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink">

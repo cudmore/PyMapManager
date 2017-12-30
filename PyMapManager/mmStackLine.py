@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 import os, io, math
 from errno import ENOENT
 import pandas as pd
@@ -68,7 +70,7 @@ class mmStackLine():
         Returns: pd with ['x'], ['y'], and ['z'] values filled in as numpy ndarray
         """
         if self.linedb is None:
-            print 'warning: getLineValues3() did not find a line'
+            print('warning: getLineValues3() did not find a line')
             return None
 
         df = self.linedb

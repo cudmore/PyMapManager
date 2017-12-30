@@ -48,12 +48,22 @@
 
 <div ng-controller="mmclient_controller" ng-init="load()">
 
-	<div class="container">
-		<div class="jumbotron" style="margin-top: 1em; padding-top: 1em; margin-bottom: 1em; padding-bottom: 1em">
-			<h1 class="display-6" style="text-align: center;">Explore Map Manager Annotations</h1>
+	<div class="row">
+		<div class="col-10">
+
+		<span style="font-size:1.6em;">Explore Map Manager Annotations and Image Time-Series</span>
+
+		<button type="button" class="btn btn-default btn-sm" data-toggle="dropdown" style="background:#bdc3c7; float:right"> <i class="fa fa-info-circle fa-2x" aria-hidden="true"></i></button>
+		<div class="mypopup">
+		<ul class="dropdown-menu" style="z-index:9999">
+		<li class="myIndentDiv2"><A HREF="http://blog.cudmore.io/PyMapManager" target="_blank">PyMapManager Documentation</A></li>
+		<li class="myIndentDiv2">Designed and implemented by <A HREF="http://www.robertcudmore.org" target="_blank">Robert Cudmore</A></li>
+		</ul>
+		</div>
+
 		</div>
 	</div>
-
+				
 	<div class="row">
 		<div class="col-4">
 			<div class="card">
@@ -75,7 +85,7 @@
 						<table>
 							<thead>
 							<tr>
-							<th>Maps</th>
+							<th>Time-series</th>
 							</tr>
 							</thead>
 						<tbody class="tbody myScrollBar2">
@@ -88,10 +98,10 @@
 					
 					<div class="col">
 						<p>
-						<button id="loadMapButtonID" type="button" class="btn btn-primary btn-sm">Load a map</button>
+						<button id="loadMapButtonID" type="button" class="btn btn-primary btn-sm">Load a time-series</button>
 						</p>
 						<p>
-						Loaded map: {{loadedMap}}
+						Loaded: {{loadedMap}}
 						</p>
 					</div>
 
@@ -237,7 +247,7 @@
 			<button type="button" class="btn btn-default btn-sm" data-toggle="dropdown"> <i class="fa fa-cog fa-1x" aria-hidden="true"></i></button>
 			<table class="dropdown-menu">
 			<tr>
-			<td  class="myIndentDiv2" >
+			<td  class="myIndentDiv2">
 				<div  class="myIndentDiv2">
 				<input type="checkbox" id="showAnnotationsID" ng-model="showAnnotations" ng-change="userToggleAnnotations()" ng-checked="showAnnotations">
 				<label for="showAnnotationsID">Annotations </label>
@@ -285,7 +295,7 @@
 		</div>		
 		
 		<div class="myIndentDiv2">
-		<label for="imageBrightnessID">Brightness</i></label>
+		<label for="imageBrightnessID"><i class="fa fa-sun-o" aria-hidden="true"></i></label>
 		<input type="range" id="imageBrightnessID" min="1" max="200" ng-model="imageBrightness">
 		</div>		
 

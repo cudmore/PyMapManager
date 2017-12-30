@@ -17,6 +17,8 @@ Example::
     mp.plotMap0(pd)
 
 """
+from __future__ import print_function
+
 #from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
 #from matplotlib.figure import Figure
 import matplotlib.pyplot as plt
@@ -47,7 +49,7 @@ class mmMapPlot2():
             event (:class:`pymapmanager.mmUtil.mmEvent`)
 
         """
-        print 'mmMapPlot2.onclick()', event.button, event.x, event.y, event.xdata, event.ydata
+        print('mmMapPlot2.onclick()', event.button, event.x, event.y, event.xdata, event.ydata)
 
     def _plotMap(self, fig):
         self.figure = fig

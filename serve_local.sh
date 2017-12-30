@@ -1,4 +1,5 @@
 # 20171229
+# run this script from its home folder PyMapManager/
 
 function usage(){
     echo "serve_local - Illegal parameters"
@@ -16,7 +17,14 @@ function serverStart(){
 	else
 		echo '=== starting gunicorn rest server'
 		cd mmserver
-		sudo gunicorn -b 127.0.0.1:5010 mmserver:app &
+		if [[ "$OSTYPE" == "linux-gnu" ]]; then
+			# linux
+			gunicorn -b 0.0.0.0:5010 mmserver:app &
+		elif [[ "$OSTYPE" == "darwin"* ]]; then
+		    # Mac OSX
+			sudo gunicorn -b 0.0.0.0:5010 mmserver:app &
+		fi
+		
 		cd ..
 	fi
 	

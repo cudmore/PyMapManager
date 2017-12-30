@@ -37,6 +37,8 @@ Notes::
 
 """
 
+from __future__ import print_function
+
 import os, requests
 
 #default_server_url = 'http://127.0.0.1:5000/'
@@ -62,11 +64,11 @@ class mmio():
 		self.username = username
 		
 		# check if url responded correctly
-		print 'server_url:', server_url
+		print('server_url:', server_url)
 		response = requests.get(server_url)
 		response.raise_for_status()
 
-		print 'server responded:', response.content
+		print('server responded:', response.content)
 		#print 'Success, the server at', server_url, 'is up and running!'
 		
 	def maplist(self):
@@ -76,7 +78,7 @@ class mmio():
 		url = self.server_url + self.username + '/maps'
 		response = requests.get(url)
 		if response.status_code == 404:
-			print 'error: mmio.maplist() received a 404 for url:', url
+			print('error: mmio.maplist() received a 404 for url:', url)
 		return response.content
 		
 	def getfile(self, type, mapname, timepoint=None, channel=None):
@@ -112,7 +114,7 @@ class mmio():
 		# print 'url:', url
 		response = requests.get(url)
 		if response.status_code == 404:
-			print 'error: mmio.getfile() received a 404 for url:', url
+			print('error: mmio.getfile() received a 404 for url:', url)
 		return response.content
 			
 	def getimage(self, mapname, timepoint, slice, channel=1):
@@ -133,7 +135,7 @@ class mmio():
 			+ '/image/' + str(slice) + '/' + str(channel)
 		response = requests.get(url)
 		if response.status_code == 404:
-			print 'error: mmio.getimage() received a 404 for url:', url
+			print('error: mmio.getimage() received a 404 for url:', url)
 		return response.content
 
 	def postmap(self, mapFolder):
@@ -143,7 +145,7 @@ class mmio():
 		Args:
 			mapFolder (str) full path to map folder (local machine).
 		"""
-		print 'posting map to server:', self.server_url, 'user:', self.username
+		print('posting map to server:', self.server_url, 'user:', self.username)
 
 		mapname = os.path.basename(mapFolder)
 
@@ -152,27 +154,27 @@ class mmio():
 		if os.path.isfile(mapFile):
 			file = {'file': open(mapFile, 'rb')}
 			url = 'post/' + self.username + '/' + mapname + '/header'
-			print 'uploading main map file with url:', url
+			print('uploading main map file with url:', url)
 			r = requests.post(default_server_url + url, files=file)
-			print '   Response:', r.content
+			print('   Response:', r.content)
 
 		# obj map
 		objMapFile = os.path.join(mapFolder, mapname + '_objMap.txt')
 		if os.path.isfile(objMapFile):
 			file = {'file': open(objMapFile, 'rb')}
 			url = 'post/' + self.username + '/' + mapname + '/header'
-			print 'uploading obj map file with url:', url
+			print('uploading obj map file with url:', url)
 			r = requests.post(default_server_url + url, files=file)
-			print '   Response:', r.content
+			print('   Response:', r.content)
 
 		# seg map
 		segMapFile = os.path.join(mapFolder, mapname + '_segMap.txt')
 		if os.path.isfile(segMapFile):
 			file = {'file': open(segMapFile, 'rb')}
 			url = 'post/' + self.username + '/' + mapname + '/header'
-			print 'uploading seg map file with url:', url
+			print('uploading seg map file with url:', url)
 			r = requests.post(default_server_url + url, files=file)
-			print '   Response:', r.content
+			print('   Response:', r.content)
 
 		# all stackdb
 		stackdbFolder = os.path.join(mapFolder, 'stackdb')
@@ -182,7 +184,7 @@ class mmio():
 					stackdbFile = os.path.join(stackdbFolder, file)
 					fileid = {'file': open(stackdbFile, 'rb')}
 					url = 'post/' + self.username + '/' + mapname + '/stackdb'
-					print 'uploading stackdb file:', file, url
+					print('uploading stackdb file:', file, url)
 					r = requests.post(default_server_url + url, files=fileid)
 
 		# all lines
@@ -193,10 +195,10 @@ class mmio():
 					lineFile = os.path.join(lineFolder, file)
 					fileid = {'file': open(lineFile, 'rb')}
 					url = 'post/' + self.username + '/' + mapname + '/line'
-					print 'uploading line file:', file, url
+					print('uploading line file:', file, url)
 					r = requests.post(default_server_url + url, files=fileid)
 
-		print 'Done uploading map:', mapFolder
+		print('Done uploading map:', mapFolder)
 
 if __name__ == '__main__':
 	if 1:
@@ -209,23 +211,23 @@ if __name__ == '__main__':
 
 		header = io.getfile('header', 'rr30a')
 		for line in header.split('\r'):
-			print line
+			print(line)
 
 		objmap = io.getfile('objmap', 'rr30a')
-		print objmap.split('\r')[0]
-		print objmap.split('\r')[1]
+		print(objmap.split('\r')[0])
+		print(objmap.split('\r')[1])
 
 		stackdb = io.getfile('stackdb', 'rr30a', timepoint=0)
-		print 'stackdb:', stackdb.split('\r')[0]
+		print('stackdb:', stackdb.split('\r')[0])
 
 		line = io.getfile('line', 'rr30a', timepoint=3)
-		print 'line:', line.split('\r')[0]
+		print('line:', line.split('\r')[0])
 
 		int1 = io.getfile('int', 'rr30a', 0, channel=1)
-		print 'int1:', int1.split('\r')[0]
+		print('int1:', int1.split('\r')[0])
 
 		int2 = io.getfile('int', 'rr30a', timepoint=2, channel=2)
-		print 'int2:', int2.split('\r')[0]
+		print('int2:', int2.split('\r')[0])
 
 		image = io.getimage('rr30a', timepoint=1, slice=5, channel=2)
 		#print 'image:', image

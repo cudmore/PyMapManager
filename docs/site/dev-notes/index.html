@@ -32,7 +32,7 @@
     
     
       
-        <title>Release Notes - PyMapManager</title>
+        <title>Development Notes - PyMapManager</title>
       
     
     
@@ -49,6 +49,8 @@
       
       <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     
+    
+      <link rel="stylesheet" href="../css/extra.css">
     
     
   </head>
@@ -88,7 +90,7 @@
                 PyMapManager
               </span>
               <span class="md-header-nav__topic">
-                Release Notes
+                Development Notes
               </span>
             
           
@@ -131,7 +133,7 @@
   
 
 
-  <a href="http://github.com/cudmore/PyMapManager/" title="Go to repository" class="md-source" data-md-source="github">
+  <a href="http://github.com/cudmore/PyMapManager" title="Go to repository" class="md-source" data-md-source="github">
     
       <div class="md-source__icon">
         <svg viewBox="0 0 24 24" width="24" height="24">
@@ -180,7 +182,7 @@
   
 
 
-  <a href="http://github.com/cudmore/PyMapManager/" title="Go to repository" class="md-source" data-md-source="github">
+  <a href="http://github.com/cudmore/PyMapManager" title="Go to repository" class="md-source" data-md-source="github">
     
       <div class="md-source__icon">
         <svg viewBox="0 0 24 24" width="24" height="24">
@@ -249,6 +251,42 @@
       
       
 
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5" type="checkbox" id="nav-5">
+    
+    <label class="md-nav__link" for="nav-5">
+      Examples
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-5">
+        Examples
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../examples/a-plotting-annotations/" title="a-plotting-annotations" class="md-nav__link">
+      a-plotting-annotations
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
   
 
 
@@ -258,11 +296,11 @@
     
     
       <label class="md-nav__link md-nav__link--active" for="toc">
-        Release Notes
+        Development Notes
       </label>
     
-    <a href="./" title="Release Notes" class="md-nav__link md-nav__link--active">
-      Release Notes
+    <a href="./" title="Development Notes" class="md-nav__link md-nav__link--active">
+      Development Notes
     </a>
     
       
@@ -283,6 +321,20 @@
         <li class="md-nav__item">
   <a href="#mkdocs" title="MkDocs" class="md-nav__link">
     MkDocs
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#synchronize-with-unison" title="Synchronize with Unison" class="md-nav__link">
+    Synchronize with Unison
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#export-ipython-notebooks-to-html" title="Export iPython notebooks to html" class="md-nav__link">
+    Export iPython notebooks to html
   </a>
   
 </li>
@@ -328,6 +380,20 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#synchronize-with-unison" title="Synchronize with Unison" class="md-nav__link">
+    Synchronize with Unison
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#export-ipython-notebooks-to-html" title="Export iPython notebooks to html" class="md-nav__link">
+    Export iPython notebooks to html
+  </a>
+  
+</li>
+      
       
       
     </ul>
@@ -342,10 +408,8 @@
             <article class="md-content__inner md-typeset">
               
                 
-                  <a href="http://github.com/cudmore/PyMapManager/edit/master/docs/release-notes.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
                 
-                
-                  <h1>Release Notes</h1>
+                  <h1>Development Notes</h1>
                 
                 <h2 id="to-do">To do</h2>
 <ol>
@@ -366,6 +430,33 @@ mkdocs serve
 <pre><code>cd ~/Sites/PyMapManager/docs
 mkdocs gh-deploy --clean
 </code></pre>
+
+<h2 id="synchronize-with-unison">Synchronize with Unison</h2>
+<pre><code># Unison preferences file
+root = /Users/cudmore/Dropbox/PyMapManager/
+root = /Users/cudmore/Sites/PyMapManager
+
+ignore = Name .DS_Store
+ignore = Name *.DS_Store
+ignore = Name *.pyc
+ignore = Name *.tif
+ignore = Name *.egg-info
+ignore = Path .git
+ignore = Path .idea
+
+#when synchronizing between platforms or hdd formats
+#rsrc = false
+#perms = 0
+
+# Be fast even on Windows
+#fastcheck = yes
+
+#servercmd=/home1/robertcu/unison
+</code></pre>
+
+<h2 id="export-ipython-notebooks-to-html">Export iPython notebooks to html</h2>
+<pre><code>jupyter nbconvert --ExecutePreprocessor.kernel_name=python3 --to html --execute --ExecutePreprocessor.timeout=120
+</code></pre>
                 
                   
                 
@@ -384,7 +475,7 @@ mkdocs gh-deploy --clean
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid">
         
-          <a href="../rest-api/" title="REST API" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../examples/a-plotting-annotations/" title="a-plotting-annotations" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-flex__cell md-flex__cell--shrink">
               <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
             </div>
@@ -393,7 +484,7 @@ mkdocs gh-deploy --clean
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                REST API
+                a-plotting-annotations
               </span>
             </div>
           </a>

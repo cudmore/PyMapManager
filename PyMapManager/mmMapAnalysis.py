@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 import time, copy
 import pandas as pd
 import numpy as np
@@ -32,7 +34,7 @@ def segmentAnalysis(map, ps):
                     autocorrelation_plot(xSorted)
 
     stopTime = time.time()
-    print 'segmentAnalysis() took', stopTime - startTime, 'seconds'
+    print('segmentAnalysis() took', stopTime - startTime, 'seconds')
 
 def getMapDynamics(map, plotDict):
     """
@@ -174,16 +176,16 @@ def getMapDynamics(map, plotDict):
             prevtotalnum = totalnum
             prevsub = numsub
     stopTime = time.time()
-    print 'getMapDynamics() took', stopTime - startTime, 'seconds'
+    print('getMapDynamics() took', stopTime - startTime, 'seconds')
 
     if 0:
-        print retList
-        print len(retList)
+        print(retList)
+        print(len(retList))
 
         seg = 0  # map centrix
-        print 'answer for map segment', seg
+        print('answer for map segment', seg)
         for key, val in retList[seg].iteritems():
-            print key, val
+            print(key, val)
 
         # convert to a pandas dataframe
         out_df = pd.DataFrame.from_dict(retList[seg], orient='index')

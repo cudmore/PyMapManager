@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 import os, time
 from glob import glob # for pool
 
@@ -15,7 +17,7 @@ class mmStackPool():
         path = '/Users/cudmore/MapManagerData/richard/Nancy/'
         stacks = mmStackPool(path)
         for stack in stacks:
-            print stack
+            print(stack)
     """
 
     def __init__(self, path):
@@ -28,14 +30,14 @@ class mmStackPool():
             for file in files:
                 isTiff = file.endswith('.tif')
                 if (isTiff):
-                    print '=== mmStackPool() loading stack:', file
+                    print('=== mmStackPool() loading stack:', file)
                     stack = mmStack(filePath=file)
                     self.stacks.append(stack)
         else:
-            print 'error: mmMapPool() did not find path:', path
+            print('error: mmMapPool() did not find path:', path)
 
         stopTime = time.time()
-        print 'mmStackPool() loaded', len(self.stacks), 'stacks in', stopTime-startTime, 'seconds.'
+        print('mmStackPool() loaded', len(self.stacks), 'stacks in', stopTime-startTime, 'seconds.')
 
     @property
     def stacks(self):

@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 import os, io, time, math
 from errno import ENOENT
 import pandas as pd
@@ -150,7 +152,7 @@ class mmMap():
 			self.stacks.append(stack)
 
 		stopTime = time.time()
-		print 'map', self.name, 'loaded in', round(stopTime-startTime,2), 'seconds.'
+		print('map', self.name, 'loaded in', round(stopTime-startTime,2), 'seconds.')
 
 	@property
 	def numChannels(self):
@@ -389,12 +391,12 @@ class mmMap():
 
 			currSegmentID = []
 			if self.numMapSegments:
-				if pd['segmentid'] >= 0:
+				if pd['segmentid']:
 					currSegmentID = self.segRunMap[pd['segmentid'], j]  # this only works for one segment -- NOT A LIST
 					currSegmentID = int(currSegmentID)
 					# print 'getMapValues3() j:', j, 'currSegmentID:', currSegmentID
 					currSegmentID = [currSegmentID]
-				if pd['segmentid']>=0 and not currSegmentID:
+				if pd['segmentid'] and not currSegmentID:
 					# this session does not have segmentID that match
 					break
 
@@ -435,10 +437,10 @@ class mmMap():
 					pd['y'][finalRows, j] = final_df[pd['ystat']].values
 				if pd['zstat']:
 					pd['z'][finalRows, j] = final_df[pd['zstat']].values
-			except KeyError, e:
-				print 'getMapValues3() KeyError - reason "%s"' % str(e)
+			except (KeyError, e):
+				print('getMapValues3() KeyError - reason ', str(e))
 			except:
-				print 'getMapValues3() error in assignment'
+				print('getMapValues3() error in assignment')
 
 			# keep track of stack centric spine idx
 			yIdx[finalRows, j] = final_df.index.values
@@ -472,7 +474,7 @@ class mmMap():
 		yIdx = yIdx[~np.isnan(yIdx).all(axis=1)] # do this last
 
 		stopTime = time.time()
-		print 'mmMap.getMapValues3() took', round(stopTime - startTime, 2), 'seconds'
+		print('mmMap.getMapValues3() took', round(stopTime - startTime, 2), 'seconds')
 
 		pd['stackidx'] = yIdx
 		pd['mapsess'] = ySess
@@ -643,13 +645,13 @@ class testmmMap():
 
 if __name__ == '__main__':
 	path = 'examples/exampleMaps/rr30a/rr30a.txt'
-	print 'path:', path
+	print('path:', path)
 	m = mmMap(path)
 
-	print m
-	print 'm.runMap.shape : ', m.runMap.shape
+	print(m)
+	print('m.runMap.shape : ', m.runMap.shape)
 	for idx, stack in enumerate(m.stacks):
-		print 'tp:', idx, 'n:', stack.stackdb.shape
+		print('tp:', idx, 'n:', stack.stackdb.shape)
 
 	from pymapmanager.mmUtil import newplotdict
 
@@ -661,18 +663,18 @@ if __name__ == '__main__':
 	plotDict['getMapDynamics'] = True
 	plotDict = m.getMapValues3(plotDict)
 
-	print "\nplotDict['x'].shape : ", plotDict['x'].shape
+	print("\nplotDict['x'].shape : ", plotDict['x'].shape)
 
 	# test line
 	session = 0
 	plotDict = m.stacks[session].line.getLineValues3(plotDict)
-	print "line plotDict['x'].shape:", plotDict['x'].shape
-	print "line plotDict['sDist'].shape:", plotDict['sDist'].shape
+	print("line plotDict['x'].shape:", plotDict['x'].shape)
+	print("line plotDict['sDist'].shape:", plotDict['sDist'].shape)
 		
-	print '\nm.mapInfo():'
+	print('\nm.mapInfo():')
 	mapInfo = m.mapInfo()
 	for key, value in mapInfo.iteritems():
-		print key, value
+		print(key, value)
 		
 	#from flask import jsonify
 	#print jsonify(mapInfo)

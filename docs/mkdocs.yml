@@ -7,9 +7,16 @@ theme:
 
 repo_url: http://github.com/cudmore/PyMapManager
 
+edit_uri: ''
+
 pages:
     - Home: index.md
     - Install PyMapManager: install-pymapmanager.md
     - Install client/server: install-client-server.md
     - REST API: rest-api.md
-    - Release Notes: release-notes.md
+    - Examples:
+        - a-plotting-annotations: examples/a-plotting-annotations.html
+    - Development Notes: dev-notes.md
+    
+extra_css:
+    - css/extra.css

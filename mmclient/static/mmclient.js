@@ -20,7 +20,7 @@ serverurl = absUrl
 //run locally with
 // sudo gunicorn -b 127.0.0.1:5010 mmserver:app
 serverurl = 'http://127.0.0.1:5010/'
-//serverurl = 'http://127.0.0.1:8000/'
+serverurl = 'http://cudmore.duckdns.org:5010/'
 
 console.log('serverurl:' + serverurl)
 
