@@ -66,6 +66,16 @@ The server is made of two components, a back-end REST server and a client-side J
 
 ### Run the back-end REST server
 
+Install libraries
+
+```
+pip install rest
+pip install rest-cors
+pip install scikit-image
+``
+
+Run
+
 ```
 cd mmserver
 python mmserver.py
@@ -78,6 +88,29 @@ http://localhost:5010
 ```
 
 ### Run the client-side Javascript server
+
+Make sure `mmclient/static/mmserver.js` point to your localhost REST interface
+
+Edit `mmclient/static/mmserver.js`
+
+```
+cd mmclient
+pico mmclient/static/mmserver.js
+```
+
+Verify and edit this line to be
+
+```
+serverurl = 'http://127.0.0.1:5010/'
+```
+
+Install libraries (Assuming you have noe and npm installed)
+
+```
+npm install http-server -g
+```
+
+Run
 
 ```
 cd mmclient

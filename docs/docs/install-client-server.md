@@ -44,9 +44,9 @@ This is only one way of running these two servers. If you want to run them a dif
 	
 ## 2) Starting the client/server for local use (basic)
 
-Start both unicorn and http-server with our `PyMapManager/serve_local.sh` script.
+Start both unicorn and http-server with our [`PyMapManager/serve_local.sh`][serve_local] script.
 
-This will work well if you are only going to be browsing the client/server from the same machine (e.g. localhost). This will work on MacOS (and Linux).
+This will work well if you are only going to be browsing the client/server from the same machine (e.g. localhost). This will work on MacOS and Linux.
 
 ### Start the servers with
 
@@ -143,7 +143,7 @@ Hit CTRL-C to stop the server
 You can then browse the client server at
 
 ```
-http://127.0.0.1:8080
+http://localhost:8080
 ```
 	
 
@@ -202,4 +202,5 @@ http://nginx_server_ip/mmclient
  
 This will serve the `mmclient/index.html` and use the `mmclient/static/mmserver.js` file. The `mmclient/static/mmserver.js` file will grab annotations and images from the `mmserver/mmserver.py` REST server via `http://nginx_server_ip:5010`.
 
+[serve_local]: https://github.com/cudmore/PyMapManager/blob/master/serve_local.sh
 

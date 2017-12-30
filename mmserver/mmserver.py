@@ -33,7 +33,7 @@ from datetime import datetime
 from flask import Flask, render_template, make_response, send_file, send_from_directory, safe_join
 from flask import jsonify, request, redirect, url_for
 from flask_cors import CORS
-from werkzeug.utils import secure_filename
+# from werkzeug.utils import secure_filename
 
 import pandas as pandas
 import numpy as np
@@ -533,8 +533,11 @@ def post_file(username, mapname, item):
 		file = request.files['file']
 		print 'post_file() got request.files::', request.files
 		if file and allowed_file(file.filename):
-			filename = secure_filename(file.filename)
-
+			
+			# todo: do something here for security
+			#filename = secure_filename(file.filename)
+			filename = file.filename
+			
 			filePath = os.path.join(app.config['UPLOAD_FOLDER'], username)
 			# path to username has to exist, don't create it
 			if not os.path.isdir(filePath):
