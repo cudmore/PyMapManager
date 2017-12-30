@@ -1,6 +1,8 @@
 
 PyMapManager is Python package to load and visualize time-series annotations created in Map Manager. The workflow is to use the Igor Pro version of <A HREF="http://blog.cudmore.io/mapmanager/">Map Manager</A> to create annotated time-series. Then, use the PyMapManager Python package to easily perform additional visualization and analysis.
 
+Please see the main [PyMapManager][PyMapManager] documentation website.
+
 ## PyMapManager Python package
 
 Python package to open and analyze Map Manager files. Please see the <A HREF="http://pymapmanager.readthedocs.io/en/latest/">API Documentation</A> and a backup copy <A HREF="http://robertcudmore.org/mapmanager/PyMapManager/docs/">here</A>. See the <A HREF="https://github.com/cudmore/PyMapManager/tree/master/PyMapManager/examples">PyMapManager/examples/</A> folder for iPython notebooks with code examples.
@@ -104,3 +106,5 @@ python main.py
  
 [1]: https://www.continuum.io/downloads
 [2]: http://www.lfd.uci.edu/~gohlke/
+[PyMapManager]: http://blog.cudmore.io/PyMapManager/
+
