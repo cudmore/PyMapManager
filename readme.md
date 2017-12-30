@@ -44,7 +44,7 @@ This screen shot shows the main PyQt interface window (left), a map plot (top ce
 
 ## Install Python PyMapManager package
 
-Once installed, PyMapManager is available in python as `import pymapmanager`
+### Install required Python libraries
 
 ```
 pip install numpy
@@ -53,24 +53,27 @@ pip install requests
 pip install tifffile
 ```
 
- - Install [tifffile](https://www.lfd.uci.edu/~gohlke). This version is for Python 2.7, newer versions are for Python 3.x
+If your using conda, install [tifffile](https://www.lfd.uci.edu/~gohlke). This version is for Python 2.7, newer versions are for Python 3.x
 
 ```
 conda install -c conda-forge tifffile=0.12.1
 ```
 
- - Install PyMapManager
+### Install PyMapManager Package
   
 ```
 pip install PyMapManager
 ```
 
+Once installed, PyMapManager is available in python as `import pymapmanager`
+
+
 ## Run the Map Manager server
 
 The server is made of two components, a back-end REST server and a client-side Javascript server.
 
- 1. The back-end server is in `mmserver/mmserver.py` and provides a REST interface using Python Flask
- 2. The client-side Javascript server is in `mmclient/index.html` and provides a front end gui that can be browsed with a web browser.
+ 1. The back-end server is in `mmserver/mmserver.py` and provides a REST interface using Python Flask.
+ 2. The client-side Javascript server is in `mmclient/` and provides a front end point-and-click interface in a web browser.
 
 ### Run the back-end REST server
 
@@ -97,16 +100,9 @@ http://localhost:5010
 
 ### Run the client-side Javascript server
 
-Make sure `mmclient/static/mmserver.js` point to your localhost REST interface
+Make sure `mmclient/static/mmserver.js` points to your localhost REST interface
 
-Edit `mmclient/static/mmserver.js`
-
-```
-cd mmclient
-pico mmclient/static/mmserver.js
-```
-
-Make sure `serverurl` points to your localhost `mmserver`.
+Edit `mmclient/static/mmserver.js` and make sure `serverurl` points to your localhost `mmserver`.
 
 ```
 serverurl = 'http://127.0.0.1:5010/'
