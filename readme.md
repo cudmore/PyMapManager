@@ -80,7 +80,7 @@ Install libraries
 pip install rest
 pip install rest-cors
 pip install scikit-image
-``
+```
 
 Run
 
@@ -106,13 +106,13 @@ cd mmclient
 pico mmclient/static/mmserver.js
 ```
 
-Verify and edit this line to be
+Make sure `serverurl` points to your localhost `mmserver`.
 
 ```
 serverurl = 'http://127.0.0.1:5010/'
 ```
 
-Install libraries (Assuming you have noe and npm installed)
+Install http-server (Assuming you have node and npm installed)
 
 ```
 npm install http-server -g
