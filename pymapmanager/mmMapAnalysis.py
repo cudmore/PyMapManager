@@ -125,15 +125,27 @@ def getMapDynamics(map, plotDict):
                 df = df[df['parentID'].isin([segmentID])]
 
                 totalnum = df.shape[0]
-                numbad = df['isBad'].isin([1]).sum(index=1)
+                
+                # 20171231, moved down
+                #numbad = df['isBad'].isin([1]).sum(index=1)
+                numbad = df['isBad'].isin([1]).sum()
 
                 # todo: strip out bad
                 df = df[~df['isBad'].isin([1])]
 
-                numgood = df.shape[0]  # numBad + numGood == totalNum
-
-                numadd = df['isAdd'].sum(index=1)
-                numsub = df['isSub'].sum(index=1)  # w.r.t. this session
+                numgood = df.shape[0]  # numgood = totalnum - 'isBad'
+                
+                #print(j, segmentID, 'numgood:', numgood, df['isAdd'])
+                #tmp999 = df['isSub'].sum()
+                #print ('tmp999:', tmp999)
+                
+                # should be same as above
+                #numbad = totalnum - numgood
+                
+                #numadd = df['isAdd'].sum(index=1)
+                #numsub = df['isSub'].sum(index=1)  # w.r.t. this session
+                numadd = df['isAdd'].sum()
+                numsub = df['isSub'].sum()  # w.r.t. this session
                 numsub2 = prevsub  # w.r.t. previous session
 
                 padd = numadd / prevtotalnum * 100

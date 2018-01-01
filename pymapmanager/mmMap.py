@@ -187,10 +187,19 @@ class mmMap():
 		objCount = 0
 		for stack in self.stacks:
 			objCount += stack.numObj
-		return ('map:' + self.name
+		'''
+		theRet = {}
+		theRet['info'] = ('map:' + self.name
 			+ ' map segments:' + str(self.numMapSegments)
 			+ ' stacks:' + str(self.numSessions)
 			+ ' total object:' + str(objCount))
+		theRet['map'] = self
+		'''
+		retStr = ('map:' + self.name
+			+ ' map segments:' + str(self.numMapSegments)
+			+ ' stacks:' + str(self.numSessions)
+			+ ' total object:' + str(objCount))
+		return retStr
 
 	def __iter__(self):
 		i = 0
