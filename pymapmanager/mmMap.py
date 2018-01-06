@@ -400,12 +400,12 @@ class mmMap():
 
 			currSegmentID = []
 			if self.numMapSegments:
-				if pd['segmentid']:
+				if pd['segmentid'] >=0 :
 					currSegmentID = self.segRunMap[pd['segmentid'], j]  # this only works for one segment -- NOT A LIST
 					currSegmentID = int(currSegmentID)
 					# print 'getMapValues3() j:', j, 'currSegmentID:', currSegmentID
 					currSegmentID = [currSegmentID]
-				if pd['segmentid'] and not currSegmentID:
+				if pd['segmentid'] >= 0and not currSegmentID:
 					# this session does not have segmentID that match
 					break
 

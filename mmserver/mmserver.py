@@ -230,6 +230,12 @@ def getmapvalues(username, mapname):
 	# always detch map dynamics into pd['dynamics']
 	pd['getMapDynamics'] = True
 	
+	# debug
+	if 0:
+		print 'getmapvalues pd:'
+		for key, item in pd.iteritems():
+			print '\t', key, ':', item
+		
 	#print 'getmapvalues() pd:', pd
 	global myMapList
 	if mapname in myMapList:

@@ -19,8 +19,9 @@ serverurl = absUrl
 // ip of mmserver rest interface
 //run locally with
 // sudo gunicorn -b 127.0.0.1:5010 mmserver:app
-serverurl = 'http://127.0.0.1:5010/'
 serverurl = 'http://cudmore.duckdns.org:5010/'
+serverurl = 'http://127.0.0.1:5010/'
+serverurl = 'http://10.16.80.219:5010/'
 
 console.log('serverurl:' + serverurl)
 
@@ -39,6 +40,10 @@ $scope.mapsegments = null
 $scope.selectedMapSegment = 0 // corresponds to all
 
 $scope.showPlotLines = true
+// radio buttons
+$scope.showNoColor = false
+$scope.showMapSegmentColor = false
+$scope.showDynamicsColor = true
 
 var xydata = null;
 
@@ -307,8 +312,12 @@ function updateScatterPlot(xydata) {
 	var colors = [];
 	var runRow = []
 	var runCol = []
+
+    var scl =['rgb(213,62,79)','rgb(244,109,67)','rgb(253,174,97)','rgb(254,224,139)','rgb(255,255,191)','rgb(230,245,152)','rgb(171,221,164)','rgb(102,194,165)','rgb(50,136,189)'];
+	// 1:add, 2:sub, 3:transient, 4:persistent
+	var dynamicsColor = ['rgb(0,0,0)', 'rgb(0,255,0)', 'rgb(255,0,0)', 'rgb(0,0,255)', 'rgb(0,0,0)']
 	
-	console.log('updateScatterPlot() xydata:')
+	console.log('****** updateScatterPlot() xydata:')
 	console.log(xydata)
 	
 	/*
@@ -356,20 +365,31 @@ function updateScatterPlot(xydata) {
 	  },
 	  []
 	);
-	colors = xydata.dynamics.reduce(
-	  function(a, b) {
-	    return a.concat(b, NaN);
-	  },
-	  []
-	);
-	/*
-	colors = xydata.mapsegment.reduce(
-	  function(a, b) {
-	    return a.concat(b, NaN);
-	  },
-	  []
-	);
-	*/
+		
+	// color will be one of (showNoColor, showMapSegmentColor, showDynamicsColor)
+	if ($scope.showNoColor) {
+		colors = 'black' //'rgb(0,0,0)'
+	} else if ($scope.showDynamicsColor) {
+		colors = xydata.dynamics.reduce(
+		  function(a, b) {
+		    return a.concat(b, NaN);
+		  },
+		  []
+		);
+		//console.log('***** 1) colors:', colors)
+	} else if ($scope.showMapSegmentColor){
+		colors = xydata.mapsegment.reduce(
+		  function(a, b) {
+		    b = b.map(function(num) {
+  				return num + 1;
+				});
+			//console.log(b)
+			return a.concat(b, NaN);
+		  },
+		  []
+		);
+	}
+
 	runCol = xydata.mapsess.reduce(
 	  function(a, b) {
 	    return a.concat(b, NaN);
@@ -391,38 +411,25 @@ function updateScatterPlot(xydata) {
 	  []
 	);
 	
-	//20171220, flatten for plotting
-	//there must be some way for plotly to plot an array of array?
-	if (true) {
-		/*
-		x = [].concat.apply([], x)
-		y = [].concat.apply([], y)
-		z = [].concat.apply([], z)
-		colors = [].concat.apply([], colors)
-		//
-		runRow = [].concat.apply([], runRow)
-		runCol = [].concat.apply([], runCol)
-		*/
-	}
-	
-	//console.log('updateScatterPlot() x:')
-	//console.log(x)
-	//console.log(y)
-	
 	// map color index onto rgb
-	colors = colors.map(function(obj) {
-		var rObj = 'rgb(0,0,0)'
-		if (obj==1) {
-			rObj = 'rgb(0,255,0)'
-		} else if (obj==2) {
-			rObj = 'rgb(255,0,0)'
-		} else if (obj==3) {
-			rObj = 'rgb(0, 0, 255)'
-		} else if (obj==4) {
-			rObj = 'rgb(0,0,0)'
-		}
-		return rObj
-	});
+	/*
+	if ($scope.showDynamicsColor) {
+		colors = colors.map(function(obj) {
+			var rObj = 'rgb(0,0,0)'
+			if (obj==1) {
+				rObj = 'rgb(0,255,0)'
+			} else if (obj==2) {
+				rObj = 'rgb(255,0,0)'
+			} else if (obj==3) {
+				rObj = 'rgb(0, 0, 255)'
+			} else if (obj==4) {
+				rObj = 'rgb(0,0,0)'
+			}
+			return rObj
+		});
+		//console.log('***** 2) colors:', colors)
+	}
+	*/
 	
    // Display scatter plot
 	var trace = {

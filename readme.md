@@ -23,12 +23,12 @@ A server to browse and share Map Manager annotates and time-series images via th
 
 This screenshot shows web based browsing and plotting of Map Manager annotations.
 
-<IMG SRC="images/mmserver_purejs.png" width=900>
+<IMG SRC="docs/docs/img/mmserver_purejs.png" width=900>
 
 These screenshots show web based browsing of 3D image volume time-series with spine annotations overlaid.
 
-<IMG SRC="images/mmserver_leaflet.png" width=900>
-<IMG SRC="images/mmserver_leaflet2.png" width=900>
+<IMG SRC="docs/docs/img/mmserver_leaflet.png" width=900>
+<IMG SRC="docs/docs/img/mmserver_leaflet2.png" width=900>
 
 
 ## PyQt interface
@@ -39,7 +39,7 @@ This project will be merged with <A HREF="https://github.com/cmicek1/TiffViewer"
 
 The PyQt GUI interface is in <A HREF="https://github.com/cudmore/PyMapManager/tree/master/PyMapManager/interface">/PyMapManager/interface</A>
 
-<IMG SRC="images/pyMapManager_v2.png" width=800>
+<IMG SRC="docs/docs/img/pyMapManager_v2.png" width=800>
 
 This screen shot shows the main PyQt interface window (left), a map plot (top center), a stack plot (top right), and a stack image plot (bottom right).
 
@@ -53,12 +53,6 @@ pip install numpy
 pip install pandas
 pip install requests
 pip install tifffile
-```
-
-If your using conda, install [tifffile](https://www.lfd.uci.edu/~gohlke). This version is for Python 2.7, newer versions are for Python 3.x
-
-```
-conda install -c conda-forge tifffile=0.12.1
 ```
 
 ### Install PyMapManager Package
@@ -110,7 +104,9 @@ Edit `mmclient/static/mmserver.js` and make sure `serverurl` points to your loca
 serverurl = 'http://127.0.0.1:5010/'
 ```
 
-Install http-server (Assuming you have node and npm installed)
+Install http-server
+
+Download and manually install [node](https://nodejs.org/en/download/).
 
 ```
 npm install http-server -g

@@ -111,3 +111,46 @@ gunicorn -b 0.0.0.0:5010 mmserver:app
 
 
 ## Pushing changes in mmclient/ to robertcudmore.org
+
+## Pushing to [PyPi][pypi]
+
+This will be available at [https://pypi.python.org/pypi/pymapmanager](https://pypi.python.org/pypi/pymapmanager) and can be installed with `pip install PyMapManager`.
+
+There is also a test server at [https://testpypi.python.org/pypi](https://testpypi.python.org/pypi)
+
+1. Make sure there is a `~/.pypirc` file
+
+```
+[distutils]
+index-servers =
+  pypi
+  pypitest
+
+[pypi]
+username=your_username
+password=your_password
+
+[pypitest]
+username=your_username
+password=your_password
+```
+
+2. Update version in `PyMapManager/setup.py`
+
+      version='0.1.1',
+
+3. Makes .tar.gz in `dist/`
+
+	cd PyMapManager
+	python setup.py sdist
+	
+4.1 push to test server
+
+	python setup.py sdist upload -r pypitest
+	
+4.2. Push to PyPi website
+
+	python setup.py sdist upload
+	
+
+[pypi]: https://pypi.python.org/pypi/pymapmanager

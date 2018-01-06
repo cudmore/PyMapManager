@@ -25,11 +25,13 @@ serverurl = 'http://127.0.0.1:5010/'
 
 ## Running the Javascript server (local)
 
-This will use a [node](https://nodejs.org/) http-server to create a local server.
+This will use a [node](https://nodejs.org/) [http-server](https://www.npmjs.com/package/http-server) to create a local web server.
+
+### Install node (and npm)
+
+[Download](https://nodejs.org/en/download/) Node for your system and install manually. This should also install [npm](https://www.npmjs.com/).
 
 ### Install http-server
-
-Assuming you have [node](https://nodejs.org/) and [npm](https://www.npmjs.com/).
 
 ```
 npm install http-server -g

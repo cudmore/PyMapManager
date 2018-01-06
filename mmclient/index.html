@@ -42,18 +42,21 @@
 	<!-- <script type="text/javascript" src="static/lib/angularjs-dropdown-multiselect.min.js"></script> -->
 
 </head>
+
+
 <body>
 <!-- {% raw %} -->
-
 
 <div ng-controller="mmclient_controller" ng-init="load()">
 
 	<div class="row">
 		<div class="col-10">
 
-		<span style="font-size:1.6em;">Explore Map Manager Annotations and Image Time-Series</span>
+		<font class="myInverseColor" style="font-size:1.6em;">
+		Explore Map Manager Annotations and Image Time-Series
+		</font>
 
-		<button type="button" class="btn btn-default btn-sm" data-toggle="dropdown" style="background:#bdc3c7; float:right"> <i class="fa fa-info-circle fa-2x" aria-hidden="true"></i></button>
+		<button type="button" class="btn btn-default btn-sm myButtonBackground" data-toggle="dropdown" style="float:right"> <i class="fa fa-info-circle fa-2x" aria-hidden="true"></i></button>
 		<div class="mypopup">
 		<ul class="dropdown-menu" style="z-index:9999">
 		<li class="myIndentDiv2"><A HREF="http://blog.cudmore.io/PyMapManager" target="_blank">PyMapManager Documentation</A></li>
@@ -243,8 +246,9 @@
 		<!-- -->
 		<div class="myIndentDiv2">
 			<!-- see https://codepen.io/bseth99/pen/fboKH -->
-			<!-- <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"></span> <i class="fa fa-cog" aria-hidden="true"></i></button> -->
-			<button type="button" class="btn btn-default btn-sm" data-toggle="dropdown"> <i class="fa fa-cog fa-1x" aria-hidden="true"></i></button>
+			<!-- <button type="button" class="btn btn-default btn-sm dropdown-toggle myButtonBackground" data-toggle="dropdown"></span> <i class="fa fa-cog fa-2x" aria-hidden="true"></i></button> -->
+			<!--  &#9662; is down arrow -->
+			<button type="button" class="btn btn-default btn-sm myButtonBackground" data-toggle="dropdown"><i class="fa fa-cog fa-lg" aria-hidden="true"></i></button>
 			<table class="dropdown-menu">
 			<tr>
 			<td  class="myIndentDiv2">
@@ -286,16 +290,16 @@
 		
 		<div class="myIndentDiv2">
 		<input type="checkbox" id="linkTimepointsID" ng-model="linkTimepoints" ng-change="userToggleLinkTimepoints()" ng-checked="linkTimepoints">
-		<label for="linkTimepointsID"><i class="fa fa-link fa-1x" aria-hidden="true"></i></label>
+		<label for="linkTimepointsID"><i class="fa fa-link fa-lg myButtonBackground" aria-hidden="true"></i></label>
 		</div>		
 		
 		<div class="myIndentDiv2">
 		<input type="checkbox" id="showSlidingZID" ng-model="showSlidingZ" ng-change="userToggleShowSlidingZ()" ng-checked="showSlidingZ">
-		<label for="showSlidingZID">Sliding Z</label>
+		<label class="myInverseColor" for="showSlidingZID">Sliding Z</label>
 		</div>		
 		
 		<div class="myIndentDiv2">
-		<label for="imageBrightnessID"><i class="fa fa-sun-o" aria-hidden="true"></i></label>
+		<label for="imageBrightnessID"><i class="fa fa-sun-o fa-lg myButtonBackground" aria-hidden="true"></i></label>
 		<input type="range" id="imageBrightnessID" min="1" max="200" ng-model="imageBrightness">
 		</div>		
 
@@ -314,10 +318,10 @@
 	</div>
 
 	<div class="row">
-		
+			
 		<div class="myIndentDiv" ng-style="getLeafletStyle()">
 			<!-- <div ng-show="showTimepoints[0]" id="myLeafletID0" style="width: 100%; height: 100%;" "> -->
-			<div ng-show="showTimepoints[0]" id="myLeafletID0" style="width: 512px; height: 512px;">
+			<div class="myLeafletDiv" ng-show="showTimepoints[0]" id="myLeafletID0" style="width: 512px; height: 512px;">
 				<div class="tpIntentDiv">
 				<div ng-if="showTimepointNumber" class="tpPosition">
 				0

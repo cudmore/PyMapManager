@@ -6,6 +6,14 @@ This REST server is accessed by the Javascript client in [mmclient](https://gith
 
 See [here](http://blog.cudmore.io/PyMapManager/rest-api/) For a full list of REST API endpoints.
 
+## Installation
+
+Make sure you have all the reuired Python libraries with
+
+	pip install -r requirements.txt
+
+Other than that, there is no formal installation. This is a stand-alone Python script, not a Python Package.
+	
 ## Running the server
 
 This will run the server locally at `http://localhost:5010`.
@@ -17,10 +25,6 @@ python mmserver.py
 
 The default Flask server that is used when running with `python mmserver.py` is **asynchronous**. This means that really fast or lots of user requests will get backed up and the server will not respond. To get around this, run a **synchronous** server with `gunicorn`.
 
-Install gunicorn
-
-	pip install gunicorn
-	
 On OSX (gunicorn requires sudo)
 
 	cd mmserver
