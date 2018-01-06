@@ -32,13 +32,23 @@
         }, 
         {
             "location": "/install-pymapmanager/", 
-            "text": "Install pyMapManager Python package\n\n\nDownload the repo\n\n\ngit clone https://github.com/cudmore/PyMapManager.git\n\n\n\nInstall PyMapManager\n\n\npip install -e PyMapManager\n\n\n\nFrom within Python, include the libraries like:\n\n\nfrom pymapmanager import mmMap", 
+            "text": "Install PyMapManager Python package\n\n\nInstall using pip\n\n\npip install PyMapManager\n\n\n\nThis will install the version located \nhere\n.\n\n\nInstall from a manual download\n\n\nDownload the repo\n\n\ngit clone https://github.com/cudmore/PyMapManager.git\n\n\n\nInstall required Python libraries\n\n\ncd PyMapManager/pymapmanager\npip install -r requirements.txt\n\n\n\nInstall PyMapManager\n\n\ncd PyMapManager\npip install -e pymapmanager\n\n\n\nTesting the install\n\n\nFrom within Python, include the libraries like:\n\n\nfrom pymapmanager import mmMap", 
             "title": "Install PyMapManager"
         }, 
         {
             "location": "/install-pymapmanager/#install-pymapmanager-python-package", 
             "text": "", 
-            "title": "Install pyMapManager Python package"
+            "title": "Install PyMapManager Python package"
+        }, 
+        {
+            "location": "/install-pymapmanager/#install-using-pip", 
+            "text": "pip install PyMapManager  This will install the version located  here .", 
+            "title": "Install using pip"
+        }, 
+        {
+            "location": "/install-pymapmanager/#install-from-a-manual-download", 
+            "text": "", 
+            "title": "Install from a manual download"
         }, 
         {
             "location": "/install-pymapmanager/#download-the-repo", 
@@ -46,9 +56,19 @@
             "title": "Download the repo"
         }, 
         {
+            "location": "/install-pymapmanager/#install-required-python-libraries", 
+            "text": "cd PyMapManager/pymapmanager\npip install -r requirements.txt", 
+            "title": "Install required Python libraries"
+        }, 
+        {
             "location": "/install-pymapmanager/#install-pymapmanager", 
-            "text": "pip install -e PyMapManager  From within Python, include the libraries like:  from pymapmanager import mmMap", 
+            "text": "cd PyMapManager\npip install -e pymapmanager", 
             "title": "Install PyMapManager"
+        }, 
+        {
+            "location": "/install-pymapmanager/#testing-the-install", 
+            "text": "From within Python, include the libraries like:  from pymapmanager import mmMap", 
+            "title": "Testing the install"
         }, 
         {
             "location": "/install-client-server/", 
@@ -197,7 +217,7 @@
         }, 
         {
             "location": "/dev-notes/", 
-            "text": "To do\n\n\n\n\n[done] Generate API documentation from doc strings\n\n\n[done] Load individual slices dynamically (how to query number of slices in .tif file?)\n\n\n[done] Use the mmserver REST API to make a standalone web-app using Flask, Angular, and Plotly\n\n\n[done] Implement visualization of a spine run in mmserver.\n\n\nMake mmserver link all plot, clicking in one will highlight in other.\n\n\nmmserver needs to use \nmap pool\n so publication data can easily be presented.\n\n\n\n\nMkDocs\n\n\nServe locally\n\n\ncd ~/Dropbox/PyMapManager/docs\nmkdocs serve\n\n\n\n\nPush to github. This needs to be pushed from local github repo, not Dropbox repo.\n\n\ncd ~/Sites/PyMapManager/docs\nmkdocs gh-deploy --clean\n\n\n\n\nSynchronize with Unison\n\n\n# Unison preferences file\nroot = /Users/cudmore/Dropbox/PyMapManager/\nroot = /Users/cudmore/Sites/PyMapManager\n\nignore = Name .DS_Store\nignore = Name *.DS_Store\nignore = Name *.pyc\nignore = Name *.tif\nignore = Name *.egg-info\nignore = Path .git\nignore = Path .idea\n\n#when synchronizing between platforms or hdd formats\n#rsrc = false\n#perms = 0\n\n# Be fast even on Windows\n#fastcheck = yes\n\n#servercmd=/home1/robertcu/unison\n\n\n\n\nExport iPython notebooks to html\n\n\njupyter nbconvert --ExecutePreprocessor.kernel_name=python3 --to html --execute --ExecutePreprocessor.timeout=120\n\njupyter nbconvert --ExecutePreprocessor.kernel_name=python2 --to html --execute --ExecutePreprocessor.timeout=120\n\n\n\n\nSearch and replace across a number of files\n\n\nsearch for \nwindows\n and replace with \nlinux\n\n\ngrep -rl 'windows' ./ | xargs sed -i 's/windows/linux/g'\n\ngrep -rl 'windows' ./ | xargs sed -i \"\" 's/windows/linux/g'\n\nfind ./ -type f -exec sed -i \"\" \"s/oldstring/new string/g\" {} \\;\n\n\n\nsearch all files in current directory \n./\n for \n and replace with ``\n\n\ngrep -rl '    ' ./ | xargs sed -i \"\" 's/    //g'\n\n\n\nfrom /PyMapMAnager/docs, search for '    ' and replace it with ''\n\n\ngrep -rl '    ' ./docs/examples | xargs sed -i \"\" 's/    //g'", 
+            "text": "To do\n\n\n\n\n[done] Generate API documentation from doc strings\n\n\n[done] Load individual slices dynamically (how to query number of slices in .tif file?)\n\n\n[done] Use the mmserver REST API to make a standalone web-app using Flask, Angular, and Plotly\n\n\n[done] Implement visualization of a spine run in mmserver.\n\n\nMake mmserver link all plot, clicking in one will highlight in other.\n\n\nmmserver needs to use \nmap pool\n so publication data can easily be presented.\n\n\n\n\nMkDocs\n\n\nServe locally\n\n\ncd ~/Dropbox/PyMapManager/docs\nmkdocs serve\n\n\n\n\nPush to github. This needs to be pushed from local github repo, not Dropbox repo.\n\n\ncd ~/Sites/PyMapManager/docs\nmkdocs gh-deploy --clean\n\n\n\n\nSynchronize with Unison\n\n\n# Unison preferences file\nroot = /Users/cudmore/Dropbox/PyMapManager/\nroot = /Users/cudmore/Sites/PyMapManager\n\nignore = Name .DS_Store\nignore = Name *.DS_Store\nignore = Name *.pyc\nignore = Name *.tif\nignore = Name *.egg-info\nignore = Path .git\nignore = Path .idea\n\n#when synchronizing between platforms or hdd formats\n#rsrc = false\n#perms = 0\n\n# Be fast even on Windows\n#fastcheck = yes\n\n#servercmd=/home1/robertcu/unison\n\n\n\n\nExport iPython notebooks to html\n\n\njupyter nbconvert --ExecutePreprocessor.kernel_name=python3 --to html --execute --ExecutePreprocessor.timeout=120\n\njupyter nbconvert --ExecutePreprocessor.kernel_name=python2 --to html --execute --ExecutePreprocessor.timeout=120\n\n\n\n\nSearch and replace across a number of files\n\n\nsearch for \nwindows\n and replace with \nlinux\n\n\ngrep -rl 'windows' ./ | xargs sed -i 's/windows/linux/g'\n\ngrep -rl 'windows' ./ | xargs sed -i \"\" 's/windows/linux/g'\n\nfind ./ -type f -exec sed -i \"\" \"s/oldstring/new string/g\" {} \\;\n\n\n\nsearch all files in current directory \n./\n for \n and replace with ``\n\n\ngrep -rl '    ' ./ | xargs sed -i \"\" 's/    //g'\n\n\n\nfrom /PyMapMAnager/docs, search for '    ' and replace it with ''\n\n\ngrep -rl '    ' ./docs/examples | xargs sed -i \"\" 's/    //g'\n\n\n\nPushing changes to home Debian server\n\n\n\n\nUse Unison to update entire PyMapManager folder (pymapmanager, mmclient, mmserver)\n\n\n\n\nThis lives in \n/home/cudmore/PyMapManager\n\n\n\n\nIf I changed core soure code, make sure \npymapmanager\n is updated\n\n\n\n\ncd\npip uninstall PyMapManager\npip install -e PyMapManager\n\n\n\n\n\n\nCopy mmclient into /var/www/html\n\n\n\n\ncd\ncd PyMapManager\nsudo cp -fr mmclient /var/www/html/\n\n\n\n\n\n\nRun mmserver/ in screen using gunicorn\n\n\n\n\nMake sure it is not already running with \nscreen -r\n. Or with \nps -aux | grep gunicorn\n\n\ncd\ncd PyMapManager/mmserver\nscreen\ngunicorn -b 0.0.0.0:5010 mmserver:app\n\n\n\n\nPushing changes in mmclient/ to robertcudmore.org\n\n\nPushing to \nPyPi\n\n\nThis will be available at \nhttps://pypi.python.org/pypi/pymapmanager\n and can be installed with \npip install PyMapManager\n.\n\n\nThere is also a test server at \nhttps://testpypi.python.org/pypi\n\n\n\n\nMake sure there is a \n~/.pypirc\n file\n\n\n\n\n[distutils]\nindex-servers =\n  pypi\n  pypitest\n\n[pypi]\nusername=your_username\npassword=your_password\n\n[pypitest]\nusername=your_username\npassword=your_password\n\n\n\n\n\n\n\n\nUpdate version in \nPyMapManager/setup.py\n\n\nversion='0.1.1',\n\n\n\n\n\n\nMakes .tar.gz in \ndist/\n\n\ncd PyMapManager\npython setup.py sdist\n\n\n\n\n\n\n4.1 push to test server\n\n\npython setup.py sdist upload -r pypitest\n\n\n\n4.2. Push to PyPi website\n\n\npython setup.py sdist upload", 
             "title": "Development Notes"
         }, 
         {
@@ -224,6 +244,21 @@
             "location": "/dev-notes/#search-and-replace-across-a-number-of-files", 
             "text": "search for  windows  and replace with  linux  grep -rl 'windows' ./ | xargs sed -i 's/windows/linux/g'\n\ngrep -rl 'windows' ./ | xargs sed -i \"\" 's/windows/linux/g'\n\nfind ./ -type f -exec sed -i \"\" \"s/oldstring/new string/g\" {} \\;  search all files in current directory  ./  for   and replace with ``  grep -rl '    ' ./ | xargs sed -i \"\" 's/    //g'  from /PyMapMAnager/docs, search for '    ' and replace it with ''  grep -rl '    ' ./docs/examples | xargs sed -i \"\" 's/    //g'", 
             "title": "Search and replace across a number of files"
+        }, 
+        {
+            "location": "/dev-notes/#pushing-changes-to-home-debian-server", 
+            "text": "Use Unison to update entire PyMapManager folder (pymapmanager, mmclient, mmserver)   This lives in  /home/cudmore/PyMapManager   If I changed core soure code, make sure  pymapmanager  is updated   cd\npip uninstall PyMapManager\npip install -e PyMapManager   Copy mmclient into /var/www/html   cd\ncd PyMapManager\nsudo cp -fr mmclient /var/www/html/   Run mmserver/ in screen using gunicorn   Make sure it is not already running with  screen -r . Or with  ps -aux | grep gunicorn  cd\ncd PyMapManager/mmserver\nscreen\ngunicorn -b 0.0.0.0:5010 mmserver:app", 
+            "title": "Pushing changes to home Debian server"
+        }, 
+        {
+            "location": "/dev-notes/#pushing-changes-in-mmclient-to-robertcudmoreorg", 
+            "text": "", 
+            "title": "Pushing changes in mmclient/ to robertcudmore.org"
+        }, 
+        {
+            "location": "/dev-notes/#pushing-to-pypi", 
+            "text": "This will be available at  https://pypi.python.org/pypi/pymapmanager  and can be installed with  pip install PyMapManager .  There is also a test server at  https://testpypi.python.org/pypi   Make sure there is a  ~/.pypirc  file   [distutils]\nindex-servers =\n  pypi\n  pypitest\n\n[pypi]\nusername=your_username\npassword=your_password\n\n[pypitest]\nusername=your_username\npassword=your_password    Update version in  PyMapManager/setup.py  version='0.1.1',    Makes .tar.gz in  dist/  cd PyMapManager\npython setup.py sdist    4.1 push to test server  python setup.py sdist upload -r pypitest  4.2. Push to PyPi website  python setup.py sdist upload", 
+            "title": "Pushing to PyPi"
         }
     ]
 }
