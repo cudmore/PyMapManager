@@ -2,11 +2,11 @@ from setuptools import setup, find_packages
 
 setup(name='PyMapManager',
       version='0.1.1',
-      description='Python package to load, analyze, and visualize Map Manager files',
+      description='Load, analyze, and visualize Map Manager files',
       url='http://github.com/cudmore/PyMapManager',
       author='Robert H Cudmore',
       author_email='robert.cudmore@gmail.com',
-      license='LICENSE.txt',
+      license='MIT',
       packages=['pymapmanager','pymapmanager/mmio'],
       #zip_safe=False
 )

@@ -4,6 +4,9 @@ import os, io, time, math
 from errno import ENOENT
 import pandas as pd
 import numpy as np
+#import tifffile
+
+import scipy.misc
 
 from pymapmanager.mmUtil import ROI_TYPES, newplotdict
 from pymapmanager.mmStack import mmStack
@@ -331,6 +334,63 @@ class mmMap():
 				
 		return pd
 		
+	def ingest(self, tp, channel=1):
+		"""
+		Take a raw 3D .tif and populate raw/ingest/tp<tp> with single channel .tif files.
+
+		Args:
+		    tp (int) : The timepoint to ingest
+		    channel (int) : The channel to ingest, valid channels are (1,2,3)
+
+		Returns:
+		    None
+		"""
+
+		print('mmMap.ingest() is ingesting tp:', tp, 'channel:', channel)
+
+		outFileType = '.png'
+
+		# '/Users/cudmore/Desktop/tmp/'
+		savePath = self._folder # ends in '/'
+		savePath += 'raw/'
+		if not os.path.isdir(savePath):
+			os.makedirs(savePath)
+		savePath += 'ingested/'
+		if not os.path.isdir(savePath):
+			os.makedirs(savePath)
+		savePath += 'tp' + str(tp) + '/'
+		if not os.path.isdir(savePath):
+			os.makedirs(savePath)
+
+		maxSavePath = self._folder + 'raw/ingested/'
+
+		print('   loading full 3d .tif')
+		# load the full 3D .tif
+		image = self.stacks[tp].loadStackImages(channel=channel)
+		print('   image shape:', image.shape)
+		[slices, m, n] = image.shape
+		for slice in range(slices):
+			outfile = self.name + '_tp' + str(tp) + '_ch' + str(channel) + '_s' + str(slice).zfill(4) + outFileType
+			outfilepath = savePath + outfile
+
+			if slice % 10 == 0:
+				print('   saving slice:', slice, 'of', slices, outfilepath)
+
+			# this saves .png as 8-bit, I am not sure if it is doing normalization?
+			scipy.misc.imsave(outfilepath, image[slice,:,:])
+
+		# make maximal intensity projection
+		maxfile = 'MAX_' + self.name + '_tp' + str(tp) + '_ch' + str(channel) + outFileType
+		maxfilepath = maxSavePath + maxfile
+		print('   making and saving max project', maxfilepath)
+		max_ = np.zeros((m, n), dtype='uint8')
+		for slice in range(slices):
+			max_ = np.maximum(max_, image[slice,:,:])
+		# MAX_rr30a_tp0_ch2
+		scipy.misc.imsave(maxfilepath, max_)
+
+		print('done ingesting')
+
 	def getMapValues3(self, pd):
 		"""
 		Get values of a stack annotation across all stacks in the map.
@@ -396,18 +456,25 @@ class mmMap():
 			myRange = range(n)
 
 		for j in myRange:
+			print('*** getMapValues3() j:', j, "pd['segmentid']:", pd['segmentid'])
 			orig_df = self.stacks[j].stackdb
 
 			currSegmentID = []
 			if self.numMapSegments:
 				if pd['segmentid'] >=0 :
 					currSegmentID = self.segRunMap[pd['segmentid'], j]  # this only works for one segment -- NOT A LIST
-					currSegmentID = int(currSegmentID)
-					# print 'getMapValues3() j:', j, 'currSegmentID:', currSegmentID
-					currSegmentID = [currSegmentID]
-				if pd['segmentid'] >= 0and not currSegmentID:
+					print('   currSegmentID:', currSegmentID)
+					if currSegmentID >= 0:
+						currSegmentID = int(currSegmentID)
+						# print 'getMapValues3() j:', j, 'currSegmentID:', currSegmentID
+						currSegmentID = [currSegmentID]
+					else:
+						currSegmentID = []
+				print('currSegmentID:', currSegmentID)
+				if pd['segmentid'] >= 0 and not currSegmentID:
 					# this session does not have segmentID that match
-					break
+					print('   getMapValues3() skipping tp', j)
+					continue
 
 			goodIdx = self.runMap[:, j]  # valid indices from runMap
 
@@ -644,16 +711,9 @@ class mmMap():
 		else:
 			return stackSegment
 
-class testmmMap():
-	"""
-	docstring for testmmMap
-	"""
-	def __init__(self):
-		pass
-
-
 if __name__ == '__main__':
-	path = 'examples/exampleMaps/rr30a/rr30a.txt'
+	path = '../examples/exampleMaps/THet2a/THet2a.txt'
+	#path = '../examples/exampleMaps/rr30a/rr30a.txt'
 	print('path:', path)
 	m = mmMap(path)
 
@@ -668,18 +728,22 @@ if __name__ == '__main__':
 	plotDict['xstat'] = 'days'
 	plotDict['ystat'] = 'pDist'
 	plotDict['zstat'] = 'ubssSum_int2'  # 'sLen3d_int1' #swap in any stat you like, e.g. 'ubssSum_int2'
-	plotDict['segmentid'] = [0]
+	plotDict['segmentid'] = 0 #[0]
 	plotDict['getMapDynamics'] = True
 	plotDict = m.getMapValues3(plotDict)
 
 	print("\nplotDict['x'].shape : ", plotDict['x'].shape)
 
 	# test line
+	# THet2a has a stack but NO tracing and NO spines at session 0
 	session = 0
 	plotDict = m.stacks[session].line.getLineValues3(plotDict)
-	print("line plotDict['x'].shape:", plotDict['x'].shape)
-	print("line plotDict['sDist'].shape:", plotDict['sDist'].shape)
-		
+	if plotDict['x']:
+		print("line plotDict['x'].shape:", plotDict['x'].shape)
+		print("line plotDict['sDist'].shape:", plotDict['sDist'].shape)
+	else:
+		print('__main__ did not find a line at session:', session)
+			
 	print('\nm.mapInfo():')
 	mapInfo = m.mapInfo()
 	for key, value in mapInfo.iteritems():

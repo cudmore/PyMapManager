@@ -153,4 +153,16 @@ password=your_password
 	python setup.py sdist upload
 	
 
+## images
+
+I need to decide between
+
+mmServer.py is using
+
+	from skimage.io import imsave, imread
+
+mmMap is using
+
+	import scipy.misc
+
 [pypi]: https://pypi.python.org/pypi/pymapmanager

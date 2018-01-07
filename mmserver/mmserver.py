@@ -48,7 +48,7 @@ from pymapmanager import mmMap
 from pymapmanager import mmUtil
 
 # turn off printing to console
-if 1:
+if 0:
 	import logging
 	log = logging.getLogger('werkzeug')
 	log.setLevel(logging.ERROR)

@@ -160,17 +160,35 @@
 							<table>
 								<thead>
 								<tr>
-								<th>Time-point</th>
+								<th>X Time-point</th>
 								</tr>
 								</thead>
 							<tbody class="tbody myScrollBar">
-								<tr ng-repeat="session in sessions" ng-class="{'mySelected':$index == selectedSession}" ng-click="setSelectedSession($index)">
+								<tr ng-repeat="session in sessions" ng-class="{'mySelected':$index == xSelectedSession}" ng-click="setSelectedSession('x', $index)">
 									<td>{{$index}} </td>
 									<td>{{session}} </td>
 								</tr>
 							</tbody>
 							</table>
 					</div>
+					<div class="col">
+							<table>
+								<thead>
+								<tr>
+								<th>Y Time-point</th>
+								</tr>
+								</thead>
+							<tbody class="tbody myScrollBar">
+								<tr ng-repeat="session in sessions" ng-class="{'mySelected':$index == ySelectedSession}" ng-click="setSelectedSession('y', $index)">
+									<td>{{$index}} </td>
+									<td>{{session}} </td>
+								</tr>
+							</tbody>
+							</table>
+					</div>
+					</div>
+					
+					<div class="row">
 					<div class="col">
 							<table>
 								<thead>
@@ -187,9 +205,9 @@
 					</div>
 					</div>
 					
-				</div>
-			</div>
-		</div>
+				</div> <!-- card block -->
+			</div> <!-- card -->
+		</div> <!-- col-4 -->
 
 		<div class="col-8">
 			<div class="card" style="width: 620px;">
@@ -208,8 +226,23 @@
 						
 						<div class="col">
 						<div class="myIndentDiv">
-						<input type="checkbox" id="showPlotLinesID" ng-model="showPlotLines" ng-change="userTogglePlotLines()" ng-checked="showPlotLines">
+						<!-- <input type="checkbox" id="showPlotLinesID" ng-model="showPlotLines" ng-change="userTogglePlotLines()" ng-checked="showPlotLines"> -->
+						<input type="checkbox" id="showPlotLinesID" ng-model="showPlotLines" ng-change="toggleInterface('showPlotLines')" ng-checked="showPlotLines">
 						<label for="showTracingID">Lines</label>
+						</div>
+						</div>
+
+						<div class="col">
+						<div class="myIndentDiv">
+						<input type="checkbox" id="showHistogramxID" ng-model="showHistogramx" ng-change="toggleInterface('showHistogramx')" ng-checked="showHistogramx">
+						<label for="showHistogramxID">X-Histograms</label>
+						</div>
+						</div>
+
+						<div class="col">
+						<div class="myIndentDiv">
+						<input type="checkbox" id="showHistogramyID" ng-model="showHistogramy" ng-change="toggleInterface('showHistogramy')" ng-checked="showHistogramy">
+						<label for="showHistogramyID">Y-Histograms</label>
 						</div>
 						</div>
 					</div>
