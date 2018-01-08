@@ -28,7 +28,7 @@
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
       <link rel="shortcut icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-0.17.1, mkdocs-material-2.0.4">
+      <meta name="generator" content="mkdocs-0.17.2, mkdocs-material-2.2.2">
     
     
       
@@ -36,11 +36,11 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/application-709eec9410.css">
+      <link rel="stylesheet" href="../assets/stylesheets/application.7a4cdee3.css">
       
     
     
-      <script src="../assets/javascripts/modernizr-e826f8942a.js"></script>
+      <script src="../assets/javascripts/modernizr.1aa3b519.js"></script>
     
     
       
@@ -83,14 +83,18 @@
         <label class="md-icon md-icon--menu md-header-nav__button" for="drawer"></label>
       </div>
       <div class="md-flex__cell md-flex__cell--stretch">
-        <span class="md-flex__ellipsis md-header-nav__title">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
           
             
-              
+              <span class="md-header-nav__topic">
+                PyMapManager
+              </span>
+              <span class="md-header-nav__topic">
+                Development Notes
+              </span>
             
-            Development Notes
           
-        </span>
+        </div>
       </div>
       <div class="md-flex__cell md-flex__cell--shrink">
         
@@ -150,6 +154,9 @@
 </header>
     
     <div class="md-container">
+      
+        
+      
       
       <main class="md-main">
         <div class="md-main__inner md-grid" data-md-component="container">
@@ -312,6 +319,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#running-development-servers" title="Running development servers" class="md-nav__link">
+    Running development servers
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#mkdocs" title="MkDocs" class="md-nav__link">
     MkDocs
   </a>
@@ -356,6 +370,20 @@
         <li class="md-nav__item">
   <a href="#pushing-to-pypi" title="Pushing to PyPi" class="md-nav__link">
     Pushing to PyPi
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#images" title="images" class="md-nav__link">
+    images
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cookies" title="cookies" class="md-nav__link">
+    cookies
   </a>
   
 </li>
@@ -395,6 +423,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#running-development-servers" title="Running development servers" class="md-nav__link">
+    Running development servers
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#mkdocs" title="MkDocs" class="md-nav__link">
     MkDocs
   </a>
@@ -443,6 +478,20 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#images" title="images" class="md-nav__link">
+    images
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cookies" title="cookies" class="md-nav__link">
+    cookies
+  </a>
+  
+</li>
+      
       
       
     </ul>
@@ -461,14 +510,49 @@
                   <h1>Development Notes</h1>
                 
                 <h2 id="to-do">To do</h2>
+<ul>
+<li>Set/get cookies in client browser. To do this, place ALL plotly options and then leaflet options into a dict. Save all values in each dict as cookies.<ul>
+<li>marker size</li>
+<li>leaflet marker size</li>
+<li>set name for session in session list from (None, original file, session condition)</li>
+<li>default channel</li>
+</ul>
+</li>
+<li>Move /data outside of /mmserver/data</li>
+<li>Implement a map pool to represent a figure in a paper<ul>
+<li>start by doing this in pure python</li>
+</ul>
+</li>
+<li>Intercept keyboard in leaflet, use this to switch (channel 1, channel 2, channel 3)</li>
+<li>
+<p>Write IGor code to export a vascular map</p>
+<ul>
+<li>stack db will have 2x type (nodeROI, slabROI)</li>
+<li>object map will hold just nodeROI (they are linked through time)</li>
+<li>on click in in plotly/leaflet, don't plotRun() is slabROI (there is no map for slabs</li>
+</ul>
+</li>
+<li>
 <ol>
-<li>[done] Generate API documentation from doc strings</li>
+<li>We now open 'otherROI' files</li>
+</ol>
+</li>
+<li>
+<p>[done] Generate API documentation from doc strings</p>
+</li>
 <li>[done] Load individual slices dynamically (how to query number of slices in .tif file?)</li>
 <li>[done] Use the mmserver REST API to make a standalone web-app using Flask, Angular, and Plotly</li>
 <li>[done] Implement visualization of a spine run in mmserver.</li>
 <li>Make mmserver link all plot, clicking in one will highlight in other.</li>
 <li>mmserver needs to use <code>map pool</code> so publication data can easily be presented.</li>
-</ol>
+</ul>
+<h2 id="running-development-servers">Running development servers</h2>
+<pre><code>cd mmserver
+python mmserver.py
+
+cd mmclient
+reload -b
+</code></pre>
 <h2 id="mkdocs">MkDocs</h2>
 <p>Serve locally</p>
 <pre><code>cd ~/Dropbox/PyMapManager/docs
@@ -592,6 +676,16 @@ python setup.py sdist</p>
 <p>4.2. Push to PyPi website</p>
 <pre><code>python setup.py sdist upload
 </code></pre>
+<h2 id="images">images</h2>
+<p>I need to decide between</p>
+<p>mmServer.py is using</p>
+<pre><code>from skimage.io import imsave, imread
+</code></pre>
+<p>mmMap is using</p>
+<pre><code>import scipy.misc
+</code></pre>
+<h2 id="cookies">cookies</h2>
+<p>see: https://stackoverflow.com/questions/14573223/set-cookie-and-get-cookie-with-javascript</p>
                 
                   
                 
@@ -633,9 +727,9 @@ python setup.py sdist</p>
       <div class="md-footer-copyright">
         
         powered by
-        <a href="http://www.mkdocs.org" title="MkDocs">MkDocs</a>
+        <a href="http://www.mkdocs.org">MkDocs</a>
         and
-        <a href="http://squidfunk.github.io/mkdocs-material/" title="Material for MkDocs">
+        <a href="https://squidfunk.github.io/mkdocs-material/">
           Material for MkDocs</a>
       </div>
       
@@ -647,9 +741,9 @@ python setup.py sdist</p>
       
     </div>
     
-      <script src="../assets/javascripts/application-8e4952e681.js"></script>
+      <script src="../assets/javascripts/application.6cdc17f0.js"></script>
       
-      <script>app.initialize({version:"0.17.1",url:{base:".."}})</script>
+      <script>app.initialize({version:"0.17.2",url:{base:".."}})</script>
       
     
     
