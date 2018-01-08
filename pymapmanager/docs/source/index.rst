@@ -11,12 +11,13 @@ PyMapManager API documentation
    :caption: Contents:
 
 
-Packages
+Classes
 ==================
 
-* :doc:`PyMapManager <pymapmanager>` is the main package with :py:class:`mmMap <pymapmanager.mmMap>` and :py:class:`mmStack <pymapmanager.mmStack>`
+* :doc:`PyMapManager <pymapmanager>`
+* :py:class:`mmMap <pymapmanager.mmMap>`
+* :py:class:`mmStack <pymapmanager.mmStack>`
 * :doc:`PyMapManager.mmio <pymapmanager.mmio>` is a liaison to load files from online repositories.
-* :doc:`PyMapManager.interface <pymapmanager.interface>` is a PyQt GUI interface package.
 
 
 

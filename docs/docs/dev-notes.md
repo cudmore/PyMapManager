@@ -2,6 +2,22 @@
 
 ## To do
 
+ - Set/get cookies in client browser. To do this, place ALL plotly options and then leaflet options into a dict. Save all values in each dict as cookies.
+    - marker size
+    - leaflet marker size
+    - set name for session in session list from (None, original file, session condition)
+    - default channel
+ - Move /data outside of /mmserver/data
+ - Implement a map pool to represent a figure in a paper
+    - start by doing this in pure python
+ - Intercept keyboard in leaflet, use this to switch (channel 1, channel 2, channel 3)
+ - Write IGor code to export a vascular map
+    - stack db will have 2x type (nodeROI, slabROI)
+    - object map will hold just nodeROI (they are linked through time)
+    - on click in in plotly/leaflet, don't plotRun() is slabROI (there is no map for slabs
+    
+ - 20170106. We now open 'otherROI' files
+ 
  1. [done] Generate API documentation from doc strings
  2. [done] Load individual slices dynamically (how to query number of slices in .tif file?)
  3. [done] Use the mmserver REST API to make a standalone web-app using Flask, Angular, and Plotly
@@ -9,6 +25,14 @@
  5. Make mmserver link all plot, clicking in one will highlight in other.
  6. mmserver needs to use `map pool` so publication data can easily be presented.
 
+## Running development servers
+
+	cd mmserver
+	python mmserver.py
+	
+	cd mmclient
+	reload -b
+	
 ## MkDocs
 
 Serve locally
@@ -111,3 +135,62 @@ gunicorn -b 0.0.0.0:5010 mmserver:app
 
 
 ## Pushing changes in mmclient/ to robertcudmore.org
+
+## Pushing to [PyPi][pypi]
+
+This will be available at [https://pypi.python.org/pypi/pymapmanager](https://pypi.python.org/pypi/pymapmanager) and can be installed with `pip install PyMapManager`.
+
+There is also a test server at [https://testpypi.python.org/pypi](https://testpypi.python.org/pypi)
+
+1. Make sure there is a `~/.pypirc` file
+
+```
+[distutils]
+index-servers =
+  pypi
+  pypitest
+
+[pypi]
+username=your_username
+password=your_password
+
+[pypitest]
+username=your_username
+password=your_password
+```
+
+2. Update version in `PyMapManager/setup.py`
+
+      version='0.1.1',
+
+3. Makes .tar.gz in `dist/`
+
+	cd PyMapManager
+	python setup.py sdist
+	
+4.1 push to test server
+
+	python setup.py sdist upload -r pypitest
+	
+4.2. Push to PyPi website
+
+	python setup.py sdist upload
+	
+
+## images
+
+I need to decide between
+
+mmServer.py is using
+
+	from skimage.io import imsave, imread
+
+mmMap is using
+
+	import scipy.misc
+
+## cookies
+
+see: https://stackoverflow.com/questions/14573223/set-cookie-and-get-cookie-with-javascript
+
+[pypi]: https://pypi.python.org/pypi/pymapmanager

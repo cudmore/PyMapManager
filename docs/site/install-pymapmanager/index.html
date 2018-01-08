@@ -240,8 +240,22 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#install-pymapmanager-python-package" title="Install pyMapManager Python package" class="md-nav__link">
-    Install pyMapManager Python package
+  <a href="#install-pymapmanager-python-package" title="Install PyMapManager Python package" class="md-nav__link">
+    Install PyMapManager Python package
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#install-using-pip" title="Install using pip" class="md-nav__link">
+    Install using pip
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#install-from-a-manual-download" title="Install from a manual download" class="md-nav__link">
+    Install from a manual download
   </a>
   
     <nav class="md-nav">
@@ -255,6 +269,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#install-required-python-libraries" title="Install required Python libraries" class="md-nav__link">
+    Install required Python libraries
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#install-pymapmanager" title="Install PyMapManager" class="md-nav__link">
     Install PyMapManager
   </a>
@@ -263,6 +284,13 @@
         
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testing-the-install" title="Testing the install" class="md-nav__link">
+    Testing the install
+  </a>
   
 </li>
       
@@ -366,8 +394,22 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#install-pymapmanager-python-package" title="Install pyMapManager Python package" class="md-nav__link">
-    Install pyMapManager Python package
+  <a href="#install-pymapmanager-python-package" title="Install PyMapManager Python package" class="md-nav__link">
+    Install PyMapManager Python package
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#install-using-pip" title="Install using pip" class="md-nav__link">
+    Install using pip
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#install-from-a-manual-download" title="Install from a manual download" class="md-nav__link">
+    Install from a manual download
   </a>
   
     <nav class="md-nav">
@@ -381,6 +423,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#install-required-python-libraries" title="Install required Python libraries" class="md-nav__link">
+    Install required Python libraries
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#install-pymapmanager" title="Install PyMapManager" class="md-nav__link">
     Install PyMapManager
   </a>
@@ -389,6 +438,13 @@
         
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testing-the-install" title="Testing the install" class="md-nav__link">
+    Testing the install
+  </a>
   
 </li>
       
@@ -409,13 +465,24 @@
                 
                   <h1>Install PyMapManager</h1>
                 
-                <h2 id="install-pymapmanager-python-package">Install pyMapManager Python package</h2>
+                <h2 id="install-pymapmanager-python-package">Install PyMapManager Python package</h2>
+<h2 id="install-using-pip">Install using pip</h2>
+<pre><code>pip install PyMapManager
+</code></pre>
+<p>This will install the version located <a href="https://pypi.python.org/pypi/pymapmanager">here</a>.</p>
+<h2 id="install-from-a-manual-download">Install from a manual download</h2>
 <h3 id="download-the-repo">Download the repo</h3>
 <pre><code>git clone https://github.com/cudmore/PyMapManager.git
 </code></pre>
-<h3 id="install-pymapmanager">Install PyMapManager</h3>
-<pre><code>pip install -e PyMapManager
+<h3 id="install-required-python-libraries">Install required Python libraries</h3>
+<pre><code>cd PyMapManager/pymapmanager
+pip install -r requirements.txt
 </code></pre>
+<h3 id="install-pymapmanager">Install PyMapManager</h3>
+<pre><code>cd PyMapManager
+pip install -e pymapmanager
+</code></pre>
+<h2 id="testing-the-install">Testing the install</h2>
 <p>From within Python, include the libraries like:</p>
 <pre><code>from pymapmanager import mmMap
 </code></pre>

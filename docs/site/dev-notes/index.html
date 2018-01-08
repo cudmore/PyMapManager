@@ -319,6 +319,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#running-development-servers" title="Running development servers" class="md-nav__link">
+    Running development servers
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#mkdocs" title="MkDocs" class="md-nav__link">
     MkDocs
   </a>
@@ -342,6 +349,41 @@
         <li class="md-nav__item">
   <a href="#search-and-replace-across-a-number-of-files" title="Search and replace across a number of files" class="md-nav__link">
     Search and replace across a number of files
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pushing-changes-to-home-debian-server" title="Pushing changes to home Debian server" class="md-nav__link">
+    Pushing changes to home Debian server
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pushing-changes-in-mmclient-to-robertcudmoreorg" title="Pushing changes in mmclient/ to robertcudmore.org" class="md-nav__link">
+    Pushing changes in mmclient/ to robertcudmore.org
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pushing-to-pypi" title="Pushing to PyPi" class="md-nav__link">
+    Pushing to PyPi
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#images" title="images" class="md-nav__link">
+    images
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cookies" title="cookies" class="md-nav__link">
+    cookies
   </a>
   
 </li>
@@ -381,6 +423,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#running-development-servers" title="Running development servers" class="md-nav__link">
+    Running development servers
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#mkdocs" title="MkDocs" class="md-nav__link">
     MkDocs
   </a>
@@ -408,6 +457,41 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#pushing-changes-to-home-debian-server" title="Pushing changes to home Debian server" class="md-nav__link">
+    Pushing changes to home Debian server
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pushing-changes-in-mmclient-to-robertcudmoreorg" title="Pushing changes in mmclient/ to robertcudmore.org" class="md-nav__link">
+    Pushing changes in mmclient/ to robertcudmore.org
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pushing-to-pypi" title="Pushing to PyPi" class="md-nav__link">
+    Pushing to PyPi
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#images" title="images" class="md-nav__link">
+    images
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cookies" title="cookies" class="md-nav__link">
+    cookies
+  </a>
+  
+</li>
+      
       
       
     </ul>
@@ -426,14 +510,49 @@
                   <h1>Development Notes</h1>
                 
                 <h2 id="to-do">To do</h2>
+<ul>
+<li>Set/get cookies in client browser. To do this, place ALL plotly options and then leaflet options into a dict. Save all values in each dict as cookies.<ul>
+<li>marker size</li>
+<li>leaflet marker size</li>
+<li>set name for session in session list from (None, original file, session condition)</li>
+<li>default channel</li>
+</ul>
+</li>
+<li>Move /data outside of /mmserver/data</li>
+<li>Implement a map pool to represent a figure in a paper<ul>
+<li>start by doing this in pure python</li>
+</ul>
+</li>
+<li>Intercept keyboard in leaflet, use this to switch (channel 1, channel 2, channel 3)</li>
+<li>
+<p>Write IGor code to export a vascular map</p>
+<ul>
+<li>stack db will have 2x type (nodeROI, slabROI)</li>
+<li>object map will hold just nodeROI (they are linked through time)</li>
+<li>on click in in plotly/leaflet, don't plotRun() is slabROI (there is no map for slabs</li>
+</ul>
+</li>
+<li>
 <ol>
-<li>[done] Generate API documentation from doc strings</li>
+<li>We now open 'otherROI' files</li>
+</ol>
+</li>
+<li>
+<p>[done] Generate API documentation from doc strings</p>
+</li>
 <li>[done] Load individual slices dynamically (how to query number of slices in .tif file?)</li>
 <li>[done] Use the mmserver REST API to make a standalone web-app using Flask, Angular, and Plotly</li>
 <li>[done] Implement visualization of a spine run in mmserver.</li>
 <li>Make mmserver link all plot, clicking in one will highlight in other.</li>
 <li>mmserver needs to use <code>map pool</code> so publication data can easily be presented.</li>
-</ol>
+</ul>
+<h2 id="running-development-servers">Running development servers</h2>
+<pre><code>cd mmserver
+python mmserver.py
+
+cd mmclient
+reload -b
+</code></pre>
 <h2 id="mkdocs">MkDocs</h2>
 <p>Serve locally</p>
 <pre><code>cd ~/Dropbox/PyMapManager/docs
@@ -488,6 +607,85 @@ find ./ -type f -exec sed -i "" "s/oldstring/new string/g" {} \;
 <p>from /PyMapMAnager/docs, search for '    ' and replace it with ''</p>
 <pre><code>grep -rl '    ' ./docs/examples | xargs sed -i "" 's/    //g'
 </code></pre>
+<h2 id="pushing-changes-to-home-debian-server">Pushing changes to home Debian server</h2>
+<ol>
+<li>Use Unison to update entire PyMapManager folder (pymapmanager, mmclient, mmserver)</li>
+</ol>
+<p>This lives in <code>/home/cudmore/PyMapManager</code></p>
+<ol>
+<li>If I changed core soure code, make sure <code>pymapmanager</code> is updated</li>
+</ol>
+<pre><code>cd
+pip uninstall PyMapManager
+pip install -e PyMapManager
+</code></pre>
+
+<ol>
+<li>Copy mmclient into /var/www/html</li>
+</ol>
+<pre><code>cd
+cd PyMapManager
+sudo cp -fr mmclient /var/www/html/
+</code></pre>
+
+<ol>
+<li>Run mmserver/ in screen using gunicorn</li>
+</ol>
+<p>Make sure it is not already running with <code>screen -r</code>. Or with <code>ps -aux | grep gunicorn</code></p>
+<pre><code>cd
+cd PyMapManager/mmserver
+screen
+gunicorn -b 0.0.0.0:5010 mmserver:app
+</code></pre>
+
+<h2 id="pushing-changes-in-mmclient-to-robertcudmoreorg">Pushing changes in mmclient/ to robertcudmore.org</h2>
+<h2 id="pushing-to-pypi">Pushing to <a href="https://pypi.python.org/pypi/pymapmanager">PyPi</a></h2>
+<p>This will be available at <a href="https://pypi.python.org/pypi/pymapmanager">https://pypi.python.org/pypi/pymapmanager</a> and can be installed with <code>pip install PyMapManager</code>.</p>
+<p>There is also a test server at <a href="https://testpypi.python.org/pypi">https://testpypi.python.org/pypi</a></p>
+<ol>
+<li>Make sure there is a <code>~/.pypirc</code> file</li>
+</ol>
+<pre><code>[distutils]
+index-servers =
+  pypi
+  pypitest
+
+[pypi]
+username=your_username
+password=your_password
+
+[pypitest]
+username=your_username
+password=your_password
+</code></pre>
+
+<ol>
+<li>
+<p>Update version in <code>PyMapManager/setup.py</code></p>
+<p>version='0.1.1',</p>
+</li>
+<li>
+<p>Makes .tar.gz in <code>dist/</code></p>
+<p>cd PyMapManager
+python setup.py sdist</p>
+</li>
+</ol>
+<p>4.1 push to test server</p>
+<pre><code>python setup.py sdist upload -r pypitest
+</code></pre>
+<p>4.2. Push to PyPi website</p>
+<pre><code>python setup.py sdist upload
+</code></pre>
+<h2 id="images">images</h2>
+<p>I need to decide between</p>
+<p>mmServer.py is using</p>
+<pre><code>from skimage.io import imsave, imread
+</code></pre>
+<p>mmMap is using</p>
+<pre><code>import scipy.misc
+</code></pre>
+<h2 id="cookies">cookies</h2>
+<p>see: https://stackoverflow.com/questions/14573223/set-cookie-and-get-cookie-with-javascript</p>
                 
                   
                 

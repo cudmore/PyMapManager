@@ -1,14 +1,15 @@
 from setuptools import setup, find_packages
 
-setup(name='pymapmanager',
-      version='0.1',
-      description='Python library to load and analyze MapManager files',
+setup(name='PyMapManager',
+      version='0.1.1',
+      description='Load, analyze, and visualize Map Manager files',
       url='http://github.com/cudmore/PyMapManager',
       author='Robert H Cudmore',
       author_email='robert.cudmore@gmail.com',
       license='MIT',
-      packages=['pymapmanager'],
-      zip_safe=False)
+      packages=['pymapmanager','pymapmanager/mmio'],
+      #zip_safe=False
+)
 
 #  This one work, it excludes interface
 """

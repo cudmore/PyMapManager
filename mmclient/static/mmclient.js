@@ -11,16 +11,12 @@ angular.module('mmclient_app', [])
 //console.log = function() {}
 
 absUrl = $location.absUrl(); // http://127.0.0.1:8000/
+host = $location.host()
 console.log('absUrl:', absUrl)
-serverurl = 'http://' + $location.host() + ':5010'
-
-serverurl = absUrl
+console.log('host:', host)
 
 // ip of mmserver rest interface
-//run locally with
-// sudo gunicorn -b 127.0.0.1:5010 mmserver:app
-serverurl = 'http://127.0.0.1:5010/'
-serverurl = 'http://cudmore.duckdns.org:5010/'
+serverurl = 'http://' + $location.host() + ':5010/'
 
 console.log('serverurl:' + serverurl)
 
@@ -33,12 +29,25 @@ $scope.loadedMap = ''
 $scope.mapInfo = ''
 
 $scope.sessions = null;
-$scope.selectedSession = 0; //corresponds to all
+$scope.xSelectedSession = 0; //0 corresponds to all
+$scope.ySelectedSession = 0; //0 corresponds to all
 
 $scope.mapsegments = null
 $scope.selectedMapSegment = 0 // corresponds to all
 
 $scope.showPlotLines = true
+
+// see $scope.toggleInterface('markerColor')
+$scope.markerColorList = ["None", "Segment", "Dynamics"]
+$scope.selectedMarkerColor = "Dynamics" //have to use double quotes ???
+
+// see $scope.toggleInterface('plotMask')
+$scope.plotMaskList = ['All', 'Added', 'Subtracted', 'Transient', 'Always Present']
+$scope.selectedPlotMask = "All"
+
+// see $scope.toggleInterface()
+$scope.showHistogramx = false
+$scope.showHistogramy = false
 
 var xydata = null;
 
@@ -46,7 +55,7 @@ $scope.userRowSelection = null //reassign on changing stats, set null on changin
 
 $scope.userClickStackIndex = null
 $scope.userClickSessionIndex = null
-$scope.userClickMapSegment = null
+//$scope.userClickMapSegment = null
 
 //$scope.mapSizePixels = 512
 
@@ -62,6 +71,7 @@ $scope.statList = {
 	'9': 'ubsdSum_int2',
 	'10': 'ubssSum_int1',
 	'11': 'ubsdSum_int1',
+	'12': 'runIdx',
 }
 $scope.xStatSelection = 'days'
 $scope.yStatSelection = 'pDist'
@@ -85,23 +95,32 @@ $scope.setSelectedStat = function(xy, stat){
 	}
 }
 
-$scope.setSelectedSession = function(index){  //function that sets the value of selectedSession to current index
+$scope.setSelectedSession = function(xy, index){
+	//function that sets the value of selectedSession to current index
 	//console.log('setSelectedSession()')
 	// index==0 is 'All', others are index-1 for 0 based session
-	$scope.selectedSession = index;
-	//console.log('$scope.selectedSession:' + $scope.selectedSession)
+	switch (xy) {
+		case 'x':
+			$scope.xSelectedSession = index;
+			break
+		case 'y':
+			$scope.ySelectedSession = index;
+			break
+	}
 	if (xydata != null) {
-		myplot0()
+		//myplot0() // this calls rest and then redraws
+		updateScatterPlot(xydata)
 	}
 }
 
-$scope.setSelectedMapSegment = function(index){  //function that sets the value of selectedSession to current index
-	//console.log('setSelectedMapSegment()')
+$scope.setSelectedMapSegment = function(index){
+	//function that sets the value of selectedMapSegment to current index
 	// index==0 is 'All', others are index-1 for 0 based session
 	$scope.selectedMapSegment = index;
-	//console.log('$scope.selectedMapSegment:' + $scope.selectedMapSegment)
+	console.log('$scope.selectedMapSegment:' + $scope.selectedMapSegment)
 	if (xydata != null) {
-		myplot0()
+		//myplot0() // this calls rest and then redraws
+		updateScatterPlot(xydata)
 	}
 }
 
@@ -121,19 +140,22 @@ loadMapButton.addEventListener('click', function() {
 //});
 
 function myplot0() {
-	if ($scope.selectedMapSegment == 0) {
-		theMapSegment = null // all map segments
-	} else {
-		theMapSegment = $scope.selectedMapSegment - 1
-	}
-	if ($scope.selectedSession == 0) {
-		theSession = null // all sessions
-	} else {
-		theSession = $scope.selectedSession - 1
-	}
+	var theMapSegment = null
+	//if ($scope.selectedMapSegment == 0) {
+	//	theMapSegment = null // all map segments
+	//} else {
+	//	theMapSegment = $scope.selectedMapSegment - 1
+	//}
+	var theSession = null
+	//if ($scope.selectedSession == 0) {
+	//	theSession = null // all sessions
+	//} else {
+	//	theSession = $scope.selectedSession - 1
+	//}
+	// 20180106, getMapValues() now ignores theMapSegment and theSession
 	getMapValues(theMapSegment, theSession, $scope.xStatSelection, $scope.yStatSelection, 'z')
-	//getMapDynamics(theMapSegment, theSession)
 }
+
 
 // handle marker size slider
 dotSize.addEventListener('input', function() {
@@ -143,6 +165,7 @@ dotSize.addEventListener('input', function() {
 	}, [0]); // [0] is first trace
 });
 
+/*
 //handle plot lines checkbox
 $scope.userTogglePlotLines = function () {
 	console.log('userTogglePlotLines()', $scope.showPlotLines)
@@ -156,19 +179,54 @@ $scope.userTogglePlotLines = function () {
 		}, [0]); // [0] is first trace
 	}
 }
+*/
+
+$scope.toggleInterface = function(toggleThis) {
+	// variable will already be toggle when we get here
+	switch (toggleThis) {
+		case 'showHistogramx':
+		case 'showHistogramy':
+		  	// I want to use restyle for this, how do i restlye layouts 
+		  	updateScatterPlot(xydata)
+			break;
+		case 'showPlotLines':
+			if ($scope.showPlotLines) {
+				Plotly.restyle('scatterPlot', {
+					'mode': 'lines+markers'
+				}, [0]); // [0] is first trace
+			} else {
+				Plotly.restyle('scatterPlot', {
+					'mode': 'markers'
+				}, [0]); // [0] is first trace
+			}
+			break
+		case 'markerColor':
+		  	updateScatterPlot(xydata)
+			break
+		case 'plotMask':
+		  	updateScatterPlot(xydata)
+			break
+		default:
+			console.log('toggleInterface() case not taken:', toggleThis)
+			break;
+	} //switch
+}
 
 // get map list
 function getMapList(username) {
 	// /api/<username>/maps
+	//console.log('getMapList() starting for username:', username)
 	var url = serverurl + 'api/' + username + '/maps'
 	$http.get(url)
 		.then(function(response) {
 			$scope.maps = response.data;
 			// select the first map
 			$scope.selectedMap = $scope.maps[0]
-			//console.log($scope.maps)
+			//console.log('getMapList() finished for username:', username)
+			//return $scope.maps
 		})
 		.catch(function(data, status) {
+			console.log('ERROR: getMapList(()')
 			$log.info(data)
 		})
 }
@@ -177,23 +235,28 @@ function getMapList(username) {
 function loadMap(map) {
 	// http://127.0.0.1:5010/loadmap/public/rr30a
 	var url = serverurl + 'loadmap/' + $scope.username + '/' + map
+	$scope.loading = true;
 	$http.get(url)
 		.then(function(response) {
 			$scope.mapInfo = response.data // should contain all we need to know abou the map
-			//console.log('$scope.mapInfo:')
-			//console.log($scope.mapInfo)
+			
+			console.log('=== loadMap()', map, '$scope.mapInfo:')
+			console.log($scope.mapInfo)
 
-			$scope.sessions = $scope.mapInfo.stackNames;
+			$scope.sessions = $scope.mapInfo.importedStackName;
 			$scope.sessions.splice(0, 0, 'All'); //insert 'All' sessions at beginning
 
 			$scope.loadedMap = map
 
-			//getSessions()
-			//getMapSegments()
+			$scope.xSelectedSession = 0; //corresponds to all
+			$scope.ySelectedSession = 0; //corresponds to all
 
-			$scope.selectedSession = 0; //corresponds to all
-			$scope.selectedMapSegment = 1 // corresponds to FIRST session, session 0
-
+			if ($scope.mapInfo.numMapSegments > 0) {
+				$scope.selectedMapSegment = 1 // corresponds to FIRST segment, segment 0
+			} else {
+				$scope.selectedMapSegment = 0 // no map segments, select all
+			}
+			
 			$scope.mapsegments = []
 			var i
 			for (i=0; i<$scope.mapInfo.numMapSegments; i+=1) {
@@ -203,16 +266,43 @@ function loadMap(map) {
 
 			$scope.userRowSelection = null
 			
+			//set default x/y stats
+			switch ($scope.mapInfo.defaultAnnotation) {
+				case 'spineROI':
+					$scope.xStatSelection = 'days'
+					$scope.yStatSelection = 'pDist'
+					break
+				case 'otherROI':
+					$scope.xStatSelection = 'days'
+					$scope.yStatSelection = 'runIdx'
+					break;
+			}
+			
+			//globals leaflet
+			myScale = $scope.mapInfo.dx[0] // ASSUMING dx==dy AND all sessions are same
+			originalPixelsPerLine = $scope.mapInfo.px[0] // ASSUMING
+			//var webDisplaySize = 512
+			pixels_1024_512 = originalPixelsPerLine/ webDisplaySize
+			
+			$scope.leafletChannel = $scope.mapInfo.numChannels.toString()
+
+			// plotly scatter plot
 			myplot0()
 			
 			//
 			// leaflet
+			$scope.leafletMap = $scope.loadedMap //'rr30a'
+			buildMapInterface(1)
 			getLeafletMapData()
-			
+			//redrawLayers0()		
 		})
 		.catch(function(data, status) {
 			$log.info(data)
 		})
+		.finally(function() {
+    	    console.log('This finally block');
+    	    $scope.loading = false;
+	    })
 }
 
 // call parseFloat on a multidimensional array (of string)
@@ -230,12 +320,15 @@ function nested_to_float(a) {
 // http://127.0.0.1:5010/v2/<username>/<mapname>/getmapvalues?session=1&xstat=x&ystat=y&zstat=z
 //http://127.0.0.1:5010/v2/public/rr30a/getmapvalues?mapsegment=&session=0&xstat=x&ystat=y&zstat=z
 function getMapValues(mapsegment, session, xstat, ystat, zstat) {
-	if (mapsegment == null) {
-		mapsegment = ''
-	}
-	if (session == null) {
-		session = ''
-	}
+	// 20180106, ignore mapsegment and session, always get ALL annotations for given stat
+	//if (mapsegment == null) {
+	//	mapsegment = ''
+	//}
+	//if (session == null) {
+	//	session = ''
+	//}
+	mapsegment = ''
+	session = ''
 	
 	var startTime = Date.now()
 	
@@ -279,7 +372,7 @@ function getMapValues(mapsegment, session, xstat, ystat, zstat) {
 		  xydata.ystat = ystat
 		  xydata.zstat = zstat
 		  
-		  console.log('getMapValues() xydata:');
+		  console.log('=== getMapValues() xydata:');
 		  console.log(xydata);
 
 			var stopTime = Date.now()
@@ -303,13 +396,17 @@ function updateScatterPlot(xydata) {
 	// Create markers for points
 	var x = [];
 	var y = [];
-	var z = [];
+	//var z = [];
 	var colors = [];
 	var runRow = []
 	var runCol = []
+
+    var scl =['rgb(213,62,79)','rgb(244,109,67)','rgb(253,174,97)','rgb(254,224,139)','rgb(255,255,191)','rgb(230,245,152)','rgb(171,221,164)','rgb(102,194,165)','rgb(50,136,189)'];
+	// 1:add, 2:sub, 3:transient, 4:persistent
+	var dynamicsColor = ['rgb(0,0,0)', 'rgb(0,255,0)', 'rgb(255,0,0)', 'rgb(0,0,255)', 'rgb(0,0,0)']
 	
-	console.log('updateScatterPlot() xydata:')
-	console.log(xydata)
+	console.log('****** updateScatterPlot() xydata:')
+	//console.log(xydata)
 	
 	/*
 	I need some way to draw lines but not between runs (rows) and between first/last element
@@ -317,112 +414,150 @@ function updateScatterPlot(xydata) {
 		- Flattened array is # rows elements longer than expected -> use click pnt then spineidx[pnt]
 	*/
 	
-	//length of x is number of runs!
-	/*
-	for (var i = 0; i < xydata.x.length; i += 1) {
-		x.push(xydata.x[i]);
-			x.push([NaN])
-		y.push(xydata.y[i]);
-			y.push([NaN])
-		z.push(xydata.z[i]);
-			z.push([NaN])
-		colors.push(xydata.mapsegment[i]);
-			colors.push([])
-		// book-keeping
-		runRow.push(Array(numCol).fill(i));
-			runRow.push([NaN]);
-		runCol.push(xydata.mapsess[i]);
-			runCol.push([NaN]);
-	}
-	*/
+	//switching back to this for loop
+	// goal is to have if(run has dynamics addiotion) thnen include else don't
 		
-	// 20171224, thought this would be faster than looping? Does not seem to be?
-	// construct x/y/z as flat array
-	x = xydata.x.reduce(
-	  function(a, b) {
-	    return a.concat(b, NaN);
-	  },
-	  []
-	);
-	y = xydata.y.reduce(
-	  function(a, b) {
-	    return a.concat(b, NaN);
-	  },
-	  []
-	);
-	z = xydata.z.reduce(
-	  function(a, b) {
-	    return a.concat(b, NaN);
-	  },
-	  []
-	);
-	colors = xydata.dynamics.reduce(
-	  function(a, b) {
-	    return a.concat(b, NaN);
-	  },
-	  []
-	);
-	/*
-	colors = xydata.mapsegment.reduce(
-	  function(a, b) {
-	    return a.concat(b, NaN);
-	  },
-	  []
-	);
-	*/
-	runCol = xydata.mapsess.reduce(
-	  function(a, b) {
-	    return a.concat(b, NaN);
-	  },
-	  []
-	);
+	numCol = xydata.x[0].length
+	var tmpRow = Array(numCol)
+	var tmp = []
+	//length of x is number of runs!
+	for (var i = 0; i < xydata.x.length; i += 1) {
+		//only include each run based on current mask (added run, subtracted run, transient run)
+		var okGo = 1
+		// continue if row does not include map segment
+		if ($scope.selectedMapSegment>0) {
+			okGo = okGo && xydata.mapsegment[i].includes($scope.selectedMapSegment-1)
+			if (! okGo) {
+				//console.log('updateScatterPlot() skipping row:', i)
+				continue
+			}
+		}
+		//continue if dynamics does not include mask
+		switch ($scope.selectedPlotMask) {
+			case 'All':
+				// all okGo
+				break;
+			case 'Added':
+				okGo = okGo && xydata.dynamics[i].includes(1)
+				break;
+			case 'Subtracted':
+				okGo = okGo && xydata.dynamics[i].includes(2)
+				break;
+			case 'Transient':
+				okGo = okGo && xydata.dynamics[i].includes(3)
+				break;
+			case 'Always Present':
+				// lots of ways to do this, AP is ! added, ! subtracted and ! transient
+				okGo = okGo && ! xydata.dynamics[i].includes(1) && ! xydata.dynamics[i].includes(2) && ! xydata.dynamics[i].includes(3)
+				break;
+			default:
+				okGo = 1
+				break;
+		}
+		if (! okGo ) {
+			continue
+		}
+		
+		if ($scope.xSelectedSession>0 && $scope.ySelectedSession>0) {
+			
+			//this is REALLY inefficient, write REST interface to get single session x/y stats
+			//
+			tmp = Array(numCol).fill(null)
+			tmp[$scope.xSelectedSession-1] = xydata.x[i][$scope.xSelectedSession-1] // lhs is x, rhs is x
+			x = x.concat(tmp)
+			x = x.concat([NaN])
+			//
+			tmp = Array(numCol).fill(null)
+			tmp[$scope.xSelectedSession-1] = xydata.y[i][$scope.ySelectedSession-1] // lhs is x, rhs is y
+			y = y.concat(tmp)
+			y = y.concat([NaN])
+			//
+			//tmp = Array(numCol).fill(null)
+			//tmp[$scope.xSelectedSession-1] = xydata.z[i][$scope.ySelectedSession-1] // lhs is x, rhs is y
+			//z = z.concat(tmp)
+			//z = z.concat([NaN])
+			//
+			tmp = Array(numCol).fill(null)
+			switch ($scope.selectedMarkerColor) {
+				case 'Dynamics':
+					tmp[$scope.xSelectedSession-1] = xydata.dynamics[i][$scope.xSelectedSession-1] // lhs is x, rhs is y
+					break
+				case 'Segment':
+					tmp[$scope.xSelectedSession-1] = xydata.mapsegment[i][$scope.xSelectedSession-1] // lhs is x, rhs is y
+					break;
+				default:
+					tmp[$scope.xSelectedSession-1] = 0
+					break;
+			}
+			colors = y.concat(tmp)
+			colors = y.concat([NaN])
+			//sloppy here, need to strip down to x/y session
+			// book-keeping
+			runRow = runRow.concat(Array(numCol).fill(i));
+			runRow = runRow.concat([NaN]);
+			//
+			runCol = runCol.concat(xydata.mapsess[i]); // does not have to be mapsess, just j
+			runCol = runCol.concat([NaN]);
+		} else {
 
-	var numRows = xydata.x.length
-	var numCol = xydata.x[0].length
-	runRow = Array(numRows)
-	for (var i = 0; i < numRows; i += 1) {
-		runRow.push(Array(numCol).fill(i))
-		//runRow.push([NaN])
+			//
+			x = x.concat(xydata.x[i]);
+			x = x.concat([NaN])
+			//
+			y = y.concat(xydata.y[i]);
+			y = y.concat([NaN])
+			//
+			//z = z.concat(xydata.z[i]);
+			//z = z.concat([NaN])
+			//
+			switch ($scope.selectedMarkerColor) {
+				case 'Dynamics':
+					colors = colors.concat(xydata.dynamics[i]);
+					colors = colors.concat([NaN])
+					break;
+				case 'Segment':
+					colors = colors.concat(xydata.mapsegment[i]);
+					colors = colors.concat([NaN])
+					break;
+				default:
+					colors = colors.concat(Array(numCol).fill(0));
+					colors = colors.concat([NaN])
+					break;
+			}
+			// book-keeping
+			runRow = runRow.concat(Array(numCol).fill(i));
+			runRow = runRow.concat([NaN]);
+			//
+			runCol = runCol.concat(xydata.mapsess[i]); // does not have to be mapsess, just j
+			runCol = runCol.concat([NaN]);
+		}
 	}
-	runRow = runRow.reduce(
-	  function(a, b) {
-	    return a.concat(b, NaN);
-	  },
-	  []
-	);
-	
-	//20171220, flatten for plotting
-	//there must be some way for plotly to plot an array of array?
-	if (true) {
-		/*
-		x = [].concat.apply([], x)
-		y = [].concat.apply([], y)
-		z = [].concat.apply([], z)
-		colors = [].concat.apply([], colors)
-		//
-		runRow = [].concat.apply([], runRow)
-		runCol = [].concat.apply([], runCol)
-		*/
-	}
-	
-	//console.log('updateScatterPlot() x:')
-	//console.log(x)
-	//console.log(y)
+
+	//console.log(' after x:',x)
+	//console.log(' after colors:',colors)
 	
 	// map color index onto rgb
-	colors = colors.map(function(obj) {
-		var rObj = 'rgb(0,0,0)'
-		if (obj==1) {
-			rObj = 'rgb(0,255,0)'
-		} else if (obj==2) {
-			rObj = 'rgb(255,0,0)'
-		} else if (obj==3) {
-			rObj = 'rgb(0, 0, 255)'
-		} else if (obj==4) {
-			rObj = 'rgb(0,0,0)'
-		}
-		return rObj
-	});
+	if ($scope.selectedMarkerColor == 'Dynamics') {
+		colors = colors.map(function(obj) {
+			var rObj = 'rgb(0,0,0)'
+			if (obj >= 1) {
+				rObj = dynamicsColor[obj]
+			}
+			/*
+			if (obj==1) {
+				rObj = 'rgb(0,255,0)'
+			} else if (obj==2) {
+				rObj = 'rgb(255,0,0)'
+			} else if (obj==3) {
+				rObj = 'rgb(0, 0, 255)'
+			} else if (obj==4) {
+				rObj = 'rgb(0,0,0)'
+			}
+			*/
+			return rObj
+		});
+		//console.log('***** 2) colors:', colors)
+	}
 	
    // Display scatter plot
 	var trace = {
@@ -449,6 +584,24 @@ function updateScatterPlot(xydata) {
 		//ystat: xydata.ystat,
 	};
 
+	var xhist = {
+		  x: x,
+		  marker: {color: 'rgb(0,0,0)'}, 
+		  name: 'x density', 
+		  type: 'histogram', 
+		  yaxis: 'y2',
+		  visible: $scope.showHistogramx
+	};
+	
+	var yhist = {
+		  y: y,
+		  marker: {color: 'rgb(0,0,0)'}, 
+		  name: 'y density', 
+		  type: 'histogram', 
+		  xaxis: 'x2',
+		  visible: $scope.showHistogramy
+	};
+
 	var runSelection = {
 		x: $scope.userRowSelection ? xydata.x[$scope.userRowSelection] : [],
 		y: $scope.userRowSelection ? xydata.y[$scope.userRowSelection] : [],
@@ -466,7 +619,7 @@ function updateScatterPlot(xydata) {
 		}
 	}
 	
-	var data = [trace, runSelection];
+	var data = [trace, runSelection, xhist, yhist];
 
 	
 	var layout = {
@@ -476,6 +629,7 @@ function updateScatterPlot(xydata) {
 		//		center: {x: 0, y: 0, z: 0}
 		//	}
 		//},
+		dragmode: 'select',
 		hovermode: 'closest',
 		showlegend: false,
 		xaxis: {
@@ -485,7 +639,15 @@ function updateScatterPlot(xydata) {
 			zeroline: false,
 	        showline : true,
 	        autotick: true,
+			domain: ($scope.showHistogramy) ? [0, 0.83] : [0,0.99], 
 		},
+		xaxis2: {
+			domain: ($scope.showHistogramy) ? [0.85, 1] : [0.99,1], 
+			showgrid: false, 
+			zeroline: false,
+			visible: $scope.showHistogramy, //thee are swapped
+			//layer: 'below traces'
+		}, 
 		yaxis: {
 			title: xydata.ystat,
 			titlefont: { size: 20 },
@@ -495,11 +657,18 @@ function updateScatterPlot(xydata) {
 	        autotick: true,
 	        ticks: '',
        		showticklabels: true,
+			domain: ($scope.showHistogramx) ? [0, 0.83] : [0,0.99], 
+		},
+		yaxis2: {
+			domain: ($scope.showHistogramx) ? [0.85, 1] : [0.99,1], 
+			showgrid: false, 
+			zeroline: false,
+			visible: $scope.showHistogramx //these are swapped
 		},
 		margin: {
 			l: 80, //default i s80
 			r: 0,
-			t: 10,
+			t: 40,
 			b: 50, //default is 80
 			pad: 0
 		}
@@ -536,6 +705,33 @@ function updateScatterPlot(xydata) {
 	    }
 	});
 
+	//see: https://plot.ly/javascript/lasso-selection/
+	/*
+	scatterPlotDiv.on('plotly_selected', function(eventData) {
+	  console.log('plotly_selected;', eventData)
+	  var x = [];
+	  var y = [];
+
+	  var colors = [];
+	  for(var i = 0; i < N; i++) colors.push(color1Light);
+
+	  console.log(eventData.points)
+
+	  eventData.points.forEach(function(pt) {
+		x.push(pt.x);
+		y.push(pt.y);
+		colors[pt.pointNumber] = color1;
+	  });
+
+	  Plotly.restyle(graphDiv, {
+		x: [x, y],
+		xbins: {}
+	  }, [1, 2]);
+
+	  Plotly.restyle(scatterPlotDiv, 'marker.color', [colors], [0]);
+	});
+	*/
+
 	var stopTime = Date.now()
 	console.log('updateScatterPlot() took', (stopTime-startTime) / 1000, 'seconds')
 } //updateScatterPlot
@@ -556,12 +752,13 @@ function userClick(pnt, data) {
 
 	//$scope.userRowSelection = selRunRow
 	
-	console.log('selRunRow:', selRunRow, 'selRunCol:', selRunCol)
+	//console.log('selRunRow:', selRunRow, 'selRunCol:', selRunCol)
 	
 	//need to call $scope.$apply() for these to become visible in html
 	$scope.userClickStackIndex = xydata.stackidx[selRunRow][selRunCol]
 	$scope.userClickSessionIndex = xydata.mapsess[selRunRow][selRunCol]
-	$scope.userClickMapSegment = xydata.mapsegment[selRunRow][selRunCol]
+//todo: check if this exists
+//	$scope.userClickMapSegment = xydata.mapsegment[selRunRow][selRunCol]
 	//$scope.$apply();
 	
 	selectInPlotly(selRunRow, selRunCol)
@@ -572,10 +769,10 @@ function userClick(pnt, data) {
 	// leaflet
 	// if map is rr30a, segment is NOT all, sessions is all
 	// to do this I need plotly to get ALL so row is in sync with leaflet
-	console.log('todo: link with leaflet !!!')
-	if ($scope.selectedSession==0 && $scope.selectedMapSegment==0) {
+	//console.log('todo: link with leaflet !!!')
+	//if ($scope.selectedSession==0 && $scope.selectedMapSegment==0) {
 		selectRun(selRunCol, selRunRow)
-	}
+	//}
   }
 
 function selectInPlotly(runRow, runCol) {
@@ -590,7 +787,7 @@ function selectInPlotly(runRow, runCol) {
 	Plotly.restyle('scatterPlot', {
     	x: xNew,
     	y: yNew,
-  	}, [1])
+  	}, [1]) // [1] is user selection trace in plotly layout
 
   	updateScatterPlot(xydata)
 
@@ -607,9 +804,8 @@ function selectInPlotly(runRow, runCol) {
 	xyzTracingLeaflet2 = [] // todo: this is more classic dit for .find todo: merge these two !!!!
 	
 	$scope.leafletUser = 'public'
-	$scope.leafletMap = 'rr30a'
+	$scope.leafletMap = '' //$scope.loadedMap //'rr30a'
 	$scope.leafletTimepoint = 0
-	$scope.leafletChannel = 2
 
 	$scope.showAnnotations = true
 	$scope.showTracing = true
@@ -650,7 +846,8 @@ function selectInPlotly(runRow, runCol) {
 	bicycleRental = Array(tmpNumTimepoint)
 	bicycleRental2 = Array(tmpNumTimepoint)
 	
-    var myScale = 0.12
+    //var myScale = 0.12 //richard
+    var myScale = 0.108 // julia
     var originalPixelsPerLine = 1024
     var webDisplaySize = 512
     var pixels_1024_512 = originalPixelsPerLine/ webDisplaySize //1024 is original, 512 is what we are using to display on webpage
@@ -663,8 +860,28 @@ function selectInPlotly(runRow, runCol) {
 	$scope.showTimepoints.fill(true)
 	
 	//$scope.$apply();
+
+	$scope.leafletChannel = "1"
+	$scope.channelList = ["1", "2", "3"];
+	$scope.setLeafletChannel = function() {
+		console.log('=== setLeafletChannel()', $scope.leafletChannel)
+		//buildMapInterface(0)
+	}
+
+	$scope.leafletMarkerSize = 2
+	$scope.setLeafletMarkerSize = function () {
+		console.log('setLeafletMarkerSize()')
+		for (var currTP=0; currTP<tmpNumTimepoint; currTP+=1) {
+			if (! $scope.showTimepoints[currTP]) {
+				continue
+			}
+			redrawLayers(currTP)
+		}
+	}
 	
-	function buildMapInterface() {
+	$scope.leafletZoom = 2
+
+	function buildMapInterface(forceMaxProject) {
 		for (var thisTP=0; thisTP<tmpNumTimepoint; thisTP+=1) {
 
 			if (! $scope.showTimepoints[thisTP]) {
@@ -677,7 +894,7 @@ function selectInPlotly(runRow, runCol) {
 			var thisDIV = document.getElementById(thisDIVID);
 
 
-			console.log('building thisTP:', thisTP, 'thisDIV:', thisDIVID)
+			//console.log('building thisTP:', thisTP, 'thisDIV:', thisDIVID)
 		
 			//if (leafletRun[thisTP]) {
 			//	//console.log('   removing tp:', thisTP)
@@ -700,6 +917,8 @@ function selectInPlotly(runRow, runCol) {
 						//}
 				}) //.fitBounds(bounds);
 			}
+			
+			//console.log('   madeMap:', madeMap)
 			
 			/*
 			leafletRun[thisTP].on('load', function (e) {
@@ -728,7 +947,7 @@ function selectInPlotly(runRow, runCol) {
 			//  imperial: false
 			//}).addTo(leafletRun[thisTP]);
 
-			if (madeMap ) {
+			if (madeMap || forceMaxProject) {
 				$scope.currSlice[thisTP] = 0
 			}
 			
@@ -746,7 +965,7 @@ function selectInPlotly(runRow, runCol) {
 			//overlay.addTo(leafletRun[thisTP]);
 			//$scope.image[thisTP] = overlay
 			
-			if (madeMap ) {
+			if (madeMap || forceMaxProject) {
 				setMaxProject(thisTP)
 				leafletRun[thisTP].fitBounds(bounds);
 			}
@@ -827,12 +1046,16 @@ function selectInPlotly(runRow, runCol) {
 		
 			$scope.resetTimepoints = function () {
 				console.log('resetTimepoints()')
+				redrawLayers()
+				//buildMapInterface(1)
+				/*
 				for (var i=0; i<tmpNumTimepoint; i+=1) {
 					if (! $scope.showTimepoints[i]) {
 						continue
 					}
 					leafletRun[i].setView([256,256],0)
 				}
+				*/
 			}
 
 		}
@@ -966,6 +1189,9 @@ function selectInPlotly(runRow, runCol) {
 				//console.log('xyzTracingLeaflet2:')
 				//console.log(xyzTracingLeaflet2)
 				
+//
+//if no segments, we need to follow global pivot !!!
+//
 				//get sDist along line for seed
 				var seedSegmentID = mapLeafletData.mapsegment[seedRunRow][seedTP]
 				var seed_cPnt = mapLeafletData.cPnt[seedRunRow][seedTP]
@@ -996,7 +1222,6 @@ function selectInPlotly(runRow, runCol) {
 		}
 		
 		//select in plotly scatterplot (assuming it has same shape)
-		// segments NEED to be all
 		selectInPlotly(seedRunRow, seedTP)
 	}
 	
@@ -1011,12 +1236,14 @@ function selectInPlotly(runRow, runCol) {
 		//console.log(tracing)
 	}
 	
+/*
 	//
 	// leflet button callbacks
 	$scope.loadStackDataButton = function () {
 		console.log('loadStackDataButton')
 		getLeafletMapData()
 	}
+*/
 	
 /*
 	$scope.plotRunButton = function () {
@@ -1029,9 +1256,9 @@ function selectInPlotly(runRow, runCol) {
 	}
 */
 	
-$scope.imageBrightness = 100
-$scope.$watch("imageBrightness", function(){
-    // do whatever you need with the just-changed $scope.value
+	$scope.imageBrightness = 100
+	// need $watch so it updates as it drags (otherwise just updates on mouse up)
+	$scope.$watch("imageBrightness", function(){
     for (var thisTP=0; thisTP<tmpNumTimepoint; thisTP+=1) {
 		if (! $scope.showTimepoints[thisTP]) {
 			continue
@@ -1115,18 +1342,31 @@ $scope.$watch("imageBrightness", function(){
 	    $scope.image[tp].setUrl(maxImageUrl)
 	}
 	
+/*
+	function redrawLayers0() {
+		for (var currTP=0; currTP<tmpNumTimepoint; currTP+=1) {
+			redrawLayers()
+		}
+	}
+*/
+	
+//20170108, why did I need to put all this login in here? I did not need it before. What the fuck did I change
 	// split this to redraw one or other: xyz or tracing
 	function redrawLayers(tp) {
 	    //console.log('redrawLayers() tp:', tp)
 	    //geoJSON is a one-way controller of data, once set, changing the data will NOT update
-	    myLayer[tp].clearLayers()
-	    if ( $scope.showAnnotations) {
-		    myLayer[tp].addData(bicycleRental[tp]);
-	    }
-	    
-	   	myTracingLayer[tp].clearLayers()
-	    if ( $scope.showTracing) {
-	    	myTracingLayer[tp].addData(bicycleRental2[tp]);
+		if (myLayer[tp]) {
+		    myLayer[tp].clearLayers()
+		    if ( $scope.showAnnotations && bicycleRental[tp]) {
+			    	myLayer[tp].addData(bicycleRental[tp]);
+			}
+		}
+			    
+	   	if (myTracingLayer[tp]) {
+	   		myTracingLayer[tp].clearLayers()
+	    	if ( $scope.showTracing && bicycleRental2[tp]) {
+	    		myTracingLayer[tp].addData(bicycleRental2[tp]);
+	    	}
 		}
 	}
 	
@@ -1134,7 +1374,7 @@ $scope.$watch("imageBrightness", function(){
 	// x,y is in um
 	function setMapPosition(tp, x,y,slice) {
 		//zoom = leafletRun[0].getZoom()
-		var zoom = 2
+		var zoom = $scope.leafletZoom
 		var ll = L.latLng;
 		var ll = um2leaflet(x,y)
 		//ll = xy(ll)
@@ -1232,8 +1472,9 @@ $scope.$watch("imageBrightness", function(){
 				pointToLayer: function (feature, latlng) {
 					//console.log('XXXXXX feature')
 					//console.log(feature)
+					//return L.circleMarker(latlng, geojsonMarkerOptions)
 					return L.circleMarker(latlng, {
-						radius: 2,
+						radius: $scope.leafletMarkerSize,
 						fillColor: feature.properties.myColor, //"#ffff00",
 						color: feature.properties.myColor, //"#ffff00",
 						weight: 1,
@@ -1317,6 +1558,20 @@ $scope.$watch("imageBrightness", function(){
 		url += '&zstat=' + 'z'
 		console.log('getLeafletMapData() url:', url)
 
+		mapLeafletData = {}
+		mapLeafletData.x = []
+		mapLeafletData.y = []
+		mapLeafletData.z = []
+		//
+		mapLeafletData.stackidx = []
+		mapLeafletData.dynamics = []
+		mapLeafletData.cPnt = []
+		mapLeafletData.mapsegment = []
+
+		mapLeafletData.xstat = 'x'
+		mapLeafletData.ystat = 'y'
+		mapLeafletData.zstat = 'z'
+
 		$http.get(url)
 			.then(function(response) {
 				//console.log('getLeafletMapData) response.data:')
@@ -1355,7 +1610,7 @@ $scope.$watch("imageBrightness", function(){
 	
 	// make a copy of a column of mapLeafletData for ONE session
 	function getLeafletMapValues(tp, mapsegment) {
-		console.log('getLeafletMapValues() tp:', tp, 'mapsegment:', mapsegment)
+		//console.log('getLeafletMapValues() tp:', tp, 'mapsegment:', mapsegment)
 		if (mapsegment == null) {
 			mapsegment = ''
 		}
@@ -1369,8 +1624,8 @@ $scope.$watch("imageBrightness", function(){
 		xyzLeaflet[tp].y = mapLeafletData.y.map(function(value,index) { return value[tp]; });
 		xyzLeaflet[tp].z = mapLeafletData.z.map(function(value,index) { return value[tp]; });
 		
-		console.log('getLeafletMapValues() xyzLeaflet:');
-		console.log(xyzLeaflet[tp]);
+		//console.log('getLeafletMapValues() xyzLeaflet:');
+		//console.log(xyzLeaflet[tp]);
 		
 		//
 		// tracing
@@ -1381,23 +1636,29 @@ $scope.$watch("imageBrightness", function(){
 		url += '&ystat=' + 'y'
 		url += '&zstat=' + 'z'
 		//console.log('map tracing url:', url)
-		d3.json(url, function(data) {
+		d3.json(url, function(error, data) {
 			//todo: have flask return this
 			// we need an array with keys for .find in selectRun
-			var length = data.x.length
-			xyzTracingLeaflet2[tp] = []
-			for (var i=0; i<length; i+=1) {
-				var item = {
-					'idx': i,
-					'x': data.x[i],
-					'y': data.y[i],
-					'z': data.z[i],
-					'ID': data.ID[i],
-					'sDist': data.sDist[i],
-				}
-				xyzTracingLeaflet2[tp].push(item)
-			}
 			
+			if (error) {
+				console.log('getLeafletMapValues() d3.json error')
+				xyzTracingLeaflet2[tp] = []
+			} else {
+				var length = data.x.length
+				xyzTracingLeaflet2[tp] = []
+				for (var i=0; i<length; i+=1) {
+					var item = {
+						'idx': i,
+						'x': data.x[i],
+						'y': data.y[i],
+						'z': data.z[i],
+						'ID': data.ID[i],
+						'sDist': data.sDist[i],
+					}
+					xyzTracingLeaflet2[tp].push(item)
+				}
+			}
+						
 		  //console.log('xyzTracingLeaflet2[tp]:')
 		  //console.log(xyzTracingLeaflet2[tp])
 		});
@@ -1627,7 +1888,7 @@ $scope.$watch("imageBrightness", function(){
 		console.log('=== userToggleTimepoints() tp:', tp, 'show:', show)
 		$scope.showTimepoints[tp] = show
 
-		buildMapInterface()
+		buildMapInterface(0)
 
 		// not sure why i have to rebuild everything?
 		if (show) {
@@ -1659,16 +1920,37 @@ $scope.$watch("imageBrightness", function(){
 // try this for  sizing map dics
 //$timeout(initMap, 0);
 
+  //$scope.load = function() {
+	console.log('getMapList() username:', $scope.username)
+	getMapList($scope.username)
+
+    //dataPromise.then(function(result) {  
+       // this is only run after getMapList() resolves
+       //$scope.data = result;
+       //console.log("data.name"+$scope.data.name);
+
+		console.log('$scope.maps:', $scope.maps)
+	
+		console.log('loadMap() rr30a')
+		loadMap('rr30a')
+
+		console.log('finished')
+    //});
+ // }
+
+
+/*
   $scope.load = function() {
-    console.log('LOADED')
+    console.log('LOADED scope.load()')
     //alert("Window is loaded");
 	
 	getMapList($scope.username)
 	loadMap('rr30a')
 
-	buildMapInterface()
+	// load map is asynchronous, call this from within http response
+	//buildMapInterface()
   }
-
+*/
 
 //$scope.$apply();
 

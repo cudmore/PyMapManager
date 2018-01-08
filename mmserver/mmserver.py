@@ -48,7 +48,7 @@ from pymapmanager import mmMap
 from pymapmanager import mmUtil
 
 # turn off printing to console
-if 1:
+if 0:
 	import logging
 	log = logging.getLogger('werkzeug')
 	log.setLevel(logging.ERROR)
@@ -119,10 +119,17 @@ def mapInfo(mapname):
 	theRet = {}
 	if mapname in myMapList:
 		theRet = myMapList[mapname].mapInfo()
+		
 		# tweak 2d arrays for json
-		theRet['objMap'] = theRet['objMap'].astype('str').tolist() # spine i, session j, [i][j] gives us runIdx
-		theRet['runMap'] = theRet['runMap'].astype('str').tolist() # run index i, session j, [i][j] gives us stack idx
-		theRet['segMap'] = theRet['segMap'].astype('str').tolist()
+		
+		# i am not using these
+		#theRet['objMap'] = theRet['objMap'].astype('str').tolist() # spine i, session j, [i][j] gives us runIdx
+		#theRet['runMap'] = theRet['runMap'].astype('str').tolist() # run index i, session j, [i][j] gives us stack idx
+		
+		# I am not using segment map in .js
+		#theRet['segMap'] = []
+		#if theRet['numMapSegments'] > 0:
+		#	theRet['segMap'] = theRet['segMap'].astype('str').tolist()
 	else:
 		print 'error: mapInfo() map not loaded:', mapname
 	#return json.dumps(theRet)
@@ -227,51 +234,59 @@ def getmapvalues(username, mapname):
 	pd['ystat'] = ystat
 	pd['zstat'] = zstat
 	
-	# always detch map dynamics into pd['dynamics']
+	# for now, read xxx and if empty assume 'spineROI'
+	'''
+	if roitype:
+		pd['roitype'] = [roiType]
+	else:
+		# get the default roi type for this map
+		# if there is none, assume 'spineROI'
+		pd['roitype'] = ['spineROI']
+	'''
+	
+	# always fetch map dynamics into pd['dynamics']
 	pd['getMapDynamics'] = True
 	
+	# debug
+	if 0:
+		print 'getmapvalues pd:'
+		for key, item in pd.iteritems():
+			print '\t', key, ':', item
+		
 	#print 'getmapvalues() pd:', pd
 	global myMapList
 	if mapname in myMapList:
+		defaultAnnotation = myMapList[mapname].defaultAnnotation
+		if defaultAnnotation:
+			pd['roitype'] = defaultAnnotation
+		else:
+			pd['roitype'] = 'spineROI'
+		
+		print("getmapvalues() using pd['roitype']=", pd['roitype'])
+		
 		pd = myMapList[mapname].getMapValues3(pd)
 		
-		doFlatten = 0
-		if doFlatten:
-			ret['x'] = pd['x'][:]
-			ret['y'] = pd['y'][:]
-			ret['z'] = pd['z'][:]
-			ret['mapsegment'] = pd['mapsegment'][:]
-			ret['stackidx'] = pd['stackidx'][:]
-			ret['mapsess'] = pd['mapsess'][:]
-		else:
-			ret['x'] = pd['x']
-			ret['y'] = pd['y']
-			ret['z'] = pd['z']
-			ret['mapsegment'] = pd['mapsegment']
-			ret['stackidx'] = pd['stackidx']
-			ret['mapsess'] = pd['mapsess']
-			ret['dynamics'] = pd['dynamics']
-			ret['cPnt'] = pd['cPnt']
+		ret['x'] = pd['x']
+		ret['y'] = pd['y']
+		ret['z'] = pd['z']
+		ret['mapsegment'] = pd['mapsegment']
+		ret['stackidx'] = pd['stackidx']
+		ret['mapsess'] = pd['mapsess']
+		ret['dynamics'] = pd['dynamics']
+		ret['cPnt'] = pd['cPnt']
+		
 		# remove nan AND flatten to list
-		if 0:
-			ret['x'] = ret['x'][~np.isnan(ret['x'])].tolist()
-			ret['y'] = ret['y'][~np.isnan(ret['y'])].tolist()
-			ret['z'] = ret['z'][~np.isnan(ret['z'])].tolist()
-			ret['mapsegment'] = ret['mapsegment'][~np.isnan(ret['mapsegment'])].tolist()
-			ret['stackidx'] = ret['stackidx'][~np.isnan(ret['stackidx'])].tolist()
-			ret['mapsess'] = ret['mapsess'][~np.isnan(ret['mapsess'])].tolist()
-			#print ret['x']
-		if 1:
-			#print 'getmapvalues()', ret['x'].dtype # this is float64
-			ret['x'] = ret['x'].astype('str').tolist()
-			ret['y'] = ret['y'].astype('str').tolist()
-			ret['z'] = ret['z'].astype('str').tolist()
+		#print 'getmapvalues()', ret['x'].dtype # this is float64
+		ret['x'] = ret['x'].astype('str').tolist()
+		ret['y'] = ret['y'].astype('str').tolist()
+		ret['z'] = ret['z'].astype('str').tolist()
+		if len(ret['mapsegment']) > 0:
 			ret['mapsegment'] = ret['mapsegment'].astype('str').tolist()
-			ret['stackidx'] = ret['stackidx'].astype('str').tolist()
-			ret['mapsess'] = ret['mapsess'].astype('str').tolist()
-			ret['dynamics'] = ret['dynamics'].astype('str').tolist()
-			ret['cPnt'] = ret['cPnt'].astype('str').tolist()
-			#print ret['x']
+		ret['stackidx'] = ret['stackidx'].astype('str').tolist()
+		ret['mapsess'] = ret['mapsess'].astype('str').tolist()
+		ret['dynamics'] = ret['dynamics'].astype('str').tolist()
+		ret['cPnt'] = ret['cPnt'].astype('str').tolist()
+		#print ret['x']
 	else:
 		print 'warning: getmapvalues(): map', mapname, 'is not loaded'
 	#print 'getmapvalues:', ret
@@ -298,20 +313,26 @@ def getmaptracing(username, mapname):
 			pd['stacklist'] = []
 		
 		session = int(session)
+		# returns pd['x'] == None when no tracing
 		pd = myMapList[mapname].stacks[session].line.getLineValues3(pd)
 		
-		ret['x'] = pd['x'][:]
-		ret['y'] = pd['y'][:]
-		ret['z'] = pd['z'][:]
-		ret['sDist'] = pd['sDist'][:]
-		ret['ID'] = pd['ID'][:]
+		ret['x'] = []
+		ret['y'] = []
+		ret['z'] = []
 		
-		# remove nan
-		ret['x'] = ret['x'][~np.isnan(ret['x'])].tolist()
-		ret['y'] = ret['y'][~np.isnan(ret['y'])].tolist()
-		ret['z'] = ret['z'][~np.isnan(ret['z'])].tolist()
-		ret['sDist'] = ret['sDist'][~np.isnan(ret['sDist'])].tolist()
-		ret['ID'] = ret['ID'][~np.isnan(ret['ID'])].tolist()
+		if pd['x'] is not None:
+			ret['x'] = pd['x'][:]
+			ret['y'] = pd['y'][:]
+			ret['z'] = pd['z'][:]
+			ret['sDist'] = pd['sDist'][:]
+			ret['ID'] = pd['ID'][:]
+			
+			# remove nan
+			ret['x'] = ret['x'][~np.isnan(ret['x'])].tolist()
+			ret['y'] = ret['y'][~np.isnan(ret['y'])].tolist()
+			ret['z'] = ret['z'][~np.isnan(ret['z'])].tolist()
+			ret['sDist'] = ret['sDist'][~np.isnan(ret['sDist'])].tolist()
+			ret['ID'] = ret['ID'][~np.isnan(ret['ID'])].tolist()
 	else:
 		print 'warning: getmaptracing(): map', mapname, 'is not loaded'
 	return jsonify(ret)

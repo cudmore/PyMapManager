@@ -246,13 +246,19 @@ class mmStack():
     def countObj(self, roiType=None):
         """Count the number of roiType in stack
         """
-        if self.stackdb is not None:
+        theRet = 0
+        if self.stackdb is not None and self.stackdb.shape[0] > 0:
             if roiType is not None:
-            	return self.stackdb.roiType.value_counts()[roiType]
+                # this does not work
+                # #theRet = self.stackdb.roiType.value_counts()[roiType]
+                countsSeries = self.stackdb.roiType.value_counts()
+                if countsSeries.isin([roiType])[0]:
+                    theRet = countsSeries.value_counts()[roiType]
+                else:
+                    theRet = 0
             else:
-            	return self.stackdb.shape[0]
-        else:
-            return 0
+                theRet = self.stackdb.shape[0]
+        return theRet
 
     def getStackValues2(self, stat, roiType=['spineROI'], segmentID=[], plotBad=False, plotIntBad=False):
         """

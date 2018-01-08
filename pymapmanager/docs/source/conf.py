@@ -56,7 +56,6 @@ sys.path.insert(0, os.path.abspath('../..'))
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = ['sphinx.ext.autodoc',
-    'sphinx.ext.viewcode',
     'sphinx.ext.githubpages',
     'sphinx.ext.napoleon']
 
@@ -74,7 +73,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'PyMapManager'
-copyright = u'2017, Robert H Cudmore'
+copyright = u'2018, Robert H Cudmore'
 author = u'Robert H Cudmore'
 
 # The version info for the project you're documenting, acts as replacement for

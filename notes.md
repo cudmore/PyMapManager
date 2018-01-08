@@ -2,9 +2,6 @@
 
 ### Using fresh install of Anaconda on OSX
 
-    # work osx is 10.10.1 Yosemite
-    # home osx is
-
     # downgrade qt5 to qt4
     conda uninstall pyqt
     conda install pyqt=4
@@ -83,7 +80,7 @@ rebuild docs
 
 Trying to use Sphinx napolean: http://www.sphinx-doc.org/en/stable/ext/napoleon.html
 
-Tweek conf.py
+Tweek `docs/source/conf.py`
 
     exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store', 'old', 'pdoc']
 
@@ -96,13 +93,13 @@ Tweek conf.py
 
 To build the docs
 
-    cd ~/Dropbox/PyMapManager/PyMapManager/docs/
+    cd ~/Dropbox/PyMapManager/pymapmanager/docs/
     sphinx-apidoc -f -o docs ~/Dropbox/PyMapManager
     make html
 
 This should put output into root /docs/ folder (holding index.html) and github /docs/ option should work?
 
-    cd ~/Dropbox/PyMapManager/PyMapManager/docs/ #this has source directory with .rst files
+    cd ~/Dropbox/PyMapManager/pymapmanager/docs/ #this has source directory with .rst files
     
     # if i add a module i need to do this
     sphinx-apidoc -f -o source ~/Dropbox/PyMapManager
