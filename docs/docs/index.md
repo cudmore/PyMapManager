@@ -4,13 +4,13 @@ PyMapManager opens annotations created with the Igor Pro version of [Map Manager
 
 There are three components to PyMapManager: a Python package, a data client/server, and a desktop application.
 
-## PyMapManager Python package
+## 1) PyMapManager Python package
 
 To get started writing Python code to interface with Map Manager analysis, see the iPython notebooks in [/examples][5].
 
 For full class documentation, see the [API Documentation][2].
 
-## PyMapManager client/server
+## 2) PyMapManager client/server
  
 The PyMapManager server provides a web based [REST API][6] to retrieve Map Manager annotations and images.
 
@@ -28,9 +28,11 @@ We have an [example client/server][client/server] to see this in action.
 <IMG SRC="mmserver_leaflet2.png">
  
  
-## PyMapManager deskop application
+## 3) PyMapManager deskop application
  
-The Qt version of PyMapManager is a desktop application. See [github repository][4].
+**Development of this desktop application has been downgraded to focus on the PyMapManager web interface.**
+
+The Qt version of PyMapManager is a desktop application. See [github repository][4]. 
  
 <IMG SRC="pyMapManager_v2.png">
  
