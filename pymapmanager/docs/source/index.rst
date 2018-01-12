@@ -11,7 +11,7 @@ PyMapManager API documentation
    :caption: Contents:
 
 
-`PyMapManager <http://blog.cudmore.io/cudmore/PyMapManager>`_ is software to visualize and annotative 3D image time-series.
+`PyMapManager <http://blog.cudmore.io/PyMapManager>`_ is software to visualize and annotative 3D image time-series.
 
 The PyMapManager package is available on `PyPi <https://pypi.python.org/pypi/pymapmanager>`_ and can be installed with::
 
@@ -42,7 +42,7 @@ Examples
 
 Links
 ==================
-* PyMapManager `documentation website <https://github.com/cudmore/PyMapManager>`_.
+* PyMapManager `documentation website <http://blog.cudmore.io/PyMapManager>`_.
 * PyMapManager `GitHub repository <https://github.com/cudmore/PyMapManager>`_.
 * Documentation for the `Igor Pro Version of MapManager <http://blog.cudmore.io/mapmanager/>`_.
 * Robert Cudmore's `homepage <http://robertcudmore.org>`_.
