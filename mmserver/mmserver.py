@@ -62,11 +62,10 @@ if 0:
 	log.setLevel(logging.ERROR)
 
 # assuming data folder is in same folder as this source .py file
-#static_folder = '/Users/cudmore/Desktop/data'
 template_dir = os.path.abspath('../mmclient')
-static_folder = './data'
+#static_folder = './data'
 UPLOAD_FOLDER = './data'
-data_folder = './data'
+data_folder = '../PyMapManager-Data'
 
 # load a default map
 # having problems with workers in gunicorn not finding maps
@@ -157,7 +156,7 @@ def maps(username):
 	# return a list of folders in username folder
 	print('maps username:', username)
 	maplist = []
-	userfolder = safe_join(static_folder,username)
+	userfolder = safe_join(app.config['data_folder'],username)
 	if os.path.isdir(userfolder):
 		maplist = [f for f in os.listdir(userfolder) if not f.startswith('.')]
 	return json.dumps(maplist)
@@ -168,7 +167,7 @@ def get_header(username, mapname, item):
 	# args: item (str): one of (header, objmap, segmap)
 		
 	mapdir = safe_join(username, mapname)
-	mapdir = safe_join(app.static_folder, mapdir)
+	mapdir = safe_join(app.config['data_folder'], mapdir)
 	
 	as_attachment = False
 	if item == 'header':
@@ -434,7 +433,7 @@ def get_file(username, mapname, timepoint, item, channel=None):
 	
 	tpdir = safe_join(username, mapname)
 	tpdir = safe_join(tpdir, thefolder)
-	tpdir = safe_join(app.static_folder, tpdir)
+	tpdir = safe_join(app.config['data_folder'], tpdir)
 
 	print('=== getfile()', username, mapname, timepoint, item, channel)
 	print(tpdir)
