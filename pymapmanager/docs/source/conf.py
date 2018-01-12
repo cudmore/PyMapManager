@@ -21,14 +21,23 @@ import os, sys
 
 on_rtd = os.environ.get('READTHEDOCS') == 'True'
 
-"""
-import mock
- 
-MOCK_MODULES = ['numpy', 'scipy', 'matplotlib', 'matplotlib.pyplot', 'scipy.interpolate']
-for mod_name in MOCK_MODULES:
-    sys.modules[mod_name] = mock.Mock()
-"""
+###
+from mock import MagicMock
 
+class Mock(MagicMock):
+    @classmethod
+    def __getattr__(cls, name):
+            return MagicMock()
+
+MOCK_MODULES = ['pygtk', 'gtk', 'gobject', 'argparse', 'numpy', 'pandas','sip',
+    'PyQt4', 'PyQt4.QtGui', 'PyQt4.QtCore', 'tifffile',
+    'matplotlib', 'matplotlib.backends', 'matplotlib.backends.backend_qt4agg', 'matplotlib.figure',
+    'scipy', 'scipy.misc', 'lapack', 'blas']
+sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
+###
+
+# was working 20180112
+"""
 if on_rtd:
     #from unittest.mock import MagicMock
     from mock import MagicMock
@@ -43,6 +52,7 @@ if on_rtd:
                 'matplotlib', 'matplotlib.backends', 'matplotlib.backends.backend_qt4agg', 'matplotlib.figure',
                 'scipy', 'scipy.misc', 'lapack', 'blas']
     sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
+"""
 
 """
 import mock
