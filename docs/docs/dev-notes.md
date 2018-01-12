@@ -75,6 +75,18 @@
 	cd mmclient
 	reload -b
 	
+## Sphinx
+
+Whenever I change modules (like when I removed interface/)
+
+	cd PyMapManager/pymapmanager/docs
+	sphinx-apidoc -f -o source ../
+
+Make the docs in /build/
+
+	cd PyMapManager/pymapmanager/docs
+	sphinx-build -b html source/ build
+	
 ## MkDocs
 
 Serve locally

@@ -11,25 +11,41 @@ PyMapManager API documentation
    :caption: Contents:
 
 
-Classes
-==================
+`PyMapManager <http://blog.cudmore.io/cudmore/PyMapManager>`_ is software to visualize and annotative 3D image time-series.
 
-* :doc:`PyMapManager <pymapmanager>`
+The PyMapManager package is available on `PyPi <https://pypi.python.org/pypi/pymapmanager>`_ and can be installed with::
+
+	pip install PyMapManager
+
+Main Classes
++++++++++++++++++++
+
 * :py:class:`mmMap <pymapmanager.mmMap>`
 * :py:class:`mmStack <pymapmanager.mmStack>`
-* :doc:`PyMapManager.mmio <pymapmanager.mmio>` is a liaison to load files from online repositories.
+* :py:class:`mmStackLine <pymapmanager.mmStackLine>`
+* :py:class:`mmUtil <pymapmanager.mmUtil>`
 
+Plotting
++++++++++++++++++++
 
+* :py:class:`mmMapPlot2 <pymapmanager.mmMapPlot2>`
+
+Online integration
++++++++++++++++++++
+
+* :py:class:`mmio <pymapmanager.mmio>`
 
 Examples
 ==================
-See the `/examples <https://github.com/cudmore/PyMapManager/tree/master/PyMapManager/examples>`_ folder in our GitHub repository.
+* See the examples section on the main `documentation website <http://blog.cudmore.io/PyMapManager/>`_.
+* Also, see the `examples/ <https://github.com/cudmore/PyMapManager/tree/master/examples>`_ folder in main `GitHub repository <https://github.com/cudmore/PyMapManager>`_.
 
 Links
 ==================
-* PyMapManager `GitHub repository <https://github.com/cudmore/PyMapManager>`_
-* Documentation for the `Igor Pro Version of MapManager <http://blog.cudmore.io/mapmanager/>`_
-* Robert Cudmore's `homepage <http://robertcudmore.org>`_
+* PyMapManager `documentation website <https://github.com/cudmore/PyMapManager>`_.
+* PyMapManager `GitHub repository <https://github.com/cudmore/PyMapManager>`_.
+* Documentation for the `Igor Pro Version of MapManager <http://blog.cudmore.io/mapmanager/>`_.
+* Robert Cudmore's `homepage <http://robertcudmore.org>`_.
 
 Indices and tables
 ==================

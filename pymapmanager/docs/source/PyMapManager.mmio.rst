@@ -1,12 +1,17 @@
-pymapmanager\.mmio package
-==========================
+pymapmanager.mmio package
+=========================
 
 Submodules
 ----------
 
-.. toctree::
+pymapmanager.mmio.mmio module
+-----------------------------
 
-   pymapmanager.mmio.mmio
+.. automodule:: pymapmanager.mmio.mmio
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 
 Module contents
 ---------------
