@@ -22,7 +22,9 @@ import os, sys
 on_rtd = os.environ.get('READTHEDOCS') == 'True'
 
 ###
-from mock import MagicMock
+# was this
+# from mock import MagicMock
+from mock import Mock as MagicMock
 
 class Mock(MagicMock):
     @classmethod
