@@ -57,8 +57,9 @@ class mmMap():
 		# Pandas dataframe loaded from .txt file filePath or 'header' if using :class:`pymapmanager.mmio`.
 		# Get values from this dataframe using getValue(name,sessionNumber)
 
-		self.defaultRoiType = 'spineROI'
-		self.defaultRoiTypeID = 0
+		# removed 20170107, replaced with xxx
+		# self.defaultRoiType = 'spineROI'
+		#self.defaultRoiTypeID = 0
 		
 		self.server = None
 		# Pointer to :class:`pymapmanager.mmio` server connection.
@@ -71,7 +72,11 @@ class mmMap():
 		self.segMap = None
 		# 2D array where each row is a run of segments.
 		# segMap[i][j] gives us mmStack centric index into mmStack._line
-
+		
+		self.segRunMap = None # 20180107, why was this not defaulted?
+		
+		###############################################################################
+		# map nv
 		doFile = True
 		if filePath is not None:
 			if not os.path.isfile(filePath):
@@ -111,18 +116,20 @@ class mmMap():
 		numBlock = int(d['blocks'])
 
 		self.objMap.resize(numBlock,numRow,numCol)
-		self.runMap = self._buildRunMap(self.objMap, roiTypeID=self.defaultRoiTypeID)
+		self.runMap = self._buildRunMap(self.objMap, roiTypeID=self.defaultAnnotationID)
 
 		###############################################################################
 		# segMap (3d)
 		header = None
 		if doFile:
 			segMapFile = self._folder + self.name + '_segMap.txt'
-			if not os.path.isfile(segMapFile):
-				raise IOError(ENOENT, 'mmMap did not find segMapFile:', segMapFile)
-			with open(segMapFile, 'rU') as f:
-				header = f.readline().rstrip()
-			self.segMap = np.loadtxt(segMapFile, skiprows=1)
+			if os.path.isfile(segMapFile):
+				with open(segMapFile, 'rU') as f:
+					header = f.readline().rstrip()
+				self.segMap = np.loadtxt(segMapFile, skiprows=1)
+			else:
+				#raise IOError(ENOENT, 'mmMap did not find segMapFile:', segMapFile)
+				print('did not find segment map file, should be ok')
 		else:
 			tmp = self.server.getfile('segmap', self.name)
 			#header = tmp.split('\r')[0] # works when server is running on OSX
@@ -183,8 +190,36 @@ class mmMap():
 		"""The number of line segments in the map.
 		Corresponding segments are connected together with the segMap.
 		"""
-		numSegments = self.segRunMap.shape[0]
+		if self.segMap is not None:
+			numSegments = self.segRunMap.shape[0]
+		else:
+			numSegments = 0
 		return numSegments
+
+	@property
+	def defaultAnnotation(self):
+		"""
+		"""
+		
+		# if defaultAnnotation does not exist then default to 'spineROI'
+		if 'defaultAnnotation' in self.table.index:
+			theRet = self.table.loc['defaultAnnotation'][0]
+			# if empty then we assume 'spineROI'
+			if theRet == '':
+				theRet = 'spineROI'
+		else:
+			theRet = 'spineROI'
+		return theRet
+
+	@property
+	def defaultAnnotationID(self):
+		theRet = 0
+		defaultAnnotation = self.defaultAnnotation
+		if defaultAnnotation == 'spineROI':
+			theRet = 0
+		elif defaultAnnotation == 'otherROI':
+			theRet = 4
+		return theRet
 
 	def __str__(self):
 		objCount = 0
@@ -224,8 +259,12 @@ class mmMap():
 		theRet = {}
 		theRet['mapName'] = self.name
 		theRet['numSessions'] = self.numSessions
+		theRet['numChannels'] = self.numChannels
+		theRet['defaultAnnotation'] = self.defaultAnnotation
+		theRet['numAnnotations'] = 0
 		# lists, one value per session
 		theRet['stackNames'] = []
+		theRet['importedStackName'] = []
 		theRet['date'] = []
 		theRet['time'] = []
 		theRet['px'] = [] # pixels
@@ -237,6 +276,7 @@ class mmMap():
 		theRet['numROI'] = []
 		for idx in range(self.numSessions):
 			theRet['stackNames'].append(self.table.loc['hsStack'][idx])
+			theRet['importedStackName'].append(self.table.loc['importedStackName'][idx])
 			theRet['date'].append(self.table.loc['date'][idx])
 			theRet['time'].append(self.table.loc['time'][idx])
 			theRet['px'].append(self.table.loc['px'][idx])
@@ -247,17 +287,27 @@ class mmMap():
 			theRet['dy'].append(self.table.loc['dy'][idx])
 			theRet['dz'].append(self.table.loc['dz'][idx])
 			
-			thisNum = self.stacks[idx].countObj(roiType=self.defaultRoiType)
+			thisNum = self.stacks[idx].countObj(roiType=self.defaultAnnotation)
 			theRet['numROI'].append(thisNum)
+			theRet['numAnnotations'] = theRet['numAnnotations'] + self.stacks[idx].numObj
 			
 			runIdx = 6
+
+		if self.segMap is not None:
+			theRet['numMapSegments'] = self.segRunMap.shape[0]
+		else:
+			theRet['numMapSegments'] = 0
+
+		'''
+		# these were not being used
 		theRet['objMap'] = self.objMap[runIdx].astype('int') # from spine index to run index
 		theRet['runMap'] = self.runMap.astype('int') # from run idx to spine idx
 		theRet['segMap'] = None
 		theRet['numMapSegments'] = 0
 		if self.segMap is not None:
 			theRet['segMap'] = self.segMap.astype('int')
-			theRet['numMapSegments'] = self.segMap.shape[0]
+			theRet['numMapSegments'] = self.segRunMap.shape[0]
+		'''
 					
 		#print 'mapInfo() theRet:', theRet
 		return theRet
@@ -440,8 +490,10 @@ class mmMap():
 		yRunRow[:] = np.NAN
 
 		# keep track of map segment id
-		yMapSegment = np.empty([m, n])
-		yMapSegment[:] = np.NAN
+		yMapSegment = []
+		if self.segMap is not None:
+			yMapSegment = np.empty([m, n])
+			yMapSegment[:] = np.NAN
 
 		# 20171225, cPnt is overkill but until I rewrite REST
 		# to get list of stat (x,y,z,pDist, cPnt, cx, cy, cz) etc. etc.
@@ -456,24 +508,24 @@ class mmMap():
 			myRange = range(n)
 
 		for j in myRange:
-			print('*** getMapValues3() j:', j, "pd['segmentid']:", pd['segmentid'])
+			#print('*** getMapValues3() j:', j, "pd['segmentid']:", pd['segmentid'])
 			orig_df = self.stacks[j].stackdb
 
 			currSegmentID = []
-			if self.numMapSegments:
+			if self.numMapSegments > 0:
 				if pd['segmentid'] >=0 :
 					currSegmentID = self.segRunMap[pd['segmentid'], j]  # this only works for one segment -- NOT A LIST
-					print('   currSegmentID:', currSegmentID)
+					#print('   currSegmentID:', currSegmentID)
 					if currSegmentID >= 0:
 						currSegmentID = int(currSegmentID)
 						# print 'getMapValues3() j:', j, 'currSegmentID:', currSegmentID
 						currSegmentID = [currSegmentID]
 					else:
 						currSegmentID = []
-				print('currSegmentID:', currSegmentID)
+				#print('   currSegmentID:', currSegmentID)
 				if pd['segmentid'] >= 0 and not currSegmentID:
 					# this session does not have segmentID that match
-					print('   getMapValues3() skipping tp', j)
+					#print('   getMapValues3() skipping tp', j)
 					continue
 
 			goodIdx = self.runMap[:, j]  # valid indices from runMap
@@ -526,7 +578,8 @@ class mmMap():
 			# 20171119 finish this
 			#print 'a', final_df['parentID'].values.astype(int)
 			#print 'b', self.segMap[0, final_df['parentID'].values.astype(int), j]
-			yMapSegment[finalRows, j] = self.segMap[0, final_df['parentID'].values.astype(int), j]
+			if self.segMap is not None:
+				yMapSegment[finalRows, j] = self.segMap[0, final_df['parentID'].values.astype(int), j]
 
 			# 20171225
 			cPnt[finalRows, j] = final_df['cPnt'].values
@@ -539,7 +592,8 @@ class mmMap():
 		# makes plotting way faster
 		ySess = ySess[~np.isnan(yIdx).all(axis=1)]
 		yRunRow = yRunRow[~np.isnan(yIdx).all(axis=1)]
-		yMapSegment = yMapSegment[~np.isnan(yIdx).all(axis=1)] # added 20171220
+		if self.segMap is not None:
+			yMapSegment = yMapSegment[~np.isnan(yIdx).all(axis=1)] # added 20171220
 		cPnt = cPnt[~np.isnan(yIdx).all(axis=1)] # added 20171225
 		if pd['xstat']:
 			pd['x'] = pd['x'][~np.isnan(yIdx).all(axis=1)]
@@ -714,6 +768,8 @@ class mmMap():
 if __name__ == '__main__':
 	path = '../examples/exampleMaps/THet2a/THet2a.txt'
 	#path = '../examples/exampleMaps/rr30a/rr30a.txt'
+	path = '../examples/exampleMaps/BD_NGDG450/BD_NGDG450.txt'
+
 	print('path:', path)
 	m = mmMap(path)
 
@@ -725,11 +781,13 @@ if __name__ == '__main__':
 	from pymapmanager.mmUtil import newplotdict
 
 	plotDict = newplotdict()
+	plotDict['roitype'] = m.defaultAnnotation
 	plotDict['xstat'] = 'days'
 	plotDict['ystat'] = 'pDist'
 	plotDict['zstat'] = 'ubssSum_int2'  # 'sLen3d_int1' #swap in any stat you like, e.g. 'ubssSum_int2'
 	plotDict['segmentid'] = 0 #[0]
 	plotDict['getMapDynamics'] = True
+
 	plotDict = m.getMapValues3(plotDict)
 
 	print("\nplotDict['x'].shape : ", plotDict['x'].shape)

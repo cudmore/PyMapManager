@@ -1,0 +1,48 @@
+																											
+stringonly	1																										
+folder	root:maps:																										
+wname	F27A_1																										
+rawpath	fourt:MapManagerData:ye_maps:																										
+savepath																											
+parent	none																										
+class	nv																										
+nvTemplate																											
+isDirty	1																										
+index	0	1	2	3																							
+hsIdx	0	1	2	3																							
+hsType	mm3	mm3	mm3	mm3																							
+hsStack	F27A_1_s4_ch1	F27A_1_s5_ch1	F27A_1_s7_ch1	F27A_1_s8_ch1																							
+hsStackPath	root:ScanImage:F27A_1:raw:	root:ScanImage:F27A_1:raw:	root:ScanImage:F27A_1:raw:	root:ScanImage:F27A_1:raw:																							
+hsdb	F27A_1_s4_db2	F27A_1_s5_db2	F27A_1_s7_db2	F27A_1_s8_db2																							
+hsStackNV	F27A_1_s4	F27A_1_s5	F27A_1_s7	F27A_1_s8																							
+date	20160302	20160304	20160321	20160323																							
+time	13:40:42	14:12:09	12:55:54	13:12:04																							
+hsStackSeconds	3539770842.000000	3539945529.000000	3541409754.000000	3541583524.000000																							
+fiducPnt	0	0	0	0																							
+numChannels	1	1	1	1																							
+defaultChannel	1	1	1	1																							
+px	2048	2048	2048	2048																							
+py	2048	2048	2048	2048																							
+pz	72	72	72	73																							
+dx	0.108	0.108	0.108	0.108																							
+dy	0.108	0.108	0.108	0.108																							
+dz	1	1	1	1																							
+stackdbVersion	20151224																										
+numSeg	5																										
+numObj	407																										
+numSpine	240																										
+importedStackName	F27_16302_001	F27_16304_001	F21_16321_001	F27_16323_001																							
+isDirty_stacknv	0	0	0	0																							
+isDirty_stackdb	0	0	0	0																							
+isDirty_line	0	0	0	0																							
+condStr																											
+zeroSession	0																										
+sessions	0	1	2	3																							
+datetime	3539770842.000000	3539945529.000000	3541409754.000000	3541583524.000000																							
+days	0	2.0218	18.969	20.98																							
+hours	0	48.524	455.25	503.52																							
+zsessions	0	1	2	3																							
+zdays	0	2.0218	18.969	20.98																							
+zhours	0	48.524	455.25	503.52																							
+mapCond																											
+mapWinPos	2203;66;2560;575;																										

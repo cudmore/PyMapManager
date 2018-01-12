@@ -1,12 +1,5 @@
-# core pymapmanager
-numpy==1.13.3
-pandas==0.20.3
-
-# to load .tif files
-tifffile==0.12.1
-
-# plotting is mmMapLot2
-matplotlib==2.1.0
-
-# used in mmio
-requests==2.18.4
+numpy>=1.14.0
+pandas>=0.22.0"
+requests>=2.18.4"
+scipy>=1.0.0"
+tifffile
