@@ -32,7 +32,8 @@ if on_rtd:
 
     MOCK_MODULES = ['pygtk', 'gtk', 'gobject', 'argparse', 'numpy', 'pandas','sip',
                 'PyQt4', 'PyQt4.QtGui', 'PyQt4.QtCore', 'tifffile',
-                'matplotlib', 'matplotlib.backends', 'matplotlib.backends.backend_qt4agg', 'matplotlib.figure']
+                'matplotlib', 'matplotlib.backends', 'matplotlib.backends.backend_qt4agg', 'matplotlib.figure',
+                'lapack']
     sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
 
 """

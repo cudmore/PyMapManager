@@ -77,6 +77,8 @@
 	
 ## Sphinx
 
+Don't foget to add modules that depend on C code to `MOCK_MODULES` section of `conf.py`.
+
 Whenever I change modules (like when I removed interface/)
 
 	cd PyMapManager/pymapmanager/docs
