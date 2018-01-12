@@ -88,7 +88,11 @@ Make the docs in /build/
 
 	cd PyMapManager/pymapmanager/docs
 	sphinx-build -b html source/ build
-	
+
+Push to Github and then go to ReadTheDocs and click `build`.
+
+This relies on a webhook made inside the Github repo (forgot exactly how/where).
+
 ## MkDocs
 
 Serve locally
