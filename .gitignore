@@ -5,7 +5,14 @@
 *.pyc
 
 # Setuptools distribution folder.
-/dist/
+dist/
+build/
 
 # Python egg metadata, regenerated from source files by setuptools.
 /*.egg-info
+
+# Sphinx documentation
+pymapmanager/docs/_build/
+
+# Jupyter Notebook
+.ipynb_checkpoints
