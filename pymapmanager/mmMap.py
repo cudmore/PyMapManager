@@ -20,7 +20,7 @@ from pymapmanager.mmio import mmio
 
 class mmMap():
 	"""
-	A time-series of :class:`pymapmanager.mmStack` plus some book-keeping to link corresponding annotations
+	A time-series of :class:`pymapmanager.mmStack` time-points plus some book-keeping to link corresponding annotations
 	and segments between time-points.
 
 	Args:
