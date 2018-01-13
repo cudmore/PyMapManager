@@ -252,10 +252,24 @@ class mmMap():
 		Get information on the map
 		
 		Returns:
-			| ['mapName'],
-			| ['stackNames'],
-			| ['dx'], Voxel size in um
-			| ['dy'], Voxel size in um
+			| A dict of
+			| mapName : Str
+			| numSessions : Int
+			| numChannels : Int
+			| numMapSegments : Int
+			| 
+			| The following are string list with numSessions elements
+			| stackNames : 
+			| importedStackName : 
+			| numSlices : 
+			| date : 
+			| time : 
+			| dx : Voxel size in um
+			| dy : Voxel size in um
+			| dz : Voxel size in um
+			| px : Number of Pixels
+			| py : Number of Pixels
+			| pz : Number of Pixels
 			| ...
 		"""
 		theRet = {}

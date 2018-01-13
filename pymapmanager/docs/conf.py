@@ -27,6 +27,7 @@ import os, sys
 
 on_rtd = os.environ.get('READTHEDOCS') == 'True'
 
+# requires `pip install mock` on the system i am running `make html`
 #from mock import MagicMock
 from mock import Mock as MagicMock
 

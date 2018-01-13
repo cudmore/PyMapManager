@@ -3,14 +3,16 @@ Utility functions and classes for PyMapManager.
 """
 
 #: Allowed ROI types. Specifies valid 'roiType'.
-ROI_TYPES = ['spineROI', 'otherROI']
+#ROI_TYPES = ['spineROI', 'otherROI']
 
 #: Allowed stack stats. Specifies valid 'tokens' for mmStack.getValue().
+'''
 STACK_STATS = ['Idx',
                'x',
                'y',
                'z',
                'pDist']
+'''
 
 PLOT_DICT = {
     'map' : None, #: map (object) mmMap
@@ -48,13 +50,31 @@ def newplotdict():
     Get a new default plot dictionary.
 
     The plot dictionary is used to tell plot functions what to plot (e.g. ['xtat'] and ['ystat']).
+    
     All plot function return the same plot dictionary with keys filled in with values that were plotted
     (e.g. ['x'] and ['y']).
+    
+    Example::
+    
+    	import pymapmanager as pmm
+    	
+    	path = 'PyMapManager/examples/exampleMaps/rr30a/rr30a.txt'
+    	map = pmm.mmMap(path)
+    	plotdict = pmm.mmUtil.newplotdict()
+    	plotdict['xstat'] = 'days'
+    	plotdict['ystat'] = 'pDist' # position of spine on its parent segment
+    	plotdict = map.getMapValues3(plotdict)
+    	
+    	# display with matplotlib
+    	plotdict['x']
+    	plotdict['y']
+    	
     """
     return PLOT_DICT.copy()
 
 class mmEvent:
-    """Class used by Qt to broadcast events.
+    """
+    Class used by Qt to broadcast events.
     Events can be user events like 'spine selection' or program events like 'map opened'
     """
 

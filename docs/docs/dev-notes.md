@@ -77,24 +77,39 @@
 	
 ## Sphinx
 
-Don't foget to add modules that depend on C code to `MOCK_MODULES` section of `conf.py`.
+This is to auto generated API documentation from embedded docstrings in the python code using Sphinx. The output is available on readthedocs.
 
-Whenever I change modules (like when I removed interface/)
+
+1) Don't foget to add modules that depend on C code to `MOCK_MODULES` section of `conf.py`.
+
+2) Whenever I change modules (like when I removed interface/)
+
+last `../version.py` should exclude `pymapmanager/version.py` from output.
+
+Note: I am using pymapmanager/version.py to import a common __version__ into PyMapManager/setup.py and inserting __version__ into pymapmanager module (via pymapmanager/__init__.py)
 
 	cd PyMapManager/pymapmanager/docs
-	sphinx-apidoc -f -o source ../
-	
-Make the docs in /build/
+	sphinx-apidoc -f -o source ../ ../version.py
+
+Output should look like:
+
+	Creating file source/pymapmanager.rst.
+	Creating file source/modules.rst.
+
+3) Make the docs in /build/
 
 	cd PyMapManager/pymapmanager/docs
 	#sphinx-build -b html source/ build
+	#sphinx-build -b html . build
 	make html
 	
-Push to Github and then go to ReadTheDocs and click `build`.
+4) Push to Github and then go to ReadTheDocs and click `build`.
 
 This relies on a webhook made inside the Github repo (forgot exactly how/where).
 
 ## MkDocs
+
+This is for 'human readable' documentation website available at http://blog.cudore.io/PyMapMAnager
 
 Serve locally
 
@@ -198,6 +213,7 @@ gunicorn -b 0.0.0.0:5010 mmserver:app
 ## Pushing changes in mmclient/ to robertcudmore.org
 
 No need for this any more !
+
 
 ## Pushing to [PyPi][pypi]
 

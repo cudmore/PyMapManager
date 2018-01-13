@@ -76,14 +76,6 @@ pymapmanager\.mmio module
     :undoc-members:
     :show-inheritance:
 
-pymapmanager\.version module
-----------------------------
-
-.. automodule:: pymapmanager.version
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 
 Module contents
 ---------------
