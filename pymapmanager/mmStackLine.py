@@ -9,9 +9,16 @@ class mmStackLine():
 	"""
 	A stack line represents a 3D tracing of a number of dendritic segments.
 
-	Get a particular segment with `getLine(segmentID=[])`.
+	Each spineROI annotation in a mmStack is associated with one segmentID.
 
-	Each spineROI and axonROI annotation in a mmStack is associated with one segmentID.
+	Example::
+
+		from pymapmanager.mmMap import mmMap
+		myMapFile = 'PyMapManager/examples/exampleMaps/rr30a/rr30a.txt'
+		myMap = mmMap(filePath=myMapFile)
+
+		# Get the (x,y,z) values, in um, of the 2nd mmStack tracing
+		xyz = myMap.stacks[2].getLine()
 	"""
 	def __init__(self,stack):
 		"""

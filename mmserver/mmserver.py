@@ -26,6 +26,8 @@ todo:
 	
 """
 
+from __future__ import print_function
+
 import os
 import json
 from datetime import datetime
@@ -38,7 +40,13 @@ from flask_cors import CORS
 import pandas as pandas
 import numpy as np
 
-from cStringIO import StringIO # for sending a numpy array back as a .png image
+# python 2 to 3 business
+#from cStringIO import StringIO # for sending a numpy array back as a .png image
+try:
+    from cStringIO import StringIO
+except ImportError:
+    from io import StringIO
+    
 from skimage.io import imsave, imread
 
 #from bokeh.plotting import figure, output_file, show
@@ -54,26 +62,33 @@ if 0:
 	log.setLevel(logging.ERROR)
 
 # assuming data folder is in same folder as this source .py file
-#static_folder = '/Users/cudmore/Desktop/data'
 template_dir = os.path.abspath('../mmclient')
-static_folder = './data'
+#static_folder = './data'
 UPLOAD_FOLDER = './data'
-data_folder = './data'
+data_folder = '../PyMapManager-Data'
 
-#myMap = None
+# load a default map
+# having problems with workers in gunicorn not finding maps
 myMapList = {}
+if 0:
+	defaultMapPath = data_folder + '/public/rr30a/rr30a.txt'
+	print('defaultMapPath:', defaultMapPath)
+	myMapList['rr30a'] = mmMap.mmMap(defaultMapPath)
+
 
 #app = Flask(__name__, static_url_path='/data')
 #app = Flask(__name__, static_folder=static_folder)
-app = Flask(__name__, template_folder=template_dir)
+#app = Flask(__name__, template_folder=template_dir)
+app = Flask(__name__)
 CORS(app)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['data_folder'] = data_folder
 
 @app.route('/')
 def hello_world():
-	print 'hello_world()'
-	return render_template('index.html')
+	print('hello_world()')
+	#return render_template('index.html')
+	return 'mmserver rest interface. use /help to get started'
 
 '''
 @app.route('/purejs')
@@ -97,7 +112,7 @@ def help():
 	
 @app.route('/loadmap/<username>/<mapname>')
 def loadmap(username, mapname):
-	print ('=== loadmap()')
+	print('=== loadmap()')
 	mapdir = safe_join(username, mapname)
 	mapdir = safe_join(app.config['data_folder'], mapdir)
 	mapfile = mapname + '.txt'
@@ -106,17 +121,18 @@ def loadmap(username, mapname):
 	global myMapList
 	if mapname in myMapList:
 		# already loaded
-		print 'map already loaded'
+		print('map already loaded')
 		pass
 	else:
-		print 'loadmap() loading map:', mappath
+		print('loadmap() loading map:', mappath)
 		myMapList[mapname] = mmMap.mmMap(mappath)
-		print 'myMap:', myMapList[mapname]
+		print('myMap:', myMapList[mapname])
 	ret = mapInfo(mapname)
 	return jsonify(ret)
 
 def mapInfo(mapname):
 	theRet = {}
+	global myMapList
 	if mapname in myMapList:
 		theRet = myMapList[mapname].mapInfo()
 		
@@ -131,16 +147,16 @@ def mapInfo(mapname):
 		#if theRet['numMapSegments'] > 0:
 		#	theRet['segMap'] = theRet['segMap'].astype('str').tolist()
 	else:
-		print 'error: mapInfo() map not loaded:', mapname
+		print('error: mapInfo() map not loaded:', mapname)
 	#return json.dumps(theRet)
 	return theRet
 	
 @app.route('/api/<username>/maps')
 def maps(username):
 	# return a list of folders in username folder
-	print 'maps:', username
+	print('maps username:', username)
 	maplist = []
-	userfolder = safe_join(static_folder,username)
+	userfolder = safe_join(app.config['data_folder'],username)
 	if os.path.isdir(userfolder):
 		maplist = [f for f in os.listdir(userfolder) if not f.startswith('.')]
 	return json.dumps(maplist)
@@ -151,7 +167,7 @@ def get_header(username, mapname, item):
 	# args: item (str): one of (header, objmap, segmap)
 		
 	mapdir = safe_join(username, mapname)
-	mapdir = safe_join(app.static_folder, mapdir)
+	mapdir = safe_join(app.config['data_folder'], mapdir)
 	
 	as_attachment = False
 	if item == 'header':
@@ -166,9 +182,9 @@ def get_header(username, mapname, item):
 	else:
 		mapfile = ''
 
-	print '=== get_header()', username, mapname, item
-	print 'mapdir:', mapdir
-	print 'mapfile:', mapfile
+	print('=== get_header()', username, mapname, item)
+	print('mapdir:', mapdir)
+	print('mapfile:', mapfile)
 	return send_from_directory(mapdir, mapfile, as_attachment=True, attachment_filename=mapfile)
 	#return send_from_directory(mapdir, mapfile) #, as_attachment=as_attachment) #, mimetype='text/txt')
 
@@ -204,7 +220,7 @@ def getmapdynamics(username, mapname):
 		ret['mapsess'] = ret['mapsess'].astype('str').tolist()
 
 	else:
-		print 'warning: getmapvalues(): map', mapname, 'is not loaded'
+		print('warning: getmapvalues(): map', mapname, 'is not loaded')
 
 	return jsonify(ret)
 '''
@@ -217,7 +233,7 @@ def getmapvalues(username, mapname):
 	ystat = request.args.get('ystat', '')
 	zstat = request.args.get('zstat', '')
 
-	print 'getmapvalues() mapsegment:', mapsegment, 'session:', session, 'xstat:', xstat, 'ystat:', ystat, 'zstat:', zstat
+	print('getmapvalues() mapsegment:', mapsegment, 'session:', session, 'xstat:', xstat, 'ystat:', ystat, 'zstat:', zstat)
 
 	ret = {}
 	
@@ -249,9 +265,9 @@ def getmapvalues(username, mapname):
 	
 	# debug
 	if 0:
-		print 'getmapvalues pd:'
+		print('getmapvalues pd:')
 		for key, item in pd.iteritems():
-			print '\t', key, ':', item
+			print('\t', key, ':', item)
 		
 	#print 'getmapvalues() pd:', pd
 	global myMapList
@@ -288,7 +304,7 @@ def getmapvalues(username, mapname):
 		ret['cPnt'] = ret['cPnt'].astype('str').tolist()
 		#print ret['x']
 	else:
-		print 'warning: getmapvalues(): map', mapname, 'is not loaded'
+		print('warning: getmapvalues(): map', mapname, 'is not loaded')
 	#print 'getmapvalues:', ret
 	return jsonify(ret)
 
@@ -334,7 +350,7 @@ def getmaptracing(username, mapname):
 			ret['sDist'] = ret['sDist'][~np.isnan(ret['sDist'])].tolist()
 			ret['ID'] = ret['ID'][~np.isnan(ret['ID'])].tolist()
 	else:
-		print 'warning: getmaptracing(): map', mapname, 'is not loaded'
+		print('warning: getmaptracing(): map', mapname, 'is not loaded')
 	return jsonify(ret)
 		
 @app.route('/v2/<username>/<mapname>/<item>')
@@ -347,16 +363,16 @@ def get_header_v2(username, mapname, item):
 	
 	as_attachment = False
 	if item == 'header':
-		print '   get_header_v2: header'
+		print('   get_header_v2: header')
 		mapfile = mapname + '.txt'
 		path = mapdir + '/' + mapfile
-		print '   path:', path
+		print('   path:', path)
 		t = pandas.read_table(path, index_col=0)
 		return t.to_json()
 	elif item == 'sessions':
 		mapfile = mapname + '.txt'
 		path = mapdir + '/' + mapfile
-		print '   path:', path
+		print('   path:', path)
 		t = pandas.read_table(path, index_col=0)
 		#ret = {}
 		ret = []
@@ -389,9 +405,9 @@ def get_header_v2(username, mapname, item):
 		mapfile = mapname + '.zip'
 		as_attachment = True
 		
-	print '=== get_header()', username, mapname, item
-	print 'mapdir:', mapdir
-	print 'mapfile:', mapfile
+	print('=== get_header()', username, mapname, item)
+	print('mapdir:', mapdir)
+	print('mapfile:', mapfile)
 	return send_from_directory(mapdir, mapfile, as_attachment=True, attachment_filename=mapfile)
 	#return send_from_directory(mapdir, mapfile) #, as_attachment=as_attachment) #, mimetype='text/txt')
 
@@ -417,11 +433,11 @@ def get_file(username, mapname, timepoint, item, channel=None):
 	
 	tpdir = safe_join(username, mapname)
 	tpdir = safe_join(tpdir, thefolder)
-	tpdir = safe_join(app.static_folder, tpdir)
+	tpdir = safe_join(app.config['data_folder'], tpdir)
 
-	print '=== getfile()', username, mapname, timepoint, item, channel
-	print tpdir
-	print thefile
+	print('=== getfile()', username, mapname, timepoint, item, channel)
+	print(tpdir)
+	print(thefile)
 	
 	return send_from_directory(tpdir, thefile)
 
@@ -440,9 +456,9 @@ def get_image(username, mapname, timepoint, channel, slice):
 	tpdir = safe_join(app.config['data_folder'], tpdir)
 
 	'''
-	print '=== get_image()', username, mapname, timepoint, slice, channel
-	print 'tpdir:', tpdir
-	print 'thefile:', thefile
+	print('=== get_image()', username, mapname, timepoint, slice, channel)
+	print('tpdir:', tpdir)
+	print('thefile:', thefile)
 	'''
 	
 	return send_from_directory(tpdir, thefile, as_attachment=True, mimetype='image/png')
@@ -511,7 +527,7 @@ def getslidingz(username, mapname, timepoint, channel, slice):
 		imsave(strIO, max_, plugin='pil', format_str='png')
 		strIO.seek(0)
 	except:
-		print '\r\r\t\tgetslidingz() exception\r\r'
+		print('\r\r\t\tgetslidingz() exception\r\r')
 	return send_file(strIO, mimetype='image/png')
 
 @app.route('/getmaximage/<username>/<mapname>/<int:timepoint>/<int:channel>')
@@ -552,7 +568,7 @@ def uploaded_file(filename):
 def post_file(username, mapname, item):
 	if request.method == 'POST':
 		file = request.files['file']
-		print 'post_file() got request.files::', request.files
+		print('post_file() got request.files::', request.files)
 		if file and allowed_file(file.filename):
 			
 			# todo: do something here for security
@@ -563,7 +579,7 @@ def post_file(username, mapname, item):
 			# path to username has to exist, don't create it
 			if not os.path.isdir(filePath):
 				errStr = 'error: post_file() username does not exist:' + username
-				print errStr
+				print(errStr)
 				return errStr
 			filePath = os.path.join(filePath, mapname)
 			# make map folder if necc.
@@ -582,7 +598,7 @@ def post_file(username, mapname, item):
 
 			# save file on server in correct spot
 			filePath = os.path.join(filePath,filename)
-			print 'post_file() saving file:', filePath
+			print('post_file() saving file:', filePath)
 
 			file.save(filePath)
 
@@ -615,7 +631,7 @@ def data():
 	output = StringIO()
 	np.savetxt(output, myarray)
 	csv_string = output.getvalue()
-	print csv_string
+	print(csv_string)
 	return csv_string
 
 '''
@@ -660,7 +676,7 @@ def plot2():
 	response = {}
 	response['script'] = script
 	response['div'] = div
-	print 'plot2()', response
+	print('plot2()', response)
 	return jsonify(response)
 
 @app.route("/my_d3")

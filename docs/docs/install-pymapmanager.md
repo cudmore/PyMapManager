@@ -5,23 +5,23 @@
 
 	pip install PyMapManager
 	
-This will install the version located [here](https://pypi.python.org/pypi/pymapmanager).
+This will install the most recent version from [PyPi](https://pypi.python.org/pypi/pymapmanager).
 
 ## Install from a manual download
 
-### Download the repo
+### 1) Download the repo
+
+This will make a `PyMapManager` folder.
 
 	git clone https://github.com/cudmore/PyMapManager.git
 
-### Install required Python libraries
+### 2) Install required Python libraries
 
-	cd PyMapManager/pymapmanager
-	pip install -r requirements.txt
+	pip install -r PyMapManager/requirements.txt
 	
-### Install PyMapManager
+### 3) Install PyMapManager
 
-	cd PyMapManager
-	pip install -e pymapmanager
+	pip install PyMapManager/
 	
 ## Testing the install
 

@@ -1,0 +1,12 @@
+requirements_file: requirements.txt
+
+build:
+   image: latest
+  
+python:
+   version: 3
+   pip_install: true
+
+formats:
+   - epub
+   - pdf

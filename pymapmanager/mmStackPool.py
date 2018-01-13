@@ -7,14 +7,14 @@ from pymapmanager.mmStack import mmStack
 
 class mmStackPool():
     """
-    Load all stacks in a folder.
+    Load all .tif stacks in a folder.
 
     Args:
-        path (str): Full path to a folder. This folder should contain .tif files.
+        path (str): Full path to a folder containing .tif files.
 
     Example::
 
-        path = '/Users/cudmore/MapManagerData/richard/Nancy/'
+		path = myMapFile = 'PyMapManager/examples/exampleMaps/'
         stacks = mmStackPool(path)
         for stack in stacks:
             print(stack)

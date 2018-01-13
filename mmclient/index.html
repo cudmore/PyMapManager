@@ -44,7 +44,7 @@
 </head>
 
 
-<body ng-cloak>
+<!-- <body ng-cloak> -->
 <!-- {% raw %} -->
 
 <div ng-controller="mmclient_controller" ng-init="load()">
@@ -309,21 +309,19 @@
 	</div> <!-- row -->
 	
 	<BR>
-	<div class="row">
-		<!--
-		<div class="myIndentDiv2">
-		<button id="showStackButtonID" type="button" class="btn btn-primary btn-sm" ng-click="loadStackDataButton()">Load Stack Data</button>
-		</div>		
-		-->
-		
-		<!--
-		<div class="col-sm-1">
-		<button id="showStackButtonID" type="button" class="btn btn-primary btn-sm" ng-click="plotRunButton()">Plot Run</button>
-		</div>
-		-->
 
-		<!-- -->
-		<div class="myIndentDiv2">
+
+	<div class="row">
+	<button type="button" class="btn btn-default btn-sm myButtonBackground" ng-click="showRawImagesCallback()">
+	<i ng-if="showRawImages" class="fa fa-chevron-down"></i>
+	<i ng-if="!showRawImages" class="fa fa-chevron-right"></i>
+	Images
+	</button>
+	</div>
+	
+	<div class="row" ng-show="showRawImages">
+
+		<div class="myIndentDiv2" >
 			<!-- see https://codepen.io/bseth99/pen/fboKH -->
 			<!-- <button type="button" class="btn btn-default btn-sm dropdown-toggle myButtonBackground" data-toggle="dropdown"></span> <i class="fa fa-cog fa-2x" aria-hidden="true"></i></button> -->
 			<!--  &#9662; is down arrow -->
@@ -401,6 +399,11 @@
 		<select ng-change="setLeafletChannel()" ng-model="leafletChannel" ng-options="channel for channel in channelList"></select>
 		</div>		
 
+		<div class="myInverseColor">
+			<div class="myIndentDiv2">
+				User:{{leafletUser}} Map:{{leafletMap}} {{(leafletSelectedTP != null) ? leafletSelectedTP : ''}} {{(leafletSelectedStackIndex != null) ? leafletSelectedStackIndex : ''}}
+			</div>
+		</div>
 		<!--
 		<div class="myIndentDiv2">
 			<button type="button" class="btn btn-default btn-sm" data-toggle="dropdown" style="z-index: 999;">Time-points</button>
@@ -413,9 +416,9 @@
 		</div>
 		-->
 		
-	</div>
-
-	<div class="row">
+	</div> <!-- row -->
+	
+	<div ng-show="showRawImages" class="row">
 			
 		<div class="myIndentDiv">
 			<div ng-show="showTimepoints[0]" id="myLeafletID0" class="myLeafletDiv" style="width: 512px; height: 512px;">

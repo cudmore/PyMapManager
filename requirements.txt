@@ -1,8 +1,5 @@
-
-# for running Flask server in mmserver/mmserver.py
-Flask==0.12.2
-Flask-Cors==3.0.3
-scikit-image==0.13.0
-
-# for running Flask server synchronously
-gunicorn==19.7.1
+numpy>=1.14.0
+pandas>=0.22.0"
+requests>=2.18.4"
+scipy>=1.0.0"
+tifffile
