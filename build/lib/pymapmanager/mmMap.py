@@ -8,7 +8,7 @@ import numpy as np
 
 import scipy.misc
 
-from pymapmanager.mmUtil import ROI_TYPES, newplotdict
+from pymapmanager.mmUtil import newplotdict
 from pymapmanager.mmStack import mmStack
 from pymapmanager.mmio import mmio
 

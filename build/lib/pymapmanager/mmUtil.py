@@ -3,14 +3,14 @@ Utility functions and classes for PyMapManager.
 """
 
 #: Allowed ROI types. Specifies valid 'roiType'.
-ROI_TYPES = ['spineROI', 'otherROI']
+#ROI_TYPES = ['spineROI', 'otherROI']
 
 #: Allowed stack stats. Specifies valid 'tokens' for mmStack.getValue().
-STACK_STATS = ['Idx',
-               'x',
-               'y',
-               'z',
-               'pDist']
+#STACK_STATS = ['Idx',
+#               'x',
+#               'y',
+#               'z',
+#               'pDist']
 
 PLOT_DICT = {
     'map' : None, #: map (object) mmMap

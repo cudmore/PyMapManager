@@ -8,12 +8,12 @@ class mmMapPool():
 	Load all maps in a folder.
 
 	Args:
-		path (str): Full path to a folder. This folder should contain folders of maps.
+		path (str): Full path to a folder containing folders of maps.
 
 	Example::
 
-		path = '/Users/cudmore/MapManagerData/richard/Nancy/'
-		maps = mmMapPool(path)
+		folderPath = myMapFile = 'PyMapManager/examples/exampleMaps/'
+		maps = mmMapPool(folderPath)
 		for map in maps:
 			print map
 	"""

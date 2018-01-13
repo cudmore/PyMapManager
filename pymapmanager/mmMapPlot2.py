@@ -1,35 +1,25 @@
 """
-An object to hold a map plot. Create object with a map and call one plot function,
-either mapPlot0 or mapPlot.
-
-This class will then give you x/y that are plotted, tell you what a user clicked on and append selections.
+Helper class to plot mmMap annotations.
 
 Example::
 
+    from pymapmanager.mmMap import mmMap
+    from pymapmanager.mmUtil import newplotdict
     %matplotlib notebook
 
     # load a map
-    filePath = '/Users/cudmore/Desktop/data/rr30a/rr30a.txt'
-    m = mmMap(filePath=filePath)
+    myMapFile = 'PyMapManager/examples/exampleMaps/rr30a/rr30a.txt'
+    myMap = mmMap(filePath=myMapFile)
 
     # plot
-    mp = mmMapPlot2(m)
-    mp.plotMap0(pd)
-
+    mp = mmMapPlot2(myMap)
+    plotDict = newplotdict()
+    plotDict['segmentid'] = 1 # only map segment 1
+    mp.plotMap0(plotDict)
 """
 from __future__ import print_function
-
-#from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
-#from matplotlib.figure import Figure
 import matplotlib.pyplot as plt
-
-#from bokeh.plotting import figure, output_file, show
-
 import numpy as np
-
-#from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
-#from matplotlib.figure import Figure
-
 
 class mmMapPlot2():
     def __init__(self, m):

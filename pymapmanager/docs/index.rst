@@ -3,11 +3,6 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to PyMapManager's documentation!
-========================================
-
-Contents:
-
 .. toctree::
    :maxdepth: 2
 
@@ -17,23 +12,19 @@ The PyMapManager package is available on `PyPi <https://pypi.python.org/pypi/pym
 
 	pip install PyMapManager
 
-Main Classes
-+++++++++++++++++++
+Classes
+==================
 
-* :py:class:`mmMap <pymapmanager.mmMap>`
-* :py:class:`mmStack <pymapmanager.mmStack>`
-* :py:class:`mmStackLine <pymapmanager.mmStackLine>`
-* :py:class:`mmUtil <pymapmanager.mmUtil>`
+* :py:class:`mmMap <pymapmanager.mmMap>` - A time-series of :py:class:`mmStack <pymapmanager.mmStack>`.
+* :py:class:`mmStack <pymapmanager.mmStack>` - A 3D image volume, annotations, and :py:class:`mmStackLine <pymapmanager.mmStackLine>` tracings.
+* :py:class:`mmStackLine <pymapmanager.mmStackLine>` - 3D tracings.
 
-Plotting
-+++++++++++++++++++
+* :py:class:`mmMapPool <pymapmanager.mmMapPool>` - Pooling mmMap.
+* :py:class:`mmStackPool <pymapmanager.mmStackPool>` - Pooling mmStack.
 
-* :py:class:`mmMapPlot2 <pymapmanager.mmMapPlot2>`
+* :py:class:`mmMapPlot2 <pymapmanager.mmMapPlot2>` - Simplifies plotting annotations from a mmMap.
 
-Online integration
-+++++++++++++++++++
-
-* :py:class:`mmio <pymapmanager.mmio>`
+* :py:class:`mmio <pymapmanager.mmio>` - Interface to Map Manager server.
 
 Examples
 ==================
