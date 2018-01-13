@@ -7,10 +7,14 @@ Submodules
 pymapmanager\.mmMap module
 --------------------------
 
+<<<<<<< HEAD
 .. automodule:: pymapmanager.mmMap
     :members:
     :undoc-members:
     :show-inheritance:
+=======
+    pymapmanager.mmio
+>>>>>>> 1fafab487d3f9fa7524c831a1474814132f4a645
 
 pymapmanager\.mmMapAnalysis module
 ----------------------------------
@@ -84,6 +88,81 @@ pymapmanager\.version module
     :undoc-members:
     :show-inheritance:
 
+<<<<<<< HEAD
+=======
+pymapmanager.mmMap module
+-------------------------
+
+.. automodule:: pymapmanager.mmMap
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+pymapmanager.mmMapAnalysis module
+---------------------------------
+
+.. automodule:: pymapmanager.mmMapAnalysis
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+pymapmanager.mmMapPlot2 module
+------------------------------
+
+.. automodule:: pymapmanager.mmMapPlot2
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+pymapmanager.mmMapPool module
+-----------------------------
+
+.. automodule:: pymapmanager.mmMapPool
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+pymapmanager.mmStack module
+---------------------------
+
+.. automodule:: pymapmanager.mmStack
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+pymapmanager.mmStackLine module
+-------------------------------
+
+.. automodule:: pymapmanager.mmStackLine
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+pymapmanager.mmStackPool module
+-------------------------------
+
+.. automodule:: pymapmanager.mmStackPool
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+pymapmanager.mmUtil module
+--------------------------
+
+.. automodule:: pymapmanager.mmUtil
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+pymapmanager.version module
+---------------------------
+
+.. automodule:: pymapmanager.version
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+>>>>>>> 1fafab487d3f9fa7524c831a1474814132f4a645
 
 Module contents
 ---------------
