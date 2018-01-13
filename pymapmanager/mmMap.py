@@ -21,7 +21,7 @@ from pymapmanager.mmio import mmio
 class mmMap():
 	"""
 	A time-series of :class:`pymapmanager.mmStack` plus some book-keeping to link corresponding annotations
-	and segments between stacks.
+	and segments between time-points.
 
 	Args:
 		filePath (str): Full file path to .txt file for the map. File is inside map folder, for map a5n it is /a5n/a5n.txt
@@ -30,14 +30,14 @@ class mmMap():
 	Example::
 
 		from pymapmanager.mmMap import mmMap
-		file = '/Users/cudmore/Desktop/data/cudmore/rr30a/rr30a.txt'
-		m = mmMap(filePath=path)
+		myMapFile = 'PyMapManager/examples/exampleMaps/rr30a/rr30a.txt'
+		myMap = mmMap(filePath=myMapFile)
 
 		# Get the 3rd mmStack using
-		stack = m.stacks[3]
+		stack = myMap.stacks[3]
 
-		# Use getMapValues2() to retrieve stack annotations (for the given segmentID) across the entire map
-		pDist_values = m.getMapValues2('pDist', segmentID=[3])
+		# Retrieve annotations (for a given segmentID) across all time-points in the map
+		pDist_values = myMap.getMapValues2('pDist', segmentID=[3])
 	"""
 
 	def __init__(self, filePath=None, urlmap=None):
