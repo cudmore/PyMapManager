@@ -36,6 +36,9 @@ from skimage.io import imsave, imread
 
 from pymapmanager import mmMap, mmUtil
 
+# local debugging
+debugThis = False
+
 # turn off printing to console
 if 0:
 	import logging
@@ -43,7 +46,7 @@ if 0:
 	log.setLevel(logging.ERROR)
 
 # assuming data folder is in same folder as this source .py file
-UPLOAD_FOLDER = './data'
+UPLOAD_FOLDER = '../../PyMapManager-Data/upload'
 data_folder = '../../PyMapManager-Data'
 
 # load a default map, leave this here until I implement redis
@@ -120,7 +123,7 @@ def loadmap(username, mapname):
 	else:
 		print('loadmap() loading map:', mappath)
 		myMapList[mapname] = mmMap(mappath)
-		print('myMap:', myMapList[mapname])
+		print('loaded myMap:', myMapList[mapname])
 	ret = myMapList[mapname].mapInfo() # enclose in dict?
 	return jsonify(ret)
 
@@ -366,18 +369,37 @@ def get_maximage(username, mapname, timepoint, channel):
 	return send_from_directory(tpdir, thefile, as_attachment=True, mimetype='image/png')
 		
 ############################################################
+############################################################
 # mmio is easier with files (compared to json as returned in /api/v1
 ############################################################
+############################################################
 
-@app.route('/api/<username>/<mapname>/<item>')
-def get_header(username, mapname, item):
-	# return a top level file of a map
-	# args: item (str): one of (header, objmap, segmap)
+@app.route('/api/v1/getfile/<item>/<username>/<mapname>')
+@app.route('/api/v1/getfile/<item>/<username>/<mapname>/<timepoint>')
+@app.route('/api/v1/getfile/<item>/<username>/<mapname>/<timepoint>/<int:channel>')
+def getfile(item, username, mapname, timepoint=None, channel=None):
+	"""
+	Get a file from a map
+	
+	Arguments:
+		item: (str) in ['header', 'objmap', 'segmap', 'stackdb', 'line', 'int'
+		
+		For ['stackdb', 'line', 'int'], must also specify 'timepoint'
+		For ['int'], must also specify 'channel'
+		
+	Returns:
+		File like string
+	"""
 		
 	mapdir = safe_join(username, mapname)
 	mapdir = safe_join(app.config['data_folder'], mapdir)
 	
 	as_attachment = False
+	theFolder = '' # for timepoint files
+	
+	#
+	# map
+	#
 	if item == 'header':
 		mapfile = mapname + '.txt'
 	elif item == 'objmap':
@@ -387,105 +409,32 @@ def get_header(username, mapname, item):
 	elif item == 'zip':
 		mapfile = mapname + '.zip'
 		as_attachment = True
-	else:
-		mapfile = ''
-
-	print('=== get_header()', username, mapname, item)
-	print('mapdir:', mapdir)
-	print('mapfile:', mapfile)
-	return send_from_directory(mapdir, mapfile, as_attachment=True, attachment_filename=mapfile)
-	#return send_from_directory(mapdir, mapfile) #, as_attachment=as_attachment) #, mimetype='text/txt')
-		
-# used
-@app.route('/api/v1/getheader/<username>/<mapname>/<item>')
-def get_header_v2(username, mapname, item):
-	# return a top level file of a map
-	# args: item (str): one of (header, objmap, segmap)
-		
-	mapdir = safe_join(username, mapname)
-	mapdir = safe_join(app.config['data_folder'], mapdir)
-	
-	as_attachment = False
-	if item == 'header':
-		print('   get_header_v2: header')
-		mapfile = mapname + '.txt'
-		path = mapdir + '/' + mapfile
-		print('   path:', path)
-		t = pandas.read_table(path, index_col=0)
-		return t.to_json()
-	elif item == 'sessions':
-		mapfile = mapname + '.txt'
-		path = mapdir + '/' + mapfile
-		print('   path:', path)
-		t = pandas.read_table(path, index_col=0)
-		#ret = {}
-		ret = []
-		for idx, i in enumerate(t.loc['hsStack']):
-			if str(i) != 'nan':
-				#ret.append({'s'+str(idx) : i})
-				#ret.append({idx : i})
-				ret.append(i)
-				#ret['s' + str(idx)] = i
-		#print 'ret:', ret
-		#print jsonify(ret)
-		#return jsonify(ret)
-		return jsonify(ret)
-	elif item == 'mapsegments':
-		global myMapList
-		if mapname in myMapList:
-			numRows = myMapList[mapname].segRunMap.shape[0]
-			ret = []
-			for i in range(numRows):
-				ret.append(i)
-			return jsonify(ret)
-		else:
-			# map not loaded
-			return jsonify('')
-	elif item == 'objmap':
-		mapfile = mapname + '_objMap.txt'
-	elif item == 'segmap':
-		mapfile = mapname + '_segMap.txt'
-	elif item == 'zip':
-		mapfile = mapname + '.zip'
-		as_attachment = True
-		
-	print('=== get_header()', username, mapname, item)
-	print('mapdir:', mapdir)
-	print('mapfile:', mapfile)
-	return send_from_directory(mapdir, mapfile, as_attachment=True, attachment_filename=mapfile)
-	#return send_from_directory(mapdir, mapfile) #, as_attachment=as_attachment) #, mimetype='text/txt')
-
-# used
-@app.route('/api/<username>/<mapname>/<timepoint>/<item>')
-@app.route('/api/<username>/<mapname>/<timepoint>/<item>/<int:channel>')
-def get_file(username, mapname, timepoint, item, channel=None):
-	# return a file for single timepoint
-	# args: item (str): Is one of (stackdb, line, int)
-		
-	if item == 'stackdb':
-		thefile = mapname + '_s' + str(timepoint) + '_db2.txt'
-		thefolder = 'stackdb'
+	#
+	# timepoint
+	#
+	elif item == 'stackdb':
+		mapfile = mapname + '_s' + str(timepoint) + '_db2.txt'
+		theFolder = 'stackdb'
 	elif item == 'line':
-		thefile = mapname + '_s' + str(timepoint) + '_l.txt'
-		thefolder = 'line'
+		mapfile = mapname + '_s' + str(timepoint) + '_l.txt'
+		theFolder = 'line'
 	elif item == 'int':
-		thefile = mapname + '_s' + str(timepoint) + '_Int' + str(channel) + '.txt'
-		thefolder = 'stackdb'
+		mapfile = mapname + '_s' + str(timepoint) + '_Int' + str(channel) + '.txt'
+		theFolder = 'stackdb'
 	else:
 		# error
-		thefile = ''
-		thefolder = ''
-	
-	tpdir = safe_join(username, mapname)
-	tpdir = safe_join(tpdir, thefolder)
-	tpdir = safe_join(app.config['data_folder'], tpdir)
+		mapfile = ''
 
-	print('=== getfile()', username, mapname, timepoint, item, channel)
-	print(tpdir)
-	print(thefile)
-	
-	return send_from_directory(tpdir, thefile)
-
+	if theFolder:
+		mapdir = safe_join(mapdir, theFolder)
+		
+	if debugThis:
+		print('=== mmserver.getfile()', item, username, mapname, timepoint, channel)
+		print('   mapdir:', mapdir)
+		print('   mapfile:', mapfile)
+		
+	return send_from_directory(mapdir, mapfile, as_attachment=True, attachment_filename=mapfile)
+		
 
 ############################################################
 ############################################################

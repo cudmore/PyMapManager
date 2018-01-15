@@ -26,14 +26,16 @@ class mmMap():
 	and segments between time-points.
 
 	Args:
-		filePath (str): Full file path to .txt file for the map. File is inside map folder, for map a5n it is /a5n/a5n.txt
+		filePath (str):
+			Either: Full path to map folder.
+			Or: Full file path to .txt file for the map. File is inside map folder, for map a5n it is '/a5n/a5n.txt'.
 		urlmap (str): Name of the map to load from a :class:`pymapmanager.mmio` online repository.
 
 	Example::
 
-		from pymapmanager.mmMap import mmMap
-		myMapFile = 'PyMapManager/examples/exampleMaps/rr30a/rr30a.txt'
-		myMap = mmMap(filePath=myMapFile)
+		from pymapmanager import mmMap
+		myMapPath = 'PyMapManager/examples/exampleMaps/rr30a'
+		myMap = mmMap(filePath=myMapPath)
 
 		# Get the 3rd mmStack using
 		stack = myMap.stacks[3]
@@ -77,6 +79,24 @@ class mmMap():
 		
 		self.segRunMap = None # 20180107, why was this not defaulted?
 		
+		# if we get a filePath, make sure it exists and decide if it is a folder or a file
+		# in the end we will always load from a .txt file
+		if filePath is not None:
+			if filePath.endswith(os.sep):
+				filePath = filePath[0:-1]
+			if os.path.exists(filePath):
+				if os.path.isdir(filePath):
+					tmpPath, tmpName = os.path.split(filePath)
+					filePath = os.path.join(filePath, tmpName + '.txt')
+					# check if file exists
+					if not os.path.isfile(filePath):
+						raise IOError(ENOENT, 'mmMap got a bad map folder:', filePath)
+				else:
+					pass
+			else:
+				# error
+				raise IOError(ENOENT, 'mmMap got a bad map path:', filePath)
+		
 		###############################################################################
 		# map nv
 		doFile = True
@@ -91,7 +111,7 @@ class mmMap():
 			doFile = False
 			# try loading from url
 			self.name = urlmap
-			self.server = mmio.mmio()
+			self.server = mmio()
 			tmp = self.server.getfile('header', self.name)
 			self.table = pd.read_table(io.StringIO(tmp.decode('utf-8')), index_col=0)
 

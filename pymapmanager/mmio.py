@@ -1,15 +1,10 @@
 """
-Use this to load (get) files from a mmserver.
-This is a temporary wrapper as mmserver is currently a Flask server (slow).
-Eventually transition this to use proper online repository like ndio.
-
-To Do: add Rest interface to get number of timepoints in a map?
+Get files from a mmserver using REST interface.
 
 Examples::
 
-	from pymapmanager.mmio import mmio
+	from pymapmanager import mmio
 	s = mmio.mmio()
-		Success, the server at http://robertcudmore.org/mmserver/ is up and running!
 
 	s.maplist()
 		["rr30a", "rr58c"]
@@ -38,42 +33,48 @@ Notes::
 """
 
 from __future__ import print_function
+import os, time, requests
 
-import os, requests
-
-default_server_url = 'http://cudmore.duckdns.org:5010/'
 default_server_url = 'http://localhost:5010/'
 default_user = 'public'
 
 default_eol = '\n'
 
+debugThis = False
+
 class mmio():
 
+	####################################################
+	## init
+	####################################################
 	def __init__(self, server_url=default_server_url, username=default_user):
 		"""
 		Establish connection to a mmserver.
 		
 		Args:
 			server_url (str): The full url to the mmServer
-				For example: http://127.0.0.1:5000/
+				For example: 'http://localhost:5000/'
 			username (str): A valid username.
-				For example: public
+				For example: 'public'
 		"""
 		self.server_url = server_url
 		self.username = username
 		
-		# check if url responded correctly
-		print('server_url:', server_url)
+		if debugThis:
+			print('mmio.__init__(): server_url:', server_url)
 		url = server_url + 'api/v1/status'
-		response = requests.get(server_url)
+		response = requests.get(url)
 		response.raise_for_status()
 
-		print('server responded:', response.content)
-		#print 'Success, the server at', server_url, 'is up and running!'
+		if debugThis:
+			print('   server responded:', response.content)
 		
+	####################################################
+	## get
+	####################################################
 	def maplist(self):
 		"""
-		Return list of maps for user username
+		Get list of maps for user username
 		"""
 		url = self.server_url + 'api/v1/maplist/' + self.username
 		response = requests.get(url)
@@ -95,26 +96,15 @@ class mmio():
 			Server should mirror mmMap and mmStack. For example, merge stackdb and int
 
 		"""
-		baseurl = self.server_url + self.username + '/' + mapname + '/'
-		if type == 'header':
-			url = baseurl + 'header'
-		elif type == 'objmap':
-			url = baseurl + 'objmap'
-		elif type == 'segmap':
-			url = baseurl + 'segmap'		
-		elif type == 'stackdb':
-			#
-			url = baseurl + str(timepoint) + '/stackdb'
-		elif type == 'line':
-			#
-			url = baseurl + str(timepoint) + '/line'
-		elif type == 'int':
-			#
-			url = baseurl + str(timepoint) + '/int/' + str(channel)
-		else:
-			# error
-			url = ''
-		# print 'url:', url
+		
+		url = self.server_url + 'api/v1/getfile/' + type + '/' + self.username + '/' + mapname
+		if timepoint is not None:
+			url += '/' + str(timepoint)
+		if channel is not None:
+			url += '/' + str(channel)
+			
+		if debugThis:
+			print('mmio.getfile() url:', url)
 		response = requests.get(url)
 		if response.status_code == 404:
 			print('error: mmio.getfile() received a 404 for url:', url)
@@ -136,11 +126,16 @@ class mmio():
 		
 		url = self.server_url + self.username + '/' + mapname + '/' + str(timepoint) \
 			+ '/image/' + str(slice) + '/' + str(channel)
+		if debugThis:
+			print('mmio.getimage() url:', url)
 		response = requests.get(url)
 		if response.status_code == 404:
 			print('error: mmio.getimage() received a 404 for url:', url)
 		return response.content
 
+	####################################################
+	## post
+	####################################################
 	def postmap(self, mapFolder):
 		"""
 		Post a map to the server.
@@ -148,7 +143,9 @@ class mmio():
 		Args:
 			mapFolder (str) full path to map folder (local machine).
 		"""
-		print('posting map to server:', self.server_url, 'user:', self.username)
+		startTime = time.time()
+
+		print('mmio.postmap() posting map to server:', self.server_url, 'user:', self.username)
 
 		mapname = os.path.basename(mapFolder)
 
@@ -157,27 +154,27 @@ class mmio():
 		if os.path.isfile(mapFile):
 			file = {'file': open(mapFile, 'rb')}
 			url = 'post/' + self.username + '/' + mapname + '/header'
-			print('uploading main map file with url:', url)
-			r = requests.post(default_server_url + url, files=file)
-			print('   Response:', r.content)
+			#print('uploading main map file with url:', url)
+			r = requests.post(self.server_url + url, files=file)
+			#print('   Response:', r.content)
 
 		# obj map
 		objMapFile = os.path.join(mapFolder, mapname + '_objMap.txt')
 		if os.path.isfile(objMapFile):
 			file = {'file': open(objMapFile, 'rb')}
 			url = 'post/' + self.username + '/' + mapname + '/header'
-			print('uploading obj map file with url:', url)
-			r = requests.post(default_server_url + url, files=file)
-			print('   Response:', r.content)
+			#print('uploading obj map file with url:', url)
+			r = requests.post(self.server_url + url, files=file)
+			#print('   Response:', r.content)
 
 		# seg map
 		segMapFile = os.path.join(mapFolder, mapname + '_segMap.txt')
 		if os.path.isfile(segMapFile):
 			file = {'file': open(segMapFile, 'rb')}
 			url = 'post/' + self.username + '/' + mapname + '/header'
-			print('uploading seg map file with url:', url)
-			r = requests.post(default_server_url + url, files=file)
-			print('   Response:', r.content)
+			#print('uploading seg map file with url:', url)
+			r = requests.post(self.server_url + url, files=file)
+			#print('   Response:', r.content)
 
 		# all stackdb
 		stackdbFolder = os.path.join(mapFolder, 'stackdb')
@@ -187,8 +184,8 @@ class mmio():
 					stackdbFile = os.path.join(stackdbFolder, file)
 					fileid = {'file': open(stackdbFile, 'rb')}
 					url = 'post/' + self.username + '/' + mapname + '/stackdb'
-					print('uploading stackdb file:', file, url)
-					r = requests.post(default_server_url + url, files=fileid)
+					#print('uploading stackdb file:', file, url)
+					r = requests.post(self.server_url + url, files=fileid)
 
 		# all lines
 		lineFolder = os.path.join(mapFolder, 'line')
@@ -198,20 +195,22 @@ class mmio():
 					lineFile = os.path.join(lineFolder, file)
 					fileid = {'file': open(lineFile, 'rb')}
 					url = 'post/' + self.username + '/' + mapname + '/line'
-					print('uploading line file:', file, url)
-					r = requests.post(default_server_url + url, files=fileid)
+					#print('uploading line file:', file, url)
+					r = requests.post(self.server_url + url, files=fileid)
 
-		print('Done uploading map:', mapFolder)
+		stopTime = time.time()
+		print('Done uploading map:', mapFolder, 'in', round(stopTime-startTime,2), 'seconds.')
 
 if __name__ == '__main__':
-	if 1:
-		s = mmio()
-		map = '/Users/cudmore/MapManagerData/richard/Nancy/rr58c'
-		s.postmap(map)
 	if 0:
-		io = mmio(username='cudmore')
-		io.maplist()
-
+		s = mmio()
+		map = '../examples/exampleMaps/rr30a/rr30a.txt'
+		s.postmap(map)
+	if 1:
+		io = mmio(username='public')
+		maplist = io.maplist()
+		print('main: maplist:', maplist)
+		
 		header = io.getfile('header', 'rr30a')
 		for line in header.split('\r'):
 			print(line)

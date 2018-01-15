@@ -46,7 +46,7 @@ class mmStack():
             #from server
             self.doFile = False
             self.urlmap = urlmap
-            self.server = mmio.mmio()
+            self.server = mmio()
         elif map is not None:
             # from mm map
             self._folder = map._folder
