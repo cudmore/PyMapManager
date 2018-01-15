@@ -4,11 +4,21 @@ Please see the main [PyMapManager](http://blog.cudmore.io/PyMapManager) document
 
 This REST server is accessed by the Javascript client in [mmclient](https://github.com/cudmore/PyMapManager/tree/master/mmclient).
 
-See [here](http://blog.cudmore.io/PyMapManager/rest-api/) For a full list of REST API endpoints.
+See the full list of [REST API endpoints](http://blog.cudmore.io/PyMapManager/rest-api/).
 
 ## Installation
 
-Make sure you have all the reuired Python libraries with
+Clone the main PyMapManager repository
+
+	git clone https://github.com/cudmore/PyMapManager.git
+
+Make a Python virtual environment in `PyMapManager/mmserver`
+
+	cd PyMapManager/mmserver
+	virtualenv venv
+	source venv/bin/activate
+
+Install the required Python libraries
 
 	pip install -r requirements.txt
 
@@ -19,7 +29,7 @@ Other than that, there is no formal installation. This is a stand-alone Python s
 This will run the server locally at `http://localhost:5010`.
 
 ```
-cd mmserver
+cd PyMapManager/mmserver
 python mmserver.py
 ```
 
@@ -47,9 +57,9 @@ See the [mmclient](https://github.com/cudmore/PyMapManager/tree/master/mmclient)
 import json
 import urllib2
 
+# grab the tracing (from the server)
 url='http://localhost:5010/v2/public/rr30a/getmaptracing?mapsegment=&session=3&xstat=x&ystat=y&zstat=z'
-
-mytracing = json.load(urllib2.urlopen("url"))
+mytracing = json.load(urllib2.urlopen(url))
 
 # plot with matplotlib
 import matplotlib.pyplot as plt

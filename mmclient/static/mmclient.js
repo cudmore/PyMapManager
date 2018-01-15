@@ -222,7 +222,7 @@ $scope.toggleInterface = function(toggleThis) {
 function getMapList(username) {
 	// /api/<username>/maps
 	//console.log('getMapList() starting for username:', username)
-	var url = serverurl + 'api/' + username + '/maps'
+	var url = serverurl + 'api/v1/maplist/' + username
 	$http.get(url)
 		.then(function(response) {
 			$scope.maps = response.data;
@@ -241,7 +241,7 @@ function getMapList(username) {
 function loadMap(map) {
 	// http://127.0.0.1:5010/loadmap/public/rr30a
 	console.log('load map start')
-	var url = serverurl + 'loadmap/' + $scope.username + '/' + map
+	var url = serverurl + 'api/v1/loadmap/' + $scope.username + '/' + map
 	//$scope.loading = true;
 	$http.get(url)
 		.then(function(response) {
@@ -344,7 +344,7 @@ function getMapValues(mapsegment, session, xstat, ystat, zstat) {
 
 	var startTime = Date.now()
 
-	var url = serverurl + 'v2/' + $scope.username + '/' + $scope.loadedMap + '/getmapvalues'
+	var url = serverurl + 'api/v1/getmapvalues/' + $scope.username + '/' + $scope.loadedMap
 	url += '?mapsegment=' + mapsegment
 	url += '&session=' + session
 	url += '&xstat=' + xstat
@@ -1330,12 +1330,12 @@ function selectInPlotly(runRow, runCol) {
 	    //var imageUrl = serverurl + 'getimage/' + $scope.leafletUser + '/' + $scope.leafletMap + '/' + $scope.leafletTimepoint + '/' + $scope.leafletChannel + '/' + sliceNum
 
 	    // one image
-	    var imageUrl = serverurl + 'getimage/' + $scope.leafletUser + '/' + $scope.leafletMap + '/' + tp + '/' + $scope.leafletChannel + '/' + sliceNum
+	    var imageUrl = serverurl + 'api/v1/getimage/' + $scope.leafletUser + '/' + $scope.leafletMap + '/' + tp + '/' + $scope.leafletChannel + '/' + sliceNum
 
 	    // sliding z
 	    var imageUrl = ''
 	    if ($scope.showSlidingZ) {
-	    	imageUrl = serverurl + 'getslidingz/' + $scope.leafletUser + '/' + $scope.leafletMap + '/' + tp + '/' + $scope.leafletChannel + '/' + sliceNum
+	    	imageUrl = serverurl + 'api/v1/getslidingz/' + $scope.leafletUser + '/' + $scope.leafletMap + '/' + tp + '/' + $scope.leafletChannel + '/' + sliceNum
 			$http.get(url)
 				.then(function(response) {
 					//console.log('getLeafletMapData) response.data:')
@@ -1348,7 +1348,7 @@ function selectInPlotly(runRow, runCol) {
 				})
 	    	$scope.image[tp].setUrl(imageUrl)
 	    } else {
-	    	imageUrl = serverurl + 'getimage/' + $scope.leafletUser + '/' + $scope.leafletMap + '/' + tp + '/' + $scope.leafletChannel + '/' + sliceNum
+	    	imageUrl = serverurl + 'api/v1/getimage/' + $scope.leafletUser + '/' + $scope.leafletMap + '/' + tp + '/' + $scope.leafletChannel + '/' + sliceNum
 	    	$scope.image[tp].setUrl(imageUrl)
 	    }
 
@@ -1362,7 +1362,7 @@ function selectInPlotly(runRow, runCol) {
 
 	function setMaxProject(tp) {
 		//var maxImageUrl = serverurl + 'getmaximage/' + $scope.leafletUser + '/' + $scope.leafletMap + '/' + $scope.leafletTimepoint + '/' + $scope.leafletChannel
-		var maxImageUrl = serverurl + 'getmaximage/' + $scope.leafletUser + '/' + $scope.leafletMap + '/' + tp + '/' + $scope.leafletChannel
+		var maxImageUrl = serverurl + 'api/v1/getmaximage/' + $scope.leafletUser + '/' + $scope.leafletMap + '/' + tp + '/' + $scope.leafletChannel
 	    $scope.image[tp].setUrl(maxImageUrl)
 	}
 
@@ -1579,7 +1579,7 @@ function selectInPlotly(runRow, runCol) {
 	// get leaflet x/y/z for ENTIRE map, ALL sessions, ALL map segments
 	//each leaflet map div will pull a column (session) into a copy of a local variable
 	function getLeafletMapData() {
-		var url = serverurl + 'v2/' + $scope.username + '/' + $scope.loadedMap + '/getmapvalues'
+		var url = serverurl + 'api/v1/getmapvalues/' + $scope.username + '/' + $scope.loadedMap
 		url += '?mapsegment=' + ''
 		url += '&session=' + ''
 		url += '&xstat=' + 'x'
@@ -1658,7 +1658,7 @@ function selectInPlotly(runRow, runCol) {
 
 		//
 		// tracing
-		url = serverurl + 'v2/' + $scope.username + '/' + $scope.loadedMap + '/getmaptracing'
+		url = serverurl + 'api/v1/getmaptracing/' + $scope.username + '/' + $scope.loadedMap
 		url += '?mapsegment=' + ''
 		url += '&session=' + tp
 		url += '&xstat=' + 'x'

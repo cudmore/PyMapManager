@@ -41,9 +41,8 @@ from __future__ import print_function
 
 import os, requests
 
-#default_server_url = 'http://127.0.0.1:5000/'
-default_server_url = 'http://robertcudmore.org/mmserver/'
 default_server_url = 'http://cudmore.duckdns.org:5010/'
+default_server_url = 'http://localhost:5010/'
 default_user = 'public'
 
 default_eol = '\n'
@@ -58,13 +57,14 @@ class mmio():
 			server_url (str): The full url to the mmServer
 				For example: http://127.0.0.1:5000/
 			username (str): A valid username.
-				For example: cudmore
+				For example: public
 		"""
 		self.server_url = server_url
 		self.username = username
 		
 		# check if url responded correctly
 		print('server_url:', server_url)
+		url = server_url + 'api/v1/status'
 		response = requests.get(server_url)
 		response.raise_for_status()
 
@@ -75,7 +75,7 @@ class mmio():
 		"""
 		Return list of maps for user username
 		"""
-		url = self.server_url + self.username + '/maps'
+		url = self.server_url + 'api/v1/maplist/' + self.username
 		response = requests.get(url)
 		if response.status_code == 404:
 			print('error: mmio.maplist() received a 404 for url:', url)
@@ -103,10 +103,13 @@ class mmio():
 		elif type == 'segmap':
 			url = baseurl + 'segmap'		
 		elif type == 'stackdb':
+			#
 			url = baseurl + str(timepoint) + '/stackdb'
 		elif type == 'line':
+			#
 			url = baseurl + str(timepoint) + '/line'
 		elif type == 'int':
+			#
 			url = baseurl + str(timepoint) + '/int/' + str(channel)
 		else:
 			# error
