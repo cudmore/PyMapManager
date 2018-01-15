@@ -11,11 +11,11 @@ Please see the main [PyMapManager](http://blog.cudmore.io/PyMapManager) document
  - [examples/](examples/) : Jupyter notebooks with example Python code using pymapmanager.
  - [mmserver/](mmserver/) : A Python Flask server that provides a REST interface to easily retrieve Map Manager annotations and images.
  - [mmclient/](mmclient/) : A user friendly front-end Javascript client to plot annotations and view image time-series from a `mmserver` REST server.
- - [pymapmanager/mmio/](pymapmanager/mmio.py) : Helper class allowing pymapmanager Python code to load annotations and images from a [mmserver/](mmserver/) REST server.
+ - [pymapmanager/mmio.py](pymapmanager/mmio.py) : Helper class allowing pymapmanager Python code to load annotations and images from a [mmserver/](mmserver/) REST server.
  
 ## PyMapManager Python package
 
-Python package to open and analyze Map Manager files. Please see the <A HREF="http://pymapmanager.readthedocs.io/en/latest/">API Documentation</A> and a backup copy <A HREF="http://robertcudmore.org/mapmanager/PyMapManager/docs/">here</A>. See the <A HREF="https://github.com/cudmore/PyMapManager/tree/master/PyMapManager/examples">PyMapManager/examples/</A> folder for iPython notebooks with code examples.
+Python package to open and analyze Map Manager files. Please see the <A HREF="http://pymapmanager.readthedocs.io/en/latest/">API Documentation</A> and a backup copy <A HREF="http://robertcudmore.org/mapmanager/PyMapManager/docs/">here</A>. See the [examples/](examples/) folder for iPython notebooks with code examples.
 
 ## Map Manager server
 
@@ -31,37 +31,46 @@ These screenshots show web based browsing of 3D image volume time-series with sp
 <IMG SRC="docs/docs/img/mmserver_leaflet2.png" width=900>
 
 
-## PyQt interface
+## PyQt interface -- DEPRECIATED
 
 The next generation desktop application version of Map Manager. Written in Python using the Qt interface library and using the PyMapManager Python package as an back-end.
 
 This project will be merged with <A HREF="https://github.com/cmicek1/TiffViewer">PyQt TiffViewer</A> created by <A HREF="https://github.com/cmicek1">Chris Micek</A>.
 
-The PyQt GUI interface is in <A HREF="https://github.com/cudmore/PyMapManager/tree/master/PyMapManager/interface">/PyMapManager/interface</A>
+The PyQt GUI interface is in [PyQtMapManager/](PyQtMapManager/)
 
 <IMG SRC="docs/docs/img/pyMapManager_v2.png" width=800>
 
 This screen shot shows the main PyQt interface window (left), a map plot (top center), a stack plot (top right), and a stack image plot (bottom right).
 
 
-## Install Python PyMapManager package
+## Install the PyMapManager package
 
-### Install required Python libraries
+### Install from [PyPi](https://pypi.python.org/pypi/pymapmanager) using pip
 
-```
-pip install numpy
-pip install pandas
-pip install requests
-pip install tifffile
-```
+	pip install PyMapManager
 
-### Install PyMapManager Package
+### install from download
+
+Clone the repository
+
+	git clone https://github.com/cudmore/PyMapManager.git
+
+Install required Python libraries
+
+	pip install -r PyMapManager/requirements.txt
+
+Install PyMapManager package (from download)
   
-```
-pip install PyMapManager
-```
+	pip install PyMapManager/
 
-Once installed, PyMapManager is available in python as `import pymapmanager`. See the [examples/](examples/) to get started.
+Once installed, example maps can easily be loaded.
+
+	from pymapmanager import mmMap
+	path = 'PyMapManager/examples/exampleMaps/rr30a'
+	myMap = mmMap(path)
+
+See the [examples/](examples/) to get started.
 
 
 ## Run the Map Manager server
@@ -76,15 +85,13 @@ The server is made of two components, a back-end REST server and a client-side J
 Install libraries
 
 ```
-pip install rest
-pip install rest-cors
-pip install scikit-image
+pip install -r PyMapManager/mmserver/requirements.txt
 ```
 
 Run
 
 ```
-cd mmserver
+cd PyMapManager/mmserver
 python mmserver.py
 ```
 
@@ -96,17 +103,9 @@ http://localhost:5010
 
 ### Run the client-side Javascript server
 
-Make sure `mmclient/static/mmserver.js` points to your localhost REST interface
-
-Edit `mmclient/static/mmserver.js` and make sure `serverurl` points to your localhost `mmserver`.
-
-```
-serverurl = 'http://127.0.0.1:5010/'
-```
+This assumes [Node](https://nodejs.org/en/download/) has been manually downloaded and installed.
 
 Install http-server
-
-Download and manually install [node](https://nodejs.org/en/download/).
 
 ```
 npm install http-server -g
@@ -115,7 +114,7 @@ npm install http-server -g
 Run
 
 ```
-cd mmclient
+cd PyMapManager/mmclient
 http-server
 ```
 
@@ -126,7 +125,7 @@ http://localhost:8080
 ```
 	
    
-## Run the PyQt interface
+## Run the PyQt interface -- DEPRECIATED
 
 We have downgraded development of the PyQt interface to focus on the web client/server version of Map Manager
 
