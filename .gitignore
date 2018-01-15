@@ -16,3 +16,5 @@ pymapmanager/docs/_build/
 
 # Jupyter Notebook
 .ipynb_checkpoints
+
+.idea
