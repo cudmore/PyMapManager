@@ -33,18 +33,9 @@ cd PyMapManager/mmserver
 python mmserver.py
 ```
 
-The default Flask server that is used when running with `python mmserver.py` is **asynchronous**. This means that really fast or lots of user requests will get backed up and the server will not respond. To get around this, run a **synchronous** server with `gunicorn`.
+Please note, this is a very simplified example. In reality, the REST server should be run **synchronously** using either gunicorn or uwsgi and then served through a proper web-server such as Apache or nginx.
 
-On OSX (gunicorn requires sudo)
 
-	cd mmserver
-	sudo gunicorn -b 0.0.0.0:5010 mmserver:app
-
-On Linux (no sudo needed)
-
-	cd mmserver
-	gunicorn -b 0.0.0.0:5010 mmserver:app
-	
 ## Using the REST API in a scripting language
 
 ### In Javascript
@@ -53,12 +44,22 @@ See the [mmclient](https://github.com/cudmore/PyMapManager/tree/master/mmclient)
 
 ### In Python
 
+Map Manager maps can easily be loaded from the server, just like they are loaded from a local file
+
+```python
+from pymapmanager import mmMap
+urlmap='rr30a' # map 'rr30a' is an example map in PyMapMAnager/exmples/exampleMaps
+mymap = mmMap(urlmap=urlmap)
+```
+
+Or the server can be addressed directly
+
 ```python
 import json
 import urllib2
 
 # grab the tracing (from the server)
-url='http://localhost:5010/v2/public/rr30a/getmaptracing?mapsegment=&session=3&xstat=x&ystat=y&zstat=z'
+url='http://localhost:5010/api/v1/getmaptracing/public/rr30a?mapsegment=&session=3&xstat=x&ystat=y&zstat=z'
 mytracing = json.load(urllib2.urlopen(url))
 
 # plot with matplotlib
@@ -66,7 +67,7 @@ import matplotlib.pyplot as plt
 plt.plot(mytracing['x'],mytracing['y'])
 ```
 
-Also see [mmio](https://github.com/cudmore/PyMapManager/tree/master/PyMapManager/mmio) to seemlesly load Map Manager annotations from the REST server using Python.
+
 
 ### In Matlab
 
