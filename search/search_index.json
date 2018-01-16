@@ -32,18 +32,13 @@
         }, 
         {
             "location": "/install-pymapmanager/", 
-            "text": "Install PyMapManager Python package\n\n\nInstall using pip\n\n\npip install PyMapManager\n\n\n\nThis will install the most recent version from \nPyPi\n.\n\n\nInstall from a manual download\n\n\n1) Download the repo\n\n\nThis will make a \nPyMapManager\n folder.\n\n\ngit clone https://github.com/cudmore/PyMapManager.git\n\n\n\n2) Install required Python libraries\n\n\npip install -r PyMapManager/requirements.txt\n\n\n\n3) Install PyMapManager\n\n\npip install PyMapManager/\n\n\n\nTesting the install\n\n\nFrom within Python, include the libraries like:\n\n\nfrom pymapmanager import mmMap", 
+            "text": "Install from \nPyPi\n using pip\n\n\npip install PyMapManager\n\n\n\nThis will install the most recent version from \nPyPi\n.\n\n\nInstall from a manual download\n\n\n1) Download the repo\n\n\nThis will make a \nPyMapManager\n folder.\n\n\ngit clone https://github.com/cudmore/PyMapManager.git\n\n\n\n2) Install required Python libraries\n\n\npip install -r PyMapManager/requirements.txt\n\n\n\n3) Install PyMapManager (from the downloaded folder)\n\n\npip install PyMapManager/\n\n\n\nTesting the install from a \npython\n prompt\n\n\nCheck the version\n\n\n import pymapmanager\n\n pymapmanager.__version__\n'0.0.3'\n\n\n\n\nLoad an example map\n\n\nfrom pymapmanager import mmMap\npath = 'PyMapManager/examples/exampleMaps/rr30a'\nmyMap = mmMap(path)\n\n\n\n\nYou should see (exact seconds will vary)\n\n\nmap rr30a loaded in 0.45 seconds.\n\n\n\n\nThen type\n\n\nprint myMap\n\n\n\n\nAnd you should see\n\n\nmap:rr30a map segments:5 stacks:9 total object:2467", 
             "title": "Install PyMapManager"
         }, 
         {
-            "location": "/install-pymapmanager/#install-pymapmanager-python-package", 
-            "text": "", 
-            "title": "Install PyMapManager Python package"
-        }, 
-        {
-            "location": "/install-pymapmanager/#install-using-pip", 
+            "location": "/install-pymapmanager/#install-from-pypi-using-pip", 
             "text": "pip install PyMapManager  This will install the most recent version from  PyPi .", 
-            "title": "Install using pip"
+            "title": "Install from PyPi using pip"
         }, 
         {
             "location": "/install-pymapmanager/#install-from-a-manual-download", 
@@ -61,14 +56,14 @@
             "title": "2) Install required Python libraries"
         }, 
         {
-            "location": "/install-pymapmanager/#3-install-pymapmanager", 
+            "location": "/install-pymapmanager/#3-install-pymapmanager-from-the-downloaded-folder", 
             "text": "pip install PyMapManager/", 
-            "title": "3) Install PyMapManager"
+            "title": "3) Install PyMapManager (from the downloaded folder)"
         }, 
         {
-            "location": "/install-pymapmanager/#testing-the-install", 
-            "text": "From within Python, include the libraries like:  from pymapmanager import mmMap", 
-            "title": "Testing the install"
+            "location": "/install-pymapmanager/#testing-the-install-from-a-python-prompt", 
+            "text": "Check the version   import pymapmanager  pymapmanager.__version__\n'0.0.3'  Load an example map  from pymapmanager import mmMap\npath = 'PyMapManager/examples/exampleMaps/rr30a'\nmyMap = mmMap(path)  You should see (exact seconds will vary)  map rr30a loaded in 0.45 seconds.  Then type  print myMap  And you should see  map:rr30a map segments:5 stacks:9 total object:2467", 
+            "title": "Testing the install from a python prompt"
         }, 
         {
             "location": "/install-client-server/", 
