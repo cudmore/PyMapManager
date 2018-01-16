@@ -11,7 +11,7 @@
  
 ### General
 
- - posting a mpa from Igor
+ - posting a map from Igor
     - mmio will allow mmio.postmap() from folder
     - make mmio also post map from zip
     - have igor call an igor script (not part of class library)
@@ -288,7 +288,7 @@ see: https://stackoverflow.com/questions/14573223/set-cookie-and-get-cookie-with
 
 ## redis flask server
 
-We need to use a global database when running production server where mmserver is spawned into maultiple processes and can not share `global` python objects.
+We need to use a global database when running production server where mmserver is spawned into multiple processes and can not share `global` python objects. Redis requires a bit of work to package objects into json serializable objects so for now just use pickle to do the heaver lifting. Map rr30 is ~24 MB when pickled, rough estimate is we get ~44 picked maps per 1 GB of memory (in practice we will get a bit more).
 
 ```
 #!/bin/python
