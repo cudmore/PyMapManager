@@ -28,7 +28,7 @@
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
       <link rel="shortcut icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-0.17.1, mkdocs-material-2.0.4">
+      <meta name="generator" content="mkdocs-0.17.2, mkdocs-material-2.2.2">
     
     
       
@@ -36,11 +36,11 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/application-709eec9410.css">
+      <link rel="stylesheet" href="../assets/stylesheets/application.7a4cdee3.css">
       
     
     
-      <script src="../assets/javascripts/modernizr-e826f8942a.js"></script>
+      <script src="../assets/javascripts/modernizr.1aa3b519.js"></script>
     
     
       
@@ -49,8 +49,6 @@
       
       <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     
-    
-      <link rel="stylesheet" href="../css/extra.css">
     
     
   </head>
@@ -83,14 +81,18 @@
         <label class="md-icon md-icon--menu md-header-nav__button" for="drawer"></label>
       </div>
       <div class="md-flex__cell md-flex__cell--stretch">
-        <span class="md-flex__ellipsis md-header-nav__title">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
           
             
-              
+              <span class="md-header-nav__topic">
+                PyMapManager
+              </span>
+              <span class="md-header-nav__topic">
+                Development Notes
+              </span>
             
-            Development Notes
           
-        </span>
+        </div>
       </div>
       <div class="md-flex__cell md-flex__cell--shrink">
         
@@ -150,6 +152,9 @@
 </header>
     
     <div class="md-container">
+      
+        
+      
       
       <main class="md-main">
         <div class="md-main__inner md-grid" data-md-component="container">
@@ -320,6 +325,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#general" title="General" class="md-nav__link">
+    General
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#front-end-javascript" title="Front end javascript" class="md-nav__link">
     Front end javascript
   </a>
@@ -369,6 +381,13 @@
         <li class="md-nav__item">
   <a href="#running-development-servers" title="Running development servers" class="md-nav__link">
     Running development servers
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sphinx" title="Sphinx" class="md-nav__link">
+    Sphinx
   </a>
   
 </li>
@@ -486,6 +505,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#general" title="General" class="md-nav__link">
+    General
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#front-end-javascript" title="Front end javascript" class="md-nav__link">
     Front end javascript
   </a>
@@ -535,6 +561,13 @@
         <li class="md-nav__item">
   <a href="#running-development-servers" title="Running development servers" class="md-nav__link">
     Running development servers
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sphinx" title="Sphinx" class="md-nav__link">
+    Sphinx
   </a>
   
 </li>
@@ -634,6 +667,27 @@
 <li>Enable editing and saving of maps via web interface.</li>
 <li>Make a docker to easily install and run PyMapManager client/server on a local machine (MacOS, Linux, Windows).</li>
 </ul>
+<h3 id="general">General</h3>
+<ul>
+<li>
+<p>posting a mpa from Igor</p>
+<ul>
+<li>mmio will allow mmio.postmap() from folder</li>
+<li>make mmio also post map from zip</li>
+<li>have igor call an igor script (not part of class library)<ul>
+<li>given a folder path, zip the map and post it</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>then unzip and place files in correct spot</p>
+</li>
+<li>add class GlobalMaps() to mmserver.<ul>
+<li>Set and get maps from either a global dict (when run as python mmserver.py) or a redis database when run insode uWSGI</li>
+</ul>
+</li>
+</ul>
 <h3 id="front-end-javascript">Front end javascript</h3>
 <ul>
 <li>Intercept keyboard in leaflet, use this to switch (channel 1, channel 2, channel 3)</li>
@@ -715,7 +769,29 @@ python mmserver.py
 cd mmclient
 reload -b
 </code></pre>
+<h2 id="sphinx">Sphinx</h2>
+<p>This is to auto generated API documentation from embedded docstrings in the python code using Sphinx. The output is available on readthedocs.</p>
+<p>1) Don't foget to add modules that depend on C code to <code>MOCK_MODULES</code> section of <code>conf.py</code>.</p>
+<p>2) Whenever I change modules (like when I removed interface/)</p>
+<p>last <code>../version.py</code> should exclude <code>pymapmanager/version.py</code> from output.</p>
+<p>Note: I am using pymapmanager/version.py to import a common <strong>version</strong> into PyMapManager/setup.py and inserting <strong>version</strong> into pymapmanager module (via pymapmanager/<strong>init</strong>.py)</p>
+<pre><code>cd PyMapManager/pymapmanager/docs
+sphinx-apidoc -f -o source ../ ../version.py
+</code></pre>
+<p>Output should look like:</p>
+<pre><code>Creating file source/pymapmanager.rst.
+Creating file source/modules.rst.
+</code></pre>
+<p>3) Make the docs in /build/</p>
+<pre><code>cd PyMapManager/pymapmanager/docs
+#sphinx-build -b html source/ build
+#sphinx-build -b html . build
+make html
+</code></pre>
+<p>4) Push to Github and then go to ReadTheDocs and click <code>build</code>.</p>
+<p>This relies on a webhook made inside the Github repo (forgot exactly how/where).</p>
 <h2 id="mkdocs">MkDocs</h2>
+<p>This is for 'human readable' documentation website available at http://blog.cudore.io/PyMapMAnager</p>
 <p>Serve locally</p>
 <pre><code>cd ~/Dropbox/PyMapManager/docs
 mkdocs serve
@@ -803,7 +879,7 @@ gunicorn -b 0.0.0.0:5010 mmserver:app
 <h2 id="pushing-changes-in-mmclient-to-robertcudmoreorg">Pushing changes in mmclient/ to robertcudmore.org</h2>
 <p>No need for this any more !</p>
 <h2 id="pushing-to-pypi">Pushing to <a href="https://pypi.python.org/pypi/pymapmanager">PyPi</a></h2>
-<p>Version 0.1.1 is working with <code>pip install PyMapManager</code>!</p>
+<p>Version 0.0.1 is working with <code>pip install PyMapManager</code>!</p>
 <p>This will be available at <a href="https://pypi.python.org/pypi/pymapmanager">https://pypi.python.org/pypi/pymapmanager</a> and can be installed with <code>pip install PyMapManager</code>.</p>
 <p>There is also a test server at <a href="https://testpypi.python.org/pypi">https://testpypi.python.org/pypi</a></p>
 <ol>
@@ -826,7 +902,7 @@ password=your_password
 <ol>
 <li>
 <p>Update version in <code>PyMapManager/setup.py</code></p>
-<p>version='0.1.1',</p>
+<p>version='0.0.1',</p>
 </li>
 <li>
 <p>Makes .tar.gz in <code>dist/</code></p>
@@ -851,6 +927,7 @@ python setup.py sdist</p>
 <h2 id="cookies">cookies</h2>
 <p>see: https://stackoverflow.com/questions/14573223/set-cookie-and-get-cookie-with-javascript</p>
 <h2 id="redis-flask-server">redis flask server</h2>
+<p>We need to use a global database when running production server where mmserver is spawned into maultiple processes and can not share <code>global</code> python objects.</p>
 <pre><code>#!/bin/python
 
 '''
@@ -975,9 +1052,9 @@ if __name__ == &quot;__main__&quot;:
       <div class="md-footer-copyright">
         
         powered by
-        <a href="http://www.mkdocs.org" title="MkDocs">MkDocs</a>
+        <a href="http://www.mkdocs.org">MkDocs</a>
         and
-        <a href="http://squidfunk.github.io/mkdocs-material/" title="Material for MkDocs">
+        <a href="https://squidfunk.github.io/mkdocs-material/">
           Material for MkDocs</a>
       </div>
       
@@ -989,9 +1066,9 @@ if __name__ == &quot;__main__&quot;:
       
     </div>
     
-      <script src="../assets/javascripts/application-8e4952e681.js"></script>
+      <script src="../assets/javascripts/application.6cdc17f0.js"></script>
       
-      <script>app.initialize({version:"0.17.1",url:{base:".."}})</script>
+      <script>app.initialize({version:"0.17.2",url:{base:".."}})</script>
       
     
     
