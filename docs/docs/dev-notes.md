@@ -9,6 +9,18 @@
  - Enable editing and saving of maps via web interface.
  - Make a docker to easily install and run PyMapManager client/server on a local machine (MacOS, Linux, Windows).
  
+### General
+
+ - posting a mpa from Igor
+    - mmio will allow mmio.postmap() from folder
+    - make mmio also post map from zip
+    - have igor call an igor script (not part of class library)
+        - given a folder path, zip the map and post it
+
+ - then unzip and place files in correct spot
+ - add class GlobalMaps() to mmserver.
+    - Set and get maps from either a global dict (when run as python mmserver.py) or a redis database when run insode uWSGI
+ 
 ### Front end javascript
 
  - Intercept keyboard in leaflet, use this to switch (channel 1, channel 2, channel 3)
@@ -217,7 +229,7 @@ No need for this any more !
 
 ## Pushing to [PyPi][pypi]
 
-Version 0.1.1 is working with `pip install PyMapManager`!
+Version 0.0.1 is working with `pip install PyMapManager`!
 
 This will be available at [https://pypi.python.org/pypi/pymapmanager](https://pypi.python.org/pypi/pymapmanager) and can be installed with `pip install PyMapManager`.
 
@@ -242,7 +254,7 @@ password=your_password
 
 2. Update version in `PyMapManager/setup.py`
 
-      version='0.1.1',
+      version='0.0.1',
 
 3. Makes .tar.gz in `dist/`
 
@@ -275,6 +287,8 @@ mmMap is using
 see: https://stackoverflow.com/questions/14573223/set-cookie-and-get-cookie-with-javascript
 
 ## redis flask server
+
+We need to use a global database when running production server where mmserver is spawned into maultiple processes and can not share `global` python objects.
 
 ```
 #!/bin/python

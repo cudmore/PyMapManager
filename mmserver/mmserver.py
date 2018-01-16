@@ -17,7 +17,7 @@ todo:
 """
 
 from __future__ import print_function
-import os
+import os, sys
 import json
 from datetime import datetime
 
@@ -27,12 +27,13 @@ except ImportError:
     from io import StringIO # python 3.x
 
 from flask import Flask, render_template, send_file, send_from_directory, safe_join
-from flask import jsonify, request
+from flask import jsonify, request, make_response
 from flask_cors import CORS
 
 import pandas as pandas
 import numpy as np
 from skimage.io import imsave, imread
+import pickle
 
 from pymapmanager import mmMap, mmUtil
 
@@ -67,6 +68,14 @@ app.config['data_folder'] = data_folder
 ############################################################
 # routes
 ############################################################
+@app.errorhandler(404)
+def not_found(error):
+    theRet = {
+    	'name': 'mmserver',
+    	'error': 'Not found'
+    }
+    return make_response(jsonify(theRet), 404)
+    
 @app.route('/')
 def hello_world():
 	print('hello_world()')
@@ -124,6 +133,11 @@ def loadmap(username, mapname):
 		print('loadmap() loading map:', mappath)
 		myMapList[mapname] = mmMap(mappath)
 		print('loaded myMap:', myMapList[mapname])
+	
+	# rr30a is 24 MB -> 0.024 GB. Telling us we can store ~41 maps in 1 GB
+	#pickled_object = pickle.dumps(myMapList[mapname])
+	#print('getsizeof:', sys.getsizeof(pickled_object))
+	
 	ret = myMapList[mapname].mapInfo() # enclose in dict?
 	return jsonify(ret)
 
