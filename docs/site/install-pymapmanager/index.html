@@ -238,15 +238,8 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#install-pymapmanager-python-package" title="Install PyMapManager Python package" class="md-nav__link">
-    Install PyMapManager Python package
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#install-using-pip" title="Install using pip" class="md-nav__link">
-    Install using pip
+  <a href="#install-from-pypi-using-pip" title="Install from PyPi using pip" class="md-nav__link">
+    Install from PyPi using pip
   </a>
   
 </li>
@@ -274,8 +267,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#3-install-pymapmanager" title="3) Install PyMapManager" class="md-nav__link">
-    3) Install PyMapManager
+  <a href="#3-install-pymapmanager-from-the-downloaded-folder" title="3) Install PyMapManager (from the downloaded folder)" class="md-nav__link">
+    3) Install PyMapManager (from the downloaded folder)
   </a>
   
 </li>
@@ -286,8 +279,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#testing-the-install" title="Testing the install" class="md-nav__link">
-    Testing the install
+  <a href="#testing-the-install-from-a-python-prompt" title="Testing the install from a python prompt" class="md-nav__link">
+    Testing the install from a python prompt
   </a>
   
 </li>
@@ -392,15 +385,8 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#install-pymapmanager-python-package" title="Install PyMapManager Python package" class="md-nav__link">
-    Install PyMapManager Python package
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#install-using-pip" title="Install using pip" class="md-nav__link">
-    Install using pip
+  <a href="#install-from-pypi-using-pip" title="Install from PyPi using pip" class="md-nav__link">
+    Install from PyPi using pip
   </a>
   
 </li>
@@ -428,8 +414,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#3-install-pymapmanager" title="3) Install PyMapManager" class="md-nav__link">
-    3) Install PyMapManager
+  <a href="#3-install-pymapmanager-from-the-downloaded-folder" title="3) Install PyMapManager (from the downloaded folder)" class="md-nav__link">
+    3) Install PyMapManager (from the downloaded folder)
   </a>
   
 </li>
@@ -440,8 +426,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#testing-the-install" title="Testing the install" class="md-nav__link">
-    Testing the install
+  <a href="#testing-the-install-from-a-python-prompt" title="Testing the install from a python prompt" class="md-nav__link">
+    Testing the install from a python prompt
   </a>
   
 </li>
@@ -463,8 +449,7 @@
                 
                   <h1>Install PyMapManager</h1>
                 
-                <h2 id="install-pymapmanager-python-package">Install PyMapManager Python package</h2>
-<h2 id="install-using-pip">Install using pip</h2>
+                <h2 id="install-from-pypi-using-pip">Install from <a href="https://pypi.python.org/pypi/pymapmanager">PyPi</a> using pip</h2>
 <pre><code>pip install PyMapManager
 </code></pre>
 <p>This will install the most recent version from <a href="https://pypi.python.org/pypi/pymapmanager">PyPi</a>.</p>
@@ -476,12 +461,32 @@
 <h3 id="2-install-required-python-libraries">2) Install required Python libraries</h3>
 <pre><code>pip install -r PyMapManager/requirements.txt
 </code></pre>
-<h3 id="3-install-pymapmanager">3) Install PyMapManager</h3>
+<h3 id="3-install-pymapmanager-from-the-downloaded-folder">3) Install PyMapManager (from the downloaded folder)</h3>
 <pre><code>pip install PyMapManager/
 </code></pre>
-<h2 id="testing-the-install">Testing the install</h2>
-<p>From within Python, include the libraries like:</p>
-<pre><code>from pymapmanager import mmMap
+<h2 id="testing-the-install-from-a-python-prompt">Testing the install from a <code>python</code> prompt</h2>
+<p>Check the version</p>
+<pre><code class="python">&gt;&gt;&gt; import pymapmanager
+&gt;&gt;&gt; pymapmanager.__version__
+'0.0.3'
+</code></pre>
+
+<p>Load an example map</p>
+<pre><code class="python">from pymapmanager import mmMap
+path = 'PyMapManager/examples/exampleMaps/rr30a'
+myMap = mmMap(path)
+</code></pre>
+
+<p>You should see (exact seconds will vary)</p>
+<pre><code>map rr30a loaded in 0.45 seconds.
+</code></pre>
+
+<p>Then type</p>
+<pre><code>print myMap
+</code></pre>
+
+<p>And you should see</p>
+<pre><code>map:rr30a map segments:5 stacks:9 total object:2467
 </code></pre>
                 
                   
