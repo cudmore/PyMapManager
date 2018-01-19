@@ -8,6 +8,16 @@ function usage(){
     echo "   serve_local stop"
 }
 
+# see: https://stackoverflow.com/questions/13322485/how-to-get-the-primary-ip-address-of-the-local-machine-on-linux-and-os-x
+getMyIP() {
+    local _ip _line
+    while IFS=$': \t' read -a _line ;do
+        [ -z "${_line%inet}" ] &&
+           _ip=${_line[${#_line[1]}>4?1:2]} &&
+           [ "${_ip#127.0.0.1}" ] && echo $_ip && return 0
+      done< <(LANG=C /sbin/ifconfig)
+}
+
 function serverStart(){
 	# 1) unicorn
 	unicornPID=`pgrep -f unicorn`
@@ -41,13 +51,12 @@ function serverStart(){
 		cd ..
 	fi
 
+	sleep 1
 	echo '=== unicorn and http-server servers running'
-	echo '   this assumes mmclient.js has:'
-	echo "      serverurl = 'http://127.0.0.1:5010/'"
 	echo '   unicorn rest server is at:'
-	echo '      http://127.0.0.1:5010'
+	echo "      http://$(getMyIP):5010"
 	echo '   http-server client interface is at:'
-	echo '      http://127.0.0.1:8080'
+	echo "      http://$(getMyIP):8080"
 	
 }
 
