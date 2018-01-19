@@ -1346,7 +1346,7 @@ function selectInPlotly(runRow, runCol) {
 				.catch(function(data, status) {
 					$log.info(data)
 				})
-	    	$scope.image[tp].setUrl(imageUrl)
+	    	//$scope.image[tp].setUrl(imageUrl)
 	    } else {
 	    	imageUrl = serverurl + 'api/v1/getimage/' + $scope.leafletUser + '/' + $scope.leafletMap + '/' + tp + '/' + $scope.leafletChannel + '/' + sliceNum
 	    	$scope.image[tp].setUrl(imageUrl)

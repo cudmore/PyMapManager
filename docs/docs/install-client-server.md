@@ -31,7 +31,12 @@ Running the servers requires some additional software
 
 ### Make sure you have redis
 
-	sudo apt-get redis
+	# osx
+	brew install redis
+	
+	# linux
+	sudo apt-get install redis-server # to install redis-server
+	sudo apt install redis-tools # to install redis-cli
 	
 	redis-cli ping
 	# should respond

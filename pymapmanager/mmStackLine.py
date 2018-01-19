@@ -88,7 +88,7 @@ class mmStackLine():
 			print('warning: getLineValues3() did not find a line')
 		else:
 			df = self.linedb
-			if pd['segmentid'] >= 0:
+			if pd['segmentid'] is not None and pd['segmentid'] >= 0:
 				# we are passing pd['segmentid'] as an int
 				df = df[df['ID'].isin([pd['segmentid']])]
 			pd['x'] = df['x'].values

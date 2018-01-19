@@ -24,7 +24,7 @@ from datetime import datetime
 try:
     from cStringIO import StringIO # python 2.x
 except ImportError:
-    from io import StringIO # python 3.x
+    from io import BytesIO as StringIO # python 3.x
 
 from flask import Flask, render_template, send_file, send_from_directory, safe_join
 from flask import jsonify, request, make_response
@@ -391,7 +391,7 @@ def getslidingz(username, mapname, timepoint, channel, slice):
 		imsave(strIO, max_, plugin='pil', format_str='png')
 		strIO.seek(0)
 	except:
-		print('\r\r\t\tgetslidingz() exception\r\r')
+		print('\r\r\tmmserver.getslidingz() exception\r\r')
 	return send_file(strIO, mimetype='image/png')
 
 @app.route('/api/v1/getmaximage/<username>/<mapname>/<int:timepoint>/<int:channel>')

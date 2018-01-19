@@ -549,7 +549,7 @@ class mmMap():
 
 			currSegmentID = []
 			if self.numMapSegments > 0:
-				if pd['segmentid'] >=0 :
+				if pd['segmentid'] is not None and pd['segmentid'] >=0 :
 					currSegmentID = self.segRunMap[pd['segmentid'], j]  # this only works for one segment -- NOT A LIST
 					#print('   currSegmentID:', currSegmentID)
 					if currSegmentID >= 0:
@@ -559,7 +559,7 @@ class mmMap():
 					else:
 						currSegmentID = []
 				#print('   currSegmentID:', currSegmentID)
-				if pd['segmentid'] >= 0 and not currSegmentID:
+				if pd['segmentid'] is not None and pd['segmentid'] >= 0 and not currSegmentID:
 					# this session does not have segmentID that match
 					#print('   getMapValues3() skipping tp', j)
 					continue
