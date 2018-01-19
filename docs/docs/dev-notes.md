@@ -290,6 +290,38 @@ see: https://stackoverflow.com/questions/14573223/set-cookie-and-get-cookie-with
 
 We need to use a global database when running production server where mmserver is spawned into multiple processes and can not share `global` python objects. Redis requires a bit of work to package objects into json serializable objects so for now just use pickle to do the heaver lifting. Map rr30 is ~24 MB when pickled, rough estimate is we get ~44 picked maps per 1 GB of memory (in practice we will get a bit more).
 
+### install redis-server
+
+	# osx
+	brew install redis
+	# linux
+	sudo apt-get install redis
+
+### Make redis-server run at system boot
+
+	# osx
+	figure this out
+	# linux
+	figure this out
+
+### Run redis server manually
+
+	redis-server
+	
+### Check redis-server is running
+
+	redis-cli ping
+	
+### To clear all data from server
+
+	redis-cli FLUSHALL
+
+### run in development mode (on osx)
+
+	cd
+	cd PyMapManager/mmserver
+	sudo gunicorn -w 4 -b 127.0.0.1:5010 mmserver:app
+	
 ```
 #!/bin/python
 

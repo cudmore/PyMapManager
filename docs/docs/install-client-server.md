@@ -16,37 +16,70 @@ Once the PyMapManager `mmclient` and `mmserver` are running, there is a point an
 
 PyMapManager can serve Map Manager annotations and images using a client/server model. We use two different servers to acheive this
 
- 1. `mmserver/mmserver.py` : Python flask server to provide a REST interface so a web browser can retrieve Map Manager annotations and images
+ 1. `mmserver/mmserver.py` : Python Flask server to provide a REST interface so a web browser can retrieve Map Manager annotations and images.
  2. `mmclient/index.html` : A front end point-and-click web-browser interface allowing Map Manager annotations and images to be visualized.
  
 
-
 ## 1) Installing software to run the servers
 
-The `mmserver/mmserver.py` Flask REST server requires the following Python libraries
+This will work well if you only want to check out the servers. This is not designed for final production which should use Apache or nginx (as opposed to manually running gunicorn and http-server). For final production servers, nginx serves the mmclient Javascript and forwards the REST requests to mmserver using uwsgi.
 
-```
-pip install flask
-pip install flask-cors
-pip install scikit-image
-```
+Running the servers requires some additional software
 
-Running the servers requires `gunicorn` for the `mmserver` Flask REST server and `http-server` for the `mmclient` server.
+ - `mmserver`: Requires redis and gunicorn
+ - `mmclient`: Requires node npm and http-server
 
-```
-pip install gunicorn
+### Make sure you have redis
 
-# this assumes you have node and npm install
-npm install http-server -g
-```
-
-This is only one way of running these two servers. If you want to run them a different way you are free to do this.
+	sudo apt-get redis
 	
-## 2) Starting the client/server for local use (basic)
+	redis-cli ping
+	# should respond
+	PONG
+
+### Make sure you have gunicorn
+
+Wrapping the `mmserver` to run inside of gunicorn provides a **synchronous** web server. This should handle fast interaction with the web interface much better than the **asynchronous** version provided by `python mmserver.py`. This is most noticeable when viewing linked sliding z-projections.
+
+	pip install gunicorn
+	
+### Make sure you have Node npm and http-server
+
+Node install changes based on your flavor of linux, see [node install instruction](https://nodejs.org/en/download/package-manager/).
+
+	# on debian jessie
+	curl -sL https://deb.nodesource.com/setup_9.x | sudo -E bash -
+	sudo apt-get install -y nodejs
+	
+	# install http-server
+	sudo npm install http-server -g
+	
+## 2) Install PyMapManager
+
+### Clone the repository
+
+This makes a `PyMapManager` folder
+
+	git clone https://github.com/cudmore/PyMapManager.git
+	
+### Make a virtual environment `mm_env` and activate it
+
+	virtualenv mm_env
+	source mm_env/bin/activate
+
+### Install PyMapManager
+
+	# install PyMapManager
+	pip install -e PyMapManager/
+	
+
+### Install dependencies for `mmserver`
+
+	pip install -r PyMapManager/mmserver/requirements.txt
+		
+## 3) Either, run the servers with a script
 
 Start both unicorn and http-server with our [`PyMapManager/serve_local.sh`][serve_local] script.
-
-This will work well if you are only going to be browsing the client/server from the same machine (e.g. localhost). This will work on MacOS and Linux.
 
 ### Start the servers with
 
@@ -76,59 +109,29 @@ The back-end REST server can be accessed at
 http://localhost:5010/help
 ```
 
+## 4) Or, run the servers manually
+
+### Run the REST server
+
+On OSX, use `sudo`, on linux **do not**.
+
+	#osx
+	cd PyMapManager/mmserver
+	sudo gunicorn -w 4 -b 0.0.0.0:5010 mmserver:app
 	
-## 3) Manually start both client and server
+	#linux
+	gunicorn -w 4 -b 0.0.0.0:5010 mmserver:app
 
-### Start the `mmserver/mmserver.py` REST server
- 
-```
-cd mmserver
-python mmserver.py
-```
+#### Check the rest server
 
-Alternatively, start the `mmserver/mmserver.py` REST server with `gunicorn`
+Here `server_ip` is the IP address of your server
 
-Install `gunicorn`
+	http://server_ip:5010
 
-	pip install gunicorn
-	
-On OSX (requires sudo)
+### Run the mmclient Javascript client
 
-```
-cd mmserver
-sudo gunicorn -b 0.0.0.0:5010 mmserver:app
-```
-	
-On Linux (no sudo)
-
-```
-cd mmserver
-gunicorn -b 0.0.0.0:5010 mmserver:app
-```
-	
-Wrapping the `mmserver` to run inside of gunicorn provides a **synchronous** web server. This should handle fast interaction with the web interface much better than the **asynchronous** version provided by `python mmserver.py`. This is most noticeable when viewing linked sliding z-projections.
-
-### Start the `mmclient/index.html` client
-
-This is assuming you have node and npm installed. In addition, we are assuming you have used npm to install http-server with `npm install http-server -g`.
-
-Make sure `mmclient/static/mmserver.js` points to the **localhost** REST interface. This file should have
-
-```
-serverurl = 'http://127.0.0.1:5010/'
-```
-	
-Install http-server
-
-	# this assumes you have node and npm install
-	npm install http-server -g
-
-Run the mmclient client server
-
-```
-cd mmclient
-http-server
-```
+	cd PyMapManager/mmclient
+	http-server
 
 The output should look like this
 
@@ -139,15 +142,14 @@ Available on:
   http://192.168.1.10:8080
 Hit CTRL-C to stop the server
 ```
-
-You can then browse the client server at
-
-```
-http://localhost:8080
-```
 	
+#### View the mmclient at
 
-## 4) Running the client/server on a Linux system with a pre-existing web-server
+Here `server_ip` is the IP address of your server
+
+	http://server_ip:8080
+
+## [REWRITE THIS TO USE PROPER FORWARDING IN nginx USING uwsgi] Running the client/server on a Linux system with a pre-existing web-server
 
 This requires a pre-existing web server to serve both the client server `mmclient/index.html` and the Python Flask REST server `mmserver/mmserver.py`.
 

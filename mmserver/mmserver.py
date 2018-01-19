@@ -33,6 +33,7 @@ from flask_cors import CORS
 import pandas as pandas
 import numpy as np
 from skimage.io import imsave, imread
+import redis
 import pickle
 
 from pymapmanager import mmMap, mmUtil
@@ -52,10 +53,11 @@ data_folder = '../../PyMapManager-Data'
 
 # load a default map, leave this here until I implement redis
 # to share myMapList between processes
-myMapList = {}
-if 1:
-	defaultMapPath = data_folder + '/public/rr30a/rr30a.txt'
-	myMapList['rr30a'] = mmMap(defaultMapPath)
+#myMapList = {}
+
+#if 0:
+#	defaultMapPath = data_folder + '/public/rr30a/rr30a.txt'
+#	myMapList['rr30a'] = mmMap(defaultMapPath)
 
 ############################################################
 # app
@@ -64,6 +66,8 @@ app = Flask(__name__)
 CORS(app)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER # upload to server should be proper scp, then flask app can trigger mmMap.ingest
 app.config['data_folder'] = data_folder
+
+db = redis.Redis('localhost') #connect to redis server
 
 ############################################################
 # routes
@@ -124,23 +128,39 @@ def loadmap(username, mapname):
 	mapfile = mapname + '.txt'
 	mappath = safe_join(mapdir, mapfile)
 	
-	global myMapList
-	if mapname in myMapList:
+	mapInfo = None
+	
+	# was this 20180118
+	#global myMapList
+	#if mapname in myMapList:
+	if db.exists(mapname):
 		# already loaded
 		print('map already loaded')
-		pass
+		
+		# get map info
+		m = pickle.loads(db.get(mapname))
+		mapInfo = m.mapInfo()
 	else:
 		print('loadmap() loading map:', mappath)
-		myMapList[mapname] = mmMap(mappath)
-		print('loaded myMap:', myMapList[mapname])
+		# was this 20180118
+		#myMapList[mapname] = mmMap(mappath)
+
+		m = mmMap(mappath)
+		pickled_object = pickle.dumps(m)
+		db.set(mapname, pickled_object) # themap is a string key '' here
+
+		mapInfo = m.mapInfo()
+		print('loaded myMap:', mappath)
 	
 	# rr30a is 24 MB -> 0.024 GB. Telling us we can store ~41 maps in 1 GB
 	#pickled_object = pickle.dumps(myMapList[mapname])
 	#print('getsizeof:', sys.getsizeof(pickled_object))
 	
-	ret = myMapList[mapname].mapInfo() # enclose in dict?
-	return jsonify(ret)
-
+	# was this 20180118
+	#ret = myMapList[mapname].mapInfo() # enclose in dict?
+	#return jsonify(ret)
+	return jsonify(mapInfo)
+	
 @app.route('/api/v1/getmapvalues/<username>/<mapname>')
 def getmapvalues(username, mapname):
 	"""
@@ -189,9 +209,14 @@ def getmapvalues(username, mapname):
 			print('\t', key, ':', item)
 		
 	#print 'getmapvalues() pd:', pd
-	global myMapList
-	if mapname in myMapList:
-		defaultAnnotation = myMapList[mapname].defaultAnnotation
+	#global myMapList
+	#if mapname in myMapList:
+	if db.exists(mapname):
+		# get from redis
+		m = pickle.loads(db.get(mapname))
+		
+		#defaultAnnotation = myMapList[mapname].defaultAnnotation
+		defaultAnnotation = m.defaultAnnotation
 		if defaultAnnotation:
 			pd['roitype'] = defaultAnnotation
 		else:
@@ -199,7 +224,8 @@ def getmapvalues(username, mapname):
 		
 		print("getmapvalues() using pd['roitype']=", pd['roitype'])
 		
-		pd = myMapList[mapname].getMapValues3(pd)
+		#pd = myMapList[mapname].getMapValues3(pd)
+		pd = m.getMapValues3(pd)
 		
 		ret['x'] = pd['x']
 		ret['y'] = pd['y']
@@ -238,8 +264,9 @@ def getmaptracing(username, mapname):
 	# print 'getmaptracing() mapsegment:', mapsegment, mapsegment == None
 	
 	ret = {}
-	global myMapList
-	if mapname in myMapList:
+	#global myMapList
+	#if mapname in myMapList:
+	if db.exists(mapname):
 		pd = mmUtil.newplotdict()
 		if mapsegment:
 			pd['segmentid'] = int(mapsegment)
@@ -251,8 +278,13 @@ def getmaptracing(username, mapname):
 			pd['stacklist'] = []
 		
 		session = int(session)
+
+		# get from redis
+		m = pickle.loads(db.get(mapname))
+		pd = m.stacks[session].line.getLineValues3(pd)		
+
 		# returns pd['x'] == None when no tracing
-		pd = myMapList[mapname].stacks[session].line.getLineValues3(pd)
+		#pd = myMapList[mapname].stacks[session].line.getLineValues3(pd)		
 		
 		ret['x'] = []
 		ret['y'] = []

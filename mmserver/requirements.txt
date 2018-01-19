@@ -4,3 +4,4 @@ pandas>=0.22.0
 Flask>=0.12.2
 Flask-Cors>=3.0.3
 uWSGI>=2.0.15
+redis>=2.10.6
