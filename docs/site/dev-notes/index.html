@@ -460,6 +460,54 @@
     redis flask server
   </a>
   
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#install-redis-server" title="install redis-server" class="md-nav__link">
+    install redis-server
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#make-redis-server-run-at-system-boot" title="Make redis-server run at system boot" class="md-nav__link">
+    Make redis-server run at system boot
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#run-redis-server-manually" title="Run redis server manually" class="md-nav__link">
+    Run redis server manually
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#check-redis-server-is-running" title="Check redis-server is running" class="md-nav__link">
+    Check redis-server is running
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#to-clear-all-data-from-server" title="To clear all data from server" class="md-nav__link">
+    To clear all data from server
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#run-in-development-mode-on-osx" title="run in development mode (on osx)" class="md-nav__link">
+    run in development mode (on osx)
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
       
@@ -639,6 +687,54 @@
   <a href="#redis-flask-server" title="redis flask server" class="md-nav__link">
     redis flask server
   </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#install-redis-server" title="install redis-server" class="md-nav__link">
+    install redis-server
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#make-redis-server-run-at-system-boot" title="Make redis-server run at system boot" class="md-nav__link">
+    Make redis-server run at system boot
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#run-redis-server-manually" title="Run redis server manually" class="md-nav__link">
+    Run redis server manually
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#check-redis-server-is-running" title="Check redis-server is running" class="md-nav__link">
+    Check redis-server is running
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#to-clear-all-data-from-server" title="To clear all data from server" class="md-nav__link">
+    To clear all data from server
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#run-in-development-mode-on-osx" title="run in development mode (on osx)" class="md-nav__link">
+    run in development mode (on osx)
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -928,6 +1024,32 @@ python setup.py sdist</p>
 <p>see: https://stackoverflow.com/questions/14573223/set-cookie-and-get-cookie-with-javascript</p>
 <h2 id="redis-flask-server">redis flask server</h2>
 <p>We need to use a global database when running production server where mmserver is spawned into multiple processes and can not share <code>global</code> python objects. Redis requires a bit of work to package objects into json serializable objects so for now just use pickle to do the heaver lifting. Map rr30 is ~24 MB when pickled, rough estimate is we get ~44 picked maps per 1 GB of memory (in practice we will get a bit more).</p>
+<h3 id="install-redis-server">install redis-server</h3>
+<pre><code># osx
+brew install redis
+# linux
+sudo apt-get install redis
+</code></pre>
+<h3 id="make-redis-server-run-at-system-boot">Make redis-server run at system boot</h3>
+<pre><code># osx
+figure this out
+# linux
+figure this out
+</code></pre>
+<h3 id="run-redis-server-manually">Run redis server manually</h3>
+<pre><code>redis-server
+</code></pre>
+<h3 id="check-redis-server-is-running">Check redis-server is running</h3>
+<pre><code>redis-cli ping
+</code></pre>
+<h3 id="to-clear-all-data-from-server">To clear all data from server</h3>
+<pre><code>redis-cli FLUSHALL
+</code></pre>
+<h3 id="run-in-development-mode-on-osx">run in development mode (on osx)</h3>
+<pre><code>cd
+cd PyMapManager/mmserver
+sudo gunicorn -w 4 -b 127.0.0.1:5010 mmserver:app
+</code></pre>
 <pre><code>#!/bin/python
 
 '''
