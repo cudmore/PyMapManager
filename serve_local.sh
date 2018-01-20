@@ -18,6 +18,22 @@ getMyIP() {
       done< <(LANG=C /sbin/ifconfig)
 }
 
+getNumberOfCores() {
+	if [[ "$OSTYPE" == "linux-gnu" ]]; then
+		#linux
+		ncore=$(grep -c processor /proc/cpuinfo)
+	elif [[ "$OSTYPE" == "darwin"* ]]; then
+		# osx
+		ncore=$(sysctl -n hw.physicalcpu)
+	fi
+	echo "$ncore"
+}
+
+getNumberOfWorkers() {
+	numWorkers=$(($(getNumberOfCores)*2+1))
+	echo "$numWorkers"
+}
+
 function serverStart(){
 	# 1) unicorn
 	unicornPID=`pgrep -f unicorn`
@@ -25,14 +41,14 @@ function serverStart(){
 		echo "unicorn is running, use 'serve_local stop' to stop."
 		# exit 1
 	else
-		echo '=== starting gunicorn rest server'
+		echo "=== starting gunicorn rest server with $(getNumberOfWorkers) workers..."
 		cd mmserver
 		if [[ "$OSTYPE" == "linux-gnu" ]]; then
 			# linux
-			gunicorn -b 0.0.0.0:5010 mmserver:app &
+			gunicorn -w $(getNumberOfWorkers) -b 0.0.0.0:5010 mmserver:app &
 		elif [[ "$OSTYPE" == "darwin"* ]]; then
 		    # Mac OSX
-			sudo gunicorn -b 0.0.0.0:5010 mmserver:app &
+			sudo gunicorn -w $(getNumberOfWorkers) -b 0.0.0.0:5010 mmserver:app &
 		fi
 		
 		cd ..
@@ -45,7 +61,7 @@ function serverStart(){
 		echo "http-server is running, use 'serve_local stop' to stop."
 		exit 1
 	else
-		echo '=== starting mmclient'
+		echo '=== starting mmclient...'
 		cd mmclient
 		http-server &
 		cd ..
