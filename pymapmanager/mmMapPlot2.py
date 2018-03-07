@@ -49,7 +49,8 @@ class mmMapPlot2():
         #self.axes.axis('off')  # turn off axis labels
 
         markersize = 10  # units here is area
-        self.myScatterPlot = self.axes.scatter(self.pd['x'], self.pd['y'], marker='o', s=markersize, picker=True)
+        #self.myScatterPlot = self.axes.scatter(self.pd['x'], self.pd['y'], marker='o', s=markersize, picker=True)
+        self.myScatterPlot = self.axes.scatter(self.pd['x'].flatten(), self.pd['y'].flatten(), marker='o', s=markersize, picker=True)
 
         self.axes.spines['top'].set_visible(False)
         self.axes.spines['right'].set_visible(False)
@@ -86,6 +87,8 @@ class mmMapPlot2():
         #self.figure = fig
 
         self.pd = pd
+        #self.pd['plotbad'] = True
+        #self.pd['getMapDynamics'] = True
         self.pd['xstat'] = 'mapSession'
         self.pd['ystat'] = 'pDist'
         self.pd['zstat'] = 'cAngle'
@@ -94,9 +97,10 @@ class mmMapPlot2():
         # get spine angle and offset
         offset = 0.1
         cAngle = pd['z']
-        #cAngle = self.map.getMapValues2('cAngle', segmentID=pd['segmentid'])
-        self.pd['x'][cAngle > 180] += offset
-        self.pd['y'][cAngle < 180] -= offset
+        #todo: put this back in
+        if 0:
+            self.pd['x'][cAngle > 180] += offset
+            self.pd['x'][cAngle < 180] -= offset
 
         self._plotMap(fig) # uses self.pd
 
@@ -218,34 +222,39 @@ class mmMapPlot2():
             cAdd = (0, 1, 0, alpha)
             cTransient = (0, 0, 1, alpha)
             cPersistent = (1, 1, 0, alpha)
+            cBad = (1, 0, 1, alpha)
 
-            cMatrix = []
-
+            colorList = []
+            colorList.append(cNone)
+            colorList.append(cAdd) # 1 
+            colorList.append(cSubtract) # 2
+            colorList.append(cTransient) # 3
+            colorList.append(cPersistent) # 4
+            
             m = self.pd['runrow'].shape[0]
             n = self.pd['runrow'].shape[1]
 
+            cMatrix = []
             for i in range(m):
                 for j in range(n):
                     currColor = cNone
-                    prev = 'nan'
-                    next = 'nan'
-                    if j > 0:
-                        prev = self.pd['mapsess'][i][j - 1] >= 0
-                    if j < n - 1:
-                        next = self.pd['mapsess'][i][j + 1] >= 0
-                    if not prev and j > 0:
-                        currColor = cAdd
-                    if not next and j < n - 1:
-                        currColor = cSubtract
-                    if not prev and not next and j > 0 and j < n - 1:
-                        currColor = cTransient
-                    if prev and next:
-                        currColor = cPersistent
-
-                    cMatrix.append(currColor)
+                    currDynamics = self.pd['dynamics'][i][j].astype(int)
+                    if currDynamics > 0:
+                        currColor = colorList[currDynamics]
+                    # bad
+                    if self.pd['plotbad']:
+                    	isBad = self.pd['isBad'][i][j] == 1
+                    	if isBad:
+                    	    #print(i, j, 'is bad')
+                    	    currColor = cBad
+                    
+                    # nan values (no spine) in our scatter don't get plotted by matplotlib
+                    if self.pd['dynamics'][i][j] >= 0:
+                        cMatrix.append(currColor)
         else:
             cMatrix = 'b'
 
         self.myScatterPlot.set_color(cMatrix)
+        #self.myScatterPlot.set_color(ijList)
 
 

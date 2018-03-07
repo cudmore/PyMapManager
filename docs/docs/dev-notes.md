@@ -2,6 +2,22 @@
 
 ## Roadmap
 
+### ToDo
+
+ - Should be very possible to make a docker to install debian+nginx+uwsgi+flask+pymapmanager
+
+	https://hub.docker.com/r/tiangolo/uwsgi-nginx-flask/
+
+ - Re-organize mmserver/mmclient into one folder. Have flask server templaes/index.html from `python mmserver.py`. Have nginx server templates/index.thml as native html/javascript (no flask)
+ - Add a configure.html to visually configure server
+    - for a `username` show list of maps in `data/`
+    - have `upload annotations button` ask for a hdd folder and upload via rest.
+        - will probably not work because web interface is not allowed to operate outside its root directory
+        - maybe add a local `drop` folder to make this possible? User drops a map folder in here (it is inside mmserver/)
+    
+ - Get simple login working. I don't understand how Flask session and multiple instances in uwsgi/gunicorn works?
+ 
+ 
 ### Big picture
 
  - Have web interface load a map pool and plot based on time-point conditions across a number of maps. Goal here is to reproduce figures in a paper.
@@ -299,10 +315,17 @@ We need to use a global database when running production server where mmserver i
 
 ### Make redis-server run at system boot
 
-	# osx
-	figure this out
-	# linux
-	figure this out
+
+```
+osx
+   To have launchd start redis now and restart at login:
+     brew services start redis
+   Or, if you don't want/need a background service you can just run:
+    redis-server /usr/local/etc/redis.conf
+
+# linux
+figure this out
+```
 
 ### Run redis server manually
 

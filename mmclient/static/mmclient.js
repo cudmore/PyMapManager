@@ -36,6 +36,7 @@ $scope.mapsegments = null;
 $scope.selectedMapSegment = 0; // corresponds to all
 
 $scope.showPlotLines = true;
+$scope.showBad = true;
 
 // see $scope.toggleInterface('markerColor')
 $scope.markerColorList = ["None", "Segment", "Dynamics"];
@@ -192,7 +193,7 @@ $scope.toggleInterface = function(toggleThis) {
 	switch (toggleThis) {
 		case 'showHistogramx':
 		case 'showHistogramy':
-		  	// I want to use restyle for this, how do i restlye layouts
+		  	// todo: I want to use restyle for this, how do i restlye layouts
 		  	updateScatterPlot(xydata)
 			break;
 		case 'showPlotLines':
@@ -206,6 +207,10 @@ $scope.toggleInterface = function(toggleThis) {
 				}, [0]); // [0] is first trace
 			}
 			break
+		case 'showBad':
+		  	console.log('toggleInterface() showBad:', $scope.showBad)
+		  	updateScatterPlot(xydata)
+			break;
 		case 'markerColor':
 		  	updateScatterPlot(xydata)
 			break
@@ -369,6 +374,7 @@ function getMapValues(mapsegment, session, xstat, ystat, zstat) {
 			xydata.stackidx = nested_to_float(response.data.stackidx)
 			xydata.mapsess = nested_to_float(response.data.mapsess)
 			xydata.dynamics = nested_to_float(response.data.dynamics)
+			xydata.isBad = nested_to_float(response.data.isBad)
 
 		  //20171220, this was working but was not handing UN flattened 2d response form rest
 		  /*
@@ -415,7 +421,7 @@ function updateScatterPlot(xydata) {
 
     var scl =['rgb(213,62,79)','rgb(244,109,67)','rgb(253,174,97)','rgb(254,224,139)','rgb(255,255,191)','rgb(230,245,152)','rgb(171,221,164)','rgb(102,194,165)','rgb(50,136,189)'];
 	// 1:add, 2:sub, 3:transient, 4:persistent
-	var dynamicsColor = ['rgb(0,0,0)', 'rgb(0,255,0)', 'rgb(255,0,0)', 'rgb(0,0,255)', 'rgb(0,0,0)']
+	var dynamicsColor = ['rgb(0,0,0)', 'rgb(0,255,0)', 'rgb(255,0,0)', 'rgb(0,0,255)', 'rgb(0,0,0)', 'rgb(255,0,255)'] // last element [5] is for bad
 
 	console.log('****** updateScatterPlot() xydata:')
 	//console.log(xydata)
@@ -466,6 +472,11 @@ function updateScatterPlot(xydata) {
 				okGo = 1
 				break;
 		}
+		// strip out bad rows
+		if ($scope.showBad == false) {
+			okGo = okGo && ! xydata.isBad[i].includes(1)
+		}
+		
 		if (! okGo ) {
 			continue
 		}
@@ -524,7 +535,19 @@ function updateScatterPlot(xydata) {
 			//
 			switch ($scope.selectedMarkerColor) {
 				case 'Dynamics':
-					colors = colors.concat(xydata.dynamics[i]);
+					tmpRow = xydata.dynamics[i]
+					// fill in bad as color [5]
+					if (xydata.isBad[i].includes(1)) {
+						tmpRow = xydata.isBad[i].map(function(obj, index) {
+							var rObj = xydata.dynamics[i][index]
+							if (obj == 1) {
+								rObj = 5
+							}
+							return rObj
+							});
+					}
+					//colors = colors.concat(xydata.dynamics[i]);
+					colors = colors.concat(tmpRow);
 					colors = colors.concat([NaN])
 					break;
 				case 'Segment':
@@ -756,8 +779,8 @@ function userClick(pnt, data) {
 	//console.log('data:')
 	//console.log(data)
 
-	//console.log('data.points[0].data.myRunRow:')
-	//console.log(data.points[0].data.myRunRow)
+	console.log('data.points[0].data.myRunRow:', data.points[0].data.myRunRow)
+	console.log(data.points[0].data.myRunRow)
 
 	var selRunRow = data.points[0].data.myRunRow[pnt]
 	var selRunCol = data.points[0].data.myRunCol[pnt]
@@ -1225,15 +1248,19 @@ function selectInPlotly(runRow, runCol) {
 					gFindThis_mapSegment = seedSegmentID
 					gFindThis_sDist = seed_sDist
 					var foundIdx = xyzTracingLeaflet2[currTP].find(find_sDist_)
-					//console.log('foundIdx:', foundIdx)
-	
-					//
-					//snap to the x/y/z of the tracing
-					var xSnap = xyzTracingLeaflet2[currTP][foundIdx.idx].x
-					var ySnap = xyzTracingLeaflet2[currTP][foundIdx.idx].y
-					var zSnap = xyzTracingLeaflet2[currTP][foundIdx.idx].z
-					setMapPosition(currTP, xSnap, ySnap, zSnap)
-	
+					if (foundIdx) {
+						console.log('selectRun() foundIdx:', foundIdx)
+		
+						//
+						//snap to the x/y/z of the tracing
+						var xSnap = xyzTracingLeaflet2[currTP][foundIdx.idx].x
+						var ySnap = xyzTracingLeaflet2[currTP][foundIdx.idx].y
+						var zSnap = xyzTracingLeaflet2[currTP][foundIdx.idx].z
+						setMapPosition(currTP, xSnap, ySnap, zSnap)
+					} else {
+						console.log('did not find sDist at tp:')
+					}
+					
 					//and make a marker
 					//var ll = L.latLng;
 					//ll = um2leaflet(xSnap, ySnap)
@@ -1289,7 +1316,19 @@ function selectInPlotly(runRow, runCol) {
 		}
 
     	if ($scope.image[thisTP]) {
+    		// works for brightness
     		$scope.image[thisTP].getElement().style.filter = "brightness(" + $scope.imageBrightness + "%)";
+    		// what about color lut: red, green, blue, ..
+    		//blue
+    		//$scope.image[thisTP].getElement().style.filter = "sepia(100%) hue-rotate(190deg) saturate(500%)";
+    		//green
+    		$scope.image[thisTP].getElement().style.filter = "sepia(100%) hue-rotate(90deg) saturate(500%) brightness(" + $scope.imageBrightness + "%)";
+    		//megenta
+    		//$scope.image[thisTP].getElement().style.filter = "sepia(100%) hue-rotate(270deg) saturate(500%) brightness(" + $scope.imageBrightness + "%)";
+    		//yellow
+    		//$scope.image[thisTP].getElement().style.filter = "sepia(100%) hue-rotate(360deg) saturate(500%) brightness(" + $scope.imageBrightness + "%)";
+    		// red
+    		//$scope.image[thisTP].getElement().style.filter = "sepia(100%) saturate(500%) hue-rotate(75deg) brightness(" + $scope.imageBrightness + "%)";
     	}
     	//$scope.image[i].getElement().style.filter = "invert(" + $scope.imageBrightness + "%)";
     	//$scope.image[i].getElement().style.filter = "blur(" + $scope.imageBrightness + "px)";
@@ -1596,6 +1635,7 @@ function selectInPlotly(runRow, runCol) {
 		mapLeafletData.dynamics = []
 		mapLeafletData.cPnt = []
 		mapLeafletData.mapsegment = []
+		mapLeafletData.isBad = []
 
 		mapLeafletData.xstat = 'x'
 		mapLeafletData.ystat = 'y'
@@ -1616,6 +1656,7 @@ function selectInPlotly(runRow, runCol) {
 				mapLeafletData.dynamics = nested_to_float(response.data.dynamics)
 				mapLeafletData.cPnt = nested_to_float(response.data.cPnt)
 				mapLeafletData.mapsegment = nested_to_float(response.data.mapsegment)
+				mapLeafletData.isBad = nested_to_float(response.data.isBad)
 
 				mapLeafletData.xstat = 'x'
 				mapLeafletData.ystat = 'y'
@@ -1726,7 +1767,7 @@ function selectInPlotly(runRow, runCol) {
                     "type": "Feature",
                     "properties": {
                     	//this is bad, i am switching to FULL data in mapLeafletData
-                    	"myColor": getDynamicsColor(mapLeafletData.dynamics[i][tp]), //'#00ffff', //mapLeafletData.dynamics
+                    	"myColor": getDynamicsColor(mapLeafletData.dynamics[i][tp], mapLeafletData.isBad[i][tp]), //'#00ffff', //mapLeafletData.dynamics
                         "popupContent": i,
                         "show_on_map": ( theSlice==-1 ? true : (xyzLeaflet[tp].z[i] > upperBound && xyzLeaflet[tp].z[i] < lowerBound) ),
                     },
@@ -1766,7 +1807,7 @@ function selectInPlotly(runRow, runCol) {
 
     } // getLeafletData
 
-	function getDynamicsColor(type) {
+	function getDynamicsColor(type, isBad) {
 		//1:add, 2:sub, 3:transient, 4:pers
 		switch (type) {
 			case 1:
@@ -1783,6 +1824,9 @@ function selectInPlotly(runRow, runCol) {
 				break;
 			default:
 				theRet = '#ffffff'
+		}
+		if (isBad == 1) {
+			theRet = '#ff00ff'
 		}
 		return theRet
 	}

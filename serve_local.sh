@@ -35,6 +35,17 @@ getNumberOfWorkers() {
 }
 
 function serverStart(){
+	# check that redis-server is running (used by mmserver:app)
+	redisPID=`pgrep -f redis-server`
+	if [ -n "$redisPID" ]; then
+		echo "=== redis-server already running"
+	else
+		echo "=== starting redis-server"
+		redis-server &
+		echo "   sleeping 2 seconds"
+		sleep 2
+	fi
+	
 	# 1) unicorn
 	unicornPID=`pgrep -f unicorn`
 	if [ -n "$unicornPID" ]; then

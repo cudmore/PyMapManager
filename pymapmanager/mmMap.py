@@ -2,7 +2,7 @@ from __future__ import print_function
 
 import os, io, time, math
 from errno import ENOENT
-import pandas as pd
+import pandas as pandas
 import numpy as np
 #import tifffile
 
@@ -106,14 +106,14 @@ class mmMap():
 			self.filePath = filePath #  Path to file used to open map."""
 			self._folder = os.path.dirname(filePath) + '/'
 			self.name = os.path.basename(filePath).strip('.txt')
-			self.table = pd.read_table(filePath, index_col=0)
+			self.table = pandas.read_table(filePath, index_col=0)
 		elif urlmap is not None:
 			doFile = False
 			# try loading from url
 			self.name = urlmap
 			self.server = mmio()
 			tmp = self.server.getfile('header', self.name)
-			self.table = pd.read_table(io.StringIO(tmp.decode('utf-8')), index_col=0)
+			self.table = pandas.read_table(io.StringIO(tmp.decode('utf-8')), index_col=0)
 
 		###############################################################################
 		# objMap (3d)
@@ -524,6 +524,10 @@ class mmMap():
 		# keep track of run map rows (we already know the session/column)
 		yRunRow = np.empty([m, n])
 		yRunRow[:] = np.NAN
+		
+		# always make a matrix of bad
+		isBad = np.empty([m, n])
+		isBad[:] = np.NAN
 
 		# keep track of map segment id
 		yMapSegment = []
@@ -544,6 +548,7 @@ class mmMap():
 			myRange = range(n)
 
 		for j in myRange:
+
 			#print('*** getMapValues3() j:', j, "pd['segmentid']:", pd['segmentid'])
 			orig_df = self.stacks[j].stackdb
 
@@ -576,7 +581,10 @@ class mmMap():
 			if currSegmentID:
 				segmentID_idx = orig_df['parentID'].isin(currSegmentID)
 				runMap_idx = runMap_idx & segmentID_idx
+			
+			# bad
 			if not pd['plotbad']:
+				#print('mmMap.getMapValues3() is stripping out isBad')
 				notBad_idx = ~orig_df['isBad'].isin([1])
 				runMap_idx = runMap_idx & notBad_idx
 
@@ -610,24 +618,35 @@ class mmMap():
 			yIdx[finalRows, j] = final_df.index.values
 			ySess[finalRows, j] = j
 			yRunRow[finalRows, j] = finalRows  # final_df.index
+			
+			# bad
+			if pd['plotbad']:
+				bad_idx = final_df['isBad'].isin([1])
+				'''
+				if j == 3:
+					print(j, 'finalRows.shape:', finalRows.shape, finalRows.dtype)
+					print(j, 'bad_idx.shape:', bad_idx.shape, bad_idx.dtype)
+					print(final_df[['Idx', 'isBad']])
+				'''
+				isBad[finalRows, j] = bad_idx
 
-			# 20171119 finish this
 			#print 'a', final_df['parentID'].values.astype(int)
 			#print 'b', self.segMap[0, final_df['parentID'].values.astype(int), j]
 			if self.segMap is not None:
 				yMapSegment[finalRows, j] = self.segMap[0, final_df['parentID'].values.astype(int), j]
 
-			# 20171225
 			cPnt[finalRows, j] = final_df['cPnt'].values
 			
 			if pd['xstat'] == 'session':
 				#print 'swapping x for session'
 				pd['x'][finalRows, j] = j #ySess[finalRows,j]
 
-		# strip out a nan rows, can't do this until we have gone through all sessions
+		# strip out all nan rows, can't do this until we have gone through all sessions
 		# makes plotting way faster
 		ySess = ySess[~np.isnan(yIdx).all(axis=1)]
 		yRunRow = yRunRow[~np.isnan(yIdx).all(axis=1)]
+		if pd['plotbad']:
+			isBad = isBad[~np.isnan(yIdx).all(axis=1)]
 		if self.segMap is not None:
 			yMapSegment = yMapSegment[~np.isnan(yIdx).all(axis=1)] # added 20171220
 		cPnt = cPnt[~np.isnan(yIdx).all(axis=1)] # added 20171225
@@ -639,19 +658,24 @@ class mmMap():
 			pd['z'] = pd['z'][~np.isnan(yIdx).all(axis=1)]
 		yIdx = yIdx[~np.isnan(yIdx).all(axis=1)] # do this last
 
-		stopTime = time.time()
-		print('mmMap.getMapValues3() took', round(stopTime - startTime, 2), 'seconds')
 
 		pd['stackidx'] = yIdx
 		pd['mapsess'] = ySess
 		pd['runrow'] = yRunRow
 		pd['mapsegment'] = yMapSegment
 		pd['cPnt'] = cPnt
+		if pd['plotbad']:
+			pd['isBad'] = isBad
+		else:
+			pd['isBad'] = None
 
 		if pd['getMapDynamics']:
 			# creates pd['dynamics']
 			pd = self.getMapDynamics(pd, thisMatrix=pd['stackidx'])
 		
+		stopTime = time.time()
+		print('mmMap.getMapValues3() took', round(stopTime - startTime, 2), 'seconds')
+
 		return pd
 
 	def getMapValues2(self, stat, roiType=['spineROI'], segmentID=[], plotBad=False, plotIntBad=False):
@@ -803,8 +827,8 @@ class mmMap():
 
 if __name__ == '__main__':
 	path = '../examples/exampleMaps/THet2a/THet2a.txt'
-	#path = '../examples/exampleMaps/rr30a/rr30a.txt'
 	path = '../examples/exampleMaps/BD_NGDG450/BD_NGDG450.txt'
+	path = '../examples/exampleMaps/rr30a/rr30a.txt'
 
 	print('path:', path)
 	m = mmMap(path)
@@ -817,31 +841,41 @@ if __name__ == '__main__':
 	from pymapmanager.mmUtil import newplotdict
 
 	plotDict = newplotdict()
+	plotDict['plotbad'] = True
 	plotDict['roitype'] = m.defaultAnnotation
 	plotDict['xstat'] = 'days'
 	plotDict['ystat'] = 'pDist'
 	plotDict['zstat'] = 'ubssSum_int2'  # 'sLen3d_int1' #swap in any stat you like, e.g. 'ubssSum_int2'
-	plotDict['segmentid'] = 0 #[0]
+	plotDict['segmentid'] = 1 #[0]
 	plotDict['getMapDynamics'] = True
 
 	plotDict = m.getMapValues3(plotDict)
 
 	print("\nplotDict['x'].shape : ", plotDict['x'].shape)
 
+	# test is bad
+	#print("plotDict['stackidx']:", plotDict['stackidx'].shape, plotDict['stackidx'].dtype)
+	#print("plotDict['isBad']:", plotDict['isBad'].shape, plotDict['isBad'].dtype)
+	#plotDict['isBad'])
+	#for row in plotDict['isBad']:
+	#	print(row)
+		
 	# test line
 	# THet2a has a stack but NO tracing and NO spines at session 0
-	session = 0
-	plotDict = m.stacks[session].line.getLineValues3(plotDict)
-	if plotDict['x']:
-		print("line plotDict['x'].shape:", plotDict['x'].shape)
-		print("line plotDict['sDist'].shape:", plotDict['sDist'].shape)
-	else:
-		print('__main__ did not find a line at session:', session)
+	if 0:
+		session = 0
+		plotDict = m.stacks[session].line.getLineValues3(plotDict)
+		if plotDict['x']:
+			print("line plotDict['x'].shape:", plotDict['x'].shape)
+			print("line plotDict['sDist'].shape:", plotDict['sDist'].shape)
+		else:
+			print('__main__ did not find a line at session:', session)
 			
-	print('\nm.mapInfo():')
-	mapInfo = m.mapInfo()
-	for key, value in mapInfo.iteritems():
-		print(key, value)
+	if 0:
+		print('\nm.mapInfo():')
+		mapInfo = m.mapInfo()
+		for key, value in mapInfo.iteritems():
+			print(key, value)
 		
 	#from flask import jsonify
 	#print jsonify(mapInfo)

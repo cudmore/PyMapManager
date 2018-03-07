@@ -30,6 +30,8 @@ from flask import Flask, render_template, send_file, send_from_directory, safe_j
 from flask import jsonify, request, make_response
 from flask_cors import CORS
 
+from werkzeug import secure_filename, FileStorage
+
 import pandas as pandas
 import numpy as np
 from skimage.io import imsave, imread
@@ -202,6 +204,9 @@ def getmapvalues(username, mapname):
 	# always fetch map dynamics into pd['dynamics']
 	pd['getMapDynamics'] = True
 	
+	# always fetch bad
+	pd['plotbad'] = True
+	
 	# debug
 	if 0:
 		print('getmapvalues pd:')
@@ -235,6 +240,7 @@ def getmapvalues(username, mapname):
 		ret['mapsess'] = pd['mapsess']
 		ret['dynamics'] = pd['dynamics']
 		ret['cPnt'] = pd['cPnt']
+		ret['isBad'] = pd['isBad']
 		
 		# remove nan AND flatten to list
 		#print 'getmapvalues()', ret['x'].dtype # this is float64
@@ -247,6 +253,7 @@ def getmapvalues(username, mapname):
 		ret['mapsess'] = ret['mapsess'].astype('str').tolist()
 		ret['dynamics'] = ret['dynamics'].astype('str').tolist()
 		ret['cPnt'] = ret['cPnt'].astype('str').tolist()
+		ret['isBad'] = ret['isBad'].astype('str').tolist()
 		#print ret['x']
 	else:
 		print('warning: getmapvalues(): map', mapname, 'is not loaded')
@@ -498,6 +505,46 @@ def allowed_file(filename):
 def uploaded_file(filename):
 	return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
+@app.route('/api/v1/uploadzip/<username>', methods=['GET', 'POST'])
+def uploadzip(username):
+	if request.method == 'POST':
+		# user upload a zip
+		print('mmserver POST /api/v1/uploadzip/')
+		print('request.files:', request.files)
+		files = request.files.getlist('file') # files on lhs, file on rhs
+		print(files)
+		
+		# see: https://stackoverflow.com/questions/15981637/flask-how-to-handle-application-octet-stream
+		for file in files:
+			print('file:', file)
+			print('file.filename:', file.filename)
+
+			if not isinstance(file, FileStorage):
+				raise TypeError("mmserver.uploadzip() storage must be a werkzeug.FileStorage")
+			saveFileName = secure_filename(file.filename)
+			savePath = os.path.join(UPLOAD_FOLDER, saveFileName)
+			file.save(savePath)
+		
+		'''
+		# unzip the .zip file
+		import zipfile
+		zip_ref = zipfile.ZipFile(savePath, 'r')
+		zip_ref.extractall(directory_to_extract_to)
+		zip_ref.close()
+		'''
+		
+		# unzip the .zip file
+		import zipfile
+		dstZipFolder = safe_join(app.config['data_folder'],username)
+		with zipfile.ZipFile(savePath,"r") as zip_ref:
+		    zip_ref.extractall(dstZipFolder)
+		
+		return 'ok'
+	elif request.method == 'GET':
+		# user download a zip
+		print('mmserver GET /api/v1/uploadzip/')
+		pass
+	
 @app.route('/post/<username>/<mapname>/<item>', methods=['GET', 'POST'])
 def post_file(username, mapname, item):
 	if request.method == 'POST':
