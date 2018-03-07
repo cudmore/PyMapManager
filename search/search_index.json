@@ -2,7 +2,7 @@
     "docs": [
         {
             "location": "/", 
-            "text": "PyMapManager is a suite of Python tools to analyze time-series image stacks.\n\n\nPyMapManager opens annotations created with the Igor Pro version of \nMap Manager\n. Allowing additional visualization and analysis to easily be performed.\n\n\nThere are three components to PyMapManager: a Python package, a data client/server, and a desktop application.\n\n\n1) PyMapManager Python package\n\n\nTo get started writing Python code to interface with Map Manager analysis, see the iPython notebooks in \n/examples\n.\n\n\nFor full class documentation, see the \nAPI Documentation\n.\n\n\n2) PyMapManager client/server\n\n\nThe PyMapManager server provides a web based \nREST API\n to retrieve Map Manager annotations and images.\n\n\nThe PyMapManager client provides a web-based front-end to browse annotations and images off the server.\n\n\nWe have an \nexample client/server\n to see this in action.\n\n\nBrowsing annotations\n\n\n\n\nBrowsing annotations in time series stacks\n\n\n\n\n\n\n3) PyMapManager deskop application\n\n\nDevelopment of this desktop application has been downgraded to focus on the PyMapManager web interface.\n\n\nThe Qt version of PyMapManager is a desktop application. See \ngithub repository\n.", 
+            "text": "PyMapManager is a suite of Python tools to analyze time-series image stacks.\n\n\nPyMapManager opens annotations created with the Igor Pro version of \nMap Manager\n. Allowing additional visualization and analysis to easily be performed.\n\n\nThere are three components to PyMapManager: a Python package, a data client/server, and a desktop application.\n\n\n1) PyMapManager Python package\n\n\nTo get started writing Python code to interface with Map Manager analysis, see the iPython notebooks in \n/examples\n.\n\n\nFor full class documentation, see the \nAPI Documentation\n.\n\n\n2) PyMapManager client/server\n\n\nThe PyMapManager server provides a web based \nREST API\n to retrieve Map Manager annotations and images.\n\n\nThe PyMapManager client provides a web-based front-end to browse annotations and images off the server.\n\n\nWe have an \nexample client/server\n to see this in action. Please note, this server is at an early development stage and might not always be available.\n\n\nBrowsing annotations\n\n\n\n\nBrowsing annotations in time series stacks\n\n\n\n\n\n\n3) PyMapManager deskop application\n\n\nDevelopment of this desktop application has been downgraded to focus on the PyMapManager web interface.\n\n\nThe Qt version of PyMapManager is a desktop application. See \ngithub repository\n.", 
             "title": "Home"
         }, 
         {
@@ -12,7 +12,7 @@
         }, 
         {
             "location": "/#2-pymapmanager-clientserver", 
-            "text": "The PyMapManager server provides a web based  REST API  to retrieve Map Manager annotations and images.  The PyMapManager client provides a web-based front-end to browse annotations and images off the server.  We have an  example client/server  to see this in action.", 
+            "text": "The PyMapManager server provides a web based  REST API  to retrieve Map Manager annotations and images.  The PyMapManager client provides a web-based front-end to browse annotations and images off the server.  We have an  example client/server  to see this in action. Please note, this server is at an early development stage and might not always be available.", 
             "title": "2) PyMapManager client/server"
         }, 
         {
