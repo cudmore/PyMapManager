@@ -318,6 +318,13 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#todo" title="ToDo" class="md-nav__link">
+    ToDo
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#big-picture" title="Big picture" class="md-nav__link">
     Big picture
   </a>
@@ -546,6 +553,13 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#todo" title="ToDo" class="md-nav__link">
+    ToDo
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#big-picture" title="Big picture" class="md-nav__link">
     Big picture
   </a>
@@ -756,6 +770,30 @@
                   <h1>Development Notes</h1>
                 
                 <h2 id="roadmap">Roadmap</h2>
+<h3 id="todo">ToDo</h3>
+<ul>
+<li>
+<p>Should be very possible to make a docker to install debian+nginx+uwsgi+flask+pymapmanager</p>
+<p>https://hub.docker.com/r/tiangolo/uwsgi-nginx-flask/</p>
+</li>
+<li>
+<p>Re-organize mmserver/mmclient into one folder. Have flask server templaes/index.html from <code>python mmserver.py</code>. Have nginx server templates/index.thml as native html/javascript (no flask)</p>
+</li>
+<li>
+<p>Add a configure.html to visually configure server</p>
+<ul>
+<li>for a <code>username</code> show list of maps in <code>data/</code></li>
+<li>have <code>upload annotations button</code> ask for a hdd folder and upload via rest.<ul>
+<li>will probably not work because web interface is not allowed to operate outside its root directory</li>
+<li>maybe add a local <code>drop</code> folder to make this possible? User drops a map folder in here (it is inside mmserver/)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>Get simple login working. I don't understand how Flask session and multiple instances in uwsgi/gunicorn works?</p>
+</li>
+</ul>
 <h3 id="big-picture">Big picture</h3>
 <ul>
 <li>Have web interface load a map pool and plot based on time-point conditions across a number of maps. Goal here is to reproduce figures in a paper.</li>
@@ -1031,11 +1069,16 @@ brew install redis
 sudo apt-get install redis
 </code></pre>
 <h3 id="make-redis-server-run-at-system-boot">Make redis-server run at system boot</h3>
-<pre><code># osx
-figure this out
+<pre><code>osx
+   To have launchd start redis now and restart at login:
+     brew services start redis
+   Or, if you don't want/need a background service you can just run:
+    redis-server /usr/local/etc/redis.conf
+
 # linux
 figure this out
 </code></pre>
+
 <h3 id="run-redis-server-manually">Run redis server manually</h3>
 <pre><code>redis-server
 </code></pre>
