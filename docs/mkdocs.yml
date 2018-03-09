@@ -14,8 +14,10 @@ pages:
     - Install PyMapManager: install-pymapmanager.md
     - Install client/server: install-client-server.md
     - REST API: rest-api.md
-    - Examples:
+    - Examples: 
         - a-plotting-annotations: examples/a-plotting-annotations.html
+        - b-dynamics: examples/b-dynamics.html
+        - c-intensity-analysis: examples/c-intensity-analysis.html
     - Development Notes: dev-notes.md
     
 #extra_css:

@@ -16,7 +16,7 @@ The PyMapManager server provides a web based [REST API][6] to retrieve Map Manag
 
 The PyMapManager client provides a web-based front-end to browse annotations and images off the server.
 
-We have an [example client/server][client/server] to see this in action.
+We have an [example client/server][client/server] to see this in action. Please note, this server is at an early development stage and might not always be available.
 
 ### Browsing annotations
 
@@ -32,14 +32,14 @@ We have an [example client/server][client/server] to see this in action.
  
 **Development of this desktop application has been downgraded to focus on the PyMapManager web interface.**
 
-The Qt version of PyMapManager is a desktop application. See [github repository][4]. 
+The Qt version of PyMapManager is a desktop application. See [/PyQtMapManager][4]. 
  
 <IMG SRC="pyMapManager_v2.png">
  
-[1]: http://blog.cudmore.io/mapmanager
+[1]: http://mapmanager.github.io
 [2]: http://pymapmanager.readthedocs.io/en/latest/
 [3]: install-client-server
-[4]: https://github.com/cudmore/PyMapManager/tree/master/PyMapManager/interface
-[5]: https://github.com/cudmore/PyMapManager/tree/master/PyMapManager/examples
+[4]: https://github.com/cudmore/PyMapManager/tree/master/PyQtMapManager
+[5]: https://github.com/cudmore/PyMapManager/tree/master/examples
 [6]: rest-api
-[client/server]: http://robertcudmore.org/mmclient
+[client/server]: http://cudmore.duckdns.org

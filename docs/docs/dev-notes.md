@@ -83,7 +83,10 @@
     
 ## Change log
 
- - 20170106
+ - 20180301
+ 	- We now have a docker to install the client/server with zero configuration
+ 	
+ - 20180106
     - We now open 'otherROI' files
     - Can now set marker size in leaflet maps
     - leflet maps report user click, tp and spine
