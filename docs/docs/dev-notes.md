@@ -433,4 +433,15 @@ if __name__ == "__main__":
     app.run()
 ```
 
+## Debian
+
+### Redis
+
+    /etc/init.d/redis-server stop
+
+### nginx
+
+    sudo service nginx stop
+    
+    
 [pypi]: https://pypi.python.org/pypi/pymapmanager
