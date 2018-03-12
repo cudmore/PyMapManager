@@ -11,6 +11,7 @@ edit_uri: ''
 
 pages:
     - Home: index.md
+    - Web Help: web-help.md
     - Install PyMapManager: install-pymapmanager.md
     - Install client/server: install-client-server.md
     - REST API: rest-api.md
