@@ -1,1 +1,1 @@
-pip install pymapmanager/
+python setup.py install
