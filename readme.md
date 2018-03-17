@@ -1,20 +1,19 @@
 
 PyMapManager is an ecosystem of tools to load and visualize time-series annotations and 3D image volumes.
 
-The workflow is to use the Igor Pro version of <A HREF="http://blog.cudmore.io/mapmanager/">Map Manager</A> and then use PyMapManager to easily perform additional visualization and analysis.
+Use the Igor Pro version of <A HREF="http://blog.cudmore.io/mapmanager/">Map Manager</A> and then use PyMapManager to easily perform additional visualization and analysis.
 
-Please see the main [PyMapManager](http://blog.cudmore.io/PyMapManager) documentation website.
+For a complete overview, see the main [PyMapManager](http://blog.cudmore.io/PyMapManager) documentation.
 
 ## Repository contents
 
  - [pymapmanager/](pymapmanager/) : Python package to load and visualize time-series annotations and images.
- - [examples/](examples/) : Jupyter notebooks with example Python code using pymapmanager.
- - [mmserver/](mmserver/) : A client-server to browse Map Manager annotations and images in a web browser.
- - [pymapmanager/mmio.py](pymapmanager/mmio.py) : Helper class allowing pymapmanager Python code to load annotations and images from a [mmserver/](mmserver/) REST server.
+ - [examples/](examples/) : Jupyter notebooks with example Python code.
+ - [mmserver/](mmserver/) : A client-server to browse Map Manager annotations and images in a web browser. The server implements a [REST API][rest-api] allowing data to be queried programmatically. 
  
 ## PyMapManager Python package
 
-Python package to open and analyze Map Manager files. Please see the <A HREF="http://pymapmanager.readthedocs.io/en/latest/">API Documentation</A> and a backup copy <A HREF="http://robertcudmore.org/mapmanager/PyMapManager/docs/">here</A>. See the [examples/](examples/) folder for Jupyter notebooks with code examples.
+Python package to open and analyze Map Manager files. Please see the <A HREF="http://pymapmanager.readthedocs.io/en/latest/">API Documentation</A> and a backup copy <A HREF="http://robertcudmore.org/mapmanager/PyMapManager/docs/">here</A>.
 
 ### Install from [PyPi](https://pypi.python.org/pypi/pymapmanager) using pip
 
@@ -33,16 +32,15 @@ path = 'PyMapManager/examples/exampleMaps/rr30a'
 myMap = mmMap(path)
 ```
 
-See the [examples/](examples/) to get started.
-
+See the [examples/](examples/) folder for Jupyter notebooks with more examples.
 
 ## Map Manager web server
 
-A web server to browse and share Map Manager annotates and time-series images.
+A web server to browse and share Map Manager annotates and time-series images. In addition to the point-and-click interface, there is also a [REST API][rest-api] to programmatically retrieve data.
 
 ### Run the server locally
 
-Please note, the server currently requires [redis][redis]. Install redis on OSX with 'brew install redis-server' and on linux with 'sudo apt-get install redis-server'
+Please note, the server currently requires [redis][redis]. Install redis on OSX with `brew install redis-server` and on linux with `sudo apt-get install redis-server`.
 
     cd PyMapManager/mmserver
     pip install -r requirements.txt
@@ -72,62 +70,9 @@ The PyQt GUI interface is in [PyQtMapManager/](PyQtMapManager/)
 
 This screen shot shows the main PyQt interface window (left), a map plot (top center), a stack plot (top right), and a stack image plot (bottom right).
 
-
-
-
-## Run the Map Manager server
-
-The server is made of two components, a back-end REST server and a client-side Javascript server.
-
- 1. The back-end server is in `mmserver/mmserver.py` and provides a REST interface using Python Flask.
- 2. The client-side Javascript server is in `mmclient/` and provides a front end point-and-click interface in a web browser.
-
-### Run the back-end REST server
-
-Install libraries
-
-```
-pip install -r PyMapManager/mmserver/requirements.txt
-```
-
-Run
-
-```
-cd PyMapManager/mmserver
-python mmserver.py
-```
-
-Once running, the REST interface can be accessed via
-
-```
-http://localhost:5010
-```
-
-### Run the client-side Javascript server
-
-This assumes [Node](https://nodejs.org/en/download/) has been manually downloaded and installed.
-
-Install http-server
-
-```
-npm install http-server -g
-```
-
-Run
-
-```
-cd PyMapManager/mmclient
-http-server
-```
-
-Once running, the client-side server can be accessed via
-
-```
-http://localhost:8080
-```
 	
    
-## Run the PyQt interface -- DEPRECIATED
+### Run the PyQt interface -- DEPRECIATED
 
 We have downgraded development of the PyQt interface to focus on the web client/server version of Map Manager
 
@@ -144,5 +89,6 @@ conda install pyqt=4
 cd PyMapManager/interface
 python main.py
 ```
-	  
- [redis]: https://redis.io/
+
+[redis]: https://redis.io/
+[rest-api]: http://blog.cudmore.io/PyMapManager/rest-api/
