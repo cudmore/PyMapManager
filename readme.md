@@ -42,7 +42,7 @@ A web server to browse and share Map Manager annotates and time-series images.
 
 ### Run the server locally
 
-Please note, the server currently requires [redis](redis). Install redis on OSX with 'brew install redis-server' and on linux with 'sudo apt-get install redis-server'
+Please note, the server currently requires [redis][redis]. Install redis on OSX with 'brew install redis-server' and on linux with 'sudo apt-get install redis-server'
 
     cd PyMapManager/mmserver
     pip install -r requirements.txt
