@@ -12,6 +12,7 @@ This folder contains Jupyter notebooks along with example data that step you thr
 4. Run the Jupyter notebooks
 
     cd PyMapManager/examples
+
     jupyter notebook
     
 This will open a web-browser where you can interact with the code and example data.
