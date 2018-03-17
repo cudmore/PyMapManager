@@ -9,17 +9,46 @@ Please see the main [PyMapManager](http://blog.cudmore.io/PyMapManager) document
 
  - [pymapmanager/](pymapmanager/) : Python package to load and visualize time-series annotations and images.
  - [examples/](examples/) : Jupyter notebooks with example Python code using pymapmanager.
- - [mmserver/](mmserver/) : A Python Flask server that provides a REST interface to easily retrieve Map Manager annotations and images.
- - [mmclient/](mmclient/) : A user friendly front-end Javascript client to plot annotations and view image time-series from a `mmserver` REST server.
+ - [mmserver/](mmserver/) : A client-server to browse Map Manager annotations and images in a web browser.
  - [pymapmanager/mmio.py](pymapmanager/mmio.py) : Helper class allowing pymapmanager Python code to load annotations and images from a [mmserver/](mmserver/) REST server.
  
 ## PyMapManager Python package
 
-Python package to open and analyze Map Manager files. Please see the <A HREF="http://pymapmanager.readthedocs.io/en/latest/">API Documentation</A> and a backup copy <A HREF="http://robertcudmore.org/mapmanager/PyMapManager/docs/">here</A>. See the [examples/](examples/) folder for iPython notebooks with code examples.
+Python package to open and analyze Map Manager files. Please see the <A HREF="http://pymapmanager.readthedocs.io/en/latest/">API Documentation</A> and a backup copy <A HREF="http://robertcudmore.org/mapmanager/PyMapManager/docs/">here</A>. See the [examples/](examples/) folder for Jupyter notebooks with code examples.
 
-## Map Manager server
+### Install from [PyPi](https://pypi.python.org/pypi/pymapmanager) using pip
 
-A server to browse and share Map Manager annotates and time-series images via the web. The server uses the PyMapManager Python package as an back-end.
+	pip install PyMapManager
+
+### Install from download
+
+	git clone https://github.com/cudmore/PyMapManager.git
+	pip install PyMapManager/
+
+Once installed, example maps can easily be loaded.
+
+```python
+from pymapmanager import mmMap
+path = 'PyMapManager/examples/exampleMaps/rr30a'
+myMap = mmMap(path)
+```
+
+See the [examples/](examples/) to get started.
+
+
+## Map Manager web server
+
+A web server to browse and share Map Manager annotates and time-series images.
+
+### Run the server locally
+
+Please note, the server currently requires [redis](redis). Install redis on OSX with 'brew install redis-server' and on linux with 'sudo apt-get install redis-server'
+
+    cd PyMapManager/mmserver
+    pip install -r requirements.txt
+    python mmserver.py
+
+Have fun browsing at 'http://localhost:5000'
 
 This screenshot shows web based browsing and plotting of Map Manager annotations.
 
@@ -44,33 +73,6 @@ The PyQt GUI interface is in [PyQtMapManager/](PyQtMapManager/)
 This screen shot shows the main PyQt interface window (left), a map plot (top center), a stack plot (top right), and a stack image plot (bottom right).
 
 
-## Install the PyMapManager package
-
-### Install from [PyPi](https://pypi.python.org/pypi/pymapmanager) using pip
-
-	pip install PyMapManager
-
-### install from download
-
-Clone the repository
-
-	git clone https://github.com/cudmore/PyMapManager.git
-
-Install required Python libraries
-
-	pip install -r PyMapManager/requirements.txt
-
-Install PyMapManager package (from download)
-  
-	pip install PyMapManager/
-
-Once installed, example maps can easily be loaded.
-
-	from pymapmanager import mmMap
-	path = 'PyMapManager/examples/exampleMaps/rr30a'
-	myMap = mmMap(path)
-
-See the [examples/](examples/) to get started.
 
 
 ## Run the Map Manager server
@@ -143,4 +145,4 @@ cd PyMapManager/interface
 python main.py
 ```
 	  
- 
+ [redis]: https://redis.io/

@@ -53,6 +53,9 @@ if 0:
 UPLOAD_FOLDER = '../../PyMapManager-Data/upload'
 data_folder = '../../PyMapManager-Data'
 
+if not os.path.isdir(data_folder):
+	print('mmserver error: did not find path data_folder:', data_folder)
+	
 # load a default map, leave this here until I implement redis
 # to share myMapList between processes
 #myMapList = {}
@@ -69,7 +72,12 @@ CORS(app)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER # upload to server should be proper scp, then flask app can trigger mmMap.ingest
 app.config['data_folder'] = data_folder
 
-db = redis.Redis('localhost') #connect to redis server
+#db = redis.Redis('localhost') #connect to redis server
+# on osx this was eventually giving error
+#   ConnectionError: Error 8 connecting to redis:6379. nodename nor servname provided, or not known.
+db = redis.Redis(host='redis', port=6379) #connect to redis server
+# switched to this
+#db = redis.Redis('localhost') #connect to redis server
 
 ############################################################
 # routes
@@ -85,8 +93,13 @@ def not_found(error):
 @app.route('/')
 def hello_world():
 	print('hello_world()')
-	#return render_template('index.html')
-	return 'mmserver rest interface. use /help to get started'
+	return render_template('index.html')
+	#return 'mmserver rest interface. use /help to get started'
+
+@app.route('/download')
+def download():
+	print('download()')
+	return render_template('download.html')
 
 @app.route('/help')
 def help():
@@ -119,6 +132,14 @@ def maps(username):
 		maplist = [f for f in os.listdir(userfolder) if not f.startswith('.')]
 	return json.dumps(maplist)
 
+@app.route('/api/v1/downloadmap/<username>/<mapname>')
+def downloadmap(username, mapname):
+	mapdir = safe_join(app.config['data_folder'], username)
+	mapzip = mapname + '.zip'
+	thepath = safe_join(mapdir, mapzip)
+	print('downloadmap:', thepath)
+	return send_file(thepath)
+	
 @app.route('/api/v1/loadmap/<username>/<mapname>')
 def loadmap(username, mapname):
 	"""
@@ -610,5 +631,5 @@ def plot2():
 # main
 ############################################################
 if __name__ == '__main__':
-	app.run(host='0.0.0.0',port=5010, debug=True)
+	app.run(host='0.0.0.0',port=5000, debug=True)
 
