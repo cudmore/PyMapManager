@@ -1,16 +1,9 @@
 
 PyMapManager is an ecosystem of tools to load and visualize time-series annotations and 3D image volumes.
 
-Use the Igor Pro version of <A HREF="http://blog.cudmore.io/mapmanager/">Map Manager</A> and then use PyMapManager to easily perform additional visualization and analysis.
-
 For a complete overview, see the main [PyMapManager](http://blog.cudmore.io/PyMapManager) documentation.
 
-## Repository contents
 
- - [pymapmanager/](pymapmanager/) : Python package to load and visualize time-series annotations and images.
- - [examples/](examples/) : Jupyter notebooks with example Python code.
- - [mmserver/](mmserver/) : A client-server to browse Map Manager annotations and images in a web browser. The server implements a [REST API][rest-api] allowing data to be queried programmatically. 
- 
 ## PyMapManager Python package
 
 Python package to open and analyze Map Manager files. Please see the <A HREF="http://pymapmanager.readthedocs.io/en/latest/">API Documentation</A> and a backup copy <A HREF="http://robertcudmore.org/mapmanager/PyMapManager/docs/">here</A>.
@@ -36,7 +29,9 @@ See the [examples/](examples/) folder for Jupyter notebooks with more examples.
 
 ## Map Manager web server
 
-A web server to browse and share Map Manager annotates and time-series images. In addition to the point-and-click interface, there is also a [REST API][rest-api] to programmatically retrieve data.
+A web server to browse and share Map Manager annotations and time-series images. Please check out our [example server](http://cudmore.duckdns.org).
+
+In addition to the point-and-click interface, there is also a [REST API][rest-api] to programmatically retrieve data.
 
 ### Run the server locally
 
