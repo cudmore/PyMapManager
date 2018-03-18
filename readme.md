@@ -6,16 +6,11 @@ PyMapManager is an ecosystem of tools to load and visualize time-series annotati
 
 Python package to open and analyze Map Manager files. Please see the <A HREF="http://pymapmanager.readthedocs.io/en/latest/">API Documentation</A> and a backup copy <A HREF="http://robertcudmore.org/mapmanager/PyMapManager/docs/">here</A>.
 
-### Install from [PyPi](https://pypi.python.org/pypi/pymapmanager) using pip
+### Install from [PyPi](https://pypi.python.org/pypi/pymapmanager)
 
 	pip install PyMapManager
 
-### Install from download
-
-	git clone https://github.com/cudmore/PyMapManager.git
-	pip install PyMapManager/
-
-Once installed, example maps can easily be loaded.
+### Open a Map Manager time-series (map)
 
 ```python
 from pymapmanager import mmMap
@@ -27,7 +22,9 @@ See the [examples/](examples/) folder for Jupyter notebooks with more examples.
 
 ## 2) Map Manager web server
 
-A web server to browse and share Map Manager annotations and time-series images. Please check out our [example server](http://cudmore.duckdns.org). In addition to the point-and-click interface, there is also a [REST API][rest-api] to programmatically retrieve data.
+A web server to browse and share Map Manager annotations and time-series images. In addition to the point-and-click interface, there is also a [REST API][rest-api] to programmatically retrieve data.
+
+To see this in action, check out our [example server](http://cudmore.duckdns.org). 
 
 ### Run the server locally
 
@@ -38,6 +35,12 @@ Please note, the server currently requires [redis][redis]. Install redis on OSX 
     python mmserver.py
 
 Have fun browsing at 'http://localhost:5000'.
+
+### Run the server in a Docker container
+
+Please see the [server installation](http://blog.cudmore.io/PyMapManager/install-server/).
+
+### Screenshots
 
 The server includes web based browsing and plotting of Map Manager annotations.
 

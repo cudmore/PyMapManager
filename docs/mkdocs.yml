@@ -13,13 +13,14 @@ pages:
     - Home: index.md
     - Web Help: web-help.md
     - Install PyMapManager: install-pymapmanager.md
-    - Install client/server: install-client-server.md
+    - Install Server: install-server.md
     - REST API: rest-api.md
     - Examples: 
         - a-plotting-annotations: examples/a-plotting-annotations.html
         - b-dynamics: examples/b-dynamics.html
         - c-intensity-analysis: examples/c-intensity-analysis.html
     - Development Notes: dev-notes.md
+    - Open Source: open-source.md
     
 #extra_css:
 #    - css/extra.css

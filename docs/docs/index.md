@@ -1,22 +1,24 @@
-PyMapManager is a suite of Python tools to analyze time-series image stacks.
+PyMapManager is a suite of Python tools to visualize, annotate, and analyze time-series image volumes. PyMapManager opens annotations created with the Igor Pro version of [Map Manager][1], allowing additional visualization and analysis to easily be performed.
 
-PyMapManager opens annotations created with the Igor Pro version of [Map Manager][1]. Allowing additional visualization and analysis to easily be performed.
+There are three components to PyMapManager:
 
-There are three components to PyMapManager: a Python package, a data client/server, and a desktop application.
+1. A Python package
+2. A web server
+3. A desktop application.
 
 ## 1) PyMapManager Python package
 
-To get started writing Python code to interface with Map Manager analysis, see the iPython notebooks in [/examples][5].
+Install with
 
-For full class documentation, see the [API Documentation][2].
+	pip install PyMapManager
+	
+To get started writing Python code to extend Map Manager analysis, see the iPython notebooks in the [/examples][5] folder. For more detailed install instructions, see [Install PyMapManager](install-pymapmanager). See the [API Documentation][2] for a full description of all the classes and functions.
 
-## 2) PyMapManager client/server
+## 2) PyMapManager server
  
-The PyMapManager server provides a web based [REST API][6] to retrieve Map Manager annotations and images.
+The PyMapManager server provides a web-based front-end to browse Map Manager annotations and images. The PyMapManager server also provides a [REST API][6] to retrieve Map Manager annotations and images from within your favorite programming environment.
 
-The PyMapManager client provides a web-based front-end to browse annotations and images off the server.
-
-We have an [example client/server][client/server] to see this in action. Please note, this server is at an early development stage and might not always be available.
+We have an [example server][client/server] to see this in action. Please note, this server is at an early development stage and might not always be available. 
 
 ### Browsing annotations
 
