@@ -28,19 +28,19 @@
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
       <link rel="shortcut icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-0.17.1, mkdocs-material-2.0.4">
+      <meta name="generator" content="mkdocs-0.17.2, mkdocs-material-2.2.2">
     
     
       
-        <title>Install client/server - PyMapManager</title>
+        <title>Install Server - PyMapManager</title>
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/application-709eec9410.css">
+      <link rel="stylesheet" href="../assets/stylesheets/application.7a4cdee3.css">
       
     
     
-      <script src="../assets/javascripts/modernizr-e826f8942a.js"></script>
+      <script src="../assets/javascripts/modernizr.1aa3b519.js"></script>
     
     
       
@@ -81,14 +81,18 @@
         <label class="md-icon md-icon--menu md-header-nav__button" for="drawer"></label>
       </div>
       <div class="md-flex__cell md-flex__cell--stretch">
-        <span class="md-flex__ellipsis md-header-nav__title">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
           
             
-              
+              <span class="md-header-nav__topic">
+                PyMapManager
+              </span>
+              <span class="md-header-nav__topic">
+                Install Server
+              </span>
             
-            Install client/server
           
-        </span>
+        </div>
       </div>
       <div class="md-flex__cell md-flex__cell--shrink">
         
@@ -148,6 +152,9 @@
 </header>
     
     <div class="md-container">
+      
+        
+      
       
       <main class="md-main">
         <div class="md-main__inner md-grid" data-md-component="container">
@@ -239,11 +246,11 @@
     
     
       <label class="md-nav__link md-nav__link--active" for="toc">
-        Install client/server
+        Install Server
       </label>
     
-    <a href="./" title="Install client/server" class="md-nav__link md-nav__link--active">
-      Install client/server
+    <a href="./" title="Install Server" class="md-nav__link md-nav__link--active">
+      Install Server
     </a>
     
       
@@ -282,78 +289,44 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#overview" title="Overview" class="md-nav__link">
-    Overview
+  <a href="#important" title="Important" class="md-nav__link">
+    Important
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#1-installing-software-to-run-the-servers" title="1) Installing software to run the servers" class="md-nav__link">
-    1) Installing software to run the servers
+  <a href="#running-the-server" title="Running the server." class="md-nav__link">
+    Running the server.
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-using-python-mmserverpy" title="1) Using python mmserver.py" class="md-nav__link">
+    1) Using python mmserver.py
   </a>
   
     <nav class="md-nav">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#make-sure-you-have-redis" title="Make sure you have redis" class="md-nav__link">
-    Make sure you have redis
+  <a href="#start-redis-server" title="Start redis-server" class="md-nav__link">
+    Start redis-server
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#make-sure-you-have-gunicorn" title="Make sure you have gunicorn" class="md-nav__link">
-    Make sure you have gunicorn
+  <a href="#start-mmserver" title="Start mmserver" class="md-nav__link">
+    Start mmserver
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#make-sure-you-have-node-npm-and-http-server" title="Make sure you have Node npm and http-server" class="md-nav__link">
-    Make sure you have Node npm and http-server
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#2-install-pymapmanager" title="2) Install PyMapManager" class="md-nav__link">
-    2) Install PyMapManager
-  </a>
-  
-    <nav class="md-nav">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#clone-the-repository" title="Clone the repository" class="md-nav__link">
-    Clone the repository
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#make-a-virtual-environment-mm_env-and-activate-it" title="Make a virtual environment mm_env and activate it" class="md-nav__link">
-    Make a virtual environment mm_env and activate it
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#install-pymapmanager" title="Install PyMapManager" class="md-nav__link">
-    Install PyMapManager
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#install-dependencies-for-mmserver" title="Install dependencies for mmserver" class="md-nav__link">
-    Install dependencies for mmserver
+  <a href="#stop-redis-server" title="Stop redis-server" class="md-nav__link">
+    Stop redis-server
   </a>
   
 </li>
@@ -364,30 +337,44 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-either-run-the-servers-with-a-script" title="3) Either, run the servers with a script" class="md-nav__link">
-    3) Either, run the servers with a script
+  <a href="#21-using-docker-compose" title="2.1) Using docker-compose" class="md-nav__link">
+    2.1) Using docker-compose
   </a>
   
     <nav class="md-nav">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#start-the-servers-with" title="Start the servers with" class="md-nav__link">
-    Start the servers with
+  <a href="#setup" title="Setup" class="md-nav__link">
+    Setup
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#stop-the-servers-with" title="Stop the servers with" class="md-nav__link">
-    Stop the servers with
+  <a href="#build" title="Build" class="md-nav__link">
+    Build
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#access-local-servers" title="Access local servers" class="md-nav__link">
-    Access local servers
+  <a href="#run" title="Run" class="md-nav__link">
+    Run
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stop" title="Stop" class="md-nav__link">
+    Stop
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#troubleshoot" title="Troubleshoot" class="md-nav__link">
+    Troubleshoot
   </a>
   
 </li>
@@ -398,62 +385,43 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4-or-run-the-servers-manually" title="4) Or, run the servers manually" class="md-nav__link">
-    4) Or, run the servers manually
+  <a href="#22-using-docker" title="2.2) Using docker" class="md-nav__link">
+    2.2) Using docker
   </a>
   
     <nav class="md-nav">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#run-the-rest-server" title="Run the REST server" class="md-nav__link">
-    Run the REST server
+  <a href="#build_1" title="Build" class="md-nav__link">
+    Build
   </a>
   
-    <nav class="md-nav">
-      <ul class="md-nav__list">
+</li>
         
           <li class="md-nav__item">
-  <a href="#check-the-rest-server" title="Check the rest server" class="md-nav__link">
-    Check the rest server
+  <a href="#redis" title="Redis" class="md-nav__link">
+    Redis
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#run-and-mount-a-local-volume-in-docker" title="Run and mount a local volume in docker" class="md-nav__link">
+    Run and mount a local volume in docker
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stop_1" title="Stop" class="md-nav__link">
+    Stop
   </a>
   
 </li>
         
       </ul>
     </nav>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#run-the-mmclient-javascript-client" title="Run the mmclient Javascript client" class="md-nav__link">
-    Run the mmclient Javascript client
-  </a>
-  
-    <nav class="md-nav">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#view-the-mmclient-at" title="View the mmclient at" class="md-nav__link">
-    View the mmclient at
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#rewrite-this-to-use-proper-forwarding-in-nginx-using-uwsgi-running-the-clientserver-on-a-linux-system-with-a-pre-existing-web-server" title="[REWRITE THIS TO USE PROPER FORWARDING IN nginx USING uwsgi] Running the client/server on a Linux system with a pre-existing web-server" class="md-nav__link">
-    [REWRITE THIS TO USE PROPER FORWARDING IN nginx USING uwsgi] Running the client/server on a Linux system with a pre-existing web-server
-  </a>
   
 </li>
       
@@ -550,6 +518,18 @@
   </li>
 
     
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../open-source/" title="Open Source" class="md-nav__link">
+      Open Source
+    </a>
+  </li>
+
+    
   </ul>
 </nav>
                   </div>
@@ -596,78 +576,44 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#overview" title="Overview" class="md-nav__link">
-    Overview
+  <a href="#important" title="Important" class="md-nav__link">
+    Important
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#1-installing-software-to-run-the-servers" title="1) Installing software to run the servers" class="md-nav__link">
-    1) Installing software to run the servers
+  <a href="#running-the-server" title="Running the server." class="md-nav__link">
+    Running the server.
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-using-python-mmserverpy" title="1) Using python mmserver.py" class="md-nav__link">
+    1) Using python mmserver.py
   </a>
   
     <nav class="md-nav">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#make-sure-you-have-redis" title="Make sure you have redis" class="md-nav__link">
-    Make sure you have redis
+  <a href="#start-redis-server" title="Start redis-server" class="md-nav__link">
+    Start redis-server
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#make-sure-you-have-gunicorn" title="Make sure you have gunicorn" class="md-nav__link">
-    Make sure you have gunicorn
+  <a href="#start-mmserver" title="Start mmserver" class="md-nav__link">
+    Start mmserver
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#make-sure-you-have-node-npm-and-http-server" title="Make sure you have Node npm and http-server" class="md-nav__link">
-    Make sure you have Node npm and http-server
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#2-install-pymapmanager" title="2) Install PyMapManager" class="md-nav__link">
-    2) Install PyMapManager
-  </a>
-  
-    <nav class="md-nav">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#clone-the-repository" title="Clone the repository" class="md-nav__link">
-    Clone the repository
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#make-a-virtual-environment-mm_env-and-activate-it" title="Make a virtual environment mm_env and activate it" class="md-nav__link">
-    Make a virtual environment mm_env and activate it
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#install-pymapmanager" title="Install PyMapManager" class="md-nav__link">
-    Install PyMapManager
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#install-dependencies-for-mmserver" title="Install dependencies for mmserver" class="md-nav__link">
-    Install dependencies for mmserver
+  <a href="#stop-redis-server" title="Stop redis-server" class="md-nav__link">
+    Stop redis-server
   </a>
   
 </li>
@@ -678,30 +624,44 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-either-run-the-servers-with-a-script" title="3) Either, run the servers with a script" class="md-nav__link">
-    3) Either, run the servers with a script
+  <a href="#21-using-docker-compose" title="2.1) Using docker-compose" class="md-nav__link">
+    2.1) Using docker-compose
   </a>
   
     <nav class="md-nav">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#start-the-servers-with" title="Start the servers with" class="md-nav__link">
-    Start the servers with
+  <a href="#setup" title="Setup" class="md-nav__link">
+    Setup
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#stop-the-servers-with" title="Stop the servers with" class="md-nav__link">
-    Stop the servers with
+  <a href="#build" title="Build" class="md-nav__link">
+    Build
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#access-local-servers" title="Access local servers" class="md-nav__link">
-    Access local servers
+  <a href="#run" title="Run" class="md-nav__link">
+    Run
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stop" title="Stop" class="md-nav__link">
+    Stop
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#troubleshoot" title="Troubleshoot" class="md-nav__link">
+    Troubleshoot
   </a>
   
 </li>
@@ -712,62 +672,43 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4-or-run-the-servers-manually" title="4) Or, run the servers manually" class="md-nav__link">
-    4) Or, run the servers manually
+  <a href="#22-using-docker" title="2.2) Using docker" class="md-nav__link">
+    2.2) Using docker
   </a>
   
     <nav class="md-nav">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#run-the-rest-server" title="Run the REST server" class="md-nav__link">
-    Run the REST server
+  <a href="#build_1" title="Build" class="md-nav__link">
+    Build
   </a>
   
-    <nav class="md-nav">
-      <ul class="md-nav__list">
+</li>
         
           <li class="md-nav__item">
-  <a href="#check-the-rest-server" title="Check the rest server" class="md-nav__link">
-    Check the rest server
+  <a href="#redis" title="Redis" class="md-nav__link">
+    Redis
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#run-and-mount-a-local-volume-in-docker" title="Run and mount a local volume in docker" class="md-nav__link">
+    Run and mount a local volume in docker
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stop_1" title="Stop" class="md-nav__link">
+    Stop
   </a>
   
 </li>
         
       </ul>
     </nav>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#run-the-mmclient-javascript-client" title="Run the mmclient Javascript client" class="md-nav__link">
-    Run the mmclient Javascript client
-  </a>
-  
-    <nav class="md-nav">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#view-the-mmclient-at" title="View the mmclient at" class="md-nav__link">
-    View the mmclient at
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#rewrite-this-to-use-proper-forwarding-in-nginx-using-uwsgi-running-the-clientserver-on-a-linux-system-with-a-pre-existing-web-server" title="[REWRITE THIS TO USE PROPER FORWARDING IN nginx USING uwsgi] Running the client/server on a Linux system with a pre-existing web-server" class="md-nav__link">
-    [REWRITE THIS TO USE PROPER FORWARDING IN nginx USING uwsgi] Running the client/server on a Linux system with a pre-existing web-server
-  </a>
   
 </li>
       
@@ -786,169 +727,79 @@
               
                 
                 
-                  <h1>Install client/server</h1>
+                  <h1>Install Server</h1>
                 
                 <h2 id="web-based-browsing">Web based browsing</h2>
-<p>Once the PyMapManager <code>mmclient</code> and <code>mmserver</code> are running, there is a point and click web interface to browse Map Manager annotations and images.</p>
+<p>The PyMapManager server allows Map Manager annotations and time-series images to be browsed with a web interface. The server can be run on your local machine using the provided Docker.</p>
+<p>For instant satisfaction, we have an <a href="http://cudmore.duckdns.org">experimental server</a> you can use right now.</p>
 <h3 id="browsing-annotations">Browsing annotations</h3>
 <p><IMG SRC="../img/mmserver_purejs.png"></p>
 <h3 id="browsing-images">Browsing images</h3>
 <p><IMG SRC="../img/mmserver_leaflet.png">
 <IMG SRC="../img/mmserver_leaflet2.png"></p>
-<h2 id="overview">Overview</h2>
-<p>PyMapManager can serve Map Manager annotations and images using a client/server model. We use two different servers to acheive this</p>
-<ol>
-<li><code>mmserver/mmserver.py</code> : Python Flask server to provide a REST interface so a web browser can retrieve Map Manager annotations and images.</li>
-<li><code>mmclient/index.html</code> : A front end point-and-click web-browser interface allowing Map Manager annotations and images to be visualized.</li>
-</ol>
-<h2 id="1-installing-software-to-run-the-servers">1) Installing software to run the servers</h2>
-<p>This will work well if you only want to check out the servers. This is not designed for final production which should use Apache or nginx (as opposed to manually running gunicorn and http-server). For final production servers, nginx serves the mmclient Javascript and forwards the REST requests to mmserver using uwsgi.</p>
-<p>Running the servers requires some additional software</p>
-<ul>
-<li><code>mmserver</code>: Requires redis and gunicorn</li>
-<li><code>mmclient</code>: Requires node npm and http-server</li>
-</ul>
-<h3 id="make-sure-you-have-redis">Make sure you have redis</h3>
-<pre><code># osx
-brew install redis
-
-# linux
-sudo apt-get install redis-server # to install redis-server
-sudo apt install redis-tools # to install redis-cli
-
-redis-cli ping
-# should respond
-PONG
-</code></pre>
-<h3 id="make-sure-you-have-gunicorn">Make sure you have gunicorn</h3>
-<p>Wrapping the <code>mmserver</code> to run inside of gunicorn provides a <strong>synchronous</strong> web server. This should handle fast interaction with the web interface much better than the <strong>asynchronous</strong> version provided by <code>python mmserver.py</code>. This is most noticeable when viewing linked sliding z-projections.</p>
-<pre><code>pip install gunicorn
-</code></pre>
-<h3 id="make-sure-you-have-node-npm-and-http-server">Make sure you have Node npm and http-server</h3>
-<p>Node install changes based on your flavor of linux, see <a href="https://nodejs.org/en/download/package-manager/">node install instruction</a>.</p>
-<pre><code># on debian jessie
-curl -sL https://deb.nodesource.com/setup_9.x | sudo -E bash -
-sudo apt-get install -y nodejs
-
-# install http-server
-sudo npm install http-server -g
-</code></pre>
-<h2 id="2-install-pymapmanager">2) Install PyMapManager</h2>
-<h3 id="clone-the-repository">Clone the repository</h3>
-<p>This makes a <code>PyMapManager</code> folder</p>
+<h2 id="important">Important</h2>
+<p>To run the server locally, you need some data! Example data can be downloaded from the PyMapManager-Data repository. The first thing to do is to clone the <a href="https://github.com/cudmore/PyMapManager">PyMapManager</a> and the <a href="https://github.com/mapmanager/PyMapManager-Data">PyMapManager-Data</a> repositories.</p>
 <pre><code>git clone https://github.com/cudmore/PyMapManager.git
+git clone https://github.com/mapmanager/PyMapManager-Data.git
 </code></pre>
-<h3 id="make-a-virtual-environment-mm_env-and-activate-it">Make a virtual environment <code>mm_env</code> and activate it</h3>
-<pre><code>virtualenv mm_env
-source mm_env/bin/activate
+<p>This should put both PyMapManager and PyMapManager-Data in the same directory, for example:</p>
+<pre><code>/User/me/PyMapManager
+/User/me/PyMapManager-Data
 </code></pre>
-<h3 id="install-pymapmanager">Install PyMapManager</h3>
-<pre><code># install PyMapManager
-pip install -e PyMapManager/
+<h2 id="running-the-server">Running the server.</h2>
+<p>Simplest case is to use <code>python mmserver.py</code> and you should be up in no time. This does have limitations in that the server is run as a single thread/worker. Repeated requests, as occur when scrolling linked images, will cause the server to choke. Don't worry, you won't break anything, it will just be slow. This is why running behind a proper <a href="https://www.nginx.com/">nginx</a>+<a href="https://uwsgi-docs.readthedocs.io/en/latest/">uwsgi</a> web-sever is way better.</p>
+<h2 id="1-using-python-mmserverpy">1) Using <code>python mmserver.py</code></h2>
+<h3 id="start-redis-server">Start redis-server</h3>
+<p>You need a redis-server running. Install it on OSX with <code>brew install redis-server</code> or on most variants of Linux with <code>sudo apt-get install redis-server</code>. See <a href="https://redis.io/">redis</a> homepage for more info.</p>
+<pre><code>redis-server
 </code></pre>
-<h3 id="install-dependencies-for-mmserver">Install dependencies for <code>mmserver</code></h3>
-<pre><code>pip install -r PyMapManager/mmserver/requirements.txt
+<h3 id="start-mmserver">Start mmserver</h3>
+<pre><code>cd PyMapManager/app
+python mmserver.py
 </code></pre>
-<h2 id="3-either-run-the-servers-with-a-script">3) Either, run the servers with a script</h2>
-<p>Start both unicorn and http-server with our <a href="https://github.com/cudmore/PyMapManager/blob/master/serve_local.sh"><code>PyMapManager/serve_local.sh</code></a> script.</p>
-<h3 id="start-the-servers-with">Start the servers with</h3>
+<p>Point your browser to <code>http://localhost:5000</code> and have fun browsing.</p>
+<h3 id="stop-redis-server">Stop redis-server</h3>
+<pre><code>redis-cli shutdown
+</code></pre>
+<h2 id="21-using-docker-compose">2.1) Using docker-compose</h2>
+<p>If you want to run the server inside a <a href="https://www.docker.com/community-edition">Docker</a> container, the easiest option is to use <code>docker-compose</code>. Using this technique makes a very efficient server and is exactly what we are using at <a href="http://cudmore.duckdns.org">http://cudmore.duckdns.org</a>.</p>
+<h3 id="setup">Setup</h3>
+<p>In <code>docker-compose.yml</code>, change the path <code>/Users/cudmore/Dropbox/PyMapManager-Data</code> to the full path to your local copy of <code>PyMapManager-Data</code>. This little hoop is due to a bug in Docker and will be fixed.</p>
+<pre><code>volumes:
+  - /Users/cudmore/Dropbox/PyMapManager-Data:/PyMapManager-Data
+</code></pre>
+<h3 id="build">Build</h3>
+<pre><code>docker-compose build
+</code></pre>
+<h3 id="run">Run</h3>
+<pre><code>docker-compose up
+</code></pre>
+<p>Point your browser to <code>http://localhost</code> and have fun browsing.</p>
+<h3 id="stop">Stop</h3>
+<pre><code>docker-compose down
+</code></pre>
+<h3 id="troubleshoot">Troubleshoot</h3>
+<pre><code>docker-compose run web bash
+</code></pre>
+<h2 id="22-using-docker">2.2) Using docker</h2>
+<p>If you prefer to run the docker services separately and specify paths on the command line.</p>
+<h3 id="build_1">Build</h3>
 <pre><code>cd PyMapManager
-./serve_local.sh start
+docker build -t myimage .
 </code></pre>
-
-<h3 id="stop-the-servers-with">Stop the servers with</h3>
+<h3 id="redis">Redis</h3>
+<pre><code>docker run -d --name redis -p 6379:6379 redis
+</code></pre>
+<h3 id="run-and-mount-a-local-volume-in-docker">Run and mount a local volume in docker</h3>
+<p>You need to change <code>/Users/cudmore/Dropbox/PyMapManager-Data</code> to point to the full path of your local copy of <code>PyMapManager-Data</code>. Remember, both <code>PyMapManager</code> and <code>PyMapManager-Data</code> need to be in the same folder.</p>
 <pre><code>cd PyMapManager
-./serve_local.sh stop
+docker run --name mycontainer -p 80:80 -v /Users/cudmore/Dropbox/PyMapManager-Data:/PyMapManager-Data --link redis myimage
 </code></pre>
-
-<h3 id="access-local-servers">Access local servers</h3>
-<p>The front-end client can be accessed at</p>
-<pre><code>http://localhost:8080
+<p>Point your browser to <code>http://localhost</code> and have fun browsing.</p>
+<h3 id="stop_1">Stop</h3>
+<pre><code>docker stop mycontainer
+docker rm mycontainer
 </code></pre>
-
-<p>The back-end REST server can be accessed at</p>
-<pre><code>http://localhost:5010/help
-</code></pre>
-
-<h2 id="4-or-run-the-servers-manually">4) Or, run the servers manually</h2>
-<h3 id="run-the-rest-server">Run the REST server</h3>
-<p>On OSX, use <code>sudo</code>, on linux <strong>do not</strong>.</p>
-<pre><code>#osx
-cd PyMapManager/mmserver
-sudo gunicorn -w 4 -b 0.0.0.0:5010 mmserver:app
-
-#linux
-gunicorn -w 4 -b 0.0.0.0:5010 mmserver:app
-</code></pre>
-<h4 id="check-the-rest-server">Check the rest server</h4>
-<p>Here <code>server_ip</code> is the IP address of your server</p>
-<pre><code>http://server_ip:5010
-</code></pre>
-<h3 id="run-the-mmclient-javascript-client">Run the mmclient Javascript client</h3>
-<pre><code>cd PyMapManager/mmclient
-http-server
-</code></pre>
-<p>The output should look like this</p>
-<pre><code>Starting up http-server, serving ./
-Available on:
-  http://127.0.0.1:8080
-  http://192.168.1.10:8080
-Hit CTRL-C to stop the server
-</code></pre>
-
-<h4 id="view-the-mmclient-at">View the mmclient at</h4>
-<p>Here <code>server_ip</code> is the IP address of your server</p>
-<pre><code>http://server_ip:8080
-</code></pre>
-<h2 id="rewrite-this-to-use-proper-forwarding-in-nginx-using-uwsgi-running-the-clientserver-on-a-linux-system-with-a-pre-existing-web-server">[REWRITE THIS TO USE PROPER FORWARDING IN nginx USING uwsgi] Running the client/server on a Linux system with a pre-existing web-server</h2>
-<p>This requires a pre-existing web server to serve both the client server <code>mmclient/index.html</code> and the Python Flask REST server <code>mmserver/mmserver.py</code>.</p>
-<p>We have used <code>nginx</code> with success.</p>
-<ul>
-<li>Get a debian system</li>
-<li>Install nginx</li>
-</ul>
-<pre><code>sudo apt-get install nginx
-</code></pre>
-
-<ul>
-<li>Copy the <code>mmclient/</code> folder into <code>/var/www/html/mmclient</code></li>
-</ul>
-<pre><code>sudo cp PyMapManager/mmclient /var/www/html/
-</code></pre>
-
-<ul>
-<li>
-<p>You can now access the mmclient as http://nginx_server_ip/mmclient</p>
-</li>
-<li>
-<p>Make sure the client in <code>mmclient/static/mmserver.js</code> is pointing to the REST server (we will run that next).</p>
-</li>
-</ul>
-<pre><code>sudo pico /var/www/html/mmclient/static/mmserver.js
-
-# make sure the file has
-serverurl = 'http://nginx_server_ip:5010/'
-</code></pre>
-
-<ul>
-<li>Run the Flask server with</li>
-</ul>
-<pre><code>cd mmserver
-screen
-gunicorn -b 0.0.0.0:5010 mmserver:app
-# exit screen with ctrl+a then d 
-</code></pre>
-
-<p>This runs the Flask app <code>app</code> in the python file <code>mmserver.py</code> at the address <code>http://nginx_server_ip:5010</code>. We have used <code>screen</code> so that when you logout of the terminal, the server continues to run. If you need to stop the server, you can use <code>PyMapManager/serve_local.sh stop</code> or return to the <code>screen</code> session with <code>screen -r</code> and hit ctrl+c.</p>
-<p>Check the REST server manually by browsing to</p>
-<pre><code>http://nginx_server_ip:5010/help
-</code></pre>
-
-<p>If that all works, you can browse some maps at</p>
-<pre><code>http://nginx_server_ip/mmclient
-</code></pre>
-
-<p>This will serve the <code>mmclient/index.html</code> and use the <code>mmclient/static/mmserver.js</code> file. The <code>mmclient/static/mmserver.js</code> file will grab annotations and images from the <code>mmserver/mmserver.py</code> REST server via <code>http://nginx_server_ip:5010</code>.</p>
                 
                   
                 
@@ -1004,9 +855,9 @@ gunicorn -b 0.0.0.0:5010 mmserver:app
       <div class="md-footer-copyright">
         
         powered by
-        <a href="http://www.mkdocs.org" title="MkDocs">MkDocs</a>
+        <a href="http://www.mkdocs.org">MkDocs</a>
         and
-        <a href="http://squidfunk.github.io/mkdocs-material/" title="Material for MkDocs">
+        <a href="https://squidfunk.github.io/mkdocs-material/">
           Material for MkDocs</a>
       </div>
       
@@ -1018,9 +869,9 @@ gunicorn -b 0.0.0.0:5010 mmserver:app
       
     </div>
     
-      <script src="../assets/javascripts/application-8e4952e681.js"></script>
+      <script src="../assets/javascripts/application.6cdc17f0.js"></script>
       
-      <script>app.initialize({version:"0.17.1",url:{base:".."}})</script>
+      <script>app.initialize({version:"0.17.2",url:{base:".."}})</script>
       
     
     

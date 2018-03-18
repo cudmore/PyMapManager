@@ -28,7 +28,7 @@
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
       <link rel="shortcut icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-0.17.1, mkdocs-material-2.0.4">
+      <meta name="generator" content="mkdocs-0.17.2, mkdocs-material-2.2.2">
     
     
       
@@ -36,11 +36,11 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/application-709eec9410.css">
+      <link rel="stylesheet" href="../assets/stylesheets/application.7a4cdee3.css">
       
     
     
-      <script src="../assets/javascripts/modernizr-e826f8942a.js"></script>
+      <script src="../assets/javascripts/modernizr.1aa3b519.js"></script>
     
     
       
@@ -81,14 +81,18 @@
         <label class="md-icon md-icon--menu md-header-nav__button" for="drawer"></label>
       </div>
       <div class="md-flex__cell md-flex__cell--stretch">
-        <span class="md-flex__ellipsis md-header-nav__title">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
           
             
-              
+              <span class="md-header-nav__topic">
+                PyMapManager
+              </span>
+              <span class="md-header-nav__topic">
+                Install PyMapManager
+              </span>
             
-            Install PyMapManager
           
-        </span>
+        </div>
       </div>
       <div class="md-flex__cell md-flex__cell--shrink">
         
@@ -148,6 +152,9 @@
 </header>
     
     <div class="md-container">
+      
+        
+      
       
       <main class="md-main">
         <div class="md-main__inner md-grid" data-md-component="container">
@@ -243,8 +250,8 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#install-from-pypi-using-pip" title="Install from PyPi using pip" class="md-nav__link">
-    Install from PyPi using pip
+  <a href="#install-from-pypi" title="Install from PyPi" class="md-nav__link">
+    Install from PyPi
   </a>
   
 </li>
@@ -265,15 +272,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#2-install-required-python-libraries" title="2) Install required Python libraries" class="md-nav__link">
-    2) Install required Python libraries
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#3-install-pymapmanager-from-the-downloaded-folder" title="3) Install PyMapManager (from the downloaded folder)" class="md-nav__link">
-    3) Install PyMapManager (from the downloaded folder)
+  <a href="#2-install-pymapmanager-from-the-downloaded-folder" title="2) Install PyMapManager (from the downloaded folder)" class="md-nav__link">
+    2) Install PyMapManager (from the downloaded folder)
   </a>
   
 </li>
@@ -286,6 +286,13 @@
         <li class="md-nav__item">
   <a href="#testing-the-install-from-a-python-prompt" title="Testing the install from a python prompt" class="md-nav__link">
     Testing the install from a python prompt
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#we-have-tons-more-examples" title="We have tons more examples" class="md-nav__link">
+    We have tons more examples
   </a>
   
 </li>
@@ -305,8 +312,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../install-client-server/" title="Install client/server" class="md-nav__link">
-      Install client/server
+    <a href="../install-server/" title="Install Server" class="md-nav__link">
+      Install Server
     </a>
   </li>
 
@@ -395,6 +402,18 @@
   </li>
 
     
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../open-source/" title="Open Source" class="md-nav__link">
+      Open Source
+    </a>
+  </li>
+
+    
   </ul>
 </nav>
                   </div>
@@ -414,8 +433,8 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#install-from-pypi-using-pip" title="Install from PyPi using pip" class="md-nav__link">
-    Install from PyPi using pip
+  <a href="#install-from-pypi" title="Install from PyPi" class="md-nav__link">
+    Install from PyPi
   </a>
   
 </li>
@@ -436,15 +455,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#2-install-required-python-libraries" title="2) Install required Python libraries" class="md-nav__link">
-    2) Install required Python libraries
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#3-install-pymapmanager-from-the-downloaded-folder" title="3) Install PyMapManager (from the downloaded folder)" class="md-nav__link">
-    3) Install PyMapManager (from the downloaded folder)
+  <a href="#2-install-pymapmanager-from-the-downloaded-folder" title="2) Install PyMapManager (from the downloaded folder)" class="md-nav__link">
+    2) Install PyMapManager (from the downloaded folder)
   </a>
   
 </li>
@@ -457,6 +469,13 @@
         <li class="md-nav__item">
   <a href="#testing-the-install-from-a-python-prompt" title="Testing the install from a python prompt" class="md-nav__link">
     Testing the install from a python prompt
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#we-have-tons-more-examples" title="We have tons more examples" class="md-nav__link">
+    We have tons more examples
   </a>
   
 </li>
@@ -478,7 +497,7 @@
                 
                   <h1>Install PyMapManager</h1>
                 
-                <h2 id="install-from-pypi-using-pip">Install from <a href="https://pypi.python.org/pypi/pymapmanager">PyPi</a> using pip</h2>
+                <h2 id="install-from-pypi">Install from <a href="https://pypi.python.org/pypi/pymapmanager">PyPi</a></h2>
 <pre><code>pip install PyMapManager
 </code></pre>
 <p>This will install the most recent version from <a href="https://pypi.python.org/pypi/pymapmanager">PyPi</a>.</p>
@@ -487,16 +506,13 @@
 <p>This will make a <code>PyMapManager</code> folder.</p>
 <pre><code>git clone https://github.com/cudmore/PyMapManager.git
 </code></pre>
-<h3 id="2-install-required-python-libraries">2) Install required Python libraries</h3>
-<pre><code>pip install -r PyMapManager/requirements.txt
-</code></pre>
-<h3 id="3-install-pymapmanager-from-the-downloaded-folder">3) Install PyMapManager (from the downloaded folder)</h3>
+<h3 id="2-install-pymapmanager-from-the-downloaded-folder">2) Install PyMapManager (from the downloaded folder)</h3>
 <pre><code>pip install PyMapManager/
 </code></pre>
 <h2 id="testing-the-install-from-a-python-prompt">Testing the install from a <code>python</code> prompt</h2>
 <p>Check the version</p>
-<pre><code class="python">&gt;&gt;&gt; import pymapmanager
-&gt;&gt;&gt; pymapmanager.__version__
+<pre><code class="python">import pymapmanager
+pymapmanager.__version__
 '0.0.3'
 </code></pre>
 
@@ -517,6 +533,10 @@ myMap = mmMap(path)
 <p>And you should see</p>
 <pre><code>map:rr30a map segments:5 stacks:9 total object:2467
 </code></pre>
+
+<h2 id="we-have-tons-more-examples">We have tons more examples</h2>
+<p>Head over to the <a href="https://github.com/cudmore/PyMapManager/tree/master/examples">examples/</a> folder in the main Github repository.</p>
+<p>Experimental: You should be able to view these notebooks at <a href="https://hub.mybinder.org/user/cudmore-pymapmanager-8r5uk9g6/tree/examples">binder</a>. Beware, binder is experimental and link may be broken.</p>
                 
                   
                 
@@ -550,13 +570,13 @@ myMap = mmMap(path)
           </a>
         
         
-          <a href="../install-client-server/" title="Install client/server" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../install-server/" title="Install Server" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                Install client/server
+                Install Server
               </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink">
@@ -572,9 +592,9 @@ myMap = mmMap(path)
       <div class="md-footer-copyright">
         
         powered by
-        <a href="http://www.mkdocs.org" title="MkDocs">MkDocs</a>
+        <a href="http://www.mkdocs.org">MkDocs</a>
         and
-        <a href="http://squidfunk.github.io/mkdocs-material/" title="Material for MkDocs">
+        <a href="https://squidfunk.github.io/mkdocs-material/">
           Material for MkDocs</a>
       </div>
       
@@ -586,9 +606,9 @@ myMap = mmMap(path)
       
     </div>
     
-      <script src="../assets/javascripts/application-8e4952e681.js"></script>
+      <script src="../assets/javascripts/application.6cdc17f0.js"></script>
       
-      <script>app.initialize({version:"0.17.1",url:{base:".."}})</script>
+      <script>app.initialize({version:"0.17.2",url:{base:".."}})</script>
       
     
     
