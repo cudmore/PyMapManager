@@ -2,7 +2,7 @@
 PyMapManager is an ecosystem of tools to load and visualize time-series annotations and 3D image volumes. For a complete overview, see the main [PyMapManager](http://blog.cudmore.io/PyMapManager) documentation.
 
 
-## PyMapManager Python package
+## 1) PyMapManager Python package
 
 Python package to open and analyze Map Manager files. Please see the <A HREF="http://pymapmanager.readthedocs.io/en/latest/">API Documentation</A> and a backup copy <A HREF="http://robertcudmore.org/mapmanager/PyMapManager/docs/">here</A>.
 
@@ -25,13 +25,13 @@ myMap = mmMap(path)
 
 See the [examples/](examples/) folder for Jupyter notebooks with more examples.
 
-## Map Manager web server
+## 2) Map Manager web server
 
 A web server to browse and share Map Manager annotations and time-series images. Please check out our [example server](http://cudmore.duckdns.org). In addition to the point-and-click interface, there is also a [REST API][rest-api] to programmatically retrieve data.
 
 ### Run the server locally
 
-Please note, the server currently requires [redis][redis]. Install redis on OSX with `brew install redis-server` and on linux with `sudo apt-get install redis-server`.
+Please note, the server currently requires [redis][redis]. Install redis on OSX with `brew install redis-server` and on linux with `sudo apt-get install redis-server`. Once installed, run redis with `redis-server`.
 
     cd PyMapManager/app
     pip install -r requirements.txt
