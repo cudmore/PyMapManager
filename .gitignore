@@ -15,6 +15,13 @@ build/
 pymapmanager/docs/_build/
 
 # Jupyter Notebook
+examples/.ipynb_checkpoints
 .ipynb_checkpoints
 
 .idea
+
+# docker
+dump.rdb
+
+# local build of mkdocs
+/docs/site/

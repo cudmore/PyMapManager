@@ -1,0 +1,29 @@
+# 20180318
+# Robert Cudmore
+# robert.cudmore@gmail.com
+# http://robertcudmore.org
+
+# must specify an environment variable
+# export PYMAPMANAGER_DATA=/Users/cudmore/Dropbox/PyMapManager-Data
+
+version: '3'
+services:
+  web:
+    restart: always
+    build: ./
+    links:
+      - redis
+    depends_on:
+      - redis
+    ports:
+      - "80:80"
+    volumes:
+      - /Users/cudmore/Dropbox/PyMapManager-Data:/PyMapManager-Data
+      - ./app:/app
+      #- $PYMAPMANAGER_DATA:/PyMapManager-Data
+
+  redis:
+    restart: always
+    image: "redis"
+    ports:
+      - "6379:6379"
