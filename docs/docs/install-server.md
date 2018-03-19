@@ -28,30 +28,18 @@ This should put both PyMapManager and PyMapManager-Data in the same directory, f
 
 ## Running the server.
 
-Simplest case is to use `python mmserver.py` and you should be up in no time. This does have limitations in that the server is run as a single thread/worker. Repeated requests, as occur when scrolling linked images, will cause the server to choke. Don't worry, you won't break anything, it will just be slow. This is why running behind a proper [nginx][nginx]+[uwsgi][uwsgi] web-sever is way better.
+Simplest case is to use `python mmserver.py` and you should be up in no time. This does have limitations in that the server is run as a single thread/worker. Repeated requests, as occur when scrolling linked images, will cause the server to choke. Don't worry, you won't break anything, it will just be slow. This is why using the provided Docker and running behind a proper [nginx][nginx]+[uwsgi][uwsgi] web-sever is way better.
 
 ## 1) Using `python mmserver.py`
-
-### Start redis-server
-
-You need a redis-server running. Install it on OSX with `brew install redis-server` or on most variants of Linux with `sudo apt-get install redis-server`. See [redis][redis] homepage for more info.
-
-	redis-server
-	
-### Start mmserver
 
 	cd PyMapManager/app
 	python mmserver.py
 
 Point your browser to `http://localhost:5000` and have fun browsing.
 
-### Stop redis-server
-
-	redis-cli shutdown
-	
 ## 2.1) Using docker-compose
 
-If you want to run the server inside a [Docker][docker] container, the easiest option is to use `docker-compose`. Using this technique makes a very efficient server and is exactly what we are using at [http://cudmore.duckdns.org](http://cudmore.duckdns.org).
+If you want to run the server inside a [Docker][docker] container, the easiest option is to use `docker-compose`. Using this technique makes a very efficient production level server and is exactly what we are using at [http://cudmore.duckdns.org](http://cudmore.duckdns.org).
 
 ### Setup
 
@@ -62,6 +50,7 @@ In `docker-compose.yml`, change the path `/Users/cudmore/Dropbox/PyMapManager-Da
 
 ### Build
 
+	cd PyMapManager
 	docker-compose build
 
 ### Run

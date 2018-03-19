@@ -78,13 +78,32 @@ app.config['data_folder'] = data_folder
 ############################################################
 # redis
 ############################################################
+class fakeredis():
+	"""
+	Class to simulate redis. This way user does not have to be running redis for 'python mmserver.py'
+	"""
+	def __init__(self):
+		self.dict = {}
+	def exists(self, mapname):
+		return mapname in self.dict
+	def get(self, mapname):
+		if mapname in self.dict:
+			return self.dict[mapname]
+		else:
+			return ''
+	def set(self, mapname, pickledata):
+		self.dict[mapname] = pickledata
+
 if __name__ == '__main__':
-	# debug version
-	db = redis.StrictRedis(host='localhost', port=6379, db=0) #connect to redis server
+	# debug version when run with 'python mmserver.py'
+	#db = redis.StrictRedis(host='localhost', port=6379, db=0) #connect to redis server
+	print('   mmserver is using fakeredis()')
+	db = fakeredis()
 else:
 	# docker version
 	db = redis.StrictRedis(host='redis', port=6379, db=0) #connect to redis server
 
+		
 ############################################################
 # routes
 ############################################################

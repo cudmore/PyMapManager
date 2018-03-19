@@ -28,8 +28,6 @@ To see this in action, check out our [example server](http://cudmore.duckdns.org
 
 ### Run the server locally
 
-Please note, the server currently requires [redis][redis]. Install redis on OSX with `brew install redis-server` and on linux with `sudo apt-get install redis-server`. Once installed, run redis with `redis-server`.
-
     cd PyMapManager/app
     pip install -r requirements.txt
     python mmserver.py

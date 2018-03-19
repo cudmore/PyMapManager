@@ -1,4 +1,4 @@
-This is Python code to run a web server which will create a point-and-click interface to Map Manager annotations and image time-series. The server also includes a REST interface allowing data to be retreived from your favorite programming environment.
+This is Python code to run a web server which will create a point-and-click interface to browse Map Manager annotations and image time-series. The server also includes a REST interface allowing data to be retreived from your favorite programming environment.
 
 Please see the main [PyMapManager](http://blog.cudmore.io/PyMapManager) documentation website and examples of [REST API endpoints](http://blog.cudmore.io/PyMapManager/rest-api/).
 
@@ -32,21 +32,21 @@ Install additional requirements for server
 	
 ## Running the server
 
-You need a redis-server running. Install it on OSX with `brew install redis-server` or on most variants of Linux with `sudo apt-get install redis-server`. See [redis](http:///redis.io) homepage for more info.
-
-	redis-server
-	
-This will run the server locally at `http://localhost:5000`.
-
 ```
 cd PyMapManager/app
 python mmserver.py
 ```
 
-Please note, this is a very simplified example. In reality, the REST server should be run **synchronously** using either gunicorn or uwsgi and then served through a proper web-server such as Apache or nginx.
+This will run the server locally at `http://localhost:5000`. Have fun browsing.
+
+## Running a production level server
+
+Running the server with `python mmserver.py` is a good way to get started quickly. Yet, this is a very simplified example. In reality, the server should be run **synchronously** using either gunicorn or uwsgi and then served through a proper web-server such as Apache or nginx. We provide an easy to use Docker container to do exactly this! See [install server](http://blog.cudmore.io/PyMapManager/install-server/) for more information.
 
 
 ## Using the REST API in a scripting language
+
+Once the server is running, annotations and images can be queried via the [REST](http://blog.cudmore.io/PyMapManager/rest-api/) interface.
 
 ### In Javascript
 
