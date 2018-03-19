@@ -12,7 +12,7 @@ I think the former will still work so does not break my existing code?
 from .mmMap import mmMap
 from .mmStack import mmStack
 from .mmStack import mmio
-from .mmMapPlot2 import mmMapPlot2
+#from .mmMapPlot2 import mmMapPlot2
 
 """
 This will allow pymapmanager package to have a __version__ string

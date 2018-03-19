@@ -11,7 +11,9 @@ mmserver.py needs this BEFORE importing any matplotlib
 	import matplotlib
 	matplotlib.use('TkAgg')
 
-2) write out and test full virtual env install, missing flask for example !!!
+2) need to remove plot import from __init__.py
+
+3) write out and test full virtual env install, missing flask for example !!!
 
 ### Using fresh install of Anaconda on OSX
 

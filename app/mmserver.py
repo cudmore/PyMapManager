@@ -38,8 +38,8 @@ from skimage.io import imsave, imread
 import redis
 import pickle
 
-import pymapmanager
-print('   mmserver: pymapmanager.__version__:', pymapmanager.__version__)
+#import pymapmanager
+#print('   mmserver: pymapmanager.__version__:', pymapmanager.__version__)
 
 from pymapmanager import mmMap, mmUtil
 

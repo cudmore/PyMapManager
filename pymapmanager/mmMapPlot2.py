@@ -19,8 +19,8 @@ Example::
 """
 from __future__ import print_function
 
-import matplotlib
-matplotlib.use('TkAgg')
+#import matplotlib
+#matplotlib.use('TkAgg')
 
 import matplotlib.pyplot as plt
 import numpy as np
