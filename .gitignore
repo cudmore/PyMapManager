@@ -24,4 +24,4 @@ examples/.ipynb_checkpoints
 dump.rdb
 
 # local build of mkdocs
-/docs/site/
+docs/site/
