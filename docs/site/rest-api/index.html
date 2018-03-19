@@ -28,7 +28,7 @@
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
       <link rel="shortcut icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-0.17.1, mkdocs-material-2.0.4">
+      <meta name="generator" content="mkdocs-0.17.2, mkdocs-material-2.2.2">
     
     
       
@@ -36,11 +36,11 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/application-709eec9410.css">
+      <link rel="stylesheet" href="../assets/stylesheets/application.7a4cdee3.css">
       
     
     
-      <script src="../assets/javascripts/modernizr-e826f8942a.js"></script>
+      <script src="../assets/javascripts/modernizr.1aa3b519.js"></script>
     
     
       
@@ -81,14 +81,18 @@
         <label class="md-icon md-icon--menu md-header-nav__button" for="drawer"></label>
       </div>
       <div class="md-flex__cell md-flex__cell--stretch">
-        <span class="md-flex__ellipsis md-header-nav__title">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
           
             
-              
+              <span class="md-header-nav__topic">
+                PyMapManager
+              </span>
+              <span class="md-header-nav__topic">
+                REST API
+              </span>
             
-            REST API
           
-        </span>
+        </div>
       </div>
       <div class="md-flex__cell md-flex__cell--shrink">
         
@@ -148,6 +152,9 @@
 </header>
     
     <div class="md-container">
+      
+        
+      
       
       <main class="md-main">
         <div class="md-main__inner md-grid" data-md-component="container">
@@ -232,8 +239,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../install-client-server/" title="Install client/server" class="md-nav__link">
-      Install client/server
+    <a href="../install-server/" title="Install Server" class="md-nav__link">
+      Install Server
     </a>
   </li>
 
@@ -350,13 +357,6 @@
   
 </li>
         
-          <li class="md-nav__item">
-  <a href="#get-a-sliding-z-projection-image" title="Get a sliding Z-Projection image" class="md-nav__link">
-    Get a sliding Z-Projection image
-  </a>
-  
-</li>
-        
       </ul>
     </nav>
   
@@ -446,6 +446,18 @@
   <li class="md-nav__item">
     <a href="../dev-notes/" title="Development Notes" class="md-nav__link">
       Development Notes
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../open-source/" title="Open Source" class="md-nav__link">
+      Open Source
     </a>
   </li>
 
@@ -552,13 +564,6 @@
   
 </li>
         
-          <li class="md-nav__item">
-  <a href="#get-a-sliding-z-projection-image" title="Get a sliding Z-Projection image" class="md-nav__link">
-    Get a sliding Z-Projection image
-  </a>
-  
-</li>
-        
       </ul>
     </nav>
   
@@ -589,17 +594,17 @@
                   <h1>REST API</h1>
                 
                 <h2 id="run-the-server">Run the server</h2>
-<pre><code>cd mmserver
+<pre><code>cd PyMapManager/app
 python mmserver.py
 </code></pre>
 
-<p>This will run the server locally at <code>http://127.0.0.1:5010</code></p>
+<p>This will run the server locally at <code>http://127.0.0.1:5000</code></p>
 <h2 id="using-the-rest-api-in-a-program">Using the REST API in a program</h2>
 <h3 id="in-python">In Python</h3>
 <pre><code class="python">import json
 import urllib2
 
-url='http://127.0.0.1:5010/v2/public/rr30a/getmaptracing?mapsegment=&amp;session=3&amp;xstat=x&amp;ystat=y&amp;zstat=z'
+url='http://127.0.0.1:5000/v2/public/rr30a/getmaptracing?mapsegment=&amp;session=3&amp;xstat=x&amp;ystat=y&amp;zstat=z'
 
 mytracing = json.load(urllib2.urlopen(&quot;url&quot;))
 
@@ -609,7 +614,7 @@ plt.plot(mytracing['x'],mytracing['y'])
 </code></pre>
 
 <h3 id="in-matlab">In Matlab</h3>
-<pre><code class="matlab">url='http://127.0.0.1:5010/getmaximage/public/rr30a/0/2'
+<pre><code class="matlab">url='http://127.0.0.1:5000/getmaximage/public/rr30a/0/2'
 myimage = webread(url);
 imshow(myimage)
 </code></pre>
@@ -619,26 +624,23 @@ imshow(myimage)
 <p>We will be using the <code>public</code> user and the <code>rr30a</code> map included in the <code>mmserver/data/</code> folder.</p>
 <p>The links on this page point to a development server that may or may not be running.</p>
 <h3 id="get-help">Get help</h3>
-<p><a href="http://cudmore.duckdns.org:5010/help">http://127.0.0.1:5010/help</a></p>
+<p><a href="http://cudmore.duckdns.org/help">http://127.0.0.1:5000/help</a></p>
 <h3 id="get-a-list-of-maps">Get a list of maps</h3>
-<p><a href="http://cudmore.duckdns.org:5010/api/public/maps">http://127.0.0.1:5010/api/public/maps</a></p>
+<p><a href="http://cudmore.duckdns.org/api/v1/maplist/public">http://127.0.0.1:5000/api/public/maps</a></p>
 <h3 id="load-a-map">Load a map</h3>
-<p><a href="http://cudmore.duckdns.org:5010/loadmap/public/rr30a">/loadmap/public/rr30a</a></p>
+<p><a href="http://cudmore.duckdns.org/api/v1/loadmap/public/rr30a">api/v1/loadmap/public/rr30a</a></p>
 <h3 id="get-annotation-values">Get annotation values</h3>
 <p>Here we will get an x-stat <code>days</code>, a y-stat <code>pDist</code>, and a z-stat <code>z</code> for map segment 0 across all sessions</p>
-<p><a href="http://cudmore.duckdns.org:5010/v2/public/rr30a/getmapvalues?mapsegment=0&amp;session=&amp;xstat=days&amp;ystat=pDist&amp;zstat=z">http://127.0.0.1:5010/v2/public/rr30a/getmapvalues?mapsegment=0&amp;session=&amp;xstat=days&amp;ystat=pDist&amp;zstat=z</a></p>
+<p><a href="http://cudmore.duckdns.org/api/v1/getmapvalues/public/rr30a?mapsegment=0&amp;session=&amp;xstat=days&amp;ystat=pDist&amp;zstat=z">http://127.0.0.1:5000/v2/public/rr30a/getmapvalues?mapsegment=0&amp;session=&amp;xstat=days&amp;ystat=pDist&amp;zstat=z</a></p>
 <h3 id="get-a-tracing">Get a tracing</h3>
 <p>Here we will get the x/y/z of a tracing (in um) for all map segments in session 3</p>
-<p><a href="http://cudmore.duckdns.org:5010/v2/public/rr30a/getmaptracing?mapsegment=&amp;session=3&amp;xstat=x&amp;ystat=y&amp;zstat=z">http://127.0.0.1:5010/v2/public/rr30a/getmaptracing?mapsegment=&amp;session=3&amp;xstat=x&amp;ystat=y&amp;zstat=z</a></p>
+<p><a href="http://cudmore.duckdns.org/api/v1/getmaptracing/public/rr30a?mapsegment=&amp;session=3&amp;xstat=x&amp;ystat=y&amp;zstat=z">http://127.0.0.1:5000/v2/public/rr30a/getmaptracing?mapsegment=&amp;session=3&amp;xstat=x&amp;ystat=y&amp;zstat=z</a></p>
 <h3 id="get-an-image">Get an image</h3>
 <p>Here we will get the 20th image in the stack for timepoint 3, channel 2</p>
-<p><a href="http://cudmore.duckdns.org:5010/getimage/public/rr30a/3/2/20">http://127.0.0.1:5010/getimage/public/rr30a/3/2/20</a></p>
-<h3 id="get-a-sliding-z-projection-image">Get a sliding Z-Projection image</h3>
-<p>Here we will get a sliding z-projection of the 14th image in the stack for timepoint 5, channel 2</p>
-<p><a href="http://cudmore.duckdns.org:5010/getslidingz/public/rr30a/5/2/14">http://127.0.0.1:5010/getslidingz/public/rr30a/5/2/14</a></p>
+<p><a href="http://cudmore.duckdns.org/api/v1/getimage/public/rr30a/3/2/20">http://127.0.0.1:5000/getimage/public/rr30a/3/2/20</a></p>
 <h2 id="get-a-maximal-intensity-projection">Get a maximal intensity projection</h2>
 <p>Here we will get the maximal intensity projection of timepoint 0, channel 2</p>
-<p><a href="http://cudmore.duckdns.org:5010/getmaximage/public/rr30a/0/2">http://127.0.0.1:5010/getmaximage/public/rr30a/0/2</a></p>
+<p><a href="http://cudmore.duckdns.org/api/v1/getmaximage/public/rr30a/0/2">http://127.0.0.1:5000/getmaximage/public/rr30a/0/2</a></p>
                 
                   
                 
@@ -657,7 +659,7 @@ imshow(myimage)
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid">
         
-          <a href="../install-client-server/" title="Install client/server" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../install-server/" title="Install Server" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-flex__cell md-flex__cell--shrink">
               <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
             </div>
@@ -666,7 +668,7 @@ imshow(myimage)
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                Install client/server
+                Install Server
               </span>
             </div>
           </a>
@@ -694,9 +696,9 @@ imshow(myimage)
       <div class="md-footer-copyright">
         
         powered by
-        <a href="http://www.mkdocs.org" title="MkDocs">MkDocs</a>
+        <a href="http://www.mkdocs.org">MkDocs</a>
         and
-        <a href="http://squidfunk.github.io/mkdocs-material/" title="Material for MkDocs">
+        <a href="https://squidfunk.github.io/mkdocs-material/">
           Material for MkDocs</a>
       </div>
       
@@ -708,9 +710,9 @@ imshow(myimage)
       
     </div>
     
-      <script src="../assets/javascripts/application-8e4952e681.js"></script>
+      <script src="../assets/javascripts/application.6cdc17f0.js"></script>
       
-      <script>app.initialize({version:"0.17.1",url:{base:".."}})</script>
+      <script>app.initialize({version:"0.17.2",url:{base:".."}})</script>
       
     
     
