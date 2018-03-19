@@ -26,17 +26,7 @@ A web server to browse and share Map Manager annotations and time-series images.
 
 To see this in action, check out our [example server](http://cudmore.duckdns.org). 
 
-### Run the server locally
-
-    cd PyMapManager/app
-    pip install -r requirements.txt
-    python mmserver.py
-
-Have fun browsing at 'http://localhost:5000'.
-
-### Run the server in a Docker container
-
-Please see the [server installation](http://blog.cudmore.io/PyMapManager/install-server/).
+Running the server is easy although requires a few more steps. Please see the [server installation](http://blog.cudmore.io/PyMapManager/install-server/) for more information.
 
 ### Screenshots
 
