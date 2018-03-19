@@ -307,33 +307,6 @@
     1) Using python mmserver.py
   </a>
   
-    <nav class="md-nav">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#start-redis-server" title="Start redis-server" class="md-nav__link">
-    Start redis-server
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#start-mmserver" title="Start mmserver" class="md-nav__link">
-    Start mmserver
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#stop-redis-server" title="Stop redis-server" class="md-nav__link">
-    Stop redis-server
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
       
         <li class="md-nav__item">
@@ -594,33 +567,6 @@
     1) Using python mmserver.py
   </a>
   
-    <nav class="md-nav">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#start-redis-server" title="Start redis-server" class="md-nav__link">
-    Start redis-server
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#start-mmserver" title="Start mmserver" class="md-nav__link">
-    Start mmserver
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#stop-redis-server" title="Stop redis-server" class="md-nav__link">
-    Stop redis-server
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
       
         <li class="md-nav__item">
@@ -747,29 +693,22 @@ git clone https://github.com/mapmanager/PyMapManager-Data.git
 /User/me/PyMapManager-Data
 </code></pre>
 <h2 id="running-the-server">Running the server.</h2>
-<p>Simplest case is to use <code>python mmserver.py</code> and you should be up in no time. This does have limitations in that the server is run as a single thread/worker. Repeated requests, as occur when scrolling linked images, will cause the server to choke. Don't worry, you won't break anything, it will just be slow. This is why running behind a proper <a href="https://www.nginx.com/">nginx</a>+<a href="https://uwsgi-docs.readthedocs.io/en/latest/">uwsgi</a> web-sever is way better.</p>
+<p>Simplest case is to use <code>python mmserver.py</code> and you should be up in no time. This does have limitations in that the server is run as a single thread/worker. Repeated requests, as occur when scrolling linked images, will cause the server to choke. Don't worry, you won't break anything, it will just be slow. This is why using the provided Docker and running behind a proper <a href="https://www.nginx.com/">nginx</a>+<a href="https://uwsgi-docs.readthedocs.io/en/latest/">uwsgi</a> web-sever is way better.</p>
 <h2 id="1-using-python-mmserverpy">1) Using <code>python mmserver.py</code></h2>
-<h3 id="start-redis-server">Start redis-server</h3>
-<p>You need a redis-server running. Install it on OSX with <code>brew install redis-server</code> or on most variants of Linux with <code>sudo apt-get install redis-server</code>. See <a href="https://redis.io/">redis</a> homepage for more info.</p>
-<pre><code>redis-server
-</code></pre>
-<h3 id="start-mmserver">Start mmserver</h3>
 <pre><code>cd PyMapManager/app
 python mmserver.py
 </code></pre>
 <p>Point your browser to <code>http://localhost:5000</code> and have fun browsing.</p>
-<h3 id="stop-redis-server">Stop redis-server</h3>
-<pre><code>redis-cli shutdown
-</code></pre>
 <h2 id="21-using-docker-compose">2.1) Using docker-compose</h2>
-<p>If you want to run the server inside a <a href="https://www.docker.com/community-edition">Docker</a> container, the easiest option is to use <code>docker-compose</code>. Using this technique makes a very efficient server and is exactly what we are using at <a href="http://cudmore.duckdns.org">http://cudmore.duckdns.org</a>.</p>
+<p>If you want to run the server inside a <a href="https://www.docker.com/community-edition">Docker</a> container, the easiest option is to use <code>docker-compose</code>. Using this technique makes a very efficient production level server and is exactly what we are using at <a href="http://cudmore.duckdns.org">http://cudmore.duckdns.org</a>.</p>
 <h3 id="setup">Setup</h3>
 <p>In <code>docker-compose.yml</code>, change the path <code>/Users/cudmore/Dropbox/PyMapManager-Data</code> to the full path to your local copy of <code>PyMapManager-Data</code>. This little hoop is due to a bug in Docker and will be fixed.</p>
 <pre><code>volumes:
   - /Users/cudmore/Dropbox/PyMapManager-Data:/PyMapManager-Data
 </code></pre>
 <h3 id="build">Build</h3>
-<pre><code>docker-compose build
+<pre><code>cd PyMapManager
+docker-compose build
 </code></pre>
 <h3 id="run">Run</h3>
 <pre><code>docker-compose up
