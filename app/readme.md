@@ -1,35 +1,41 @@
-This is Python code to run a Flask server that provides a REST interface allowing Map Manager annotations and images to be retrieved.
+This is Python code to run a web server which will create a point-and-click interface to Map Manager annotations and image time-series. The server also includes a REST interface allowing data to be retreived from your favorite programming environment.
 
-Please see the main [PyMapManager](http://blog.cudmore.io/PyMapManager) documentation website.
-
-This REST server is accessed by the Javascript client in [mmclient](https://github.com/cudmore/PyMapManager/tree/master/mmclient).
-
-See the full list of [REST API endpoints](http://blog.cudmore.io/PyMapManager/rest-api/).
+Please see the main [PyMapManager](http://blog.cudmore.io/PyMapManager) documentation website and examples of [REST API endpoints](http://blog.cudmore.io/PyMapManager/rest-api/).
 
 ## Installation
 
-Clone the main PyMapManager repository
+Make a directory to work in
+
+	mkdir mmInstall
+	cd mmInstall
+	
+Clone the PyMapManager repository
 
 	git clone https://github.com/cudmore/PyMapManager.git
 
+Clone the PyMapManager-Data repository
+
+	https://github.com/mapmanager/PyMapManager-Data.git
+
 Make a Python virtual environment in `PyMapManager/mmserver`
 
-	cd PyMapManager/mmserver
 	virtualenv venv
 	source venv/bin/activate
 
-Install the required Python libraries
+Install PyMapManager
 
-	pip install -r requirements.txt
+	pip install PyMapManager/
 
-Other than that, there is no formal installation. This is a stand-alone Python script, not a Python Package.
+Install additional requirements for server
+
+	pip install -r app/requirements.txt
 	
 ## Running the server
 
-This will run the server locally at `http://localhost:5010`.
+This will run the server locally at `http://localhost:5000`.
 
 ```
-cd PyMapManager/mmserver
+cd PyMapManager/app
 python mmserver.py
 ```
 
