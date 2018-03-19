@@ -15,23 +15,27 @@ Clone the PyMapManager repository
 
 Clone the PyMapManager-Data repository
 
-	https://github.com/mapmanager/PyMapManager-Data.git
+	git clone https://github.com/mapmanager/PyMapManager-Data.git
 
-Make a Python virtual environment in `PyMapManager/mmserver`
+Make a Python virtual environment
 
 	virtualenv venv
 	source venv/bin/activate
 
 Install PyMapManager
 
-	pip install PyMapManager/
+	pip install --no-cache-dir PyMapManager/
 
 Install additional requirements for server
 
-	pip install -r app/requirements.txt
+	pip install --no-cache-dir -r PyMapManager/app/requirements.txt
 	
 ## Running the server
 
+You need a redis-server running. Install it on OSX with `brew install redis-server` or on most variants of Linux with `sudo apt-get install redis-server`. See [redis](http:///redis.io) homepage for more info.
+
+	redis-server
+	
 This will run the server locally at `http://localhost:5000`.
 
 ```
@@ -46,7 +50,7 @@ Please note, this is a very simplified example. In reality, the REST server shou
 
 ### In Javascript
 
-See the [mmclient](https://github.com/cudmore/PyMapManager/tree/master/mmclient).
+NEED TO ADD CODE EXAMPLES
 
 ### In Python
 
@@ -65,7 +69,7 @@ import json
 import urllib2
 
 # grab the tracing (from the server)
-url='http://localhost:5010/api/v1/getmaptracing/public/rr30a?mapsegment=&session=3&xstat=x&ystat=y&zstat=z'
+url='http://localhost:5000/api/v1/getmaptracing/public/rr30a?mapsegment=&session=3&xstat=x&ystat=y&zstat=z'
 mytracing = json.load(urllib2.urlopen(url))
 
 # plot with matplotlib
@@ -78,7 +82,7 @@ plt.plot(mytracing['x'],mytracing['y'])
 ### In Matlab
 
 ```matlab
-url='http://localhost:5010/getmaximage/public/rr30a/0/2'
+url='http://localhost:5000/getmaximage/public/rr30a/0/2'
 myimage = webread(url);
 imshow(myimage)
 ```
