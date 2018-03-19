@@ -1,5 +1,18 @@
 ## Development notes
 
+### 20180319
+
+1) Problems with installing and running in a virtual environment. Get the error:
+
+	RuntimeError: Python is not installed as a framework. The Mac OS X backend will not be able to fun
+	
+mmserver.py needs this BEFORE importing any matplotlib
+
+	import matplotlib
+	matplotlib.use('TkAgg')
+
+2) write out and test full virtual env install, missing flask for example !!!
+
 ### Using fresh install of Anaconda on OSX
 
     # downgrade qt5 to qt4
