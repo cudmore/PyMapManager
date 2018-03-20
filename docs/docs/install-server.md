@@ -35,7 +35,7 @@ Simplest case is to use `python mmserver.py` and you should be up in no time.
 	# install pymapmanager
 	pip install PyMapManager/
 	# install required server libraries
-	pip install PyMapManager/app/requirements.txt
+	pip install -r PyMapManager/app/requirements.txt
 	
 	# run the server
 	cd PyMapManager/app
