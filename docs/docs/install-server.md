@@ -1,6 +1,6 @@
 ## Web based browsing
 
-The PyMapManager server allows Map Manager annotations and time-series images to be browsed with a web interface. The server can be run on your local machine using the provided Docker.
+The PyMapManager server allows Map Manager annotations and time-series images to be browsed with a web interface. It is really easy to run the server on your local machine. For a production level server we provide a Docker container.
 
 For instant satisfaction, we have an [experimental server][duckdns] you can use right now.
 
@@ -14,44 +14,49 @@ For instant satisfaction, we have an [experimental server][duckdns] you can use 
 <IMG SRC="../img/mmserver_leaflet2.png">
 
 
-## Important
+## Download
 
-To run the server locally, you need some data! Example data can be downloaded from the PyMapManager-Data repository. The first thing to do is to clone the [PyMapManager][pymapmanager] and the [PyMapManager-Data][pymapmanager-data] repositories.
+To run the server locally, you need some data! Example data can be downloaded from the PyMapManager-Data repository. The first thing to do is to clone both the [PyMapManager][pymapmanager] and the [PyMapManager-Data][pymapmanager-data] repositories.
 
 	git clone https://github.com/cudmore/PyMapManager.git
 	git clone https://github.com/mapmanager/PyMapManager-Data.git
 		
 This should put both PyMapManager and PyMapManager-Data in the same directory, for example:
 
-	/User/me/PyMapManager
-	/User/me/PyMapManager-Data
+	/User/joe/PyMapManager
+	/User/joe/PyMapManager-Data
 
 ## Running the server.
 
-Simplest case is to use `python mmserver.py` and you should be up in no time. This does have limitations in that the server is run as a single thread/worker. Repeated requests, as occur when scrolling linked images, will cause the server to choke. Don't worry, you won't break anything, it will just be slow. This is why using the provided Docker and running behind a proper [nginx][nginx]+[uwsgi][uwsgi] web-sever is way better.
+## 1) Using Python
 
-## 1) Using `python mmserver.py`
+Simplest case is to use `python mmserver.py` and you should be up in no time.
 
+	# install pymapmanager
+	pip install PyMapManager/
+	# install required server libraries
+	pip install -r PyMapManager/app/requirements.txt
+	
+	# run the server
 	cd PyMapManager/app
 	python mmserver.py
 
 Point your browser to `http://localhost:5000` and have fun browsing.
 
+## 2) Using the Docker container
+
+Running the server from within a Docker container has lots of benefits. First off, the Docker container spins up a proper [nginx][nginx] web server and runs multiple copies of the python code in mmserver.py. With this system, the server is really responsive even when multiple requests are coming in fast as happens when images are scrolled.
+
+To get started, download and install [Docker Community Edition (CE)][docker ce].
+
 ## 2.1) Using docker-compose
 
 If you want to run the server inside a [Docker][docker] container, the easiest option is to use `docker-compose`. Using this technique makes a very efficient production level server and is exactly what we are using at [http://cudmore.duckdns.org](http://cudmore.duckdns.org).
 
-### Setup
-
-In `docker-compose.yml`, change the path `/Users/cudmore/Dropbox/PyMapManager-Data` to the full path to your local copy of `PyMapManager-Data`. This little hoop is due to a bug in Docker and will be fixed.
-
-    volumes:
-      - /Users/cudmore/Dropbox/PyMapManager-Data:/PyMapManager-Data
-
 ### Build
 
 	cd PyMapManager
-	docker-compose build
+	docker-compose build # this will take a few minutes the first time it is run
 
 ### Run
 
@@ -63,10 +68,9 @@ Point your browser to `http://localhost` and have fun browsing.
 
 	docker-compose down	
 	
-### Troubleshoot
-
-	docker-compose run web bash
-
+	# stop all docker containers
+	docker stop $(docker ps -aq)
+	
 ## 2.2) Using docker
 
 If you prefer to run the docker services separately and specify paths on the command line.
@@ -80,9 +84,9 @@ If you prefer to run the docker services separately and specify paths on the com
 
 	docker run -d --name redis -p 6379:6379 redis
 
-### Run and mount a local volume in docker
+### Nginx server
 
-You need to change `/Users/cudmore/Dropbox/PyMapManager-Data` to point to the full path of your local copy of `PyMapManager-Data`. Remember, both `PyMapManager` and `PyMapManager-Data` need to be in the same folder.
+In the following docker command, `/Users/cudmore/Dropbox/PyMapManager-Data` has to be changed to point to the full path of your local copy of `PyMapManager-Data`.
 
 	cd PyMapManager
 	docker run --name mycontainer -p 80:80 -v /Users/cudmore/Dropbox/PyMapManager-Data:/PyMapManager-Data --link redis myimage
@@ -94,6 +98,9 @@ Point your browser to `http://localhost` and have fun browsing.
 	docker stop mycontainer
 	docker rm mycontainer
 
+	docker stop redis
+	docker rm redis
+
 [duckdns]: http://cudmore.duckdns.org
 [pymapmanager]: https://github.com/cudmore/PyMapManager
 [pymapmanager-data]: https://github.com/mapmanager/PyMapManager-Data
@@ -101,3 +108,4 @@ Point your browser to `http://localhost` and have fun browsing.
 [uwsgi]: https://uwsgi-docs.readthedocs.io/en/latest/
 [redis]: https://redis.io/
 [docker]: https://www.docker.com/community-edition
+[docker ce]: https://docs.docker.com/install/

@@ -66,7 +66,10 @@ if __name__ == '__main__':
 else:
 	# docker version
 	data_folder = '../PyMapManager-Data'
-		
+	if not os.path.isdir(data_folder):
+		# gunicorn version
+		data_folder = '../../PyMapManager-Data'
+print('   mmserver data_folder:', data_folder)
 ############################################################
 # app
 ############################################################
@@ -101,8 +104,16 @@ if __name__ == '__main__':
 	db = fakeredis()
 else:
 	# docker version
-	db = redis.StrictRedis(host='redis', port=6379, db=0) #connect to redis server
-
+	platform = sys.platform
+	if platform == "linux" or platform == "linux2":
+		# linux
+		db = redis.StrictRedis(host='redis', port=6379, db=0) #connect to redis server
+	elif platform == "darwin":
+		# OS X
+		db = redis.StrictRedis(host='localhost', port=6379, db=0) #connect to redis server
+	elif platform == "win32":
+		# Windows...
+		db = redis.StrictRedis(host='redis', port=6379, db=0) #connect to redis server
 		
 ############################################################
 # routes

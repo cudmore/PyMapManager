@@ -18,7 +18,8 @@ services:
     ports:
       - "80:80"
     volumes:
-      - /Users/cudmore/Dropbox/PyMapManager-Data:/PyMapManager-Data
+      #- /Users/cudmore/Dropbox/PyMapManager-Data:/PyMapManager-Data
+      - ../PyMapManager-Data:/PyMapManager-Data
       - ./app:/app
       #- $PYMAPMANAGER_DATA:/PyMapManager-Data
 

@@ -19,14 +19,6 @@ This will make a `PyMapManager` folder.
 	
 ## Testing the install from a `python` prompt
 
-Check the version
-
-```python
-import pymapmanager
-pymapmanager.__version__
-'0.0.3'
-```
-
 Load an example map
 
 ```python
@@ -42,7 +34,7 @@ map rr30a loaded in 0.45 seconds.
 
 Then type
 
-```
+```python
 print myMap
 ```
 
@@ -52,14 +44,19 @@ And you should see
 map:rr30a map segments:5 stacks:9 total object:2467
 ```
 	
-[Pypi]: https://pypi.python.org/pypi/pymapmanager
-
 ## We have tons more examples
 
 Head over to the [examples/][examples/] folder in the main Github repository.
 
-Experimental: You should be able to view these notebooks at [binder][binder]. Beware, binder is experimental and link may be broken.
+## Running Jupyter notebooks
+
+At this point, it is super simple to run all the example Jupyter notebooks interactively. Back at a command prompt, not in Python, enter the following commands and you should get a web page with interactive examples.
+
+	pip install jupyter
+	cd PyMapManager/examples
+	jupyter notebook
 
 
+[Pypi]: https://pypi.python.org/pypi/pymapmanager
 [examples/]: https://github.com/cudmore/PyMapManager/tree/master/examples
 [binder]: https://hub.mybinder.org/user/cudmore-pymapmanager-8r5uk9g6/tree/examples
