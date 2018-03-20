@@ -28,7 +28,7 @@
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
       <link rel="shortcut icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-0.17.2, mkdocs-material-2.2.2">
+      <meta name="generator" content="mkdocs-0.17.1, mkdocs-material-2.0.4">
     
     
       
@@ -36,11 +36,11 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/application.7a4cdee3.css">
+      <link rel="stylesheet" href="../assets/stylesheets/application-709eec9410.css">
       
     
     
-      <script src="../assets/javascripts/modernizr.1aa3b519.js"></script>
+      <script src="../assets/javascripts/modernizr-e826f8942a.js"></script>
     
     
       
@@ -81,18 +81,14 @@
         <label class="md-icon md-icon--menu md-header-nav__button" for="drawer"></label>
       </div>
       <div class="md-flex__cell md-flex__cell--stretch">
-        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+        <span class="md-flex__ellipsis md-header-nav__title">
           
             
-              <span class="md-header-nav__topic">
-                PyMapManager
-              </span>
-              <span class="md-header-nav__topic">
-                Install Server
-              </span>
+              
             
+            Install Server
           
-        </div>
+        </span>
       </div>
       <div class="md-flex__cell md-flex__cell--shrink">
         
@@ -152,9 +148,6 @@
 </header>
     
     <div class="md-container">
-      
-        
-      
       
       <main class="md-main">
         <div class="md-main__inner md-grid" data-md-component="container">
@@ -289,8 +282,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#important" title="Important" class="md-nav__link">
-    Important
+  <a href="#download" title="Download" class="md-nav__link">
+    Download
   </a>
   
 </li>
@@ -303,8 +296,15 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#1-using-python-mmserverpy" title="1) Using python mmserver.py" class="md-nav__link">
-    1) Using python mmserver.py
+  <a href="#1-using-python" title="1) Using Python" class="md-nav__link">
+    1) Using Python
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-using-the-docker-container" title="2) Using the Docker container" class="md-nav__link">
+    2) Using the Docker container
   </a>
   
 </li>
@@ -316,13 +316,6 @@
   
     <nav class="md-nav">
       <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#setup" title="Setup" class="md-nav__link">
-    Setup
-  </a>
-  
-</li>
         
           <li class="md-nav__item">
   <a href="#build" title="Build" class="md-nav__link">
@@ -341,13 +334,6 @@
           <li class="md-nav__item">
   <a href="#stop" title="Stop" class="md-nav__link">
     Stop
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#troubleshoot" title="Troubleshoot" class="md-nav__link">
-    Troubleshoot
   </a>
   
 </li>
@@ -380,8 +366,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#run-and-mount-a-local-volume-in-docker" title="Run and mount a local volume in docker" class="md-nav__link">
-    Run and mount a local volume in docker
+  <a href="#nginx-server" title="Nginx server" class="md-nav__link">
+    Nginx server
   </a>
   
 </li>
@@ -549,8 +535,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#important" title="Important" class="md-nav__link">
-    Important
+  <a href="#download" title="Download" class="md-nav__link">
+    Download
   </a>
   
 </li>
@@ -563,8 +549,15 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#1-using-python-mmserverpy" title="1) Using python mmserver.py" class="md-nav__link">
-    1) Using python mmserver.py
+  <a href="#1-using-python" title="1) Using Python" class="md-nav__link">
+    1) Using Python
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-using-the-docker-container" title="2) Using the Docker container" class="md-nav__link">
+    2) Using the Docker container
   </a>
   
 </li>
@@ -576,13 +569,6 @@
   
     <nav class="md-nav">
       <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#setup" title="Setup" class="md-nav__link">
-    Setup
-  </a>
-  
-</li>
         
           <li class="md-nav__item">
   <a href="#build" title="Build" class="md-nav__link">
@@ -601,13 +587,6 @@
           <li class="md-nav__item">
   <a href="#stop" title="Stop" class="md-nav__link">
     Stop
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#troubleshoot" title="Troubleshoot" class="md-nav__link">
-    Troubleshoot
   </a>
   
 </li>
@@ -640,8 +619,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#run-and-mount-a-local-volume-in-docker" title="Run and mount a local volume in docker" class="md-nav__link">
-    Run and mount a local volume in docker
+  <a href="#nginx-server" title="Nginx server" class="md-nav__link">
+    Nginx server
   </a>
   
 </li>
@@ -676,39 +655,43 @@
                   <h1>Install Server</h1>
                 
                 <h2 id="web-based-browsing">Web based browsing</h2>
-<p>The PyMapManager server allows Map Manager annotations and time-series images to be browsed with a web interface. The server can be run on your local machine using the provided Docker.</p>
+<p>The PyMapManager server allows Map Manager annotations and time-series images to be browsed with a web interface. It is really easy to run the server on your local machine. For a production level server we provide a Docker container.</p>
 <p>For instant satisfaction, we have an <a href="http://cudmore.duckdns.org">experimental server</a> you can use right now.</p>
 <h3 id="browsing-annotations">Browsing annotations</h3>
 <p><IMG SRC="../img/mmserver_purejs.png"></p>
 <h3 id="browsing-images">Browsing images</h3>
 <p><IMG SRC="../img/mmserver_leaflet.png">
 <IMG SRC="../img/mmserver_leaflet2.png"></p>
-<h2 id="important">Important</h2>
-<p>To run the server locally, you need some data! Example data can be downloaded from the PyMapManager-Data repository. The first thing to do is to clone the <a href="https://github.com/cudmore/PyMapManager">PyMapManager</a> and the <a href="https://github.com/mapmanager/PyMapManager-Data">PyMapManager-Data</a> repositories.</p>
+<h2 id="download">Download</h2>
+<p>To run the server locally, you need some data! Example data can be downloaded from the PyMapManager-Data repository. The first thing to do is to clone both the <a href="https://github.com/cudmore/PyMapManager">PyMapManager</a> and the <a href="https://github.com/mapmanager/PyMapManager-Data">PyMapManager-Data</a> repositories.</p>
 <pre><code>git clone https://github.com/cudmore/PyMapManager.git
 git clone https://github.com/mapmanager/PyMapManager-Data.git
 </code></pre>
 <p>This should put both PyMapManager and PyMapManager-Data in the same directory, for example:</p>
-<pre><code>/User/me/PyMapManager
-/User/me/PyMapManager-Data
+<pre><code>/User/joe/PyMapManager
+/User/joe/PyMapManager-Data
 </code></pre>
 <h2 id="running-the-server">Running the server.</h2>
-<p>Simplest case is to use <code>python mmserver.py</code> and you should be up in no time. This does have limitations in that the server is run as a single thread/worker. Repeated requests, as occur when scrolling linked images, will cause the server to choke. Don't worry, you won't break anything, it will just be slow. This is why using the provided Docker and running behind a proper <a href="https://www.nginx.com/">nginx</a>+<a href="https://uwsgi-docs.readthedocs.io/en/latest/">uwsgi</a> web-sever is way better.</p>
-<h2 id="1-using-python-mmserverpy">1) Using <code>python mmserver.py</code></h2>
-<pre><code>cd PyMapManager/app
+<h2 id="1-using-python">1) Using Python</h2>
+<p>Simplest case is to use <code>python mmserver.py</code> and you should be up in no time.</p>
+<pre><code># install pymapmanager
+pip install PyMapManager/
+# install required server libraries
+pip install PyMapManager/app/requirements.txt
+
+# run the server
+cd PyMapManager/app
 python mmserver.py
 </code></pre>
 <p>Point your browser to <code>http://localhost:5000</code> and have fun browsing.</p>
+<h2 id="2-using-the-docker-container">2) Using the Docker container</h2>
+<p>Running the server from within a Docker container has lots of benefits. First off, the Docker container spins up a proper <a href="https://www.nginx.com/">nginx</a> web server and runs multiple copies of the python code in mmserver.py. With this system, the server is really responsive even when multiple requests are coming in fast as happens when images are scrolled.</p>
+<p>To get started, download and install <a href="https://docs.docker.com/install/">Docker Community Edition (CE)</a>.</p>
 <h2 id="21-using-docker-compose">2.1) Using docker-compose</h2>
 <p>If you want to run the server inside a <a href="https://www.docker.com/community-edition">Docker</a> container, the easiest option is to use <code>docker-compose</code>. Using this technique makes a very efficient production level server and is exactly what we are using at <a href="http://cudmore.duckdns.org">http://cudmore.duckdns.org</a>.</p>
-<h3 id="setup">Setup</h3>
-<p>In <code>docker-compose.yml</code>, change the path <code>/Users/cudmore/Dropbox/PyMapManager-Data</code> to the full path to your local copy of <code>PyMapManager-Data</code>. This little hoop is due to a bug in Docker and will be fixed.</p>
-<pre><code>volumes:
-  - /Users/cudmore/Dropbox/PyMapManager-Data:/PyMapManager-Data
-</code></pre>
 <h3 id="build">Build</h3>
 <pre><code>cd PyMapManager
-docker-compose build
+docker-compose build # this will take a few minutes the first time it is run
 </code></pre>
 <h3 id="run">Run</h3>
 <pre><code>docker-compose up
@@ -716,9 +699,9 @@ docker-compose build
 <p>Point your browser to <code>http://localhost</code> and have fun browsing.</p>
 <h3 id="stop">Stop</h3>
 <pre><code>docker-compose down
-</code></pre>
-<h3 id="troubleshoot">Troubleshoot</h3>
-<pre><code>docker-compose run web bash
+
+# stop all docker containers
+docker stop $(docker ps -aq)
 </code></pre>
 <h2 id="22-using-docker">2.2) Using docker</h2>
 <p>If you prefer to run the docker services separately and specify paths on the command line.</p>
@@ -729,8 +712,8 @@ docker build -t myimage .
 <h3 id="redis">Redis</h3>
 <pre><code>docker run -d --name redis -p 6379:6379 redis
 </code></pre>
-<h3 id="run-and-mount-a-local-volume-in-docker">Run and mount a local volume in docker</h3>
-<p>You need to change <code>/Users/cudmore/Dropbox/PyMapManager-Data</code> to point to the full path of your local copy of <code>PyMapManager-Data</code>. Remember, both <code>PyMapManager</code> and <code>PyMapManager-Data</code> need to be in the same folder.</p>
+<h3 id="nginx-server">Nginx server</h3>
+<p>In the following docker command, <code>/Users/cudmore/Dropbox/PyMapManager-Data</code> has to be changed to point to the full path of your local copy of <code>PyMapManager-Data</code>.</p>
 <pre><code>cd PyMapManager
 docker run --name mycontainer -p 80:80 -v /Users/cudmore/Dropbox/PyMapManager-Data:/PyMapManager-Data --link redis myimage
 </code></pre>
@@ -738,6 +721,9 @@ docker run --name mycontainer -p 80:80 -v /Users/cudmore/Dropbox/PyMapManager-Da
 <h3 id="stop_1">Stop</h3>
 <pre><code>docker stop mycontainer
 docker rm mycontainer
+
+docker stop redis
+docker rm redis
 </code></pre>
                 
                   
@@ -794,9 +780,9 @@ docker rm mycontainer
       <div class="md-footer-copyright">
         
         powered by
-        <a href="http://www.mkdocs.org">MkDocs</a>
+        <a href="http://www.mkdocs.org" title="MkDocs">MkDocs</a>
         and
-        <a href="https://squidfunk.github.io/mkdocs-material/">
+        <a href="http://squidfunk.github.io/mkdocs-material/" title="Material for MkDocs">
           Material for MkDocs</a>
       </div>
       
@@ -808,9 +794,9 @@ docker rm mycontainer
       
     </div>
     
-      <script src="../assets/javascripts/application.6cdc17f0.js"></script>
+      <script src="../assets/javascripts/application-8e4952e681.js"></script>
       
-      <script>app.initialize({version:"0.17.2",url:{base:".."}})</script>
+      <script>app.initialize({version:"0.17.1",url:{base:".."}})</script>
       
     
     

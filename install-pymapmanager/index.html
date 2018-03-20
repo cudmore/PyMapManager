@@ -28,7 +28,7 @@
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
       <link rel="shortcut icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-0.17.2, mkdocs-material-2.2.2">
+      <meta name="generator" content="mkdocs-0.17.1, mkdocs-material-2.0.4">
     
     
       
@@ -36,11 +36,11 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/application.7a4cdee3.css">
+      <link rel="stylesheet" href="../assets/stylesheets/application-709eec9410.css">
       
     
     
-      <script src="../assets/javascripts/modernizr.1aa3b519.js"></script>
+      <script src="../assets/javascripts/modernizr-e826f8942a.js"></script>
     
     
       
@@ -81,18 +81,14 @@
         <label class="md-icon md-icon--menu md-header-nav__button" for="drawer"></label>
       </div>
       <div class="md-flex__cell md-flex__cell--stretch">
-        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+        <span class="md-flex__ellipsis md-header-nav__title">
           
             
-              <span class="md-header-nav__topic">
-                PyMapManager
-              </span>
-              <span class="md-header-nav__topic">
-                Install PyMapManager
-              </span>
+              
             
+            Install PyMapManager
           
-        </div>
+        </span>
       </div>
       <div class="md-flex__cell md-flex__cell--shrink">
         
@@ -152,9 +148,6 @@
 </header>
     
     <div class="md-container">
-      
-        
-      
       
       <main class="md-main">
         <div class="md-main__inner md-grid" data-md-component="container">
@@ -293,6 +286,13 @@
         <li class="md-nav__item">
   <a href="#we-have-tons-more-examples" title="We have tons more examples" class="md-nav__link">
     We have tons more examples
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#running-jupyter-notebooks" title="Running Jupyter notebooks" class="md-nav__link">
+    Running Jupyter notebooks
   </a>
   
 </li>
@@ -480,6 +480,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#running-jupyter-notebooks" title="Running Jupyter notebooks" class="md-nav__link">
+    Running Jupyter notebooks
+  </a>
+  
+</li>
+      
       
       
     </ul>
@@ -510,12 +517,6 @@
 <pre><code>pip install PyMapManager/
 </code></pre>
 <h2 id="testing-the-install-from-a-python-prompt">Testing the install from a <code>python</code> prompt</h2>
-<p>Check the version</p>
-<pre><code class="python">import pymapmanager
-pymapmanager.__version__
-'0.0.3'
-</code></pre>
-
 <p>Load an example map</p>
 <pre><code class="python">from pymapmanager import mmMap
 path = 'PyMapManager/examples/exampleMaps/rr30a'
@@ -527,7 +528,7 @@ myMap = mmMap(path)
 </code></pre>
 
 <p>Then type</p>
-<pre><code>print myMap
+<pre><code class="python">print myMap
 </code></pre>
 
 <p>And you should see</p>
@@ -536,7 +537,12 @@ myMap = mmMap(path)
 
 <h2 id="we-have-tons-more-examples">We have tons more examples</h2>
 <p>Head over to the <a href="https://github.com/cudmore/PyMapManager/tree/master/examples">examples/</a> folder in the main Github repository.</p>
-<p>Experimental: You should be able to view these notebooks at <a href="https://hub.mybinder.org/user/cudmore-pymapmanager-8r5uk9g6/tree/examples">binder</a>. Beware, binder is experimental and link may be broken.</p>
+<h2 id="running-jupyter-notebooks">Running Jupyter notebooks</h2>
+<p>At this point, it is super simple to run all the example Jupyter notebooks interactively. Back at a command prompt, not in Python, enter the following commands and you should get a web page with interactive examples.</p>
+<pre><code>pip install jupyter
+cd PyMapManager/examples
+jupyter notebook
+</code></pre>
                 
                   
                 
@@ -592,9 +598,9 @@ myMap = mmMap(path)
       <div class="md-footer-copyright">
         
         powered by
-        <a href="http://www.mkdocs.org">MkDocs</a>
+        <a href="http://www.mkdocs.org" title="MkDocs">MkDocs</a>
         and
-        <a href="https://squidfunk.github.io/mkdocs-material/">
+        <a href="http://squidfunk.github.io/mkdocs-material/" title="Material for MkDocs">
           Material for MkDocs</a>
       </div>
       
@@ -606,9 +612,9 @@ myMap = mmMap(path)
       
     </div>
     
-      <script src="../assets/javascripts/application.6cdc17f0.js"></script>
+      <script src="../assets/javascripts/application-8e4952e681.js"></script>
       
-      <script>app.initialize({version:"0.17.2",url:{base:".."}})</script>
+      <script>app.initialize({version:"0.17.1",url:{base:".."}})</script>
       
     
     
