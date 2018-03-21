@@ -35,7 +35,7 @@ Notes::
 from __future__ import print_function
 import os, time, requests
 
-default_server_url = 'http://localhost:5010/'
+default_server_url = 'http://localhost:5000/'
 default_user = 'public'
 
 default_eol = '\n'
