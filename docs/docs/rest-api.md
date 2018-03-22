@@ -1,21 +1,24 @@
-## Run the server
-
-```
-cd PyMapManager/app
-python mmserver.py
-```
-
-This will run the server locally at `http://127.0.0.1:5000`
-
 ## Using the REST API in a program
 
-### In Python
+In addition to the browser interface, the PyMapManager server provides a REST interface allowing Map Manager data to be retrieved from almost any programming environment.
+
+### In Python using the PyMapManager package
+
+```python
+from pymapmanager import mmMap
+urlmap = 'rr30a'
+m = mmMap(urlmap=urlmap)
+```
+
+What we just did was very powerful. We just loaded a map from an internet REST server!
+
+### In pure Python
 
 ```python
 import json
 import urllib2
 
-url='http://127.0.0.1:5000/v2/public/rr30a/getmaptracing?mapsegment=&session=3&xstat=x&ystat=y&zstat=z'
+url='http://127.0.0.1:5000/api/v1/getmaptracing/public/rr30a?mapsegment=&session=3&xstat=x&ystat=y&zstat=z'
 
 mytracing = json.load(urllib2.urlopen("url"))
 
@@ -27,9 +30,14 @@ plt.plot(mytracing['x'],mytracing['y'])
 ### In Matlab
 
 ```matlab
-url='http://127.0.0.1:5000/getmaximage/public/rr30a/0/2'
+url='http://127.0.0.1:5000/api/v1/getmaximage/public/rr30a/0/2'
 myimage = webread(url);
 imshow(myimage)
+```
+### In Igor
+
+```
+print fetchurl("http://127.0.0.1:5000/api/v1/maplist/public")
 ```
 
 ## REST API

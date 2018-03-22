@@ -3,19 +3,16 @@
 
 	pip install PyMapManager
 	
-This will install the most recent version from [PyPi](https://pypi.python.org/pypi/pymapmanager).
-
 ## Install from a manual download
 
 ### 1) Download the repo
 
-This will make a `PyMapManager` folder.
-
-	git clone https://github.com/cudmore/PyMapManager.git
+	git clone --depth=1 https://github.com/cudmore/PyMapManager.git
 
 ### 2) Install PyMapManager (from the downloaded folder)
 
-	pip install PyMapManager/
+	cd PyMapManager
+	python setup.py install
 	
 ## Testing the install from a `python` prompt
 
@@ -50,7 +47,7 @@ Head over to the [examples/][examples/] folder in the main Github repository.
 
 ## Running Jupyter notebooks
 
-At this point, it is super simple to run all the example Jupyter notebooks interactively. Back at a command prompt, not in Python, enter the following commands and you should get a web page with interactive examples.
+At this point, it is super simple to run all the example Jupyter notebooks interactively. Back at a command prompt, not in Python, enter the following commands to open a web page with interactive examples.
 
 	pip install jupyter
 	cd PyMapManager/examples

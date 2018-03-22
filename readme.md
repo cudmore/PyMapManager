@@ -4,7 +4,7 @@ PyMapManager is an ecosystem of tools to load and visualize time-series annotati
 
 ## 1) PyMapManager Python package
 
-Python package to open and analyze Map Manager files. Please see the <A HREF="http://pymapmanager.readthedocs.io/en/latest/">API Documentation</A> and a backup copy <A HREF="http://robertcudmore.org/mapmanager/PyMapManager/docs/">here</A>.
+Please see the <A HREF="http://pymapmanager.readthedocs.io/en/latest/">API Documentation</A> and a backup copy <A HREF="http://robertcudmore.org/mapmanager/PyMapManager/docs/">here</A>.
 
 ### Install from [PyPi](https://pypi.python.org/pypi/pymapmanager)
 
@@ -26,7 +26,7 @@ A web server to browse and share Map Manager annotations and time-series images.
 
 To see this in action, check out our [example server](http://cudmore.duckdns.org). 
 
-Running the server is easy although requires a few more steps. Please see the [server installation](http://blog.cudmore.io/PyMapManager/install-server/) for more information.
+Running the server is easy with either Python or Docker, see the [server installation](http://blog.cudmore.io/PyMapManager/install-server/) for more information.
 
 ### Screenshots
 

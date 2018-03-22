@@ -18,14 +18,9 @@ For instant satisfaction, we have an [experimental server][duckdns] you can use 
 
 To run the server locally, you need some data! Example data can be downloaded from the PyMapManager-Data repository. The first thing to do is to clone both the [PyMapManager][pymapmanager] and the [PyMapManager-Data][pymapmanager-data] repositories.
 
-	git clone https://github.com/cudmore/PyMapManager.git
-	git clone https://github.com/mapmanager/PyMapManager-Data.git
+	git clone  --depth=1 https://github.com/cudmore/PyMapManager.git
+	git clone  --depth=1 https://github.com/mapmanager/PyMapManager-Data.git
 		
-This should put both PyMapManager and PyMapManager-Data in the same directory, for example:
-
-	/User/joe/PyMapManager
-	/User/joe/PyMapManager-Data
-
 ## Running the server.
 
 ## 1) Using Python
@@ -35,10 +30,10 @@ Simplest case is to use `python mmserver.py` and you should be up in no time.
 	# install pymapmanager
 	pip install PyMapManager/
 	# install required server libraries
-	pip install -r PyMapManager/app/requirements.txt
+	pip install -r PyMapManager/mmserver/requirements.txt
 	
 	# run the server
-	cd PyMapManager/app
+	cd PyMapManager/mserver
 	python mmserver.py
 
 Point your browser to `http://localhost:5000` and have fun browsing.
@@ -78,7 +73,7 @@ If you prefer to run the docker services separately and specify paths on the com
 ### Build
 
 	cd PyMapManager
-	docker build -t myimage .
+	docker build -t myimage . # the dot is important
 
 ### Redis
 

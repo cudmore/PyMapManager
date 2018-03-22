@@ -20,7 +20,7 @@ services:
     volumes:
       #- /Users/cudmore/Dropbox/PyMapManager-Data:/PyMapManager-Data
       - ../PyMapManager-Data:/PyMapManager-Data
-      - ./app:/app
+      - ./mmserver:/app
       #- $PYMAPMANAGER_DATA:/PyMapManager-Data
 
   redis:

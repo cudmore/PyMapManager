@@ -28,12 +28,12 @@ Install PyMapManager
 
 Install additional requirements for server
 
-	pip install --no-cache-dir -r PyMapManager/app/requirements.txt
+	pip install --no-cache-dir -r PyMapManager/mmserver/requirements.txt
 	
 ## Running the server
 
 ```
-cd PyMapManager/app
+cd PyMapManager/mmserver
 python mmserver.py
 ```
 
