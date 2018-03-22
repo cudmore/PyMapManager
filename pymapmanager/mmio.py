@@ -4,7 +4,11 @@ Get files from a mmserver using REST interface.
 Examples::
 
 	from pymapmanager import mmio
-	s = mmio.mmio()
+	
+	print mmio.server
+	print mmio.user
+	
+	s = mmio()
 
 	s.maplist()
 		["rr30a", "rr58c"]
@@ -29,25 +33,25 @@ Examples::
 Notes::
 	Header files are saved with \n
 	Stackdb, int, and line files are saved with \r
+	20180321, moved default_server and default_user into class
 
 """
 
 from __future__ import print_function
 import os, time, requests
 
-default_server_url = 'http://localhost:5000/'
-default_user = 'public'
-
 default_eol = '\n'
-
 debugThis = False
 
 class mmio():
-
+	#default_server = 'http://localhost:5000/'
+	server = 'http://cudmore.duckdns.org/'
+	user = 'public'
+	
 	####################################################
 	## init
 	####################################################
-	def __init__(self, server_url=default_server_url, username=default_user):
+	def __init__(self, server=server, user=user):
 		"""
 		Establish connection to a mmserver.
 		
@@ -57,12 +61,12 @@ class mmio():
 			username (str): A valid username.
 				For example: 'public'
 		"""
-		self.server_url = server_url
-		self.username = username
+		self.server_url = server
+		self.username = user
 		
 		if debugThis:
 			print('mmio.__init__(): server_url:', server_url)
-		url = server_url + 'api/v1/status'
+		url = self.server_url + 'api/v1/status'
 		response = requests.get(url)
 		response.raise_for_status()
 

@@ -11,11 +11,11 @@ Make a directory to work in
 	
 Clone the PyMapManager repository
 
-	git clone https://github.com/cudmore/PyMapManager.git
+	git clone --depth=1 https://github.com/cudmore/PyMapManager.git
 
 Clone the PyMapManager-Data repository
 
-	git clone https://github.com/mapmanager/PyMapManager-Data.git
+	git clone --depth=1 https://github.com/mapmanager/PyMapManager-Data.git
 
 Make a Python virtual environment
 
