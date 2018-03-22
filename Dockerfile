@@ -18,7 +18,7 @@ WORKDIR /PyMapManager
 RUN python /PyMapManager/setup.py install
 
 # install python libraries for /mmserver (e.g. /app)
-COPY ./app/requirements.txt /app/requirements.txt
+COPY ./mmserver/requirements.txt /app/requirements.txt
 RUN pip install -r /app/requirements.txt
 
 # volume must be mounted from command line with
