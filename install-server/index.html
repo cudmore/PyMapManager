@@ -664,12 +664,8 @@
 <IMG SRC="../img/mmserver_leaflet2.png"></p>
 <h2 id="download">Download</h2>
 <p>To run the server locally, you need some data! Example data can be downloaded from the PyMapManager-Data repository. The first thing to do is to clone both the <a href="https://github.com/cudmore/PyMapManager">PyMapManager</a> and the <a href="https://github.com/mapmanager/PyMapManager-Data">PyMapManager-Data</a> repositories.</p>
-<pre><code>git clone https://github.com/cudmore/PyMapManager.git
-git clone https://github.com/mapmanager/PyMapManager-Data.git
-</code></pre>
-<p>This should put both PyMapManager and PyMapManager-Data in the same directory, for example:</p>
-<pre><code>/User/joe/PyMapManager
-/User/joe/PyMapManager-Data
+<pre><code>git clone  --depth=1 https://github.com/cudmore/PyMapManager.git
+git clone  --depth=1 https://github.com/mapmanager/PyMapManager-Data.git
 </code></pre>
 <h2 id="running-the-server">Running the server.</h2>
 <h2 id="1-using-python">1) Using Python</h2>
@@ -677,10 +673,10 @@ git clone https://github.com/mapmanager/PyMapManager-Data.git
 <pre><code># install pymapmanager
 pip install PyMapManager/
 # install required server libraries
-pip install -r PyMapManager/app/requirements.txt
+pip install -r PyMapManager/mmserver/requirements.txt
 
 # run the server
-cd PyMapManager/app
+cd PyMapManager/mserver
 python mmserver.py
 </code></pre>
 <p>Point your browser to <code>http://localhost:5000</code> and have fun browsing.</p>
@@ -707,7 +703,7 @@ docker stop $(docker ps -aq)
 <p>If you prefer to run the docker services separately and specify paths on the command line.</p>
 <h3 id="build_1">Build</h3>
 <pre><code>cd PyMapManager
-docker build -t myimage .
+docker build -t myimage . # the dot is important
 </code></pre>
 <h3 id="redis">Redis</h3>
 <pre><code>docker run -d --name redis -p 6379:6379 redis

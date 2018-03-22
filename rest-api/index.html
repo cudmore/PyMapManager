@@ -267,13 +267,6 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#run-the-server" title="Run the server" class="md-nav__link">
-    Run the server
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#using-the-rest-api-in-a-program" title="Using the REST API in a program" class="md-nav__link">
     Using the REST API in a program
   </a>
@@ -282,8 +275,15 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#in-python" title="In Python" class="md-nav__link">
-    In Python
+  <a href="#in-python-using-the-pymapmanager-package" title="In Python using the PyMapManager package" class="md-nav__link">
+    In Python using the PyMapManager package
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#in-pure-python" title="In pure Python" class="md-nav__link">
+    In pure Python
   </a>
   
 </li>
@@ -291,6 +291,13 @@
           <li class="md-nav__item">
   <a href="#in-matlab" title="In Matlab" class="md-nav__link">
     In Matlab
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#in-igor" title="In Igor" class="md-nav__link">
+    In Igor
   </a>
   
 </li>
@@ -474,13 +481,6 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#run-the-server" title="Run the server" class="md-nav__link">
-    Run the server
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#using-the-rest-api-in-a-program" title="Using the REST API in a program" class="md-nav__link">
     Using the REST API in a program
   </a>
@@ -489,8 +489,15 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#in-python" title="In Python" class="md-nav__link">
-    In Python
+  <a href="#in-python-using-the-pymapmanager-package" title="In Python using the PyMapManager package" class="md-nav__link">
+    In Python using the PyMapManager package
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#in-pure-python" title="In pure Python" class="md-nav__link">
+    In pure Python
   </a>
   
 </li>
@@ -498,6 +505,13 @@
           <li class="md-nav__item">
   <a href="#in-matlab" title="In Matlab" class="md-nav__link">
     In Matlab
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#in-igor" title="In Igor" class="md-nav__link">
+    In Igor
   </a>
   
 </li>
@@ -586,18 +600,20 @@
                 
                   <h1>REST API</h1>
                 
-                <h2 id="run-the-server">Run the server</h2>
-<pre><code>cd PyMapManager/app
-python mmserver.py
+                <h2 id="using-the-rest-api-in-a-program">Using the REST API in a program</h2>
+<p>In addition to the browser interface, the PyMapManager server provides a REST interface allowing Map Manager data to be retrieved from almost any programming environment.</p>
+<h3 id="in-python-using-the-pymapmanager-package">In Python using the PyMapManager package</h3>
+<pre><code class="python">from pymapmanager import mmMap
+urlmap = 'rr30a'
+m = mmMap(urlmap=urlmap)
 </code></pre>
 
-<p>This will run the server locally at <code>http://127.0.0.1:5000</code></p>
-<h2 id="using-the-rest-api-in-a-program">Using the REST API in a program</h2>
-<h3 id="in-python">In Python</h3>
+<p>What we just did was very powerful. We just loaded a map from an internet REST server!</p>
+<h3 id="in-pure-python">In pure Python</h3>
 <pre><code class="python">import json
 import urllib2
 
-url='http://127.0.0.1:5000/v2/public/rr30a/getmaptracing?mapsegment=&amp;session=3&amp;xstat=x&amp;ystat=y&amp;zstat=z'
+url='http://127.0.0.1:5000/api/v1/getmaptracing/public/rr30a?mapsegment=&amp;session=3&amp;xstat=x&amp;ystat=y&amp;zstat=z'
 
 mytracing = json.load(urllib2.urlopen(&quot;url&quot;))
 
@@ -607,9 +623,13 @@ plt.plot(mytracing['x'],mytracing['y'])
 </code></pre>
 
 <h3 id="in-matlab">In Matlab</h3>
-<pre><code class="matlab">url='http://127.0.0.1:5000/getmaximage/public/rr30a/0/2'
+<pre><code class="matlab">url='http://127.0.0.1:5000/api/v1/getmaximage/public/rr30a/0/2'
 myimage = webread(url);
 imshow(myimage)
+</code></pre>
+
+<h3 id="in-igor">In Igor</h3>
+<pre><code>print fetchurl(&quot;http://127.0.0.1:5000/api/v1/maplist/public&quot;)
 </code></pre>
 
 <h2 id="rest-api">REST API</h2>

@@ -507,14 +507,13 @@
                 <h2 id="install-from-pypi">Install from <a href="https://pypi.python.org/pypi/pymapmanager">PyPi</a></h2>
 <pre><code>pip install PyMapManager
 </code></pre>
-<p>This will install the most recent version from <a href="https://pypi.python.org/pypi/pymapmanager">PyPi</a>.</p>
 <h2 id="install-from-a-manual-download">Install from a manual download</h2>
 <h3 id="1-download-the-repo">1) Download the repo</h3>
-<p>This will make a <code>PyMapManager</code> folder.</p>
-<pre><code>git clone https://github.com/cudmore/PyMapManager.git
+<pre><code>git clone --depth=1 https://github.com/cudmore/PyMapManager.git
 </code></pre>
 <h3 id="2-install-pymapmanager-from-the-downloaded-folder">2) Install PyMapManager (from the downloaded folder)</h3>
-<pre><code>pip install PyMapManager/
+<pre><code>cd PyMapManager
+python setup.py install
 </code></pre>
 <h2 id="testing-the-install-from-a-python-prompt">Testing the install from a <code>python</code> prompt</h2>
 <p>Load an example map</p>
@@ -538,7 +537,7 @@ myMap = mmMap(path)
 <h2 id="we-have-tons-more-examples">We have tons more examples</h2>
 <p>Head over to the <a href="https://github.com/cudmore/PyMapManager/tree/master/examples">examples/</a> folder in the main Github repository.</p>
 <h2 id="running-jupyter-notebooks">Running Jupyter notebooks</h2>
-<p>At this point, it is super simple to run all the example Jupyter notebooks interactively. Back at a command prompt, not in Python, enter the following commands and you should get a web page with interactive examples.</p>
+<p>At this point, it is super simple to run all the example Jupyter notebooks interactively. Back at a command prompt, not in Python, enter the following commands to open a web page with interactive examples.</p>
 <pre><code>pip install jupyter
 cd PyMapManager/examples
 jupyter notebook
