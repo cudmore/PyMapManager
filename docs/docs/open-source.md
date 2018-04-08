@@ -25,6 +25,15 @@ PyMapManager only exists because of the massive amount of creativity, expertise,
     - [Docker][docker] - containers are the future
     - [tiangolo/uwsgi-nginx-flask:python3.6](https://hub.docker.com/r/tiangolo/uwsgi-nginx-flask/)
 
+- Documentation
+    - mkDocs (This Website)
+    - Material Theme (This Theme)
+    - Sphinx (Python API Documentation)
+
+- Distribution
+    - Github
+    - PyPi
+      
 [duckdns]: http://cudmore.duckdns.org
 [pymapmanager]: https://github.com/cudmore/PyMapManager
 [pymapmanager-data]: https://github.com/mapmanager/PyMapManager-Data

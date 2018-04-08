@@ -40,7 +40,7 @@ class mmStackLine():
 		header = None
 		if stack.urlmap is not None:
 			# careful, we use tmp later to load (we need to know # header rows)
-			tmp = self.stack.server.getfile('line', stack.urlmap, timepoint=stack.mapSession)
+			tmp = self.stack.server.getfile('line', stack.urlmap, timepoint=stack.mapSession).decode("utf-8")
 			header = tmp.split('\r')[0]
 		else:
 			if stack.map_:
@@ -65,7 +65,7 @@ class mmStackLine():
 			startReadingRow = 1 + 1 + numHeaderRow
 
 			if stack.urlmap is not None:
-				self.linedb = pd.read_csv(io.StringIO(tmp.decode('utf-8')), header=startReadingRow, index_col=False)
+				self.linedb = pd.read_csv(io.StringIO(tmp), header=startReadingRow, index_col=False)
 			else:
 				self.linedb = pd.read_csv(lineFile, header=startReadingRow, index_col=False)
 

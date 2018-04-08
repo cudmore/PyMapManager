@@ -16,9 +16,9 @@ pages:
     - Install Server: install-server.md
     - REST API: rest-api.md
     - Examples: 
-        - a-plotting-annotations: examples/a-plotting-annotations.html
-        - b-dynamics: examples/b-dynamics.html
-        - c-intensity-analysis: examples/c-intensity-analysis.html
+        - a-plotting-annotations: examples/a/a-plotting-annotations.md
+        #- b-dynamics: examples/b-dynamics.html
+        #- c-intensity-analysis: examples/c-intensity-analysis.html
     - Development Notes: dev-notes.md
     - Open Source: open-source.md
     

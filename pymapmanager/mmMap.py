@@ -125,7 +125,7 @@ class mmMap():
 				header = f.readline().rstrip()
 			self.objMap = np.loadtxt(objMapFile, skiprows=1)
 		else:
-			tmp = self.server.getfile('objmap', self.name)
+			tmp = self.server.getfile('objmap', self.name).decode("utf-8")
 			header = tmp.split('\n')[0]
 			self.objMap = np.loadtxt(tmp.split('\n'), skiprows=1)
 
@@ -153,7 +153,7 @@ class mmMap():
 				#raise IOError(ENOENT, 'mmMap did not find segMapFile:', segMapFile)
 				print('did not find segment map file, should be ok')
 		else:
-			tmp = self.server.getfile('segmap', self.name)
+			tmp = self.server.getfile('segmap', self.name).decode("utf-8")
 			#header = tmp.split('\r')[0] # works when server is running on OSX
 			header = tmp.split('\n')[0]
 			self.segMap = np.loadtxt(tmp.split('\n'), skiprows=1)
@@ -825,6 +825,15 @@ class mmMap():
 		else:
 			return stackSegment
 
+	####################################################
+	## ingest
+	####################################################
+	def ingest(self):
+		print('mmMap.ingest()', self)
+		for stack in self.stacks:
+			#print(stack)
+			stack.ingest()
+			
 if __name__ == '__main__':
 	path = '../examples/exampleMaps/THet2a/THet2a.txt'
 	path = '../examples/exampleMaps/BD_NGDG450/BD_NGDG450.txt'

@@ -312,3 +312,8 @@ myul {
 		-moz-transform:scale(.3);
 	}
 }
+
+/* loading bar */
+#loading-bar .bar {
+  position: relative;
+}

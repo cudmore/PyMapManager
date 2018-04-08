@@ -1,0 +1,101 @@
+<!doctype html>
+<html ng-app="mmclient_app2">
+<head>
+
+    <!-- added tether for bootstrap -->
+    <!-- <link rel="stylesheet" href="static/lib/tether-1.3.3/dist/css/tether.css"> -->
+
+    <link rel="stylesheet" href="static/lib/bootstrap-4.0.0-beta.2-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="static/lib/font-awesome-4.7.0/css/font-awesome.min.css">
+   
+    <link rel="stylesheet" href="static/mmclient.css">
+
+	<script src="static/lib/angular/angular.min.js"></script>
+
+	<link rel='stylesheet' href='static/lib/loading-bar/loading-bar.min.css' type='text/css' media='all' />
+	<script type='text/javascript' src='static/lib/loading-bar/loading-bar.min.js'></script>
+
+	<script src="static/lib/angular/angular-animate.min.js"></script>
+	<!--
+	<script src="static/lib/angular/ui-bootstrap-tpls-0.14.3.js"></script>
+	-->
+
+	<script src='static/lib/d3/d3.min.js'></script>
+	<!-- <script src='lib/lodash.js'></script> -->
+	<script src="static/lib/plotly/plotly-latest.min.js"></script>
+
+    <!-- added (jquery, tether) for bootstrap -->
+	<script src='static/lib/jquery/jquery-3.2.1.min.js'></script>
+	<!-- <script src="static/lib/tether-1.3.3/dist/js/tether.min.js"></script> -->
+	<script src="static/lib/popper-1.12.3/popper.js"></script>
+	<script src="static/lib/bootstrap-4.0.0-beta.2-dist/js/bootstrap.min.js"></script>
+ 
+	<script src='static/upload.js'></script>
+
+	<!-- <script type="text/javascript" src="static/lib/angularjs-dropdown-multiselect.min.js"></script> -->
+
+
+</head>
+
+
+<!-- <body ng-cloak> -->
+<!-- {% raw %} -->
+
+<div ng-controller="mmclient_controller2" ng-init="load()">
+
+		<font class="myInverseColor" style="font-size:1.6em;">
+		Download Map Manager Time-Series Annotations and Images
+		</font>
+
+		<BR>
+		<BR>
+		
+		<font class="myInverseColor" style="font-size:1.1em;">
+	<table width=70% border=1>
+	  <th>Time-series</th>
+	  <th>Descriptions</th>
+	  <th>Annotations</th>
+	  <th>Annotations+Images</th>
+	  <tr ng-repeat="x in mapList">
+		<td>{{ x.name }}</td>
+		<td>coming-soon</td>
+		<td> <p ng-bind-html="x.link"></p></td>
+		<td>coming-soon</td>
+	  </tr>
+	</table>
+		</font>
+
+<BR>
+		<font class="myInverseColor" style="font-size:1.6em;">
+		Upload Map Manager Time-Series Annotations and Images
+		</font>
+
+	<font class="myInverseColor" style="font-size:1.1em;">
+	<form ng-submit="submitGuideDetailsForm()" enctype="multipart/form-data">
+    	<label for="select_import_file">Select a .zip file:</label>
+    	<input id="import_file" type="file" class="file btn btn-default" data-show-preview="false" onchange="angular.element(this).scope().uploadFile(this.files)">
+    	<input class="btn btn-primary" type="submit" name="submit" value="Upload" /><br/><br/>
+	</form>
+	<div id="loading-bar-container"></div>
+	 	  
+
+<div ng-show="uploading">
+Uploading <progress id="progress" max="100" value="{{progressBar}}"></progress>{{progressCounter}} %
+</div>
+
+<BR>
+<BR>
+	<table width=70% border=1>
+		<th>#</th>
+		<th ng-repeat="(k,v) in serverstatus[0]">{{ k }}</th>
+		<tr ng-repeat="x in serverstatus track by $index">
+		<TD> {{$index + 1}} </td>
+		<td ng-repeat="y in x">{{ y }}</td>
+		</tr>
+	</table>
+	
+	</font>
+
+<!-- {% endraw %} -->
+</body>
+</html>

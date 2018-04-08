@@ -46,6 +46,7 @@ debugThis = False
 class mmio():
 	#default_server = 'http://localhost:5000/'
 	server = 'http://cudmore.duckdns.org/'
+	#server = 'http://localhost/'
 	user = 'public'
 	
 	####################################################
@@ -204,32 +205,33 @@ class mmio():
 
 		stopTime = time.time()
 		print('Done uploading map:', mapFolder, 'in', round(stopTime-startTime,2), 'seconds.')
-
+	
 if __name__ == '__main__':
 	if 0:
 		s = mmio()
 		map = '../examples/exampleMaps/rr30a/rr30a.txt'
 		s.postmap(map)
 	if 1:
-		io = mmio(username='public')
+		io = mmio(user='public')
 		maplist = io.maplist()
 		print('main: maplist:', maplist)
 		
-		header = io.getfile('header', 'rr30a')
-		for line in header.split('\r'):
+		header = io.getfile('header', 'rr30a').decode("utf-8")
+		print('header:', header)
+		for line in header.split('\n'):
 			print(line)
 
-		objmap = io.getfile('objmap', 'rr30a')
+		objmap = io.getfile('objmap', 'rr30a').decode("utf-8")
 		print(objmap.split('\r')[0])
-		print(objmap.split('\r')[1])
+		#print(objmap.split('\r')[1])
 
-		stackdb = io.getfile('stackdb', 'rr30a', timepoint=0)
+		stackdb = io.getfile('stackdb', 'rr30a', timepoint=0).decode("utf-8")
 		print('stackdb:', stackdb.split('\r')[0])
 
-		line = io.getfile('line', 'rr30a', timepoint=3)
+		line = io.getfile('line', 'rr30a', timepoint=3).decode("utf-8")
 		print('line:', line.split('\r')[0])
 
-		int1 = io.getfile('int', 'rr30a', 0, channel=1)
+		int1 = io.getfile('int', 'rr30a', 0, channel=1).decode("utf-8")
 		print('int1:', int1.split('\r')[0])
 
 		int2 = io.getfile('int', 'rr30a', timepoint=2, channel=2)

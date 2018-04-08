@@ -11,7 +11,7 @@ I think the former will still work so does not break my existing code?
 
 from .mmMap import mmMap
 from .mmStack import mmStack
-from .mmStack import mmio
+from .mmio import mmio
 #from .mmMapPlot2 import mmMapPlot2
 
 """

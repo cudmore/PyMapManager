@@ -17,8 +17,13 @@ Flask-Cors>=3.0.3
 
 redis>=2.10.6
 
-# not used
 gunicorn
+gevent
+celery
 
 # put back in
 #jupyter
+
+# python 3.x
+#asyncio
+

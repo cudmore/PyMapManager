@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Flask-SSE Quickstart</title>
+</head>
+<body>
+  <h1>Flask-SSE Quickstart</h1>
+  <div id="serverstatusID">server status</div>
+  <div id="redisStatusID">redis status</div>
+  
+  <script>
+	var serverstatusID = document.getElementById("serverstatusID");
+	var redisStatusID = document.getElementById("redisStatusID");
+
+
+	  var source = new EventSource('/event_stream');
+	  source.onmessage = function(event){
+	    //alert(event.data);
+	    serverstatusID.innerHTML = event.data;
+	  };
+
+  </script>
+</body>
+</html>

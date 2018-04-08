@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 import os, time
 from glob import glob # for pool
 
@@ -29,14 +31,14 @@ class mmMapPool():
 				mapName = os.path.basename(folder[:-1])
 				mapFile = folder + mapName + '.txt'
 				if os.path.isfile(mapFile):
-					print 'mmMapPool() loading map:', mapName
+					print('mmMapPool() loading map:', mapName)
 					map = mmMap(mapFile)
 					self.maps.append(map)
 		else:
-			print 'error: mmMapPool() did not find path:', path
+			print('error: mmMapPool() did not find path:', path)
 
 		stopTime = time.time()
-		print 'mmMapPool() loaded', len(self.maps), 'maps in', stopTime-startTime, 'seconds.'
+		print('mmMapPool() loaded', len(self.maps), 'maps in', stopTime-startTime, 'seconds.')
 
 	@property
 	def maps(self):
