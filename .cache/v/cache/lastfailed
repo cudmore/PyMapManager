@@ -1,0 +1,4 @@
+{
+  "mmserver/my_test_sse/test_sse.py": true,
+  "test/test_pymapmanager.py::test_answer": true
+}
