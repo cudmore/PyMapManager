@@ -50,6 +50,7 @@ setup(
         "numpy>=1.14.0",
         "pandas>=0.22.0",
         "requests>=2.18.4",
+        "pillow",
         "scipy>=1.0.0",
         "tifffile",
         "matplotlib"
