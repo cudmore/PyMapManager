@@ -1,13 +1,10 @@
 
 PyMapManager is an ecosystem of tools to load and visualize time-series annotations and 3D image volumes. For a complete overview, see the main [PyMapManager](http://blog.cudmore.io/PyMapManager) documentation.
 
-[![Build Status](https://travis-ci.org/cudmore/PyMapManager.svg?branch=master)](https://travis-ci.org/cudmore/PyMapManager)
 
-## 1) PyMapManager Python package
+## 1) PyMapManager Python package [![Build Status](https://travis-ci.org/cudmore/PyMapManager.svg?branch=master)](https://travis-ci.org/cudmore/PyMapManager)
 
-Please see the <A HREF="http://pymapmanager.readthedocs.io/en/latest/">API Documentation</A> and a backup copy <A HREF="http://robertcudmore.org/mapmanager/PyMapManager/docs/">here</A>.
-
-### Install from [PyPi](https://pypi.python.org/pypi/pymapmanager)
+### Install from [PyPi](https://pypi.python.org/pypi/pymapmanager) [![PyPI version](https://badge.fury.io/py/pymapmanager.svg)](https://badge.fury.io/py/pymapmanager)
 
 	pip install PyMapManager
 
@@ -20,6 +17,9 @@ myMap = mmMap(path)
 ```
 
 See the [examples/](examples/) folder for Jupyter notebooks with more examples.
+
+Please see the <A HREF="http://pymapmanager.readthedocs.io/en/latest/">API Documentation</A> and a backup copy <A HREF="http://robertcudmore.org/mapmanager/PyMapManager/docs/">here</A>.
+
 
 ## 2) Map Manager web server
 
