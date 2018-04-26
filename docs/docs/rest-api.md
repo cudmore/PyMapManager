@@ -54,7 +54,7 @@ The links on this page point to a development server that may or may not be runn
 	
 ### Get a list of maps
 
-[http://127.0.0.1:5000/api/public/maps][/api/public/maps]
+[http://127.0.0.1:5000/api/v1/maplist/public][/api/v1/maplist/public]
 	
 ### Load a map
 
@@ -88,7 +88,7 @@ Here we will get the maximal intensity projection of timepoint 0, channel 2
 
 
 [/help]: http://cudmore.duckdns.org/help
-[/api/public/maps]: http://cudmore.duckdns.org/api/v1/maplist/public
+[/api/v1/maplist/public]: http://cudmore.duckdns.org/api/v1/maplist/public
 [/loadmap/public/rr30a]: http://cudmore.duckdns.org/api/v1/loadmap/public/rr30a
 [getmapvalues]: http://cudmore.duckdns.org/api/v1/getmapvalues/public/rr30a?mapsegment=0&session=&xstat=days&ystat=pDist&zstat=z
 [gettracing]: http://cudmore.duckdns.org/api/v1/getmaptracing/public/rr30a?mapsegment=&session=3&xstat=x&ystat=y&zstat=z

@@ -39,7 +39,7 @@ setup(
     url='http://github.com/cudmore/PyMapManager',
     author='Robert H Cudmore',
     author_email='robert.cudmore@gmail.com',
-    license='MIT',
+    license='GNU GPLv3',
     packages = find_packages(),
     #packages = find_packages(exclude=['version']),
     #packages=[
@@ -50,6 +50,7 @@ setup(
         "numpy>=1.14.0",
         "pandas>=0.22.0",
         "requests>=2.18.4",
+        "pillow",
         "scipy>=1.0.0",
         "tifffile",
         "matplotlib"
