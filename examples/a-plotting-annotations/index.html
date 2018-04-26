@@ -27,8 +27,8 @@
       
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
-      <link rel="shortcut icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-0.17.3, mkdocs-material-2.0.4">
+      <link rel="shortcut icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-0.17.2, mkdocs-material-2.2.2">
     
     
       
@@ -36,11 +36,11 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/application-709eec9410.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/application.7a4cdee3.css">
       
     
     
-      <script src="../../../assets/javascripts/modernizr-e826f8942a.js"></script>
+      <script src="../../assets/javascripts/modernizr.1aa3b519.js"></script>
     
     
       
@@ -71,7 +71,7 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="../../.." title="PyMapManager" class="md-header-nav__button md-logo">
+        <a href="../.." title="PyMapManager" class="md-header-nav__button md-logo">
           
             <i class="md-icon"></i>
           
@@ -81,18 +81,18 @@
         <label class="md-icon md-icon--menu md-header-nav__button" for="drawer"></label>
       </div>
       <div class="md-flex__cell md-flex__cell--stretch">
-        <span class="md-flex__ellipsis md-header-nav__title">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
           
             
-              
-                <span class="md-header-nav__parent">
-                  Examples
-                </span>
-              
+              <span class="md-header-nav__topic">
+                PyMapManager
+              </span>
+              <span class="md-header-nav__topic">
+                a-plotting-annotations
+              </span>
             
-            a-plotting-annotations
           
-        </span>
+        </div>
       </div>
       <div class="md-flex__cell md-flex__cell--shrink">
         
@@ -153,6 +153,9 @@
     
     <div class="md-container">
       
+        
+      
+      
       <main class="md-main">
         <div class="md-main__inner md-grid" data-md-component="container">
           
@@ -200,7 +203,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../.." title="Home" class="md-nav__link">
+    <a href="../.." title="Home" class="md-nav__link">
       Home
     </a>
   </li>
@@ -212,7 +215,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../../web-help/" title="Web Help" class="md-nav__link">
+    <a href="../../web-help/" title="Web Help" class="md-nav__link">
       Web Help
     </a>
   </li>
@@ -224,7 +227,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../../install-pymapmanager/" title="Install PyMapManager" class="md-nav__link">
+    <a href="../../install-pymapmanager/" title="Install PyMapManager" class="md-nav__link">
       Install PyMapManager
     </a>
   </li>
@@ -236,7 +239,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../../install-server/" title="Install Server" class="md-nav__link">
+    <a href="../../install-server/" title="Install Server" class="md-nav__link">
       Install Server
     </a>
   </li>
@@ -248,7 +251,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../../rest-api/" title="REST API" class="md-nav__link">
+    <a href="../../rest-api/" title="REST API" class="md-nav__link">
       REST API
     </a>
   </li>
@@ -399,7 +402,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../../dev-notes/" title="Development Notes" class="md-nav__link">
+    <a href="../../dev-notes/" title="Development Notes" class="md-nav__link">
       Development Notes
     </a>
   </li>
@@ -411,7 +414,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../../open-source/" title="Open Source" class="md-nav__link">
+    <a href="../../open-source/" title="Open Source" class="md-nav__link">
       Open Source
     </a>
   </li>
@@ -582,7 +585,7 @@ plt.show()
 mmMap.getMapValues3() took 0.04 seconds
 mmMap.getMapValues3() took 0.02 seconds
 </code></pre>
-<p><img alt="png" src="../output_7_1.png" /></p>
+<p><img alt="png" src="../a-plotting-annotations_files/a-plotting-annotations_7_1.png" /></p>
 <h3 id="plot-the-background-subtracted-spine-sum-from-image-channel-two">Plot the 'background subtracted spine sum' from image channel two.</h3>
 <pre><code class="python">segmentID = None # All segments
 x = m.getMapValues2('days', segmentID=segmentID)
@@ -599,7 +602,7 @@ plt.show()
 <pre><code>mmMap.getMapValues3() took 0.03 seconds
 mmMap.getMapValues3() took 0.02 seconds
 </code></pre>
-<p><img alt="png" src="../output_9_1.png" /></p>
+<p><img alt="png" src="../a-plotting-annotations_files/a-plotting-annotations_9_1.png" /></p>
 <h3 id="normalize-to-session-1-and-replot">Normalize to session 1 and replot.</h3>
 <p>mmMap.getMapValues returns 2D numpy arrays where earch row is a run of objects and columns are sessions. We can normalize each annotation at [i][j] to itself at session 1 with [i][session]</p>
 <pre><code class="python">segmentID = None # All segments
@@ -620,7 +623,7 @@ plt.show()
 <pre><code>mmMap.getMapValues3() took 0.03 seconds
 mmMap.getMapValues3() took 0.03 seconds
 </code></pre>
-<p><img alt="png" src="../output_11_1.png" /></p>
+<p><img alt="png" src="../a-plotting-annotations_files/a-plotting-annotations_11_1.png" /></p>
 <h3 id="compare-a-stat-on-two-different-sessions">Compare a stat on two different sessions</h3>
 <p>Here we compare the values at session 4 with the values at session 2.</p>
 <pre><code class="python">session4 = y[:,[4]] # pull annotations from sessions 4
@@ -633,7 +636,7 @@ plt.ylabel('Session 4', fontsize=16)
 plt.show()
 </code></pre>
 
-<p><img alt="png" src="../output_13_0.png" /></p>
+<p><img alt="png" src="../a-plotting-annotations_files/a-plotting-annotations_13_0.png" /></p>
 <h3 id="normalize-one-session-against-another">Normalize one session against another</h3>
 <p>And then normalize the values at session 4 with the values at session 2.</p>
 <pre><code class="python">session4 = y[:,[4]]
@@ -648,7 +651,7 @@ plt.ylabel('Session 4 (% change from session 2)', fontsize=16)
 plt.show()
 </code></pre>
 
-<p><img alt="png" src="../output_15_0.png" /></p>
+<p><img alt="png" src="../a-plotting-annotations_files/a-plotting-annotations_15_0.png" /></p>
 <h3 id="plot-length-of-added-spines-normalized-to-the-birth-day">Plot length of added spines normalized to the 'birth day'.</h3>
 <p>The color in the plot corresponds to the intensity of a spine as a function of its 'birth' day, e.g. the day it was added..</p>
 <p>Here we will use mmMap.getMapValues3() which takes a plot struct. Making it easier to specify paremeters to the plot.</p>
@@ -691,7 +694,7 @@ plt.show()
 mmMap.getMapValues3() took 0.03 seconds
 mmMap.getMapValues3() took 0.03 seconds
 </code></pre>
-<p><img alt="png" src="../output_17_1.png" /></p>
+<p><img alt="png" src="../a-plotting-annotations_files/a-plotting-annotations_17_1.png" /></p>
 <h3 id="homework">Homework</h3>
 <ul>
 <li>Plot ubssSum_int2 vs pDist, sort along pDist, calculate auto-correlation function at lag 1. Peaks in auto-correlation indicate 'hot spots' along dendritic segment. Do this for all segments in a map.</li>
@@ -717,7 +720,7 @@ mmMap.getMapValues3() took 0.03 seconds
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid">
         
-          <a href="../../../rest-api/" title="REST API" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../../rest-api/" title="REST API" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-flex__cell md-flex__cell--shrink">
               <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
             </div>
@@ -732,7 +735,7 @@ mmMap.getMapValues3() took 0.03 seconds
           </a>
         
         
-          <a href="../../../dev-notes/" title="Development Notes" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../../dev-notes/" title="Development Notes" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
@@ -754,9 +757,9 @@ mmMap.getMapValues3() took 0.03 seconds
       <div class="md-footer-copyright">
         
         powered by
-        <a href="http://www.mkdocs.org" title="MkDocs">MkDocs</a>
+        <a href="http://www.mkdocs.org">MkDocs</a>
         and
-        <a href="http://squidfunk.github.io/mkdocs-material/" title="Material for MkDocs">
+        <a href="https://squidfunk.github.io/mkdocs-material/">
           Material for MkDocs</a>
       </div>
       
@@ -768,9 +771,9 @@ mmMap.getMapValues3() took 0.03 seconds
       
     </div>
     
-      <script src="../../../assets/javascripts/application-8e4952e681.js"></script>
+      <script src="../../assets/javascripts/application.6cdc17f0.js"></script>
       
-      <script>app.initialize({version:"0.17.3",url:{base:"../../.."}})</script>
+      <script>app.initialize({version:"0.17.2",url:{base:"../.."}})</script>
       
     
     

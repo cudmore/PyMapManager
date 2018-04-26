@@ -177,7 +177,7 @@
         }, 
         {
             "location": "/rest-api/", 
-            "text": "Using the REST API in a program\n\n\nIn addition to the browser interface, the PyMapManager server provides a REST interface allowing Map Manager data to be retrieved from almost any programming environment.\n\n\nIn Python using the PyMapManager package\n\n\nfrom pymapmanager import mmMap\nurlmap = 'rr30a'\nm = mmMap(urlmap=urlmap)\n\n\n\n\nWhat we just did was very powerful. We just loaded a map from an internet REST server!\n\n\nIn pure Python\n\n\nimport json\nimport urllib2\n\nurl='http://127.0.0.1:5000/api/v1/getmaptracing/public/rr30a?mapsegment=\nsession=3\nxstat=x\nystat=y\nzstat=z'\n\nmytracing = json.load(urllib2.urlopen(\nurl\n))\n\n# plot with matplotlib\nimport matplotlib.pyplot as plt\nplt.plot(mytracing['x'],mytracing['y'])\n\n\n\n\nIn Matlab\n\n\nurl='http://127.0.0.1:5000/api/v1/getmaximage/public/rr30a/0/2'\nmyimage = webread(url);\nimshow(myimage)\n\n\n\n\nIn Igor\n\n\nprint fetchurl(\nhttp://127.0.0.1:5000/api/v1/maplist/public\n)\n\n\n\n\nREST API\n\n\nThe following REST routes specify end-points that will return JSON text or images. \n\n\nWe will be using the \npublic\n user and the \nrr30a\n map included in the \nmmserver/data/\n folder.\n\n\nThe links on this page point to a development server that may or may not be running.\n\n\nGet help\n\n\nhttp://127.0.0.1:5000/help\n\n\nGet a list of maps\n\n\nhttp://127.0.0.1:5000/api/public/maps\n\n\nLoad a map\n\n\napi/v1/loadmap/public/rr30a\n\n\nGet annotation values\n\n\nHere we will get an x-stat \ndays\n, a y-stat \npDist\n, and a z-stat \nz\n for map segment 0 across all sessions\n\n\nhttp://127.0.0.1:5000/v2/public/rr30a/getmapvalues?mapsegment=0\nsession=\nxstat=days\nystat=pDist\nzstat=z\n\n\nGet a tracing\n\n\nHere we will get the x/y/z of a tracing (in um) for all map segments in session 3\n\n\nhttp://127.0.0.1:5000/v2/public/rr30a/getmaptracing?mapsegment=\nsession=3\nxstat=x\nystat=y\nzstat=z\n\n\nGet an image\n\n\nHere we will get the 20th image in the stack for timepoint 3, channel 2\n\n\nhttp://127.0.0.1:5000/getimage/public/rr30a/3/2/20\n\n\nGet a maximal intensity projection\n\n\nHere we will get the maximal intensity projection of timepoint 0, channel 2\n\n\nhttp://127.0.0.1:5000/getmaximage/public/rr30a/0/2", 
+            "text": "Using the REST API in a program\n\n\nIn addition to the browser interface, the PyMapManager server provides a REST interface allowing Map Manager data to be retrieved from almost any programming environment.\n\n\nIn Python using the PyMapManager package\n\n\nfrom pymapmanager import mmMap\nurlmap = 'rr30a'\nm = mmMap(urlmap=urlmap)\n\n\n\n\nWhat we just did was very powerful. We just loaded a map from an internet REST server!\n\n\nIn pure Python\n\n\nimport json\nimport urllib2\n\nurl='http://127.0.0.1:5000/api/v1/getmaptracing/public/rr30a?mapsegment=\nsession=3\nxstat=x\nystat=y\nzstat=z'\n\nmytracing = json.load(urllib2.urlopen(\nurl\n))\n\n# plot with matplotlib\nimport matplotlib.pyplot as plt\nplt.plot(mytracing['x'],mytracing['y'])\n\n\n\n\nIn Matlab\n\n\nurl='http://127.0.0.1:5000/api/v1/getmaximage/public/rr30a/0/2'\nmyimage = webread(url);\nimshow(myimage)\n\n\n\n\nIn Igor\n\n\nprint fetchurl(\nhttp://127.0.0.1:5000/api/v1/maplist/public\n)\n\n\n\n\nREST API\n\n\nThe following REST routes specify end-points that will return JSON text or images. \n\n\nWe will be using the \npublic\n user and the \nrr30a\n map included in the \nmmserver/data/\n folder.\n\n\nThe links on this page point to a development server that may or may not be running.\n\n\nGet help\n\n\nhttp://127.0.0.1:5000/help\n\n\nGet a list of maps\n\n\nhttp://127.0.0.1:5000/api/v1/maplist/public\n\n\nLoad a map\n\n\napi/v1/loadmap/public/rr30a\n\n\nGet annotation values\n\n\nHere we will get an x-stat \ndays\n, a y-stat \npDist\n, and a z-stat \nz\n for map segment 0 across all sessions\n\n\nhttp://127.0.0.1:5000/v2/public/rr30a/getmapvalues?mapsegment=0\nsession=\nxstat=days\nystat=pDist\nzstat=z\n\n\nGet a tracing\n\n\nHere we will get the x/y/z of a tracing (in um) for all map segments in session 3\n\n\nhttp://127.0.0.1:5000/v2/public/rr30a/getmaptracing?mapsegment=\nsession=3\nxstat=x\nystat=y\nzstat=z\n\n\nGet an image\n\n\nHere we will get the 20th image in the stack for timepoint 3, channel 2\n\n\nhttp://127.0.0.1:5000/getimage/public/rr30a/3/2/20\n\n\nGet a maximal intensity projection\n\n\nHere we will get the maximal intensity projection of timepoint 0, channel 2\n\n\nhttp://127.0.0.1:5000/getmaximage/public/rr30a/0/2", 
             "title": "REST API"
         }, 
         {
@@ -217,7 +217,7 @@
         }, 
         {
             "location": "/rest-api/#get-a-list-of-maps", 
-            "text": "http://127.0.0.1:5000/api/public/maps", 
+            "text": "http://127.0.0.1:5000/api/v1/maplist/public", 
             "title": "Get a list of maps"
         }, 
         {
@@ -246,57 +246,57 @@
             "title": "Get a maximal intensity projection"
         }, 
         {
-            "location": "/examples/a/a-plotting-annotations/", 
+            "location": "/examples/a-plotting-annotations/", 
             "text": "Map plotting examples\n\n\nWe will load an example map, get annotation values as 2D NumPy arrays, and plot the values using MatplotLib.\nThe plotting can just as easily be done with any Python library such as Plotly or Pandas.\n\n\nImport the packages we will use\n\n\nimport numpy as np\nimport matplotlib.pyplot as plt\nimport matplotlib as mpl\n\nfrom pymapmanager import mmMap\nfrom pymapmanager.mmUtil import newplotdict\n\n# check the version of pymapmanager\nimport pymapmanager\nprint('pymapmanager version is', pymapmanager.__version__)\n\n# set some matplotlib defaults so our plots look better\nfontsize = 16\nmpl.rcParams['xtick.labelsize'] = fontsize \nmpl.rcParams['ytick.labelsize'] = fontsize \n\n\n\n\npymapmanager version is 0.0.5\n\n\n\nLoad a map\n\n\nfilePath = 'exampleMaps/rr30a/rr30a.txt'\nm = mmMap(filePath=filePath)\n\n\n\n\nmap rr30a loaded in 0.42 seconds.\n\n\n\nPlot the position of each spine along its segment tracing\n\n\n# getMapValues2(self, stat, roiType='spineROI', segmentID=[], plotBad=False)\n\nprint('Number of map segments:', m.numMapSegments)\n\nsegmentID = 3 # None to plot all segment, [1,3,5] to plot segment 1, 3, and 5\n\n# m.getMapValues2() returns a 2D numpy ndarray\n# rows are object runs, columns are sessions, each [i][j] is value for 'stat'\nx = m.getMapValues2('mapSession', segmentID=segmentID)\ny = m.getMapValues2('pDist', segmentID=segmentID)\n\n# plot with matplotlib\nplt.plot(x.transpose(), y.transpose(), '-k', linewidth=1.0, color='gray')\nplt.plot(x, y, 'ok')\nplt.xlabel('Session Index', fontsize=16)\nplt.ylabel('Dendrite Position (um)', fontsize=16)\nplt.show()\n\n\n\n\nNumber of map segments: 5\nmmMap.getMapValues3() took 0.04 seconds\nmmMap.getMapValues3() took 0.02 seconds\n\n\n\n\n\nPlot the 'background subtracted spine sum' from image channel two.\n\n\nsegmentID = None # All segments\nx = m.getMapValues2('days', segmentID=segmentID)\ny = m.getMapValues2('ubssSum_int2', segmentID=segmentID)\n\n# plot with matplotlib\nplt.plot(x.transpose(), y.transpose(), '-k', linewidth=1.0, color='gray')\nplt.plot(x, y, 'ok')\nplt.xlabel('Days', fontsize=16)\nplt.ylabel('Background Subtracted\\nSpine Sum\\n(Channel 2)', fontsize=16)\nplt.show()\n\n\n\n\nmmMap.getMapValues3() took 0.03 seconds\nmmMap.getMapValues3() took 0.02 seconds\n\n\n\n\n\nNormalize to session 1 and replot.\n\n\nmmMap.getMapValues returns 2D numpy arrays where earch row is a run of objects and columns are sessions. We can normalize each annotation at [i][j] to itself at session 1 with [i][session]\n\n\nsegmentID = None # All segments\nx = m.getMapValues2('days', segmentID=segmentID)\ny = m.getMapValues2('ubssSum_int2', segmentID=segmentID)\n\nsessionOne = y[:,[1]]\nyPercent = y / sessionOne * 100\n\n# plot with matplotlib\nplt.plot(x.T, yPercent.T, '-k', linewidth=1.0, color='gray')\nplt.plot(x, yPercent, 'ok')\nplt.xlabel('Days', fontsize=16)\nplt.ylabel('Percent Change In\\nBackground Subtracted Spine Sum\\n(Channel 2)', fontsize=16)\nplt.show()\n\n\n\n\nmmMap.getMapValues3() took 0.03 seconds\nmmMap.getMapValues3() took 0.03 seconds\n\n\n\n\n\nCompare a stat on two different sessions\n\n\nHere we compare the values at session 4 with the values at session 2.\n\n\nsession4 = y[:,[4]] # pull annotations from sessions 4\nsession2 = y[:,[2]] # pull annotaitons from session 2\n\n# plot with matplotlib\nplt.plot(session2, session4, 'ok')\nplt.xlabel('Session 2', fontsize=16)\nplt.ylabel('Session 4', fontsize=16)\nplt.show()\n\n\n\n\n\n\nNormalize one session against another\n\n\nAnd then normalize the values at session 4 with the values at session 2.\n\n\nsession4 = y[:,[4]]\nsession2 = y[:,[2]]\n\nsession4Norm = session4 / session2 * 100\n\n# plot with matplotlib\nplt.plot(session2, session4Norm, 'ok')\nplt.xlabel('Session 2', fontsize=16)\nplt.ylabel('Session 4 (% change from session 2)', fontsize=16)\nplt.show()\n\n\n\n\n\n\nPlot length of added spines normalized to the 'birth day'.\n\n\nThe color in the plot corresponds to the intensity of a spine as a function of its 'birth' day, e.g. the day it was added..\n\n\nHere we will use mmMap.getMapValues3() which takes a plot struct. Making it easier to specify paremeters to the plot.\n\n\nThis example is plotting session, it would make more sense to plot 'days'.\n\n\nplotDict = newplotdict()\nplotDict['plotbad'] = True\nplotDict['xstat'] = 'days'\nplotDict['ystat'] = 'pDist'\nplotDict['zstat'] = 'ubssSum_int2' #'sLen3d_int1' #swap in any stat you like, e.g. 'ubssSum_int2'\nplotDict['segmentid'] = [0]\nplotDict = m.getMapValues3(plotDict)\n\nplotDict2 = dict(plotDict)\nplotDict2['xstat'] = 'isAdd'\nplotDict2['ystat'] = 'isSub'\nplotDict2['zstat'] = 'isTransient'\nplotDict2 = m.getMapValues3(plotDict2)\n\n\n#only plot added spines\nx = m.getMapValues2('days', segmentID=plotDict['segmentid']) # get an array of values\nnew_z2 = []\n\nfor i, row in enumerate(plotDict['z']):\n    #if np.count_nonzero(~np.isnan(row)) \n 0:\n    for j, val in enumerate(row):\n        if plotDict2['x'][i,j] == 1: # gives us the session a spine was added\n            #row = row / row[j] * 100 # z-color as '% change' from session spine was added\n            row = row - row[j] # z-color as 'absolute change' from session spine was added\n            new_z2.append(row)\n            break\n\nplt.imshow(new_z2, aspect='auto')\nplt.xlabel('Sessions a spine was added', fontsize=16)\nplt.ylabel('Spine Index (au)', fontsize=16)\nplt.show()\n\n\n\n\nmmMap.getMapValues3() took 0.03 seconds\nmmMap.getMapValues3() took 0.03 seconds\nmmMap.getMapValues3() took 0.03 seconds\n\n\n\n\n\nHomework\n\n\n\n\nPlot ubssSum_int2 vs pDist, sort along pDist, calculate auto-correlation function at lag 1. Peaks in auto-correlation indicate 'hot spots' along dendritic segment. Do this for all segments in a map.\n\n\nPlot a heat map of spine run vs session where color is ubssSum_ch2\n\n\nplot ubssSum as a function of a spines age. X-axis should be days where day 0 is appearance of new spine. This plot will only have added spines\n\n\nDo the same for spine 'death' where x-axis counts down to day 0 when a spine is subtracted", 
             "title": "a-plotting-annotations"
         }, 
         {
-            "location": "/examples/a/a-plotting-annotations/#map-plotting-examples", 
+            "location": "/examples/a-plotting-annotations/#map-plotting-examples", 
             "text": "We will load an example map, get annotation values as 2D NumPy arrays, and plot the values using MatplotLib.\nThe plotting can just as easily be done with any Python library such as Plotly or Pandas.", 
             "title": "Map plotting examples"
         }, 
         {
-            "location": "/examples/a/a-plotting-annotations/#import-the-packages-we-will-use", 
+            "location": "/examples/a-plotting-annotations/#import-the-packages-we-will-use", 
             "text": "import numpy as np\nimport matplotlib.pyplot as plt\nimport matplotlib as mpl\n\nfrom pymapmanager import mmMap\nfrom pymapmanager.mmUtil import newplotdict\n\n# check the version of pymapmanager\nimport pymapmanager\nprint('pymapmanager version is', pymapmanager.__version__)\n\n# set some matplotlib defaults so our plots look better\nfontsize = 16\nmpl.rcParams['xtick.labelsize'] = fontsize \nmpl.rcParams['ytick.labelsize'] = fontsize   pymapmanager version is 0.0.5", 
             "title": "Import the packages we will use"
         }, 
         {
-            "location": "/examples/a/a-plotting-annotations/#load-a-map", 
+            "location": "/examples/a-plotting-annotations/#load-a-map", 
             "text": "filePath = 'exampleMaps/rr30a/rr30a.txt'\nm = mmMap(filePath=filePath)  map rr30a loaded in 0.42 seconds.", 
             "title": "Load a map"
         }, 
         {
-            "location": "/examples/a/a-plotting-annotations/#plot-the-position-of-each-spine-along-its-segment-tracing", 
+            "location": "/examples/a-plotting-annotations/#plot-the-position-of-each-spine-along-its-segment-tracing", 
             "text": "# getMapValues2(self, stat, roiType='spineROI', segmentID=[], plotBad=False)\n\nprint('Number of map segments:', m.numMapSegments)\n\nsegmentID = 3 # None to plot all segment, [1,3,5] to plot segment 1, 3, and 5\n\n# m.getMapValues2() returns a 2D numpy ndarray\n# rows are object runs, columns are sessions, each [i][j] is value for 'stat'\nx = m.getMapValues2('mapSession', segmentID=segmentID)\ny = m.getMapValues2('pDist', segmentID=segmentID)\n\n# plot with matplotlib\nplt.plot(x.transpose(), y.transpose(), '-k', linewidth=1.0, color='gray')\nplt.plot(x, y, 'ok')\nplt.xlabel('Session Index', fontsize=16)\nplt.ylabel('Dendrite Position (um)', fontsize=16)\nplt.show()  Number of map segments: 5\nmmMap.getMapValues3() took 0.04 seconds\nmmMap.getMapValues3() took 0.02 seconds", 
             "title": "Plot the position of each spine along its segment tracing"
         }, 
         {
-            "location": "/examples/a/a-plotting-annotations/#plot-the-background-subtracted-spine-sum-from-image-channel-two", 
+            "location": "/examples/a-plotting-annotations/#plot-the-background-subtracted-spine-sum-from-image-channel-two", 
             "text": "segmentID = None # All segments\nx = m.getMapValues2('days', segmentID=segmentID)\ny = m.getMapValues2('ubssSum_int2', segmentID=segmentID)\n\n# plot with matplotlib\nplt.plot(x.transpose(), y.transpose(), '-k', linewidth=1.0, color='gray')\nplt.plot(x, y, 'ok')\nplt.xlabel('Days', fontsize=16)\nplt.ylabel('Background Subtracted\\nSpine Sum\\n(Channel 2)', fontsize=16)\nplt.show()  mmMap.getMapValues3() took 0.03 seconds\nmmMap.getMapValues3() took 0.02 seconds", 
             "title": "Plot the 'background subtracted spine sum' from image channel two."
         }, 
         {
-            "location": "/examples/a/a-plotting-annotations/#normalize-to-session-1-and-replot", 
+            "location": "/examples/a-plotting-annotations/#normalize-to-session-1-and-replot", 
             "text": "mmMap.getMapValues returns 2D numpy arrays where earch row is a run of objects and columns are sessions. We can normalize each annotation at [i][j] to itself at session 1 with [i][session]  segmentID = None # All segments\nx = m.getMapValues2('days', segmentID=segmentID)\ny = m.getMapValues2('ubssSum_int2', segmentID=segmentID)\n\nsessionOne = y[:,[1]]\nyPercent = y / sessionOne * 100\n\n# plot with matplotlib\nplt.plot(x.T, yPercent.T, '-k', linewidth=1.0, color='gray')\nplt.plot(x, yPercent, 'ok')\nplt.xlabel('Days', fontsize=16)\nplt.ylabel('Percent Change In\\nBackground Subtracted Spine Sum\\n(Channel 2)', fontsize=16)\nplt.show()  mmMap.getMapValues3() took 0.03 seconds\nmmMap.getMapValues3() took 0.03 seconds", 
             "title": "Normalize to session 1 and replot."
         }, 
         {
-            "location": "/examples/a/a-plotting-annotations/#compare-a-stat-on-two-different-sessions", 
+            "location": "/examples/a-plotting-annotations/#compare-a-stat-on-two-different-sessions", 
             "text": "Here we compare the values at session 4 with the values at session 2.  session4 = y[:,[4]] # pull annotations from sessions 4\nsession2 = y[:,[2]] # pull annotaitons from session 2\n\n# plot with matplotlib\nplt.plot(session2, session4, 'ok')\nplt.xlabel('Session 2', fontsize=16)\nplt.ylabel('Session 4', fontsize=16)\nplt.show()", 
             "title": "Compare a stat on two different sessions"
         }, 
         {
-            "location": "/examples/a/a-plotting-annotations/#normalize-one-session-against-another", 
+            "location": "/examples/a-plotting-annotations/#normalize-one-session-against-another", 
             "text": "And then normalize the values at session 4 with the values at session 2.  session4 = y[:,[4]]\nsession2 = y[:,[2]]\n\nsession4Norm = session4 / session2 * 100\n\n# plot with matplotlib\nplt.plot(session2, session4Norm, 'ok')\nplt.xlabel('Session 2', fontsize=16)\nplt.ylabel('Session 4 (% change from session 2)', fontsize=16)\nplt.show()", 
             "title": "Normalize one session against another"
         }, 
         {
-            "location": "/examples/a/a-plotting-annotations/#plot-length-of-added-spines-normalized-to-the-birth-day", 
+            "location": "/examples/a-plotting-annotations/#plot-length-of-added-spines-normalized-to-the-birth-day", 
             "text": "The color in the plot corresponds to the intensity of a spine as a function of its 'birth' day, e.g. the day it was added..  Here we will use mmMap.getMapValues3() which takes a plot struct. Making it easier to specify paremeters to the plot.  This example is plotting session, it would make more sense to plot 'days'.  plotDict = newplotdict()\nplotDict['plotbad'] = True\nplotDict['xstat'] = 'days'\nplotDict['ystat'] = 'pDist'\nplotDict['zstat'] = 'ubssSum_int2' #'sLen3d_int1' #swap in any stat you like, e.g. 'ubssSum_int2'\nplotDict['segmentid'] = [0]\nplotDict = m.getMapValues3(plotDict)\n\nplotDict2 = dict(plotDict)\nplotDict2['xstat'] = 'isAdd'\nplotDict2['ystat'] = 'isSub'\nplotDict2['zstat'] = 'isTransient'\nplotDict2 = m.getMapValues3(plotDict2)\n\n\n#only plot added spines\nx = m.getMapValues2('days', segmentID=plotDict['segmentid']) # get an array of values\nnew_z2 = []\n\nfor i, row in enumerate(plotDict['z']):\n    #if np.count_nonzero(~np.isnan(row))   0:\n    for j, val in enumerate(row):\n        if plotDict2['x'][i,j] == 1: # gives us the session a spine was added\n            #row = row / row[j] * 100 # z-color as '% change' from session spine was added\n            row = row - row[j] # z-color as 'absolute change' from session spine was added\n            new_z2.append(row)\n            break\n\nplt.imshow(new_z2, aspect='auto')\nplt.xlabel('Sessions a spine was added', fontsize=16)\nplt.ylabel('Spine Index (au)', fontsize=16)\nplt.show()  mmMap.getMapValues3() took 0.03 seconds\nmmMap.getMapValues3() took 0.03 seconds\nmmMap.getMapValues3() took 0.03 seconds", 
             "title": "Plot length of added spines normalized to the 'birth day'."
         }, 
         {
-            "location": "/examples/a/a-plotting-annotations/#homework", 
+            "location": "/examples/a-plotting-annotations/#homework", 
             "text": "Plot ubssSum_int2 vs pDist, sort along pDist, calculate auto-correlation function at lag 1. Peaks in auto-correlation indicate 'hot spots' along dendritic segment. Do this for all segments in a map.  Plot a heat map of spine run vs session where color is ubssSum_ch2  plot ubssSum as a function of a spines age. X-axis should be days where day 0 is appearance of new spine. This plot will only have added spines  Do the same for spine 'death' where x-axis counts down to day 0 when a spine is subtracted", 
             "title": "Homework"
         }, 
@@ -462,8 +462,38 @@
         }, 
         {
             "location": "/open-source/", 
-            "text": "PyMapManager only exists because of the massive amount of creativity, expertise, and effort that has been put in to creating and maintaining a slew of open-source software projects.\n\n\n\n\n\n\nServer\n\n\n\n\nnginx\n - web server\n\n\nuwsgi\n - web standard for nginx to talk to python\n\n\n\n\n\n\n\n\nPython (back-end)\n\n\n\n\nflask\n\n\nnumpy\n\n\npandas\n\n\nscipy\n\n\nmatplotlib\n\n\ntifffile\n\n\n\n\n\n\n\n\nJavascript (front-end)\n\n\n\n\nAngular\n\n\nJQuery\n\n\nd3\n\n\nLeaflet\n\n\nPlotly\n\n\nBootstrap\n\n\n\n\n\n\n\n\nContainers\n\n\n\n\nDocker\n - containers are the future\n\n\ntiangolo/uwsgi-nginx-flask:python3.6\n\n\n\n\n\n\n\n\nDocumentation\n\n\n\n\nmkDocs (This Website)\n\n\nMaterial Theme (This Theme)\n\n\nSphinx (Python API Documentation)\n\n\n\n\n\n\n\n\nDistribution\n\n\n\n\nGithub\n\n\nPyPi", 
+            "text": "PyMapManager only exists because of the massive amount of creativity, expertise, and effort that has been put in to creating and maintaining a slew of open-source software projects.\n\n\nServer\n\n\n\n\nDebian\n - Operating system\n\n\nNGINX \n - Web server for load balancing, microservices, and API gateways\n\n\nuwsgi\n - Web standard for NGINX to talk to Python\n\n\n\n\nPython\n (back-end)\n\n\n\n\nFlask\n - Web microframework\n\n\nSciPy\n - Scientific computing ecosystem\n\n\nNumPy\n - Scientific computing for Python\n\n\nPandas\n - Data analysis library\n\n\nMatplotlib\n - Plotting\n\n\nTifffile - General purpose Tiff file library\n\n\nRedis\n - Database\n\n\nCelery\n - Distributed task queue\n\n\n\n\nJavascript\n (front-end)\n\n\n\n\nAngular\n - Superheroic Javascript framework\n\n\nJQuery\n\n\nD3\n - Data driven documents\n\n\nLeaflet\n - Interactive maps\n\n\nPlotly\n - Modern visualization for the data era\n\n\nBootstrap\n - Worlds most popular HTML/CSS/JS Toolkit\n\n\n\n\nContainers\n\n\n\n\nDocker\n - Software containers are the future\n\n\n\n\nDocumentation\n\n\n\n\nJekyll\n - Static site generator (Main \nMap Manager\n documentation)\n\n\nmkDocs\n - Static site generator (This Website)\n\n\nSphinx\n - To create documentation (\nPyMapManager API Documentation\n)\n\n\n\n\nDistribution\n\n\n\n\nGithub\n - Software development platform for online storage/sharing/computation\n\n\nPyPi\n - Python package index for online distribution", 
             "title": "Open Source"
+        }, 
+        {
+            "location": "/open-source/#server", 
+            "text": "Debian  - Operating system  NGINX   - Web server for load balancing, microservices, and API gateways  uwsgi  - Web standard for NGINX to talk to Python", 
+            "title": "Server"
+        }, 
+        {
+            "location": "/open-source/#python-back-end", 
+            "text": "Flask  - Web microframework  SciPy  - Scientific computing ecosystem  NumPy  - Scientific computing for Python  Pandas  - Data analysis library  Matplotlib  - Plotting  Tifffile - General purpose Tiff file library  Redis  - Database  Celery  - Distributed task queue", 
+            "title": "Python (back-end)"
+        }, 
+        {
+            "location": "/open-source/#javascript-front-end", 
+            "text": "Angular  - Superheroic Javascript framework  JQuery  D3  - Data driven documents  Leaflet  - Interactive maps  Plotly  - Modern visualization for the data era  Bootstrap  - Worlds most popular HTML/CSS/JS Toolkit", 
+            "title": "Javascript (front-end)"
+        }, 
+        {
+            "location": "/open-source/#containers", 
+            "text": "Docker  - Software containers are the future", 
+            "title": "Containers"
+        }, 
+        {
+            "location": "/open-source/#documentation", 
+            "text": "Jekyll  - Static site generator (Main  Map Manager  documentation)  mkDocs  - Static site generator (This Website)  Sphinx  - To create documentation ( PyMapManager API Documentation )", 
+            "title": "Documentation"
+        }, 
+        {
+            "location": "/open-source/#distribution", 
+            "text": "Github  - Software development platform for online storage/sharing/computation  PyPi  - Python package index for online distribution", 
+            "title": "Distribution"
         }
     ]
 }
