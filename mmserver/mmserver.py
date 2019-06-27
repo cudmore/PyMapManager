@@ -12,19 +12,19 @@ todo:
 	there should be two main routes here: api and data
 	- api: is for javascript to get json data
 	- data: is for python to get files
-	
+
 	- add another playground route to plot directly off server
-	
+
 Notes:
 	Run with gunicorn
 	sudo /usr/local/bin/gunicorn mmserver:app --worker-class gevent --workers 5 --timeout 400 --bind 127.0.0.1:5000
-	
+
 	--workers 5 = (num cores) * 2 + 1
 	--timeout 400 = seconds, so /zip upload route does not time-out, will not work for HUGE files or SLOW connection
-	
+
 	Run redis
 	redis-server
-	
+
 	Run celery
 	celery worker -A mmserver.celery --loglevel=info
 """
@@ -112,7 +112,7 @@ else:
 		# gunicorn version
 		data_folder = '../../PyMapManager-Data'
 		UPLOAD_FOLDER = '../../PyMapManager-Data/upload'
-		
+
 print('   mmserver data_folder:', data_folder)
 ############################################################
 # app
@@ -141,9 +141,9 @@ def long_task(self, a1):
 	startEpoch = time.time()
 	startDate = datetime.now().strftime('%Y%m%d')
 	startTime = datetime.now().strftime('%H:%m:%S')
-	
+
 	print('startEpoch:', startEpoch, 'startDate:', startDate, 'startTime:', startTime)
-	
+
 	verb = ['Starting up', 'Booting', 'Repairing', 'Loading', 'Checking']
 	adjective = ['master', 'radiant', 'silent', 'harmonic', 'fast']
 	noun = ['solar array', 'particle reshaper', 'cosmic ray', 'orbiter', 'bit']
@@ -157,7 +157,7 @@ def long_task(self, a1):
 											  random.choice(adjective),
 											  random.choice(noun))
 		self.update_state(state='PROGRESS',
-						  meta={'current': i, 
+						  meta={'current': i,
 						  		'total': total,
 								'status': message,
 								'startdate': startDate,
@@ -166,9 +166,9 @@ def long_task(self, a1):
 								})
 		time.sleep(1)
 	return {'current': 100, 'total': 100, 'status': 'Task completed!',
-			'startdate': startDate, 
-			'starttime': startTime, 
-			'elapsed (min)': elapsed, 
+			'startdate': startDate,
+			'starttime': startTime,
+			'elapsed (min)': elapsed,
 			'result': 42}
 
 @app.route('/longtask', methods=['POST', 'GET'])
@@ -176,14 +176,14 @@ def longtask():
 	print('app.route /longtask')
 	task = long_task.apply_async(args=['xxx'])
 	print('task.id:', task.id)
-	
+
 	#db.rpush('tasklist', *[task.id.decode('UTF-8')])
 	db.rpush('tasklist', *[task.id])
-	
+
 	#return jsonify({}), 202, {'Location': url_for('taskstatus',
 	#											  task_id=task.id)}
 	return task.id
-	
+
 @app.route('/status/<task_id>')
 def taskstatus(task_id):
 	#task = long_task.AsyncResult(task_id)
@@ -220,8 +220,8 @@ def taskstatus(task_id):
 			'elapsed (min)': '',
 			'status': str(task.info),  # this is the exception raised
 		}
-	return json.dumps(response)	
-												  
+	return json.dumps(response)
+
 ############################################################
 # redis
 ############################################################
@@ -240,6 +240,9 @@ class fakeredis():
 			return ''
 	def set(self, mapname, pickledata):
 		self.dict[mapname] = pickledata
+	# davis
+	def ltrim(self, str1, int1, int2):
+		pass
 
 upTime = time.time()
 
@@ -271,7 +274,7 @@ def db_get_str(token):
 
 db_set_str('ingesting', 'Idle')
 db.ltrim('tasklist', 1, 0) # remove all elements
-	
+
 ############################################################
 # routes
 ############################################################
@@ -284,7 +287,7 @@ def not_found(error):
 		'datetime': str(datetime.now())
 	}
 	return make_response(jsonify(theRet), 404)
-	
+
 @app.route('/')
 def hello_world():
 	print('hello_world()')
@@ -311,7 +314,7 @@ def route_frontend(path):
 		errorStr = 'mmserver error: did not find path: ' + file_path
 		print(errorStr)
 		return errorStr
-		
+
 @app.route('/download')
 def download():
 	print('download()')
@@ -336,7 +339,7 @@ def help():
 		+ '/[username]/[mapname]/timepoint/[n]/stackdb' + '<br>' \
 		+ '/[username]/[mapname]/timepoint/[n]/image/[n]/[channel]' + '<br>'
 	return theRet
-	
+
 @app.route('/api/v1/status')
 def status():
 	theRet = {
@@ -346,12 +349,12 @@ def status():
 	}
 	#return make_response(jsonify(theRet), 404)
 	return jsonify(theRet)
-	
+
 @app.route('/api/v1/maplist/<username>')
 def maps(username):
 	"""
 	Get a list of maps
-	
+
 	returns a list of folders in username folder
 	"""
 	print('maps username:', username)
@@ -364,7 +367,7 @@ def maps(username):
 			if f in ['__MACOSX']:
 				continue
 			if f.startswith('.'):
-				continue 
+				continue
 			maplist.append(f)
 	return json.dumps(maplist)
 
@@ -375,7 +378,7 @@ def downloadmap(username, mapname):
 	thepath = safe_join(mapdir, mapzip)
 	print('downloadmap:', thepath)
 	return send_file(thepath)
-	
+
 @app.route('/api/v1/loadmap/<username>/<mapname>')
 def loadmap(username, mapname):
 	"""
@@ -386,16 +389,16 @@ def loadmap(username, mapname):
 	mapdir = safe_join(app.config['data_folder'], mapdir)
 	mapfile = mapname + '.txt'
 	mappath = safe_join(mapdir, mapfile)
-	
+
 	mapInfo = None
-	
+
 	# was this 20180118
 	#global myMapList
 	#if mapname in myMapList:
 	if db.exists(mapname):
 		# already loaded
 		print('map already loaded')
-		
+
 		# get map info
 		m = pickle.loads(db.get(mapname))
 		mapInfo = m.mapInfo()
@@ -410,16 +413,16 @@ def loadmap(username, mapname):
 
 		mapInfo = m.mapInfo()
 		print('loaded myMap:', mappath)
-	
+
 	# rr30a is 24 MB -> 0.024 GB. Telling us we can store ~41 maps in 1 GB
 	#pickled_object = pickle.dumps(myMapList[mapname])
 	#print('getsizeof:', sys.getsizeof(pickled_object))
-	
+
 	# was this 20180118
 	#ret = myMapList[mapname].mapInfo() # enclose in dict?
 	#return jsonify(ret)
 	return jsonify(mapInfo)
-		
+
 @app.route('/api/v1/getmapvalues/<username>/<mapname>')
 def getmapvalues(username, mapname):
 	"""
@@ -434,7 +437,7 @@ def getmapvalues(username, mapname):
 	print('getmapvalues() mapsegment:', mapsegment, 'session:', session, 'xstat:', xstat, 'ystat:', ystat, 'zstat:', zstat)
 
 	ret = {}
-	
+
 	pd = mmUtil.newplotdict()
 	if mapsegment:
 		pd['segmentid'] = int(mapsegment)
@@ -447,7 +450,7 @@ def getmapvalues(username, mapname):
 	pd['xstat'] = xstat
 	pd['ystat'] = ystat
 	pd['zstat'] = zstat
-	
+
 	# for now, read xxx and if empty assume 'spineROI'
 	'''
 	if roitype:
@@ -457,38 +460,38 @@ def getmapvalues(username, mapname):
 		# if there is none, assume 'spineROI'
 		pd['roitype'] = ['spineROI']
 	'''
-	
+
 	# always fetch map dynamics into pd['dynamics']
 	pd['getMapDynamics'] = True
-	
+
 	# always fetch bad
 	pd['plotbad'] = True
-	
+
 	# debug
 	if 0:
 		print('getmapvalues pd:')
 		for key, item in pd.iteritems():
 			print('\t', key, ':', item)
-		
+
 	#print 'getmapvalues() pd:', pd
 	#global myMapList
 	#if mapname in myMapList:
 	if db.exists(mapname):
 		# get from redis
 		m = pickle.loads(db.get(mapname))
-		
+
 		#defaultAnnotation = myMapList[mapname].defaultAnnotation
 		defaultAnnotation = m.defaultAnnotation
 		if defaultAnnotation:
 			pd['roitype'] = defaultAnnotation
 		else:
 			pd['roitype'] = 'spineROI'
-		
+
 		print("getmapvalues() using pd['roitype']=", pd['roitype'])
-		
+
 		#pd = myMapList[mapname].getMapValues3(pd)
 		pd = m.getMapValues3(pd)
-		
+
 		ret['x'] = pd['x']
 		ret['y'] = pd['y']
 		ret['z'] = pd['z']
@@ -498,7 +501,7 @@ def getmapvalues(username, mapname):
 		ret['dynamics'] = pd['dynamics']
 		ret['cPnt'] = pd['cPnt']
 		ret['isBad'] = pd['isBad']
-		
+
 		# remove nan AND flatten to list
 		#print 'getmapvalues()', ret['x'].dtype # this is float64
 		ret['x'] = ret['x'].astype('str').tolist()
@@ -524,9 +527,9 @@ def getmaptracing(username, mapname):
 	"""
 	mapsegment = request.args.get('mapsegment', '')
 	session = request.args.get('session', '')
-	
+
 	# print 'getmaptracing() mapsegment:', mapsegment, mapsegment == None
-	
+
 	ret = {}
 	#global myMapList
 	#if mapname in myMapList:
@@ -540,27 +543,27 @@ def getmaptracing(username, mapname):
 			pd['stacklist'] = [int(session)]
 		else:
 			pd['stacklist'] = []
-		
+
 		session = int(session)
 
 		# get from redis
 		m = pickle.loads(db.get(mapname))
-		pd = m.stacks[session].line.getLineValues3(pd)		
+		pd = m.stacks[session].line.getLineValues3(pd)
 
 		# returns pd['x'] == None when no tracing
-		#pd = myMapList[mapname].stacks[session].line.getLineValues3(pd)		
-		
+		#pd = myMapList[mapname].stacks[session].line.getLineValues3(pd)
+
 		ret['x'] = []
 		ret['y'] = []
 		ret['z'] = []
-		
+
 		if pd['x'] is not None:
 			ret['x'] = pd['x'][:]
 			ret['y'] = pd['y'][:]
 			ret['z'] = pd['z'][:]
 			ret['sDist'] = pd['sDist'][:]
 			ret['ID'] = pd['ID'][:]
-			
+
 			# remove nan
 			ret['x'] = ret['x'][~np.isnan(ret['x'])].tolist()
 			ret['y'] = ret['y'][~np.isnan(ret['y'])].tolist()
@@ -576,7 +579,7 @@ def get_image(username, mapname, timepoint, channel, slice):
 	"""
 	Get an image (slice) from a stack
 	"""
-	
+
 	# http://127.0.0.1:5010/getimage/public/rr30a/0/1/5
 	sliceStr = str(slice).zfill(4)
 	thefile = mapname + '_tp' + str(timepoint) + '_ch' + str(channel) + '_s' + sliceStr + '.png'
@@ -592,7 +595,7 @@ def get_image(username, mapname, timepoint, channel, slice):
 	print('tpdir:', tpdir)
 	print('thefile:', thefile)
 	'''
-	
+
 	return send_from_directory(tpdir, thefile, as_attachment=True, mimetype='image/png')
 
 @app.route('/api/v1/getslidingz/<username>/<mapname>/<int:timepoint>/<int:channel>/<int:slice>')
@@ -603,7 +606,7 @@ def getslidingz(username, mapname, timepoint, channel, slice):
 	"""
 	plusMinus = 2
 	# print '=== getslidingz() slice:', slice, 'plusMinus:', plusMinus
-	
+
 	# the folder the images are in
 	tpdir = safe_join(username, mapname)
 	tpdir = safe_join(tpdir, 'raw')
@@ -612,7 +615,7 @@ def getslidingz(username, mapname, timepoint, channel, slice):
 	tpdir = safe_join(app.config['data_folder'], tpdir)
 
 	#print '= getslidingz() tpdir:', tpdir
-	
+
 	# load the central image (we know it exists)
 	paddedStr = str(slice).zfill(4)
 	centralImageFile = tpdir + '/' + mapname + '_tp' + str(timepoint) + '_ch' + str(channel) + '_s' + paddedStr + '.png'
@@ -620,7 +623,7 @@ def getslidingz(username, mapname, timepoint, channel, slice):
 	myArray = imread(centralImageFile) #, flatten=False, mode=None)
 	[m, n] = myArray.shape
 	myArray = myArray.reshape((1,m,n))
-	
+
 	startSlice = slice - plusMinus
 	stopSlice = slice + plusMinus
 	firstTimeThrough = 1
@@ -637,17 +640,17 @@ def getslidingz(username, mapname, timepoint, channel, slice):
 				firstTimeThrough = 0
 				myArray = currArray
 			else:
-				myArray = np.vstack((myArray,currArray)) 
-				#myArray = np.vstack([myArray,currArray]) 
-	
+				myArray = np.vstack((myArray,currArray))
+				#myArray = np.vstack([myArray,currArray])
+
 	# print 'myArray.shape:', myArray.shape
-			
+
 	# take maximal intensity projection into final nd array
 	[slicesFinal, mFinal, nFinal] = myArray.shape
 	max_ = np.zeros((m, n), dtype='uint8')
 	for i in range(slicesFinal):
 		max_ = np.maximum(max_, myArray[i])
-	
+
 	# We make sure to use the PIL plugin here because not all skimage.io plugins
 	# support writing to a file object.
 	try:
@@ -675,9 +678,9 @@ def get_maximage(username, mapname, timepoint, channel):
 
 	#print 'tpdir:', tpdir
 	#print 'thefile:', thefile
-	
+
 	return send_from_directory(tpdir, thefile, as_attachment=True, mimetype='image/png')
-		
+
 ############################################################
 ############################################################
 # mmio is easier with files (compared to json as returned in /api/v1
@@ -690,23 +693,23 @@ def get_maximage(username, mapname, timepoint, channel):
 def getfile(item, username, mapname, timepoint=None, channel=None):
 	"""
 	Get a file from a map
-	
+
 	Arguments:
 		item: (str) in ['header', 'objmap', 'segmap', 'stackdb', 'line', 'int'
-		
+
 		For ['stackdb', 'line', 'int'], must also specify 'timepoint'
 		For ['int'], must also specify 'channel'
-		
+
 	Returns:
 		File like string
 	"""
-		
+
 	mapdir = safe_join(username, mapname)
 	mapdir = safe_join(app.config['data_folder'], mapdir)
-	
+
 	as_attachment = False
 	theFolder = '' # for timepoint files
-	
+
 	#
 	# map
 	#
@@ -737,14 +740,14 @@ def getfile(item, username, mapname, timepoint=None, channel=None):
 
 	if theFolder:
 		mapdir = safe_join(mapdir, theFolder)
-		
+
 	if debugThis:
 		print('=== mmserver.getfile()', item, username, mapname, timepoint, channel)
 		print('   mapdir:', mapdir)
 		print('   mapfile:', mapfile)
-		
+
 	return send_from_directory(mapdir, mapfile, as_attachment=True, attachment_filename=mapfile)
-		
+
 
 ############################################################
 ############################################################
@@ -769,7 +772,7 @@ def background_thread(self, zipPath):
 	startEpoch = time.time()
 	startDate = datetime.now().strftime('%Y%m%d')
 	startTime = datetime.now().strftime('%H:%m:%S')
-	
+
 	#zipFile.save(zipPath)
 
 	username = 'public'
@@ -793,7 +796,7 @@ def background_thread(self, zipPath):
 
 	with zipfile.ZipFile(zipPath,"r") as zip_ref:
 		zip_ref.extractall(dstZipFolder)
-	
+
 	print('done unzipping')
 
 	print('   ingesting: ', mapPath)
@@ -813,34 +816,34 @@ def background_thread(self, zipPath):
 								})
 
 		stack.ingest()
-	
+
 
 	print('   background_thread() done')
 
 	return {'map': mapName,
 			'status': 'Finished',
-			'startdate': startDate, 
-			'starttime': startTime, 
+			'startdate': startDate,
+			'starttime': startTime,
 			'elapsed (min)': elapsed}
-	
+
 @app.route('/api/v1/uploadzip/<username>', methods=['GET', 'POST'])
 def uploadzip(username):
 	if request.method == 'POST':
 		# user upload a zip
 		print('=== mmserver POST /api/v1/uploadzip/')
-		
+
 		if 'file' in request.files:
 			pass
 		else:
 			print('uploadzip() no file')
 			return 'uploadzip() no file'
-		
+
 		file = request.files['file']
 		filename = file.filename.encode("utf8")
-		
+
 		print('uploadzip() file:', file)
 		print('uploadzip() filename:', filename)
-		
+
 		if request.files['file'].filename == '':
 			return 'uploadzip() No selected file'
 		try:
@@ -860,7 +863,7 @@ def uploadzip(username):
 
 		files = request.files.getlist('file') # files on lhs, file on rhs
 		print('   files:', files)
-		
+
 		# see: https://stackoverflow.com/questions/15981637/flask-how-to-handle-application-octet-stream
 		for file in files:
 			print('   file:', file)
@@ -870,51 +873,51 @@ def uploadzip(username):
 				# error
 				print('does not end in .zip')
 				return Response('you must upload a .zip file',mimetype="text/event-stream")
-				
+
 			if not isinstance(file, FileStorage):
 				print('is not isinstance')
 				raise TypeError("mmserver.uploadzip() storage must be a werkzeug.FileStorage")
 			saveFileName = secure_filename(file.filename)
 			savePath = os.path.join(UPLOAD_FOLDER, saveFileName)
-			
+
 			print('saving file to:', savePath)
 
 			file.save(savePath)
-			
+
 			print('done saving')
-			
+
 			#worker_loop.call_soon_threadsafe(background_thread, savePath)
 			#print('*** SPAWNING THREAD background_thread() ***')
 			#myThread = Thread(target=background_thread, args=[savePath])
 			#myThread.start()
-		
+
 			#task = long_task.apply_async()
 			print('spawning background_thread.apply_async')
 			task = background_thread.apply_async(args=[savePath])
 			db.rpush('tasklist', *[task.id])
 			print('task.id:', task.id)
-			
+
 		print('uploadzip() returning')
 		#return Response('ok', 200)
 		return jsonify({}), 202, {'Location': url_for('taskstatus', task_id=task.id)}
-		
+
 	elif request.method == 'GET':
 		# user download a zip
 		print('mmserver GET /api/v1/uploadzip/')
 		pass
 		#return 'GET'
-	
+
 @app.route('/post/<username>/<mapname>/<item>', methods=['GET', 'POST'])
 def post_file(username, mapname, item):
 	if request.method == 'POST':
 		file = request.files['file']
 		print('post_file() got request.files::', request.files)
 		if file and allowed_file(file.filename):
-						
+
 			# todo: do something here for security
 			#filename = secure_filename(file.filename)
 			filename = file.filename
-			
+
 			filePath = os.path.join(app.config['UPLOAD_FOLDER'], username)
 			# path to username has to exist, don't create it
 			if not os.path.isdir(filePath):
@@ -964,9 +967,9 @@ def stream():
 			time.sleep(1)
 			#ingestStr = db_get_str('ingesting') #.decode("utf-8")
 			tasklist = db.lrange('tasklist', 0, -1)
-			tasklist2 = [taskstatus(x.decode('UTF-8')) for x in tasklist]			
+			tasklist2 = [taskstatus(x.decode('UTF-8')) for x in tasklist]
 			yield "data: %s\n\n" % json.dumps(tasklist2)
-				
+
 	return Response(event_stream(), mimetype="text/event-stream")
 
 @app.route("/plot2")
@@ -987,4 +990,3 @@ def plot2():
 if __name__ == '__main__':
 	# /usr/local/bin/gunicorn mmserver:app --worker-class gevent --bind 127.0.0.1:5000
 	app.run(host='0.0.0.0',port=5000, debug=True)
-

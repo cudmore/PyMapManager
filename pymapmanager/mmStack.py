@@ -6,7 +6,11 @@ from errno import ENOENT
 import pandas as pd
 import numpy as np
 #import uuid # to generate a unique id for each spine
-from scipy.misc import imsave
+
+# davis
+# was this, this import is failing ????
+#from scipy.misc import imsave
+
 import tifffile
 #from skimage.io import imsave, imread
 
@@ -151,7 +155,7 @@ class mmStack():
 				int_pd = pd.read_csv(io.StringIO(tmp.decode('utf-8')), header=1, index_col=False)
 				int_pd = int_pd.add_suffix('_int' + str(ch))
 				self._stackdb = self.stackdb.join(int_pd)
-			
+
 		###############################################################################
 		# int1
 		'''
@@ -184,7 +188,7 @@ class mmStack():
 				int2 = int2.add_suffix('_int2')
 				self._stackdb = self.stackdb.join(int2)
 		'''
-		
+
 		###############################################################################
 		# line
 		self._line = None
@@ -407,7 +411,7 @@ class mmStack():
 				#self._images = imread(tiffFileName)
 				print('self._images.shape:', self._images.shape)
 				print('self._images.dtype:', self._images.dtype)
-				
+
 			except:
 				print('ERROR: mmStack.loadStackImages() did not load tiff file:', tiffFileName)
 				raise
@@ -446,9 +450,9 @@ class mmStack():
 	def ingest(self):
 		"""
 		Load each stack, save each slice as png
-		
+
 		/Users/cudmore/Dropbox/PyMaanager-Data/public/rr30a/raw/ingested/tp0/rr30a_tp0_ch2_s0000.png
-		
+
 		todo: need to ingest max project int
 		    /ingested/MAX_rr30a_tp0_ch2
 		"""
@@ -468,6 +472,8 @@ class mmStack():
 				dstFile = self.map_.name + '_tp' + str(self.mapSession) + '_ch' + str(ch) + '_s' + sliceStr + '.png'
 				#print(dstPath + dstFile)
 				#print('   mmStack.ingest() turn save back on')
-				imsave(dstPath + dstFile, self.images[slice,:,:])
-		
+				#
+				# DAVIS REMOVED
+				#imsave(dstPath + dstFile, self.images[slice,:,:])
+
 			self._images = None

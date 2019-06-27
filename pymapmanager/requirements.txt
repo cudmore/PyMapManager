@@ -1,6 +1,8 @@
 numpy>=1.14.0
 pandas>=0.22.0
 requests>=2.18.4
+#re-added davis
 #scipy>=1.0.0
+#re-added davis
 #tifffile
 matplotlib
