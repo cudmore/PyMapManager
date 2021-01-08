@@ -1,5 +1,5 @@
 
-PyMapManager is an ecosystem of tools to load and visualize time-series annotations and 3D image volumes. For a complete overview, see the main [PyMapManager](http://blog.cudmore.io/PyMapManager) documentation.
+PyMapManager is an ecosystem of tools to load and visualize time-series annotations and 3D image volumes. For a complete overview, see the main [PyMapManager](https://cudmore.github.io/PyMapManager/) documentation.
 
 
 ## 1) PyMapManager Python package [![Build Status](https://travis-ci.org/cudmore/PyMapManager.svg?branch=master)](https://travis-ci.org/cudmore/PyMapManager)
