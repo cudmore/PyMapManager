@@ -64,7 +64,7 @@ class mmMap():
 		# removed 20170107, replaced with xxx
 		# self.defaultRoiType = 'spineROI'
 		#self.defaultRoiTypeID = 0
-		
+
 		self.server = None
 		# Pointer to :class:`pymapmanager.mmio` server connection.
 		# Only used to load from urlmap.
@@ -76,9 +76,9 @@ class mmMap():
 		self.segMap = None
 		# 2D array where each row is a run of segments.
 		# segMap[i][j] gives us mmStack centric index into mmStack._line
-		
+
 		self.segRunMap = None # 20180107, why was this not defaulted?
-		
+
 		# if we get a filePath, make sure it exists and decide if it is a folder or a file
 		# in the end we will always load from a .txt file
 		if filePath is not None:
@@ -96,7 +96,7 @@ class mmMap():
 			else:
 				# error
 				raise IOError(ENOENT, 'mmMap got a bad map path:', filePath)
-		
+
 		###############################################################################
 		# map nv
 		doFile = True
@@ -222,7 +222,7 @@ class mmMap():
 	def defaultAnnotation(self):
 		"""
 		"""
-		
+
 		# if defaultAnnotation does not exist then default to 'spineROI'
 		if 'defaultAnnotation' in self.table.index:
 			theRet = self.table.loc['defaultAnnotation'][0]
@@ -270,20 +270,20 @@ class mmMap():
 	def mapInfo(self):
 		"""
 		Get information on the map
-		
+
 		Returns:
 			| A dict of
 			| mapName : Str
 			| numSessions : Int
 			| numChannels : Int
 			| numMapSegments : Int
-			| 
+			|
 			| The following are string list with numSessions elements
-			| stackNames : 
-			| importedStackName : 
-			| numSlices : 
-			| date : 
-			| time : 
+			| stackNames :
+			| importedStackName :
+			| numSlices :
+			| date :
+			| time :
 			| dx : Voxel size in um
 			| dy : Voxel size in um
 			| dz : Voxel size in um
@@ -322,11 +322,11 @@ class mmMap():
 			theRet['dx'].append(self.table.loc['dx'][idx])
 			theRet['dy'].append(self.table.loc['dy'][idx])
 			theRet['dz'].append(self.table.loc['dz'][idx])
-			
+
 			thisNum = self.stacks[idx].countObj(roiType=self.defaultAnnotation)
 			theRet['numROI'].append(thisNum)
 			theRet['numAnnotations'] = theRet['numAnnotations'] + self.stacks[idx].numObj
-			
+
 			runIdx = 6
 
 		if self.segMap is not None:
@@ -344,7 +344,7 @@ class mmMap():
 			theRet['segMap'] = self.segMap.astype('int')
 			theRet['numMapSegments'] = self.segRunMap.shape[0]
 		'''
-					
+
 		#print 'mapInfo() theRet:', theRet
 		return theRet
 
@@ -375,23 +375,23 @@ class mmMap():
 		return ret
 
 	def getMapDynamics(self, pd, thisMatrix=None):
-	
+
 		if thisMatrix is None:
 			pd = self.getMapValues3(pd)
 			thisMatrix = pd['stackidx']
-		
+
 		m = thisMatrix.shape[0]
 		n = thisMatrix.shape[1]
-			
+
 		pd['dynamics'] = np.empty([m,n])
 		pd['dynamics'][:] = np.NAN
-		
+
 		# 1:add, 2:sub, 3:transient, 4:persisten
 		kAdd = 1
 		kSubtract = 2
 		kTransient = 3
 		kPersistent = 4
-		
+
 		for i in range(m):
 			for j in range(n):
 				if not thisMatrix[i,j]>=0:
@@ -417,9 +417,9 @@ class mmMap():
 						pd['dynamics'][i,j] = kSubtract
 					else:
 						pd['dynamics'][i,j] = kPersistent
-				
+
 		return pd
-		
+
 	def ingest(self, tp, channel=1):
 		"""
 		Take a raw 3D .tif and populate raw/ingest/tp<tp> with single channel .tif files.
@@ -524,7 +524,7 @@ class mmMap():
 		# keep track of run map rows (we already know the session/column)
 		yRunRow = np.empty([m, n])
 		yRunRow[:] = np.NAN
-		
+
 		# always make a matrix of bad
 		isBad = np.empty([m, n])
 		isBad[:] = np.NAN
@@ -539,7 +539,7 @@ class mmMap():
 		# to get list of stat (x,y,z,pDist, cPnt, cx, cy, cz) etc. etc.
 		cPnt = np.empty([m, n])
 		cPnt[:] = np.NAN
-		
+
 		runIdxDim = 6
 
 		if pd['stacklist'] is not None and len(pd['stacklist'])>0:
@@ -572,7 +572,7 @@ class mmMap():
 			goodIdx = self.runMap[:, j]  # valid indices from runMap
 
 			#print goodIdx
-			
+
 			runMap_idx = orig_df.index.isin(goodIdx)  # series of boolean (Seems to play nice with nparray)
 
 			if pd['roitype']:
@@ -581,7 +581,7 @@ class mmMap():
 			if currSegmentID:
 				segmentID_idx = orig_df['parentID'].isin(currSegmentID)
 				runMap_idx = runMap_idx & segmentID_idx
-			
+
 			# bad
 			if not pd['plotbad']:
 				#print('mmMap.getMapValues3() is stripping out isBad')
@@ -589,7 +589,12 @@ class mmMap():
 				runMap_idx = runMap_idx & notBad_idx
 
 			# final_df = orig_df.loc[runMap_idx]
-			final_df = orig_df.ix[runMap_idx]
+			# 20210922 was this
+			#final_df = orig_df.ix[runMap_idx]
+			print('20210922 orig_df:')
+			print(orig_df)
+			final_df = orig_df.loc[runMap_idx]
+			print(final_df)
 
 			finalIndexList = final_df.index.tolist()
 
@@ -618,7 +623,7 @@ class mmMap():
 			yIdx[finalRows, j] = final_df.index.values
 			ySess[finalRows, j] = j
 			yRunRow[finalRows, j] = finalRows  # final_df.index
-			
+
 			# bad
 			if pd['plotbad']:
 				bad_idx = final_df['isBad'].isin([1])
@@ -636,7 +641,7 @@ class mmMap():
 				yMapSegment[finalRows, j] = self.segMap[0, final_df['parentID'].values.astype(int), j]
 
 			cPnt[finalRows, j] = final_df['cPnt'].values
-			
+
 			if pd['xstat'] == 'session':
 				#print 'swapping x for session'
 				pd['x'][finalRows, j] = j #ySess[finalRows,j]
@@ -672,7 +677,7 @@ class mmMap():
 		if pd['getMapDynamics']:
 			# creates pd['dynamics']
 			pd = self.getMapDynamics(pd, thisMatrix=pd['stackidx'])
-		
+
 		stopTime = time.time()
 		print('mmMap.getMapValues3() took', round(stopTime - startTime, 2), 'seconds')
 
@@ -729,9 +734,9 @@ class mmMap():
 		n = theMap.shape[2]
 		k = theMap.shape[0]
 
-		# reset 
+		# reset
 		theMap[runIdx][:][:] = '-1'
-		
+
 		# 20171222
 		# was this
 		#numRows = np.count_nonzero(~np.isnan(theMap[idx,:,0]))
@@ -744,7 +749,7 @@ class mmMap():
 		emptyRow[:] = 'nan'
 
 		# thisroitype = 'spineROI'
-		
+
 		currRow = 0
 		for j in range(0,n): #sessions
 			# not loaded yet
@@ -833,7 +838,7 @@ class mmMap():
 		for stack in self.stacks:
 			#print(stack)
 			stack.ingest()
-			
+
 if __name__ == '__main__':
 	path = '../examples/exampleMaps/THet2a/THet2a.txt'
 	path = '../examples/exampleMaps/BD_NGDG450/BD_NGDG450.txt'
@@ -868,7 +873,7 @@ if __name__ == '__main__':
 	#plotDict['isBad'])
 	#for row in plotDict['isBad']:
 	#	print(row)
-		
+
 	# test line
 	# THet2a has a stack but NO tracing and NO spines at session 0
 	if 0:
@@ -879,21 +884,20 @@ if __name__ == '__main__':
 			print("line plotDict['sDist'].shape:", plotDict['sDist'].shape)
 		else:
 			print('__main__ did not find a line at session:', session)
-			
+
 	if 0:
 		print('\nm.mapInfo():')
 		mapInfo = m.mapInfo()
 		for key, value in mapInfo.iteritems():
 			print(key, value)
-		
+
 	#from flask import jsonify
 	#print jsonify(mapInfo)
-	
+
 	#import json
 	#print json.dumps(mapInfo)
-	
-	
+
+
 	# dynamics
 	#plotDict = m.getMapDynamics(plotDict)
 	#print plotDict['dynamics']
-	

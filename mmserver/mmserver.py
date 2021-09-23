@@ -40,11 +40,16 @@ try:
 except ImportError:
 	from io import BytesIO as StringIO # python 3.x
 
-from flask import Flask, render_template, send_file, send_from_directory, safe_join
+# 20210922 removed safe_join
+from flask import Flask, render_template, send_file, send_from_directory # , safe_join
 from flask import jsonify, request, make_response, Response, url_for
 from flask_cors import CORS
 
-from werkzeug import secure_filename, FileStorage
+# 20210922 was this
+#from werkzeug import secure_filename, FileStorage
+# 20210922 added safe_join
+from werkzeug.utils import secure_filename, safe_join
+from werkzeug.datastructures import  FileStorage
 
 import pandas as pandas
 import numpy as np
@@ -292,6 +297,7 @@ def not_found(error):
 def hello_world():
 	print('hello_world()')
 	index_path = os.path.join(app.static_folder, 'index.html')
+	#return('20210922 hello world')
 	return send_file(index_path)
 	#return render_template('index.html')
 	#return 'mmserver rest interface. use /help to get started'
