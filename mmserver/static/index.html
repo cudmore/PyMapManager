@@ -7,7 +7,7 @@
 
     <link rel="stylesheet" href="static/lib/bootstrap-4.0.0-beta.2-dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="static/lib/font-awesome-4.7.0/css/font-awesome.min.css">
-   
+
     <link rel="stylesheet" href="static/mmclient.css">
 
 	<script src="static/lib/angular/angular.min.js"></script>
@@ -36,7 +36,7 @@
 	<!-- leftlet full screen -->
  	<link rel="stylesheet" href="static/lib/leaflet/fullscreen/Control.FullScreen.css" />
  	<script src="static/lib/leaflet/fullscreen/Control.FullScreen.js"></script>
- 
+
 	<script src='static/mmclient.js'></script>
 
 	<!-- <script type="text/javascript" src="static/lib/angularjs-dropdown-multiselect.min.js"></script> -->
@@ -56,30 +56,30 @@
 		Explore Map Manager Time-Series Annotations and Images
 		</font>
 		</div>
-		
+
 <!--		<button type="button" class="btn btn-default btn-sm myButtonBackground" style="float:right"> <i class="fa fa-hdd-o fa-2x" aria-hidden="true"></i></button> -->
 		<div class="myIndentDiv2">
 		<A HREF="download" class="myButtonBackground"> <i class="fa fa-cloud-download fa-2x" aria-hidden="true"></i> </A>
 		</div>
-		
+
 		<div class="myIndentDiv2">
 		<A HREF="upload" class="myButtonBackground"> <i class="fa fa-cloud-upload fa-2x" aria-hidden="true"></i> </A>
 		</div>
 
 		<div class="myIndentDiv2" style="float:right">
-		<A HREF="http://blog.cudmore.io/PyMapManager/web-help"> <i class="fa fa-question fa-2x" aria-hidden="true"></i> </A>
+		<A HREF="http://cudmore.github.io/PyMapManager/web-help"> <i class="fa fa-question fa-2x" aria-hidden="true"></i> </A>
 		</div>
 
 <!--		<button type="button" class="btn btn-default btn-sm myButtonBackground" data-toggle="dropdown" style="float:right"> <i class="fa fa-question fa-2x" aria-hidden="true"></i></button> -->
 <!--		<div class="mypopup"> -->
 <!--		<ul class="dropdown-menu" style="z-index:9999">-->
-<!--		<li class="myIndentDiv2"><A HREF="http://blog.cudmore.io/PyMapManager" target="_blank">PyMapManager Documentation</A></li> -->
+<!--		<li class="myIndentDiv2"><A HREF="http://cudmore.github.io/PyMapManager" target="_blank">PyMapManager Documentation</A></li> -->
 <!--		<li class="myIndentDiv2">Designed and implemented by <A HREF="http://www.robertcudmore.org" target="_blank">Robert Cudmore</A></li> -->
 <!--		</ul> -->
 <!--		</div> -->
 
 	</div>
-				
+
 	<div class="row">
 		<div class="col-4">
 			<div class="card">
@@ -93,10 +93,10 @@
 					</div>
 					</div>
 					-->
-					
+
 					<!-- list of maps -->
 					<div class="row">
-										
+
 					<div class="col">
 						<table>
 							<thead>
@@ -111,7 +111,7 @@
 						</tbody>
 						</table>
 					</div>
-					
+
 					<div class="col">
 						<p>
 						<button id="loadMapButtonID" type="button" class="btn btn-primary btn-sm">Load time-series</button>
@@ -137,7 +137,7 @@
 					</div>
 
 					</div>
-					
+
 					<!--
 					<div class="row">
 					<p>
@@ -145,7 +145,7 @@
 					</p>
 					</div>
 					-->
-					
+
 					<!-- list of stats -->
 					<BR>
 					<div class="row">
@@ -215,7 +215,7 @@
 							</table>
 					</div>
 					</div>
-					
+
 					<!-- list of map segments -->
 					<BR>
 					<div class="row">
@@ -234,15 +234,15 @@
 							</table>
 					</div>
 					</div>
-					
+
 				</div> <!-- card block -->
 			</div> <!-- card -->
 		</div> <!-- col-4 -->
-		
+
 		<div class="col-8">
 			<div class="card" style="width: 620px;">
 				<div class="card-block" style="padding: 1em">
-					
+
 					<!-- plotly scatter -->
 					<div class="row">
 					<div id="scatterPlot" style="width: 600px; height: 600px"></div>
@@ -253,7 +253,7 @@
 
 			<div class="card" style="width: 620px;">
 				<div class="card-block" style="padding: 1em">
-			
+
 					<!-- first row of plot control -->
 					<div class="row mySmallFont">
 						<div class="col">
@@ -261,7 +261,7 @@
 						<label>Marker size <input type="range" min="1" max="20" value="5" class="slider" id="dotSize"></label>
 						</div>
 						</div>
-						
+
 						<div class="col">
 						<div class="myIndentDiv3">
 						<!-- <input type="checkbox" id="showPlotLinesID" ng-model="showPlotLines" ng-change="userTogglePlotLines()" ng-checked="showPlotLines"> -->
@@ -298,17 +298,17 @@
 						<div class="myIndentDiv3">
 						<font>Marker Color</font>
 						<select ng-change="toggleInterface('markerColor')" ng-model="selectedMarkerColor" ng-options="markerColor for markerColor in markerColorList"></select>
-						</div>		
 						</div>
-						
+						</div>
+
 						<div class="col">
 						<div class="myIndentDiv3">
 						<font>Plot Mask</font>
 						<select ng-change="toggleInterface('plotMask')" ng-model="selectedPlotMask" ng-options="plotMask for plotMask in plotMaskList"></select>
-						</div>		
+						</div>
 						</div>
 					</div>
-					
+
 					<div class="row mySmallFont">
 					<div class="col">
 					<div class="myIndentDiv" ng-if="userClickSessionIndex">
@@ -327,7 +327,7 @@
 		</div>
 
 	</div> <!-- row -->
-	
+
 	<BR>
 
 
@@ -338,7 +338,7 @@
 	Images
 	</button>
 	</div>
-	
+
 	<div class="row" ng-show="showRawImages">
 
 		<div class="myIndentDiv2" >
@@ -350,7 +350,7 @@
 			<tr>
 			<td  class="myIndentDiv2">
 				<div  class="myIndentDiv2">
-				
+
 				<input type="checkbox" id="showAnnotationsID" ng-model="showAnnotations" ng-change="userToggleAnnotations()" ng-checked="showAnnotations">
 				<label for="showAnnotationsID">Annotations </label>
 
@@ -398,31 +398,38 @@
 			</table>
 		</div>
 		<!-- -->
-		
+
 		<div class="myIndentDiv2">
 		<input type="checkbox" id="linkTimepointsID" ng-model="linkTimepoints" ng-change="userToggleLinkTimepoints()" ng-checked="linkTimepoints">
 		<label for="linkTimepointsID"><i class="fa fa-link fa-lg myButtonBackground" aria-hidden="true"></i></label>
-		</div>		
-		
+		</div>
+
 		<div class="myIndentDiv2">
 		<input type="checkbox" id="showSlidingZID" ng-model="showSlidingZ" ng-change="userToggleShowSlidingZ()" ng-checked="showSlidingZ">
 		<label class="myInverseColor" for="showSlidingZID">Sliding Z</label>
-		</div>		
-		
+		</div>
+
 		<div class="myIndentDiv2">
 		<label for="imageBrightnessID"><i class="fa fa-sun-o fa-lg myButtonBackground" aria-hidden="true"></i></label>
 		<input type="range" id="imageBrightnessID" min="1" max="200" ng-model="imageBrightness">
-		</div>		
+		</div>
 
 		<div class="myIndentDiv2">
 		<font class="myInverseColor">Channel</font>
 		<select ng-change="setLeafletChannel()" ng-model="leafletChannel" ng-options="channel for channel in channelList"></select>
-		</div>		
+		</div>
 
 		<div class="myInverseColor">
 			<div class="myIndentDiv2">
 				User:{{leafletUser}} Map:{{leafletMap}} {{(leafletSelectedTP != null) ? leafletSelectedTP : ''}} {{(leafletSelectedStackIndex != null) ? leafletSelectedStackIndex : ''}}
 			</div>
+		</div>
+
+		<div class="myIndentDiv2">
+		<font class="myInverseColor"><b>Zoom:</b> Ctrl+Wheel</font>
+		</div>
+		<div class="myIndentDiv2">
+		<font class="myInverseColor"><b>Scroll images up/down:</b> Shift+Wheel</font>
 		</div>
 		<!--
 		<div class="myIndentDiv2">
@@ -435,11 +442,11 @@
 			</ul>
 		</div>
 		-->
-		
+
 	</div> <!-- row -->
-	
+
 	<div ng-show="showRawImages" class="row">
-			
+
 		<div class="myIndentDiv">
 			<div ng-show="showTimepoints[0]" id="myLeafletID0" class="myLeafletDiv" style="width: 512px; height: 512px;">
 				<div class="tpIntentDiv">
@@ -449,7 +456,7 @@
 				</div>
 			</div>
 		</div>
-		
+
 		<div class="myIndentDiv">
 			<div ng-show="showTimepoints[1]" id="myLeafletID1" class="myLeafletDiv" style="width: 512px; height: 512px;">
 				<div class="tpIntentDiv">
@@ -459,7 +466,7 @@
 				</div>
 			</div>
 		</div>
-		
+
 		<div class="myIndentDiv">
 			<div ng-show="showTimepoints[2]" id="myLeafletID2" class="myLeafletDiv" style="width: 512px; height: 512px;">
 				<div class="tpIntentDiv">
@@ -469,7 +476,7 @@
 				</div>
 			</div>
 		</div>
-		
+
 		<div class="myIndentDiv">
 			<div ng-show="showTimepoints[3]" id="myLeafletID3" class="myLeafletDiv" style="width: 512px; height: 512px;">
 				<div class="tpIntentDiv">
@@ -479,7 +486,7 @@
 				</div>
 			</div>
 		</div>
-		
+
 		<div class="myIndentDiv">
 			<div ng-show="showTimepoints[4]" id="myLeafletID4" class="myLeafletDiv" style="width: 512px; height: 512px;">
 				<div class="tpIntentDiv">
@@ -489,7 +496,7 @@
 				</div>
 			</div>
 		</div>
-		
+
 		<div class="myIndentDiv">
 			<div ng-show="showTimepoints[5]" id="myLeafletID5" class="myLeafletDiv" style="width: 512px; height: 512px;">
 				<div class="tpIntentDiv">

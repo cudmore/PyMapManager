@@ -248,6 +248,8 @@ class fakeredis():
 	# davis
 	def ltrim(self, str1, int1, int2):
 		pass
+	def lrange(self, str1, int1, int2):
+		pass
 
 upTime = time.time()
 
@@ -973,9 +975,11 @@ def stream():
 			time.sleep(1)
 			#ingestStr = db_get_str('ingesting') #.decode("utf-8")
 			tasklist = db.lrange('tasklist', 0, -1)
-			tasklist2 = [taskstatus(x.decode('UTF-8')) for x in tasklist]
-			yield "data: %s\n\n" % json.dumps(tasklist2)
-
+			if tasklist is not None:
+				tasklist2 = [taskstatus(x.decode('UTF-8')) for x in tasklist]
+				yield "data: %s\n\n" % json.dumps(tasklist2)
+			else:
+				yield "data: My Error None"
 	return Response(event_stream(), mimetype="text/event-stream")
 
 @app.route("/plot2")

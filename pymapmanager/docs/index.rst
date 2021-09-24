@@ -6,7 +6,7 @@
 .. toctree::
    :maxdepth: 2
 
-`PyMapManager <http://blog.cudmore.io/PyMapManager>`_ is software to visualize and annotative 3D image time-series.
+`PyMapManager <http://cudmore.github.io/PyMapManager>`_ is software to visualize and annotative 3D image time-series.
 
 The PyMapManager package is available on `PyPi <https://pypi.python.org/pypi/pymapmanager>`_ and can be installed with::
 
@@ -28,14 +28,14 @@ Classes
 
 Examples
 ==================
-* See the examples section on the main `documentation website <http://blog.cudmore.io/PyMapManager/>`_.
+* See the examples section on the main `documentation website <http://cudmore.github.io/PyMapManager/>`_.
 * Also, see the `examples/ <https://github.com/cudmore/PyMapManager/tree/master/examples>`_ folder in main `GitHub repository <https://github.com/cudmore/PyMapManager>`_.
 
 Links
 ==================
-* PyMapManager `documentation website <http://blog.cudmore.io/PyMapManager>`_.
+* PyMapManager `documentation website <http://cudmore.github.io/PyMapManager>`_.
 * PyMapManager `GitHub repository <https://github.com/cudmore/PyMapManager>`_.
-* Documentation for the `Igor Pro Version of MapManager <http://blog.cudmore.io/mapmanager/>`_.
+* Documentation for the `Igor Pro Version of MapManager <http://cudmore.github.io/mapmanager/>`_.
 * Robert Cudmore's `homepage <http://robertcudmore.org>`_.
 
 Indices and tables

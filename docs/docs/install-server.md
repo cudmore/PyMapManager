@@ -20,20 +20,30 @@ To run the server locally, you need some data! Example data can be downloaded fr
 
 	git clone  --depth=1 https://github.com/cudmore/PyMapManager.git
 	git clone  --depth=1 https://github.com/mapmanager/PyMapManager-Data.git
-		
+
 ## Running the server.
 
 ## 1) Using Python
 
 Simplest case is to use `python mmserver.py` and you should be up in no time.
 
-	# install pymapmanager
-	pip install PyMapManager/
+	# work from PyMapManager folder
+	cd PyMapManager
+
+	# create a virtual environment in folder `mm_env`
+	python -m venv mm_env
+
+	# activate virtual environment
+	source mm_env/bin/activate
+
+	# install pymapmanager (-e will allow you to change source code)
+	pip install -e .
+
 	# install required server libraries
-	pip install -r PyMapManager/mmserver/requirements.txt
-	
+	pip install -r mmserver/requirements.txt
+
 	# run the server
-	cd PyMapManager/mserver
+	cd mmserver
 	python mmserver.py
 
 Point your browser to `http://localhost:5000` and have fun browsing.
@@ -46,7 +56,7 @@ To get started, download and install [Docker Community Edition (CE)][docker ce].
 
 ## 2.1) Using docker-compose
 
-If you want to run the server inside a [Docker][docker] container, the easiest option is to use `docker-compose`. Using this technique makes a very efficient production level server and is exactly what we are using at [http://cudmore.duckdns.org](http://cudmore.duckdns.org).
+If you want to run the server inside a [Docker][docker] container, the easiest option is to use `docker-compose`. Using this technique makes a very efficient production level server and is exactly the same code-base we use to make world accessible PyMapManager site.
 
 ### Build
 
@@ -58,14 +68,14 @@ If you want to run the server inside a [Docker][docker] container, the easiest o
 	docker-compose up
 
 Point your browser to `http://localhost` and have fun browsing.
-	
+
 ### Stop
 
-	docker-compose down	
-	
+	docker-compose down
+
 	# stop all docker containers
 	docker stop $(docker ps -aq)
-	
+
 ## 2.2) Using docker
 
 If you prefer to run the docker services separately and specify paths on the command line.

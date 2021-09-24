@@ -1,6 +1,6 @@
 This is Python code to run a web server which will create a point-and-click interface to browse Map Manager annotations and image time-series. The server also includes a REST interface allowing data to be retreived from your favorite programming environment.
 
-Please see the main [PyMapManager](http://blog.cudmore.io/PyMapManager) documentation website and examples of [REST API endpoints](http://blog.cudmore.io/PyMapManager/rest-api/).
+Please see the main [PyMapManager](http://cudmore.github.io/PyMapManager) documentation website and examples of [REST API endpoints](http://cudmore.github.io/PyMapManager/rest-api/).
 
 ## Installation
 
@@ -41,12 +41,12 @@ This will run the server locally at `http://localhost:5000`. Have fun browsing.
 
 ## Running a production level server
 
-Running the server with `python mmserver.py` is a good way to get started quickly. Yet, this is a very simplified example. In reality, the server should be run **synchronously** using either gunicorn or uwsgi and then served through a proper web-server such as Apache or nginx. We provide an easy to use Docker container to do exactly this! See [install server](http://blog.cudmore.io/PyMapManager/install-server/) for more information.
+Running the server with `python mmserver.py` is a good way to get started quickly. Yet, this is a very simplified example. In reality, the server should be run **synchronously** using either gunicorn or uwsgi and then served through a proper web-server such as Apache or nginx. We provide an easy to use Docker container to do exactly this! See [install server](http://cudmore.github.io/PyMapManager/install-server/) for more information.
 
 
 ## Using the REST API in a scripting language
 
-Once the server is running, annotations and images can be queried via the [REST](http://blog.cudmore.io/PyMapManager/rest-api/) interface.
+Once the server is running, annotations and images can be queried via the [REST](http://cudmore.github.io/PyMapManager/rest-api/) interface.
 
 ### In Javascript
 

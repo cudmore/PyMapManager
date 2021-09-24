@@ -27,7 +27,7 @@ A web server to browse and share Map Manager annotations and time-series images.
 
 To see this in action, check out our [example server](http://cudmore.duckdns.org). 
 
-Running the server is easy with either Python or Docker, see the [server installation](http://blog.cudmore.io/PyMapManager/install-server/) for more information.
+Running the server is easy with either Python or Docker, see the [server installation](http://cudmore.github.io/PyMapManager/install-server/) for more information.
 
 ### Screenshots
 
@@ -60,4 +60,4 @@ python main.py
 ```
 
 [redis]: https://redis.io/
-[rest-api]: http://blog.cudmore.io/PyMapManager/rest-api/
+[rest-api]: http://cudmore.github.io/PyMapManager/rest-api/

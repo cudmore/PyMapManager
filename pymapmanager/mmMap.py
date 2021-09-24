@@ -591,10 +591,10 @@ class mmMap():
 			# final_df = orig_df.loc[runMap_idx]
 			# 20210922 was this
 			#final_df = orig_df.ix[runMap_idx]
-			print('20210922 orig_df:')
-			print(orig_df)
+			#print('20210922 orig_df:')
+			#print(orig_df)
 			final_df = orig_df.loc[runMap_idx]
-			print(final_df)
+			#print(final_df)
 
 			finalIndexList = final_df.index.tolist()
 
