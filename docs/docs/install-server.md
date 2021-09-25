@@ -2,8 +2,6 @@
 
 The PyMapManager server allows Map Manager annotations and time-series images to be browsed with a web interface. It is really easy to run the server on your local machine. For a production level server we provide a Docker container.
 
-~~For instant satisfaction, we have an [experimental server][duckdns] you can use right now.~~
-
 ### Browsing annotations
 
 <IMG SRC="../img/mmserver_purejs.png">

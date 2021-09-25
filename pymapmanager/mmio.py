@@ -43,7 +43,7 @@ import os, time, requests
 default_eol = '\n'
 debugThis = False
 
-class mmio(server='http://cudmore.duckdns.org:5000/'):
+class mmio(server='http://localhost:5000/'):
 	#default_server = 'http://localhost:5000/'
 	#server = 'http://cudmore.duckdns.org/'
 	#server = 'http://localhost/'
