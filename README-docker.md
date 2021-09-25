@@ -2,7 +2,7 @@
 
 The PyMapManager server allows Map Manager annotations and time-series images to be browsed with a web interface. The server can be run on your local machine using the provided Docker.
 
-For instant satisfaction, we have an [experimental server][duckdns] you can use right now.
+~~For instant satisfaction, we have an [experimental server][duckdns] you can use right now.~~
 
 ### Browsing annotations
 
@@ -20,7 +20,7 @@ To run the server locally, you need some data! Example data can be downloaded fr
 
 	git clone https://github.com/cudmore/PyMapManager.git
 	git clone https://github.com/mapmanager/PyMapManager-Data.git
-		
+
 This should put both PyMapManager and PyMapManager-Data in the same directory, for example:
 
 	/User/me/PyMapManager
@@ -37,7 +37,7 @@ Simplest case is to use `python mmserver.py` and you should be up in no time. Th
 You need a redis-server running. Install it on OSX with `brew install redis-server` or on most variants of Linux with `sudo apt-get install redis-server`. See [redis][redis] homepage for more info.
 
 	redis-server
-	
+
 ### Start mmserver
 
 	cd PyMapManager/app
@@ -48,10 +48,10 @@ Point your browser to `http://localhost:5000` and have fun browsing.
 ### Stop redis-server
 
 	redis-cli shutdown
-	
+
 ## 2.1) Using docker-compose
 
-If you want to run the server inside a [Docker][docker] container, the easiest option is to use `docker-compose`. Using this technique makes a very efficient server and is exactly what we are using at [http://cudmore.duckdns.org](http://cudmore.duckdns.org).
+If you want to run the server inside a [Docker][docker] container, the easiest option is to use `docker-compose`. Using this technique makes a very efficient server and is exactly what we are using to run our production servers.
 
 ### Setup
 
@@ -69,11 +69,11 @@ In `docker-compose.yml`, change the path `/Users/cudmore/Dropbox/PyMapManager-Da
 	docker-compose up
 
 Point your browser to `http://localhost` and have fun browsing.
-	
+
 ### Stop
 
-	docker-compose down	
-	
+	docker-compose down
+
 ### Troubleshoot
 
 	docker-compose run web bash

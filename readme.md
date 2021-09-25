@@ -25,7 +25,7 @@ Please see the <A HREF="http://pymapmanager.readthedocs.io/en/latest/">API Docum
 
 A web server to browse and share Map Manager annotations and time-series images. In addition to the point-and-click interface, there is also a [REST API][rest-api] to programmatically retrieve data.
 
-To see this in action, check out our [example server](http://cudmore.duckdns.org). 
+~~To see this in action, check out our [example server](http://cudmore.duckdns.org).~~
 
 Running the server is easy with either Python or Docker, see the [server installation](http://cudmore.github.io/PyMapManager/install-server/) for more information.
 

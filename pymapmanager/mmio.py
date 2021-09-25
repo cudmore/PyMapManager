@@ -4,15 +4,15 @@ Get files from a mmserver using REST interface.
 Examples::
 
 	from pymapmanager import mmio
-	
+
 	print mmio.server
 	print mmio.user
-	
+
 	s = mmio()
 
 	s.maplist()
 		["rr30a", "rr58c"]
-	
+
 	# these are the basic files that we can get for map 'rr30a'
 	# they will each return text that can be converted to a stringio and read into python (numpy and/or panda)
 	s.getfile('header', 'rr30a')
@@ -21,7 +21,7 @@ Examples::
 	s.getfile('stackdb', 'rr30a', timepoint=0)
 	s.getfile('line', 'rr30a', timepoint=0)
 	s.getfile('int', 'rr30a', timepoint=0, channel=1)
-	
+
 	# a bad request looks like this
 	s.getfile('header', 'bad map')
 		error: mmio.getfile() received a 404 for url: http://robertcudmore.org/mmserver/public/bad map/header
@@ -43,19 +43,19 @@ import os, time, requests
 default_eol = '\n'
 debugThis = False
 
-class mmio():
+class mmio(server='http://cudmore.duckdns.org:5000/'):
 	#default_server = 'http://localhost:5000/'
-	server = 'http://cudmore.duckdns.org/'
+	#server = 'http://cudmore.duckdns.org/'
 	#server = 'http://localhost/'
 	user = 'public'
-	
+
 	####################################################
 	## init
 	####################################################
 	def __init__(self, server=server, user=user):
 		"""
 		Establish connection to a mmserver.
-		
+
 		Args:
 			server_url (str): The full url to the mmServer
 				For example: 'http://localhost:5000/'
@@ -64,7 +64,7 @@ class mmio():
 		"""
 		self.server_url = server
 		self.username = user
-		
+
 		if debugThis:
 			print('mmio.__init__(): server_url:', server_url)
 		url = self.server_url + 'api/v1/status'
@@ -73,7 +73,7 @@ class mmio():
 
 		if debugThis:
 			print('   server responded:', response.content)
-		
+
 	####################################################
 	## get
 	####################################################
@@ -86,49 +86,49 @@ class mmio():
 		if response.status_code == 404:
 			print('error: mmio.maplist() received a 404 for url:', url)
 		return response.content
-		
+
 	def getfile(self, type, mapname, timepoint=None, channel=None):
 		"""
 		Get a file from a map.
-		
+
 		Args:
 			type (str): One of (header, objmap, segmap, stackdb, line, int)
 			mapname (str):
 			timepoint (int):
 			channel (int): Required for type=int
-			
+
 		To Do::
 			Server should mirror mmMap and mmStack. For example, merge stackdb and int
 
 		"""
-		
+
 		url = self.server_url + 'api/v1/getfile/' + type + '/' + self.username + '/' + mapname
 		if timepoint is not None:
 			url += '/' + str(timepoint)
 		if channel is not None:
 			url += '/' + str(channel)
-			
+
 		if debugThis:
 			print('mmio.getfile() url:', url)
 		response = requests.get(url)
 		if response.status_code == 404:
 			print('error: mmio.getfile() received a 404 for url:', url)
 		return response.content
-			
+
 	def getimage(self, mapname, timepoint, slice, channel=1):
 		"""
 		Get an image from a map.
-		
+
 		Args:
 			mapname (str):
 			timepoint (int):
 			slice (int):
 			channel (int):
-			
+
 		Note::
 			For now this is the whole 3D stack, need to make it one slice.
 		"""
-		
+
 		url = self.server_url + self.username + '/' + mapname + '/' + str(timepoint) \
 			+ '/image/' + str(slice) + '/' + str(channel)
 		if debugThis:
@@ -205,7 +205,7 @@ class mmio():
 
 		stopTime = time.time()
 		print('Done uploading map:', mapFolder, 'in', round(stopTime-startTime,2), 'seconds.')
-	
+
 if __name__ == '__main__':
 	if 0:
 		s = mmio()
@@ -215,7 +215,7 @@ if __name__ == '__main__':
 		io = mmio(user='public')
 		maplist = io.maplist()
 		print('main: maplist:', maplist)
-		
+
 		header = io.getfile('header', 'rr30a').decode("utf-8")
 		print('header:', header)
 		for line in header.split('\n'):

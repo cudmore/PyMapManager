@@ -11,14 +11,14 @@ There are three components to PyMapManager:
 Install with
 
 	pip install PyMapManager
-	
+
 To get started writing Python code to extend Map Manager analysis, see the iPython notebooks in the [/examples][5] folder. For more detailed install instructions, see [Install PyMapManager](install-pymapmanager). See the [API Documentation][2] for a full description of all the classes and functions.
 
 ## 2) PyMapManager server
- 
+
 The PyMapManager server provides a web-based front-end to browse Map Manager annotations and images. The PyMapManager server also provides a [REST API][6] to retrieve Map Manager annotations and images from within your favorite programming environment.
 
-We have an [example server][client/server] to see this in action. Please note, this server is at an early development stage and might not always be available. 
+~~We have an [example server][client/server] to see this in action. Please note, this server is at an early development stage and might not always be available. ~~
 
 ### Browsing annotations
 
@@ -28,16 +28,16 @@ We have an [example server][client/server] to see this in action. Please note, t
 
 <IMG SRC="mmserver_leaflet.png">
 <IMG SRC="mmserver_leaflet2.png">
- 
- 
+
+
 ## 3) PyMapManager deskop application
- 
+
 **Development of this desktop application has been downgraded to focus on the PyMapManager web interface.**
 
-The Qt version of PyMapManager is a desktop application. See [/PyQtMapManager][4]. 
- 
+The Qt version of PyMapManager is a desktop application. See [/PyQtMapManager][4].
+
 <IMG SRC="pyMapManager_v2.png">
- 
+
 [1]: http://mapmanager.github.io
 [2]: http://pymapmanager.readthedocs.io/en/latest/
 [3]: install-client-server
