@@ -655,12 +655,13 @@ pip install -r mmserver/requirements.txt
 cd mmserver
 python mmserver.py
 </code></pre>
-<p>Point your browser to <code>http://localhost:5000</code> and have fun browsing.</p>
+<p>Point your browser to <a href="http://localhost:5000">http://localhost:5000</a> and have fun browsing our example dataset.</p>
 <h2 id="2-using-the-docker-container">2) Using the Docker container</h2>
 <p>Running the server from within a Docker container has lots of benefits. First off, the Docker container spins up a proper <a href="https://www.nginx.com/">nginx</a> web server and runs multiple copies of the python code in mmserver.py. With this system, the server is really responsive even when multiple requests are coming in fast as happens when images are scrolled.</p>
 <p>To get started, download and install <a href="https://docs.docker.com/install/">Docker Community Edition (CE)</a>.</p>
 <h2 id="21-using-docker-compose">2.1) Using docker-compose</h2>
-<p>If you want to run the server inside a <a href="https://www.docker.com/community-edition">Docker</a> container, the easiest option is to use <code>docker-compose</code>. Using this technique makes a very efficient production level server and is exactly the same code-base we use to make world accessible PyMapManager site.</p>
+<p>If you want to run the server inside a <a href="https://www.docker.com/community-edition">Docker</a> container, the easiest option is to use <code>docker-compose</code>. Using this technique makes a very efficient production level server and is exactly the same code-base we use to make our world accessible PyMapManager sites.</p>
+<p><strong>Note:</strong> We are working on this documentation. In the following you may need to use <code>sudo</code> in some of the commands like <code>sudo docker-compose up</code>.</p>
 <h3 id="build">Build</h3>
 <pre><code>cd PyMapManager
 docker-compose build # this will take a few minutes the first time it is run
