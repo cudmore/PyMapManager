@@ -482,7 +482,7 @@ function updateScatterPlot(xydata) {
 		if ($scope.showBad == false) {
 			okGo = okGo && ! xydata.isBad[i].includes(1)
 		}
-		
+
 		if (! okGo ) {
 			continue
 		}
@@ -1027,7 +1027,7 @@ function selectInPlotly(runRow, runCol) {
 				document.getElementById(thisDIVID).addEventListener("keyup", myKeyUp);
 				document.getElementById(thisDIVID).addEventListener("wheel", myWheel);
 			}
-			
+
 			leafletRun[thisTP].on('move', function (e) {
 				//console.log('      move');
 				//console.log(e);
@@ -1195,7 +1195,7 @@ function selectInPlotly(runRow, runCol) {
 		$scope.leafletSelectedStackIndex = 'Stack-index:' + mapLeafletData.stackidx[myRunRow][myTimepoint]
 		//force angular to refresh with new values
 		$scope.$apply();
-				
+
 		selectRun(myTimepoint, myRunRow)
 	}
 
@@ -1247,18 +1247,18 @@ function selectInPlotly(runRow, runCol) {
 				if (mapLeafletData.mapsegment.length > 0) {
 					var seedSegmentID = mapLeafletData.mapsegment[seedRunRow][seedTP]
 					var seed_cPnt = mapLeafletData.cPnt[seedRunRow][seedTP]
-	
+
 					//look into tracing to get seed tp sDist
 					var seed_sDist = xyzTracingLeaflet2[seedTP][seed_cPnt].sDist //this seems wrong?
 					//console.log('seedSegmentID:', seedSegmentID, 'seed_cPnt:', seed_cPnt, 'seed_sDist:', seed_sDist)
-	
+
 					//look in currTP tracing for corresponding sDist ~= seed_sDist
 					gFindThis_mapSegment = seedSegmentID
 					gFindThis_sDist = seed_sDist
 					var foundIdx = xyzTracingLeaflet2[currTP].find(find_sDist_)
 					if (foundIdx) {
 						console.log('selectRun() foundIdx:', foundIdx)
-		
+
 						//
 						//snap to the x/y/z of the tracing
 						var xSnap = xyzTracingLeaflet2[currTP][foundIdx.idx].x
@@ -1268,7 +1268,7 @@ function selectInPlotly(runRow, runCol) {
 					} else {
 						console.log('did not find sDist at tp:')
 					}
-					
+
 					//and make a marker
 					//var ll = L.latLng;
 					//ll = um2leaflet(xSnap, ySnap)
@@ -1510,7 +1510,7 @@ imageUrl = serverurl + 'images/' + $scope.leafletUser + '/' + $scope.leafletMap 
 		$scope.leafletSelectedStackIndex = null
 		$scope.leafletSelectedSegment = null
 		$scope.$apply(); //force angular to refresh with new values
-		
+
 		for (var currTP=0; currTP<tmpNumTimepoint; currTP+=1) {
 			if (! $scope.showTimepoints[currTP]) {
 				continue

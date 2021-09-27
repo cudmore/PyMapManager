@@ -18,8 +18,6 @@ To get started writing Python code to extend Map Manager analysis, see the iPyth
 
 The PyMapManager server provides a web-based front-end to browse Map Manager annotations and images. The PyMapManager server also provides a [REST API][6] to retrieve Map Manager annotations and images from within your favorite programming environment.
 
-~~We have an [example server][client/server] to see this in action. Please note, this server is at an early development stage and might not always be available. ~~
-
 ### Browsing annotations
 
 <IMG SRC="mmserver_purejs.png">

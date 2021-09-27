@@ -44,7 +44,7 @@ Simplest case is to use `python mmserver.py` and you should be up in no time. Pl
 	cd mmserver
 	python mmserver.py
 
-Point your browser to `http://localhost:5000` and have fun browsing.
+Point your browser to [http://localhost:5000](http://localhost:5000) and have fun browsing our example dataset.
 
 ## 2) Using the Docker container
 
@@ -54,7 +54,9 @@ To get started, download and install [Docker Community Edition (CE)][docker ce].
 
 ## 2.1) Using docker-compose
 
-If you want to run the server inside a [Docker][docker] container, the easiest option is to use `docker-compose`. Using this technique makes a very efficient production level server and is exactly the same code-base we use to make world accessible PyMapManager site.
+If you want to run the server inside a [Docker][docker] container, the easiest option is to use `docker-compose`. Using this technique makes a very efficient production level server and is exactly the same code-base we use to make our world accessible PyMapManager sites.
+
+**Note:** We are working on this documentation. In the following you may need to use `sudo` in some of the commands like `sudo docker-compose up`.
 
 ### Build
 
