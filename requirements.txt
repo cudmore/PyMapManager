@@ -8,7 +8,7 @@ requests>=2.18.4
 
 #re-added davis
 Pillow
-scipy>=1.0.0
+scipy<=1.2.0
 tifffile
 
 matplotlib
