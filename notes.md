@@ -213,3 +213,37 @@ To generate pdoc
     # SHOULD make /doc/PyMapManager/ inside PyMapManager MODULE (not first level which is PACKAGE
     
 - check in in onpick() does it respect nan?
+
+## Downloaing data from BIL
+
+One of my datasets is here and includes raw images and folders of txt files with annotations
+
+```
+https://download.brainimagelibrary.org/d9/01/d901fb2108458eca/rr30a/
+```
+
+```
+line/                                              04-Jan-2018 09:19                   -
+max/                                               02-Oct-2015 14:18                   -
+stackdb/                                           04-Jan-2018 09:03                   -
+rr30a_s0_ch1.tif                                   02-Oct-2015 14:30           146883164
+rr30a_s0_ch2.tif                                   02-Oct-2015 14:30           146883164
+rr30a_s1_ch1.tif                                   02-Oct-2015 14:30           136391514
+rr30a_s1_ch2.tif                                   02-Oct-2015 14:30           136391514
+rr30a_s2_ch1.tif                                   02-Oct-2015 14:30           146883164
+rr30a_s2_ch2.tif                                   02-Oct-2015 14:30           146883164
+rr30a_s3_ch1.tif                                   02-Oct-2015 14:30           146883164
+rr30a_s3_ch2.tif                                   02-Oct-2015 14:30           146883164
+rr30a_s4_ch1.tif                                   02-Oct-2015 14:30           146883164
+rr30a_s4_ch2.tif                                   02-Oct-2015 14:30           146883164
+rr30a_s5_ch1.tif                                   02-Oct-2015 14:30           167866464
+rr30a_s5_ch2.tif                                   02-Oct-2015 14:30           167866464
+rr30a_s6_ch1.tif                                   02-Oct-2015 14:30           146883164
+rr30a_s6_ch2.tif                                   02-Oct-2015 14:30           146883164
+rr30a_s7_ch1.tif                                   02-Oct-2015 14:30           167866464
+rr30a_s7_ch2.tif                                   02-Oct-2015 14:30           167866464
+rr30a_s8_ch1.tif                                   02-Oct-2015 14:30           146883164
+rr30a_s8_ch2.tif                                   02-Oct-2015 14:30           146883164
+rr30a_s9_ch1.tif                                   28-Apr-2016 18:37            25710592
+rr30a_s9_ch2.tif                                   28-Apr-2016 18:37            25710592
+```
