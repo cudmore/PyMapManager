@@ -9,7 +9,7 @@ import numpy as np
 
 # davis
 # was this, this import is failing ????
-#from scipy.misc import imsave
+from scipy.misc import imsave
 
 import tifffile
 #from skimage.io import imsave, imread
@@ -474,6 +474,6 @@ class mmStack():
 				#print('   mmStack.ingest() turn save back on')
 				#
 				# DAVIS REMOVED
-				#imsave(dstPath + dstFile, self.images[slice,:,:])
+				imsave(dstPath + dstFile, self.images[slice,:,:])
 
 			self._images = None
