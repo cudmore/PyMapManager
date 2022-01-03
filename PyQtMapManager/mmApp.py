@@ -210,21 +210,21 @@ class mmApplicationWindow(QtGui.QMainWindow):
             #defaultMap = '/Volumes/fourt/MapManager_Data/stroke1/stroke1.txt'
             if not os.path.isfile(defaultMap):
                 raise IOError(ENOENT, 'mmApp did not find defaultMap:', defaultMap)
-            print 'loading default map:', defaultMap
+            print('loading default map:', defaultMap)
             self.loadMap(defaultMap)
             """
             defaultMap = '/Users/cudmore/Desktop/data/rr58c/rr58c.txt'
             if os.path.isfile(defaultMap):
-                print 'loading default map:', defaultMap
+                print('loading default map:', defaultMap
                 self.loadMap(defaultMap)
             else:
-                print 'error loading map:', defaultMap
+                print('error loading map:', defaultMap
             """
         if 0:
             defaultMap = '/Users/cudmore/Dropbox/MapManagerData/server/public/amit1/amit1.txt'
             if not os.path.isfile(defaultMap):
                 raise IOError(ENOENT, 'mmApp did not find defaultMap:', defaultMap)
-            print 'loading default map:', defaultMap
+            print('loading default map:', defaultMap)
             self.loadMap(defaultMap)
         # load from online repository
         if 1:
@@ -287,7 +287,7 @@ class mmApplicationWindow(QtGui.QMainWindow):
 
     def dragEnterEvent(self, event):
         """Changes the look of the main window when a file/folder is dragged over the window."""
-        print event.mimeData()
+        print(event.mimeData())
         if event.mimeData().hasFormat("text/uri-list"):
             event.acceptProposedAction()
         event.acceptProposedAction()
@@ -298,10 +298,10 @@ class mmApplicationWindow(QtGui.QMainWindow):
         if urls:
             filename = urls[0].toLocalFile()
             if filename:
-                print 'todo: implement drag and drop of folders, maps, and stacks, filename:', filename
+                print('todo: implement drag and drop of folders, maps, and stacks, filename:', filename)
 
     # def mainToolbar_callback(self, a):
-    #    print 'mainToolbar_callback:', a
+    #    print('mainToolbar_callback:', a
 
     def loadMap(self, path=None, urlmap=None):
         """Load a mmMap into application. Application keeps 'maps', a list of maps."""
@@ -376,27 +376,27 @@ class mmApplicationWindow(QtGui.QMainWindow):
         self.xstatListWidget.setCurrentRow(2)
 
     def toolbarButton_callback(self, buttonID):
-        print 'toolbarButton_callback:', buttonID
+        print('toolbarButton_callback:', buttonID)
         if buttonID == 'loadMapButton':
             self.loadMap()
 
     def map_list_changed(self, curr, prev):
         # (curr,prev) are QListWidgetItem
-        print 'ApplicationWindow.map_list_changed', curr
-        print '   currentRow:', self.mapListWidget.currentRow()
-        print '   ', self.mapListWidget.currentItem().text()
+        print('ApplicationWindow.map_list_changed', curr)
+        print('   currentRow:', self.mapListWidget.currentRow())
+        print('   ', self.mapListWidget.currentItem().text())
 
     def sess_list_changed(self, curr, prev):
         # (curr,prev) are QListWidgetItem
-        print 'ApplicationWindow.sess_list_changed', curr
-        print '   currentRow:', self.sessListWidget.currentRow()
-        print '   ', self.sessListWidget.currentItem().text()
+        print('ApplicationWindow.sess_list_changed', curr)
+        print('   currentRow:', self.sessListWidget.currentRow())
+        print('   ', self.sessListWidget.currentItem().text())
 
     def seg_list_changed(self, curr, prev):
         # (curr,prev) are QListWidgetItem
-        print 'ApplicationWindow.seg_list_changed', curr
-        print '   currentRow:', self.segListWidget.currentRow()
-        print '   ', self.segListWidget.currentItem().text()
+        print('ApplicationWindow.seg_list_changed', curr)
+        print('   currentRow:', self.segListWidget.currentRow())
+        print('   ', self.segListWidget.currentItem().text())
 
     def getState(self):
         """Capture the full state of the interface including selected: map, session, segment, ystat, xstat."""
@@ -441,7 +441,7 @@ class mmApplicationWindow(QtGui.QMainWindow):
         """
 
     def plotStackButton_callback(self):
-        print 'ApplicationWindow.plotStackButton_callback()'
+        print('ApplicationWindow.plotStackButton_callback()')
 
         # todo: add to list of open windows self._windows
 
@@ -454,7 +454,7 @@ class mmApplicationWindow(QtGui.QMainWindow):
         plotwindow.show()
 
     def plotMapButton_callback(self):
-        print 'ApplicationWindow.plotMapButton_callback()'
+        print('ApplicationWindow.plotMapButton_callback()')
 
         # todo: add to list of open windows self._windows
 
@@ -490,7 +490,7 @@ class mmApplicationWindow(QtGui.QMainWindow):
         plotwindow.show()
 
     def plotStackImageButton_callback(self):
-        print 'ApplicationWindow.plotStackImageButton_callback()'
+        print('ApplicationWindow.plotStackImageButton_callback()')
 
         # todo: add to list of open windows self._windows
 
