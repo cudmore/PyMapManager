@@ -42,7 +42,7 @@ if __name__ == '__main__':
 
     if 0:
         defaultMap = '/Users/cudmore/Desktop/data/rr30a/rr30a.txt'
-        print 'loading map:', defaultMap
+        print('loading map:', defaultMap)
         m = mmMap(filePath=defaultMap)
 
         import pymapmanager
@@ -57,13 +57,13 @@ if __name__ == '__main__':
         # path = '/Volumes/fourt/MapManagerData/richard/Nancy/'
 
         stacks = mmStackPool(path)
-        print stacks
+        print(stacks)
 
         for stack in stacks:
-            print stack
+            print(stack)
 
         images = stacks.stacks[1].loadStackImages(channel=1)
-        print images.shape
+        print(images.shape)
 
     if 0:
         import matplotlib.pyplot as plt
@@ -72,10 +72,10 @@ if __name__ == '__main__':
         from pymapmanager.mmUtil import newplotdict
 
         defaultMap = '/Users/cudmore/Desktop/data/rr30a/rr30a.txt'
-        print 'loading map:', defaultMap
+        print('loading map:', defaultMap)
         m = mmMap(filePath=defaultMap)
 
-        print m.stacks[0].stackdb
+        print(m.stacks[0].stackdb)
 
         plotDict = newplotdict()
         plotDict['segmentid'] = [0]

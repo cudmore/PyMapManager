@@ -71,7 +71,7 @@ class mmWindow(QtGui.QMainWindow):
 
     def closeEvent(self, event):
         """On close, remove self from xxx list"""
-        print 'PlotWindow.closeEvent()'
+        print('PlotWindow.closeEvent()')
         self.parent.closechildwindow(self)
 
     def setStatus(self, str):
@@ -86,7 +86,7 @@ class mmWindow(QtGui.QMainWindow):
         self.parent.broadcastevent(event)
 
     def receiveevent(self, event):
-        print 'PlotWindow.receiveevent()', event.type
+        print('PlotWindow.receiveevent()', event.type)
         self.myCanvas.receiveevent(event)
 
 

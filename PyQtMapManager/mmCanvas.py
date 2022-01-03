@@ -66,7 +66,7 @@ class mmCanvas(FigureCanvas):
         pass
 
     def onkey(self, event):
-        print 'mmCanvas.onkey()', event.key
+        print('mmCanvas.onkey()', event.key)
         key = event.key
 
         #
@@ -106,7 +106,7 @@ class mmCanvas(FigureCanvas):
             self.draw()
 
         elif key == 'esc':
-            print 'esc needs to cancel spine selection'
+            print('esc needs to cancel spine selection')
 
     def togglelines(self, onoff=None):
         """Toggle lines connecting annotations between timepoint. Be carefull here on repeatedly plot these lines"""
@@ -115,19 +115,19 @@ class mmCanvas(FigureCanvas):
         """Turn dynamics marker color on and off"""
 
     def onclick(self, event):
-        print 'mmCanvas.onclick()', event.button, event.x, event.y, event.xdata, event.ydata
+        print('mmCanvas.onclick()', event.button, event.x, event.y, event.xdata, event.ydata)
 
     def onscroll(self, event):
-        print 'mmCanvas.onscroll()'
+        print('mmCanvas.onscroll()')
 
     def receiveevent(self, event):
-        print 'mmCanvas.receiveevent()', event.type
+        print('mmCanvas.receiveevent()', event.type)
 
     def onpick(self, event):
         """
         Respond to clicks in a map, stack, and image plot.
         """
-        print 'mmCanvas.onpick()', event.ind
+        print('mmCanvas.onpick()', event.ind)
 
 class mmMapPlotCanvas(mmCanvas):
     """Plot and interact with a plot of stack values across a map"""
@@ -200,7 +200,7 @@ class mmMapPlotCanvas(mmCanvas):
         self.myScatterPlot.set_color(cMatrix)
 
     def receiveevent(self, event):
-        print 'mmMapPlotCanvas.receiveevent()', event.type
+        print('mmMapPlotCanvas.receiveevent()', event.type)
         if event.map != self.map:
             return
         if event.type == 'spine selection':
@@ -219,7 +219,7 @@ class mmMapPlotCanvas(mmCanvas):
                 self.draw()
 
     def onkey(self, event):
-        print 'MyStaticMplCanvas.onkey()', event.key
+        print('MyStaticMplCanvas.onkey()', event.key)
         super(mmMapPlotCanvas, self).onkey(event)
 
     def onpick(self, event):
@@ -231,7 +231,7 @@ class mmMapPlotCanvas(mmCanvas):
         event.ind is index into this array AFTER nan has been stripped.
         """
 
-        print 'mmMapPlotCanvas.onpick()', event.ind
+        print('mmMapPlotCanvas.onpick()', event.ind)
         ind = event.ind
         if not len(ind) >= 1:
             return
@@ -241,7 +241,7 @@ class mmMapPlotCanvas(mmCanvas):
         #runMapRow = int(yRunRow_noNan[ind[0]])
 
         sessIdx, stackdbIdx = self.myMapPlot.getUserSelection(ind[0])
-        print 'sessIdx:', sessIdx, 'stackdbIdx:', stackdbIdx
+        print('sessIdx:', sessIdx, 'stackdbIdx:', stackdbIdx)
 
         """
         sessIdx_noNan = self.sessIdx[~np.isnan(self.sessIdx)]
@@ -419,7 +419,7 @@ class mmStackPlotCanvas(mmCanvas):
         self.draw()
 
     def receiveevent(self, event):
-        print 'mmStackPlotCanvas.receiveevent()', event.type
+        print('mmStackPlotCanvas.receiveevent()', event.type)
         if event.map != self.map:
             return
         if event.mapSession != self.stateDict['sessidx']:
@@ -429,7 +429,7 @@ class mmStackPlotCanvas(mmCanvas):
             self.selectPoint(event.stackdbIdx)
 
     def onkey(self, event):
-        print 'mmStackPlotCanvas.onkey()', event.key
+        print('mmStackPlotCanvas.onkey()', event.key)
         super(mmStackPlotCanvas, self).onkey(event)
 
     def onpick(self, event):
@@ -439,7 +439,7 @@ class mmStackPlotCanvas(mmCanvas):
         event.ind: A list of hit points, just use the first.
         """
 
-        print 'mmStackPlotCanvas.onpick()', event.ind
+        print('mmStackPlotCanvas.onpick()', event.ind)
         ind = event.ind
         if not len(ind) >= 1:
             return
@@ -531,8 +531,8 @@ class mmStackCanvas(mmCanvas):
         Respond to clicks in a map, stack, and image plot.
         """
 
-        print 'mmStackCanvas.onpick()', event.ind
-        print '   ON PICK IS NOT WORKING FOR STACK IMAGE !!!!!'
+        print('mmStackCanvas.onpick()', event.ind)
+        print('   ON PICK IS NOT WORKING FOR STACK IMAGE !!!!!')
 
         """
         event.ind is a list of hit points, just use the first.
@@ -591,7 +591,7 @@ class mmStackCanvas(mmCanvas):
             self.draw()
 
     def receiveevent(self, event):
-        print 'mmStackPlotCanvas.receiveevent()', event.type
+        print('mmStackPlotCanvas.receiveevent()', event.type)
         if event.map != self.map:
             return
         if event.mapSession != self.stateDict['sessidx']:
@@ -628,7 +628,7 @@ class mmStackCanvas(mmCanvas):
         self.axes.set_xlabel('um')
         self.axes.set_ylabel('um')
 
-        print 'image is of type:', self.stack.images.dtype
+        print('image is of type:', self.stack.images.dtype)
 
         #
         #  line
@@ -722,7 +722,7 @@ class mmStackCanvas(mmCanvas):
                 self.yMasked = self.yPlot[~self.zMask.mask]
                 self.stackdbIdxMasked = self.stackdbIdx_plot[~self.zMask.mask]
             except:
-                print 'ERROR: mmStackCanvas.setSlice_'
+                print('ERROR: mmStackCanvas.setSlice_')
 
             # set_offsets must be passed an Nx2 array. Here we use np.c_[]
             self.myScatterPlot.set_offsets(np.c_[self.xMasked, self.yMasked])
