@@ -20,38 +20,43 @@ import sys # to make menus on osx, sys.platform == 'darwin'
 import functools
 from errno import ENOENT
 
-from PyQt4 import QtGui, QtCore
+from PyQt5 import QtWidgets, QtGui, QtCore
 
 from pymapmanager.mmMap import mmMap
-from pymapmanager.interface.mmWindow import mmStackWindow, mmMapPlotWindow, mmStackPlotWindow
+from mmWindow import mmStackWindow, mmMapPlotWindow, mmStackPlotWindow
 from pymapmanager.mmUtil import newplotdict
 
-class mmApplicationWindow(QtGui.QMainWindow):
+class mmApplicationWindow(QtWidgets.QMainWindow):
     """
     Main PyMapManager applicaiton window.
     This holds list widgets to display: maps, sessions, segments, and stats
     """
 
-    def __init__(self):
-        QtGui.QMainWindow.__init__(self)
+    def __init__(self, parent=None):
+        #QtWidgets.QMainWindow.__init__(self)
+        super(mmApplicationWindow, self).__init__(parent)
 
         self.maps = []  # List of open pymapmanager.map
         self._windows = []  # list of open windows (use this to propogate selections)
 
         # set location of the window
-        ag = QtGui.QDesktopWidget().availableGeometry()
-        sg = QtGui.QDesktopWidget().screenGeometry()
+        ag = QtWidgets.QDesktopWidget().availableGeometry()
+        sg = QtWidgets.QDesktopWidget().screenGeometry()
         widget = self.geometry()
         x = ag.width() - widget.width()
         y = 2 * ag.height() - sg.height() - widget.height()
         self.move(x, y)
 
         self.setAttribute(QtCore.Qt.WA_DeleteOnClose)
-        self.setWindowTitle("application main window")
+        self.setWindowTitle("PyQt-MapManager")
 
-        ##############################################################################
-        # menus
-        ##############################################################################
+        self._lastMap = None
+
+        # build the gui
+        self._buildMenus()
+        self._buildGui()
+
+    def _buildMenus(self):
         """
         if sys.platform.startswith('darwin') :
             self.myMenuBar = QtGui.QMenuBar() # parentless menu bar for Mac OS
@@ -71,12 +76,12 @@ class mmApplicationWindow(QtGui.QMainWindow):
         self.help_menu.addAction('&About', self.about)
         """
         if sys.platform.startswith('darwin') :
-            self.myMenuBar = QtGui.QMenuBar()
+            self.myMenuBar = QtWidgets.QMenuBar()
         else:
             self.myMenuBar = self.menuBar() # refer to the default one
         #self.myMenuBar.setNativeMenuBar(True)
-        self.file_menu = QtGui.QMenu('&File', self)
-        self.file_menu.addAction('&Load Map', self.about)
+        self.file_menu = QtWidgets.QMenu('&File', self)
+        self.file_menu.addAction('&Load Map', self.loadMap)
         self.file_menu.addSeparator()
         self.file_menu.addAction('&Close Map', self.about)
 
@@ -84,30 +89,28 @@ class mmApplicationWindow(QtGui.QMainWindow):
         #self.file_menu.addSeparator()
         #self.file_menu.addAction('&Quit', self.fileQuit) #, QtCore.Qt.CTRL + QtCore.Qt.Key_Q)
 
-        self.view_menu = QtGui.QMenu('&View', self)
+        self.view_menu = QtWidgets.QMenu('&View', self)
         self.view_menu.addAction('&Segments', self.about)
         self.view_menu.addAction('&Annotations', self.about)
 
         self.myMenuBar.addMenu(self.file_menu)
         self.myMenuBar.addMenu(self.view_menu)
-
-        ##############################################################################
-        # main widget
-        ##############################################################################
-        self.main_widget = QtGui.QWidget(self)
+    
+    def _buildGui(self):
+        self.main_widget = QtWidgets.QWidget(self)
 
         mainToolbar = self.addToolBar('myToolbar')
         # loadMapAction = QtGui.QAction(QtGui.QIcon("open.bmp"), "Load", self)
         # loadMapAction = QtGui.QAction("Load", self)
-        self.loadMapButton = QtGui.QPushButton("Load Map", self)
+        self.loadMapButton = QtWidgets.QPushButton("Load Map", self)
         #self.loadMapButton.clicked.connect(lambda: self.toolbarButton_callback(loadMapButton))
         self.loadMapButton.clicked.connect(functools.partial(self.toolbarButton_callback, 'loadMapButton'))
 
-        self.loadMapDirButton = QtGui.QPushButton("Load Directory", self)
+        self.loadMapDirButton = QtWidgets.QPushButton("Load Directory", self)
         #self.loadMapDirButton.clicked.connect(lambda: self.toolbarButton_callback(loadMapDirButton))
         self.loadMapDirButton.clicked.connect(functools.partial(self.toolbarButton_callback, 'loadMapDirButton'))
 
-        self.defaultRoiType = QtGui.QComboBox(self)
+        self.defaultRoiType = QtWidgets.QComboBox(self)
         self.defaultRoiType.addItems(['spineROI', 'otherROI'])
         self.defaultRoiType.activated[str].connect(self.setDefaultRoiType)
 
@@ -118,24 +121,24 @@ class mmApplicationWindow(QtGui.QMainWindow):
         # mainToolbar.actionTriggered[QtGui.QAction].connect(self.mainToolbar_callback)
 
         #
-        gridLayout1 = QtGui.QGridLayout()
+        gridLayout1 = QtWidgets.QGridLayout()
 
         # list of map
-        mapLabel = QtGui.QLabel("Maps")
-        self.mapListWidget = QtGui.QListWidget()
+        mapLabel = QtWidgets.QLabel("Maps")
+        self.mapListWidget = QtWidgets.QListWidget()
         self.mapListWidget.setMaximumWidth(150)
         self.mapListWidget.currentItemChanged.connect(self.map_list_changed)
         self.mapListWidget.doubleClicked.connect(self.plotmap0)
 
         # list of session
-        sessLabel = QtGui.QLabel("Sessions")
-        self.sessListWidget = QtGui.QListWidget()
+        sessLabel = QtWidgets.QLabel("Sessions")
+        self.sessListWidget = QtWidgets.QListWidget()
         self.sessListWidget.setMaximumWidth(100)
         self.sessListWidget.currentItemChanged.connect(self.sess_list_changed)
 
         # list of segment
-        segLabel = QtGui.QLabel("Segments")
-        self.segListWidget = QtGui.QListWidget()
+        segLabel = QtWidgets.QLabel("Segments")
+        self.segListWidget = QtWidgets.QListWidget()
         self.segListWidget.setMaximumWidth(100)
         self.segListWidget.currentItemChanged.connect(self.seg_list_changed)
 
@@ -149,23 +152,23 @@ class mmApplicationWindow(QtGui.QMainWindow):
         gridLayout1.setRowMinimumHeight(1, 200)
 
         #
-        gridLayout2 = QtGui.QGridLayout()
+        gridLayout2 = QtWidgets.QGridLayout()
 
         # list of y stat
-        yStatLabel = QtGui.QLabel("Y Stat")
-        self.ystatListWidget = QtGui.QListWidget()
+        yStatLabel = QtWidgets.QLabel("Y Stat")
+        self.ystatListWidget = QtWidgets.QListWidget()
         self.ystatListWidget.setMaximumWidth(200)
         for i in range(10):
-            item = QtGui.QListWidgetItem("%i\tystat" % i)
+            item = QtWidgets.QListWidgetItem("%i\tystat" % i)
             self.ystatListWidget.addItem(item)
         # self.segListWidget.currentItemChanged.connect(self.seg_list_changed)
 
         # list of x stat
-        xStatLabel = QtGui.QLabel("X Stat")
-        self.xstatListWidget = QtGui.QListWidget()
+        xStatLabel = QtWidgets.QLabel("X Stat")
+        self.xstatListWidget = QtWidgets.QListWidget()
         self.xstatListWidget.setMaximumWidth(200)
         for i in range(10):
-            item = QtGui.QListWidgetItem("%i\txstat" % i)
+            item = QtWidgets.QListWidgetItem("%i\txstat" % i)
             self.xstatListWidget.addItem(item)
         # self.segListWidget.currentItemChanged.connect(self.seg_list_changed)
 
@@ -177,18 +180,18 @@ class mmApplicationWindow(QtGui.QMainWindow):
         gridLayout2.setRowMinimumHeight(1, 200)
 
         # main vertical layout
-        l = QtGui.QVBoxLayout(self.main_widget)
+        l = QtWidgets.QVBoxLayout(self.main_widget)
 
         # sc = MyStaticMplCanvas(self.main_widget, width=5, height=4, dpi=100)
         # dc = MyDynamicMplCanvas(self.main_widget, width=5, height=4, dpi=100)
 
-        plotStackButton = QtGui.QPushButton("Plot Stack Stats")
+        plotStackButton = QtWidgets.QPushButton("Plot Stack Stats")
         plotStackButton.clicked.connect(self.plotStackButton_callback)
 
-        plotMapButton = QtGui.QPushButton("Plot Map Stats")
+        plotMapButton = QtWidgets.QPushButton("Plot Map Stats")
         plotMapButton.clicked.connect(self.plotMapButton_callback)
 
-        plotStackImageButton = QtGui.QPushButton("Plot Stack Image")
+        plotStackImageButton = QtWidgets.QPushButton("Plot Stack Image")
         plotStackImageButton.clicked.connect(self.plotStackImageButton_callback)
 
         l.addLayout(gridLayout1)
@@ -204,32 +207,6 @@ class mmApplicationWindow(QtGui.QMainWindow):
 
         self.statusBar().showMessage("All hail matplotlib!", 2000)
 
-        # load a mm map
-        if 0:
-            defaultMap = '/Users/cudmore/Desktop/data/cudmore/rr30a/rr30a.txt'
-            #defaultMap = '/Volumes/fourt/MapManager_Data/stroke1/stroke1.txt'
-            if not os.path.isfile(defaultMap):
-                raise IOError(ENOENT, 'mmApp did not find defaultMap:', defaultMap)
-            print('loading default map:', defaultMap)
-            self.loadMap(defaultMap)
-            """
-            defaultMap = '/Users/cudmore/Desktop/data/rr58c/rr58c.txt'
-            if os.path.isfile(defaultMap):
-                print('loading default map:', defaultMap
-                self.loadMap(defaultMap)
-            else:
-                print('error loading map:', defaultMap
-            """
-        if 0:
-            defaultMap = '/Users/cudmore/Dropbox/MapManagerData/server/public/amit1/amit1.txt'
-            if not os.path.isfile(defaultMap):
-                raise IOError(ENOENT, 'mmApp did not find defaultMap:', defaultMap)
-            print('loading default map:', defaultMap)
-            self.loadMap(defaultMap)
-        # load from online repository
-        if 1:
-            urlmap = 'rr30a'
-            self.loadMap(urlmap=urlmap)
 
         """
         #show a table widget
@@ -264,7 +241,7 @@ class mmApplicationWindow(QtGui.QMainWindow):
         #
 
         self.setAcceptDrops(True)
-
+        
     def setDefaultRoiType(self, text):
         """Respond to roiType popup/QComboBox"""
         d = self.getState()
@@ -272,7 +249,11 @@ class mmApplicationWindow(QtGui.QMainWindow):
             d['map'].defaultRoiType = str(text)
 
     def broadcastevent(self, event):
-        """Broadcast an event to all open application windows (self._windows) and call receiveevent(event)"""
+        """
+        Broadcast an event to all open application windows (self._windows) and call receiveevent(event)
+        
+        TODO: implement this as signal/slot
+        """
 
         # if we don;t get a runMapRow but have a spine selection from a map then fill it in
         if event.type == 'spine selection':
@@ -311,8 +292,15 @@ class mmApplicationWindow(QtGui.QMainWindow):
 
         elif path is None:
             # ask user for file
-            path = QtGui.QFileDialog.getOpenFileName(self, 'Open File', '/')
-            path = str(path)
+            # this is returning a tuple??? (path, file types)
+            aFolder = '/'
+            if self._lastMap is not None:
+                aFolder = self._lastMap
+            path = QtWidgets.QFileDialog.getOpenFileName(self, 'Open File', 
+                                                        directory=aFolder,
+                                                       filter="Text files (*.txt)")
+            path = path[0]
+            print(f'path: "{path}"')
             if not path:
                 return
 
@@ -321,9 +309,11 @@ class mmApplicationWindow(QtGui.QMainWindow):
 
         self.mapListWidget.clear()
         for i in range(len(self.maps)):
-            item = QtGui.QListWidgetItem("%i\t%s" % (i, self.maps[i].name))
+            item = QtWidgets.QListWidgetItem("%i\t%s" % (i, self.maps[i].name))
             self.mapListWidget.addItem(item)
         self.selectMap(0)
+
+        self._lastMap = path
 
     def selectMap(self, idx):
         """Update the interface when user selects a different map or a new map is loaded"""
@@ -334,16 +324,16 @@ class mmApplicationWindow(QtGui.QMainWindow):
         # sess
         self.sessListWidget.clear()
         for i in range(self.maps[idx].numSessions):
-            item = QtGui.QListWidgetItem("%i" % i)
+            item = QtWidgets.QListWidgetItem("%i" % i)
             self.sessListWidget.addItem(item)
         self.sessListWidget.setCurrentRow(0)
 
         # seg
         self.segListWidget.clear()
-        item = QtGui.QListWidgetItem('All')
+        item = QtWidgets.QListWidgetItem('All')
         self.segListWidget.addItem(item)
         for i in range(self.maps[idx].numMapSegments):
-            item = QtGui.QListWidgetItem("%i" % i)
+            item = QtWidgets.QListWidgetItem("%i" % i)
             self.segListWidget.addItem(item)
         self.segListWidget.setCurrentRow(0)
 
@@ -368,9 +358,9 @@ class mmApplicationWindow(QtGui.QMainWindow):
             elif statStr.endswith('_int2'):
                 typeStr = 'int2'
                 spaces2 = '          '
-            item = QtGui.QListWidgetItem("%i%s%s%s%s" % (i, spaces, typeStr, spaces2, statStr))
+            item = QtWidgets.QListWidgetItem("%i%s%s%s%s" % (i, spaces, typeStr, spaces2, statStr))
             self.ystatListWidget.addItem(item)
-            item = QtGui.QListWidgetItem("%i%s%s%s%s" % (i, spaces, typeStr, spaces2, statStr))
+            item = QtWidgets.QListWidgetItem("%i%s%s%s%s" % (i, spaces, typeStr, spaces2, statStr))
             self.xstatListWidget.addItem(item)
         self.ystatListWidget.setCurrentRow(3)
         self.xstatListWidget.setCurrentRow(2)
@@ -426,7 +416,9 @@ class mmApplicationWindow(QtGui.QMainWindow):
 
         plotDict['roitype'] = ['spineROI']
         if plotDict['map'] is not None:
-            plotDict['roitype'] = [plotDict['map'].defaultRoiType]
+            #plotDict['roitype'] = [plotDict['map'].defaultRoiType]
+            plotDict['roitype'] = [plotDict['map'].defaultAnnotation]
+            
 
         return plotDict
 
@@ -511,4 +503,4 @@ class mmApplicationWindow(QtGui.QMainWindow):
         self.fileQuit()
 
     def about(self):
-        QtGui.QMessageBox.about(self, "About", """Made by Robert H Cudmore.""")
+        QtWidgets.QMessageBox.about(self, "About", """Made by Robert H Cudmore.""")

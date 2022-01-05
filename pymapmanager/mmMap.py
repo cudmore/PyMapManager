@@ -222,7 +222,6 @@ class mmMap():
 	def defaultAnnotation(self):
 		"""
 		"""
-
 		# if defaultAnnotation does not exist then default to 'spineROI'
 		if 'defaultAnnotation' in self.table.index:
 			theRet = self.table.loc['defaultAnnotation'][0]
@@ -554,8 +553,16 @@ class mmMap():
 
 			currSegmentID = []
 			if self.numMapSegments > 0:
-				if pd['segmentid'] is not None and pd['segmentid'] >=0 :
-					currSegmentID = self.segRunMap[pd['segmentid'], j]  # this only works for one segment -- NOT A LIST
+				# 20220103
+				oneSegment = pd['segmentid']
+				if isinstance(oneSegment, list):
+					print('abb 20220103 in mmMap.getMapValue3() fix this cludge from list to int')
+					if len(oneSegment) > 0:
+						oneSegment = oneSegment[0]
+					else:
+						oneSegment = None
+				if oneSegment is not None and oneSegment >=0 :
+					currSegmentID = self.segRunMap[oneSegment, j]  # this only works for one segment -- NOT A LIST
 					#print('   currSegmentID:', currSegmentID)
 					if currSegmentID >= 0:
 						currSegmentID = int(currSegmentID)
@@ -564,7 +571,7 @@ class mmMap():
 					else:
 						currSegmentID = []
 				#print('   currSegmentID:', currSegmentID)
-				if pd['segmentid'] is not None and pd['segmentid'] >= 0 and not currSegmentID:
+				if oneSegment is not None and oneSegment >= 0 and not currSegmentID:
 					# this session does not have segmentID that match
 					#print('   getMapValues3() skipping tp', j)
 					continue

@@ -17,14 +17,14 @@
 
 import sys, math
 
-from PyQt4 import QtGui, QtCore
+from PyQt5 import QtWidgets, QtGui, QtCore
 
 #from matplotlib.backends.backend_qt4agg import NavigationToolbar2QT as NavigationToolbar
 
-from pymapmanager.interface.mmCanvas import mmStackCanvas, mmMapPlotCanvas, mmStackPlotCanvas
-from pymapmanager.interface.mmTable import MyPandasModel
+from mmCanvas import mmStackCanvas, mmMapPlotCanvas, mmStackPlotCanvas
+from mmTable import MyPandasModel
 
-class mmWindow(QtGui.QMainWindow):
+class mmWindow(QtWidgets.QMainWindow):
     """
     A second QMainWindow to hold a plot. Possible plots are: stack image, stack, and map. StackImageWindow derives from this to plot a stack image.
     """
@@ -36,24 +36,24 @@ class mmWindow(QtGui.QMainWindow):
         self.setAttribute(QtCore.Qt.WA_DeleteOnClose)
         self.setWindowTitle("mm plot window")
 
-        self.window_menu = QtGui.QMenu('&Window', self)
+        self.window_menu = QtWidgets.QMenu('&Window', self)
         self.window_menu.addAction('&Close', self.close,
                                  QtCore.Qt.CTRL + QtCore.Qt.Key_W)
         self.menuBar().addMenu(self.window_menu)
 
-        self.statusBar = QtGui.QStatusBar()
+        self.statusBar = QtWidgets.QStatusBar()
         self.setStatusBar(self.statusBar)
         self.statusBar.showMessage('...')
 
         self.resize(500, 500)
 
-        self.main_widget = QtGui.QWidget(self)
+        self.main_widget = QtWidgets.QWidget(self)
 
         #toolbar
         self.toolbar = self.addToolBar('myToolbar')
 
         #graphs
-        self.mainLayout = QtGui.QVBoxLayout(self.main_widget)
+        self.mainLayout = QtWidgets.QVBoxLayout(self.main_widget)
 
         # make sure these are done in derived classes
         #self.myCanvas = MyMplCanvas(parent=self, width=400, height=300, dpi=100)
@@ -103,17 +103,17 @@ class mmStackWindow(mmWindow):
         self.highContrast = sliderMax
 
         # min contrast
-        self.lowContrastLayout = QtGui.QHBoxLayout(self.main_widget)
+        self.lowContrastLayout = QtWidgets.QHBoxLayout(self.main_widget)
 
-        self.lowContrastLabel = QtGui.QLabel('Low')
+        self.lowContrastLabel = QtWidgets.QLabel('Low')
 
-        self.lowContrastSpinner = QtGui.QSpinBox()
+        self.lowContrastSpinner = QtWidgets.QSpinBox()
         self.lowContrastSpinner.valueChanged.connect(self._valuechange_spinner)
         self.lowContrastSpinner.setMinimum(0)
         self.lowContrastSpinner.setMaximum(sliderMax)
         self.lowContrastSpinner.setValue(0)
 
-        self.lowContrastSlider = QtGui.QSlider(QtCore.Qt.Horizontal)
+        self.lowContrastSlider = QtWidgets.QSlider(QtCore.Qt.Horizontal)
         self.lowContrastSlider.valueChanged.connect(self._valuechange_slider)
         self.lowContrastSlider.setMinimum(0)
         self.lowContrastSlider.setMaximum(sliderMax)
@@ -125,17 +125,17 @@ class mmStackWindow(mmWindow):
         self.lowContrastLayout.addWidget(self.lowContrastSlider)
 
         # max contrast
-        self.highContrastLayout = QtGui.QHBoxLayout(self.main_widget)
+        self.highContrastLayout = QtWidgets.QHBoxLayout(self.main_widget)
 
-        self.highContrastLabel = QtGui.QLabel("High")
+        self.highContrastLabel = QtWidgets.QLabel("High")
 
-        self.highContrastSpinner = QtGui.QSpinBox()
+        self.highContrastSpinner = QtWidgets.QSpinBox()
         self.highContrastSpinner.valueChanged.connect(self._valuechange_spinner)
         self.highContrastSpinner.setMinimum(0)
         self.highContrastSpinner.setMaximum(sliderMax)
         self.highContrastSpinner.setValue(sliderMax)
 
-        self.highContrastSlider = QtGui.QSlider(QtCore.Qt.Horizontal)
+        self.highContrastSlider = QtWidgets.QSlider(QtCore.Qt.Horizontal)
         self.highContrastSlider.valueChanged.connect(self._valuechange_slider)
         self.highContrastSlider.setMinimum(0)
         self.highContrastSlider.setMaximum(sliderMax)
@@ -154,12 +154,12 @@ class mmStackWindow(mmWindow):
 
         #
         # segment list
-        self.mySegmentDoc = QtGui.QDockWidget("Segments", self)
+        self.mySegmentDoc = QtWidgets.QDockWidget("Segments", self)
 
         numCol = 2
         numRow = 5
         colLabels = ['Segment', 'um']
-        self.segmentTable = QtGui.QTableWidget(self)
+        self.segmentTable = QtWidgets.QTableWidget(self)
         self.segmentTable.setRowCount(numRow)
         self.segmentTable.setColumnCount(numCol)
         self.segmentTable.setHorizontalHeaderLabels(colLabels)
@@ -167,13 +167,13 @@ class mmStackWindow(mmWindow):
         #self.segmentTable.horizontalHeader().setStretchLastSection(True)
         for i in range(numRow):
             for j in range(numCol):
-                self.segmentTable.setItem(i, j, QtGui.QTableWidgetItem(str(i*j + j)))
+                self.segmentTable.setItem(i, j, QtWidgets.QTableWidgetItem(str(i*j + j)))
                 #pass
                 #used to work
                 #self.tableWidget.setItem(i, j, QtGui.QTableWidgetItem(str(tmp_df.iget_value(i, j))))
                 # slow?
                 # self.tableWidget.setItem(i, j, QtGui.QTableWidgetItem(str(tmp_df.iloc[i, j])))
-        self.segmentTable.setSelectionBehavior(QtGui.QTableWidget.SelectRows)
+        self.segmentTable.setSelectionBehavior(QtWidgets.QTableWidget.SelectRows)
         #self.segmentTable.resizeColumnsToContents()
 
         self.mySegmentDoc.setWidget(self.segmentTable)
@@ -186,7 +186,7 @@ class mmStackWindow(mmWindow):
 
         #
         # stack db dock
-        self.myStackdbDoc = QtGui.QDockWidget("Annotations", self)
+        self.myStackdbDoc = QtWidgets.QDockWidget("Annotations", self)
 
         numCol = 4
         numRow = 100
@@ -200,7 +200,7 @@ class mmStackWindow(mmWindow):
         stackdb_df = stackdb_df[['Idx', 'parentID', 'z']]
         myModel = MyPandasModel(stackdb_df)
 
-        self.stackdbTable = QtGui.QTableView(self)
+        self.stackdbTable = QtWidgets.QTableView(self)
 
         self.stackdbTable.setModel(myModel)
 
@@ -229,7 +229,7 @@ class mmStackWindow(mmWindow):
             evenRow = not evenRow
         self.stackdbTable.resizeColumnsToContents()
         '''
-        self.stackdbTable.setSelectionBehavior(QtGui.QTableWidget.SelectRows)
+        self.stackdbTable.setSelectionBehavior(QtWidgets.QTableWidget.SelectRows)
         self.stackdbTable.setAlternatingRowColors(True)
 
         self.myStackdbDoc.setWidget(self.stackdbTable)
@@ -251,7 +251,7 @@ class mmStackWindow(mmWindow):
         self.file_menu.addAction('&Close Map', self.about)
         """
 
-        self.view_menu = QtGui.QMenu('&View', self)
+        self.view_menu = QtWidgets.QMenu('&View', self)
         self.view_menu.addAction(self.mySegmentDoc.toggleViewAction())
         self.view_menu.addAction(self.myStackdbDoc.toggleViewAction())
 
@@ -275,8 +275,12 @@ class mmStackWindow(mmWindow):
         self.lowContrast = self.lowContrastSlider.value()
         self.highContrast = self.highContrastSlider.value()
         # update spinner
-        self.lowContrastSpinner.setValue(self.lowContrast)
-        self.highContrastSpinner.setValue(self.highContrast)
+        try:
+            self.lowContrastSpinner.setValue(self.lowContrast)
+            self.highContrastSpinner.setValue(self.highContrast)
+        except (AttributeError) as e:
+            # this callback is being called during window creation
+            print('error: 20220103 in _valuechange_slider() with self.highContrastSpinner')
 
         if self.myCanvas:
             self.myCanvas.setSliceContrast()
@@ -286,8 +290,12 @@ class mmStackWindow(mmWindow):
         self.lowContrast = self.lowContrastSpinner.value()
         self.highContrast = self.highContrastSpinner.value()
         # update slider
-        self.lowContrastSlider.setValue(self.lowContrast)
-        self.highContrastSlider.setValue(self.highContrast)
+        try:
+            self.lowContrastSlider.setValue(self.lowContrast)
+            self.highContrastSlider.setValue(self.highContrast)
+        except (AttributeError) as e:
+            # this callback is being called during window creation
+            print('error: 20220103 in _valuechange_spinner() with self.highContrastSpinner')
 
         if self.myCanvas:
             self.myCanvas.setSliceContrast()
@@ -304,11 +312,11 @@ class mmMapPlotWindow(mmWindow):
         tmpMaxSession = 20
 
         # spinner to select session
-        self.sessionLayout = QtGui.QHBoxLayout(self.main_widget)
+        self.sessionLayout = QtWidgets.QHBoxLayout(self.main_widget)
 
-        self.sessionSpinnerLabel = QtGui.QLabel("Session")
+        self.sessionSpinnerLabel = QtWidgets.QLabel("Session")
 
-        self.sessionSpinner = QtGui.QSpinBox()
+        self.sessionSpinner = QtWidgets.QSpinBox()
         self.sessionSpinner.valueChanged.connect(self._valuechange_spinner)
         self.sessionSpinner.setMinimum(0)
         self.sessionSpinner.setMaximum(tmpMaxSession)
