@@ -47,11 +47,10 @@ setup(
     #    'pymapmanager.mmio'
     #],
     install_requires=[
-        "numpy>=1.14.0",
-        "pandas>=0.22.0",
-        "requests>=2.18.4",
-        "pillow",
-        "scipy<=1.2.0",
+        "numpy",
+        "pandas",
+        "requests",
+        "scipy",
         "tifffile",
         "matplotlib"
     ]
