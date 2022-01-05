@@ -13,7 +13,7 @@ import numpy as np
 
 from PyQt5 import QtWidgets, QtGui, QtCore
 
-from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 
 from pymapmanager.mmUtil import mmEvent, newplotdict

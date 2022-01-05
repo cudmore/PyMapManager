@@ -19,8 +19,6 @@ import sys, math
 
 from PyQt5 import QtWidgets, QtGui, QtCore
 
-#from matplotlib.backends.backend_qt4agg import NavigationToolbar2QT as NavigationToolbar
-
 from mmCanvas import mmStackCanvas, mmMapPlotCanvas, mmStackPlotCanvas
 from mmTable import MyPandasModel
 

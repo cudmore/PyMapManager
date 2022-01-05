@@ -1,14 +1,8 @@
-numpy>=1.14.0
-pandas>=0.22.0
-requests>=2.18.4
+numpy
+pandas
+requests
 
-#scikit-image
-#scipy>=1.0.0
-#tifffile
-
-#re-added davis
-Pillow
-scipy<=1.2.0
+scipy
 tifffile
 
 matplotlib

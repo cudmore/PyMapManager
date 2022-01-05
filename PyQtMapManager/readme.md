@@ -8,9 +8,14 @@ This is a basic prototype. It leaves a lot to be desired.
 
 ```
 cd PyQtMapManager
-python -m venv mm_env
+python -m venv mmqt_env
 
-source mm_env/bin/activate
+# activate it
+source mmqt_env/bin/activate
+
+# on linux, always upgrade pip
+pip install --upgrade pip
+
 ```
 
 2) Install backend MapManager

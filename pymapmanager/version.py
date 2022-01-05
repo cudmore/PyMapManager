@@ -6,5 +6,5 @@ Example::
 	import pymapmanager as pmm
 	pmm._version_
 """
-__version__ = '0.0.6'
+__version__ = '0.0.7'
 

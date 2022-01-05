@@ -9,7 +9,7 @@ import numpy as np
 
 # davis
 # was this, this import is failing ????
-from scipy.misc import imsave
+#from scipy.misc import imsave
 
 import tifffile
 #from skimage.io import imsave, imread
