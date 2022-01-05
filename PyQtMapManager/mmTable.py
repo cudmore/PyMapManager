@@ -2,7 +2,7 @@
 Tables to display stackdb pandas data frame
 """
 
-from PyQt4 import QtGui, QtCore
+from PyQt5 import QtGui, QtCore
 
 class MyPandasModel(QtCore.QAbstractTableModel):
     """

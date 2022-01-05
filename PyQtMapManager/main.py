@@ -14,26 +14,43 @@ import sys, os, math
 
 import numpy as np
 
+import qdarkstyle
+
 from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt4agg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib.figure import Figure
 
-from PyQt4 import QtGui, QtCore
+from PyQt5 import QtWidgets, QtGui, QtCore
 
 from pymapmanager.mmMap import mmMap
-from pymapmanager.interface.mmApp import mmApplicationWindow
+from mmApp import mmApplicationWindow
 
 if __name__ == '__main__':
 
     if 1:
-        qApp = QtGui.QApplication(sys.argv)
+        app = QtWidgets.QApplication(sys.argv)
+        #app.setStyleSheet(qdarkstyle.load_stylesheet(qt_api=os.environ['PYQTGRAPH_QT_LIB']))
+        app.setStyleSheet(qdarkstyle.load_stylesheet(qt_api='pyqt5'))
 
         aw = mmApplicationWindow()
         #aw.setWindowTitle("%s" % progname)
         aw.setWindowTitle('PyQtMapManager')
         aw.show()
-        sys.exit(qApp.exec_())
-        # qApp.exec_()
+
+        # load a mm map
+        if 1:
+            defaultMap = '/media/cudmore/data/richard/rr30a/rr30a.txt' 
+            if not os.path.isfile(defaultMap):
+                # TODO: Remove and just do logger.error('xxx')
+                raise IOError(ENOENT, 'mmApp did not find defaultMap:', defaultMap)
+            print('loading default map:', defaultMap)
+            aw.loadMap(defaultMap)
+        # # load from online repository
+        if 0:
+            urlmap = 'rr30a'
+            aw.loadMap(urlmap=urlmap)
+
+        sys.exit(app.exec_())
 
     if 0:
         from pymapmanager.mmStack import mmStack
