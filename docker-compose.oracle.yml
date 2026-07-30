@@ -1,0 +1,36 @@
+# Oracle Cloud deployment for dsh.mapmanager.net.
+#
+# Prerequisites:
+# - Docker and the Docker Compose plugin are installed on the Oracle host.
+# - PyMapManager-Data is beside this repository:
+#     <parent>/PyMapManager
+#     <parent>/PyMapManager-Data
+# - Cloudflare Tunnel routes dsh.mapmanager.net to http://localhost:8082.
+#
+# Run from the PyMapManager repository:
+#   docker compose -f docker-compose.oracle.yml up --build -d
+#
+# Inspect status and logs:
+#   docker compose -f docker-compose.oracle.yml ps
+#   docker compose -f docker-compose.oracle.yml logs -f web
+#
+# Stop and remove the containers:
+#   docker compose -f docker-compose.oracle.yml down
+
+services:
+  web:
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - redis
+    ports:
+      # Bind only to the Oracle host; Cloudflare Tunnel provides public access.
+      - "127.0.0.1:8082:80"
+    volumes:
+      - ../PyMapManager-Data:/PyMapManager-Data
+
+  redis:
+    restart: unless-stopped
+    image: redis

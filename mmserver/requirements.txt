@@ -19,7 +19,11 @@ redis>=2.10.6
 
 gunicorn
 gevent
-celery
+
+# 20260729
+# celery
+celery==4.4.7
+importlib-metadata==4.13.0
 
 # put back in
 #jupyter
